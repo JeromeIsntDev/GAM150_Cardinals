@@ -1,0 +1,154 @@
+//
+// Sprite rendering demo
+// 
+// AUTHORS: 
+//   Gerald Wong
+//  
+// DESCRIPTION:
+//   The code below is the minimal code to render 
+//   a single sprite in the window.
+//
+//   Students should not take this code as a reference to
+//   "good architecture". That's not the point of this demo.
+// 
+#include <crtdbg.h> // To check for memory leaks
+#include "AEEngine.h"
+
+int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
+	_In_opt_ HINSTANCE hPrevInstance,
+	_In_ LPWSTR    lpCmdLine,
+	_In_ int       nCmdShow)
+{
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+
+	int gGameRunning = 1;
+
+	// Initialization of your own variables go here
+
+	// Using custom window procedure
+	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);
+
+	// Changing the window title
+	AESysSetWindowTitle("Draw Sprite Demo!");
+
+	// Pointer to Mesh. All our sprites use the same mesh, so we can just have one.
+	AEGfxVertexList* pMesh = 0;
+
+	// Informing the library that we're about to start adding triangles
+	AEGfxMeshStart();
+
+	// This shape has 2 triangles that makes up a square
+	// Color parameters represent colours as ARGB
+	// UV coordinates to read from loaded textures
+	//AEGfxTriAdd(
+	//	-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,  // bottom-left: red
+	//	0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,   // bottom-right: green
+	//	-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);  // top-left: blue
+
+	//AEGfxTriAdd(
+	//	0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,   // bottom-right: green
+	//	0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,    // top-right: white
+	//	-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);  // top-left: blue
+
+	const int NUM_SEGMENTS = 5;   // increase for smoother circle
+	const float RADIUS = 0.5f;
+
+	for (int i = 0; i < NUM_SEGMENTS; ++i)
+	{
+		float angle1 = (float)i / NUM_SEGMENTS * 2.0f * PI;
+		float angle2 = (float)(i + 1) / NUM_SEGMENTS * 2.0f * PI;
+
+		// Center of the circle
+		float cx = 0.0f;
+		float cy = 0.0f;
+
+		// First point on the circle
+		float x1 = RADIUS * cosf(angle1);
+		float y1 = RADIUS * sinf(angle1);
+
+		// Second point on the circle
+		float x2 = RADIUS * cosf(angle2);
+		float y2 = RADIUS * sinf(angle2);
+
+		AEGfxTriAdd(
+			cx, cy, 0xFFFFFF00, 0.5f, 0.5f,
+			x1, y1, 0xFFFF00FF, 0.5f + x1, 0.5f - y1,
+			x2, y2, 0xFF00FFFF, 0.5f + x2, 0.5f - y2
+		);
+	}
+
+	// Saving the mesh (list of triangles) in pMesh
+	pMesh = AEGfxMeshEnd();
+
+	// Create a scale matrix that scales by 500 x and y
+	AEMtx33 scale = { 0 };
+	AEMtx33Scale(&scale, 50.f, 50.f);
+
+	// Create a rotation matrix that rotates by 90 degrees
+	// Note that PI in radians is 180 degrees.
+	// Since 90 degrees is 180/2, 90 degrees in radians is PI/2
+	AEMtx33 rotate = { 0 };
+	AEMtx33Rot(&rotate, 0);
+
+	// Create a translation matrix that translates by
+	// 200 in the x-axis and 100 in the y-axis
+	AEMtx33 translate = { 0 };
+	AEMtx33Trans(&translate, 0, 0);
+
+	// Concatenate the matrices into the 'transform' variable.
+	// We concatenate in the order of translation * rotation * scale
+	// i.e. this means we scale, then rotate, then translate.
+	AEMtx33 transform = { 0 };
+	AEMtx33Concat(&transform, &rotate, &scale);
+	AEMtx33Concat(&transform, &translate, &transform);
+
+	// Game Loop
+	while (gGameRunning)
+	{
+		// Informing the system about the loop's start
+		AESysFrameStart();
+
+		// Your own rendering logic goes here
+		// Set the background to black.
+		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+
+		// Tell the engine to get ready to draw something with texture.
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+
+		// Set the the color to multiply to white, so that the sprite can 
+		// display the full range of colors (default is black).
+		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+
+		// Set the color to add to nothing, so that we don't alter the sprite's color
+		AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+
+		// Set blend mode to AE_GFX_BM_BLEND
+		// This will allow transparency.
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetTransparency(1.0f);
+
+		// Set the texture to pTex
+
+		// Tell Alpha Engine to use the matrix in 'transform' to apply onto all
+		// the vertices of the mesh that we are about to choose to draw in the next line.
+		AEGfxSetTransform(transform.m);
+
+		// Tell Alpha Engine to draw the mesh with the above settings.
+		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+
+		// Informing the system about the loop's end
+		AESysFrameEnd();
+
+		// check if forcing the application to quit
+		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
+			gGameRunning = 0;
+	}
+
+	AEGfxMeshFree(pMesh);
+	// free the system
+	AESysExit();
+
+}
