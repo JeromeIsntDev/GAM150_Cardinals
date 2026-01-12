@@ -1,6 +1,9 @@
-Projected collabration by:
-Jerome Lim\n
-Sadric Koh\n
-Breanne Chua\n
-Shirley Liau\n
-Zoey Tan
+# Projected Collaboration
+
+This project is a collaborative effort by:
+
+- **Jerome Lim**
+- **Sadric Koh**
+- **Breanne Chua**
+- **Shirley Liau**
+- **Zoey Tan**
