@@ -1,6 +1,6 @@
 Projected collabration by:
-Jerome Lim
-Sadric Koh
-Breanne Chua
-Shirley Liau
+Jerome Lim\n
+Sadric Koh\n
+Breanne Chua\n
+Shirley Liau\n
 Zoey Tan
