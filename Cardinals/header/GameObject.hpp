@@ -33,9 +33,9 @@ public:
 	f32 GetLocalRotatation() const;
 	AEVec2 GetLocalScale() const;
 
-	void UpdatePosition(AEVec2 pos);
-	void UpdateRotation(f32 rot);
-	void UpdateScale(AEVec2 scale);
+	virtual void UpdatePosition(AEVec2 pos);
+	virtual void UpdateRotation(f32 rot);
+	virtual void UpdateScale(AEVec2 scale);
 
 	void Draw() const;
 
