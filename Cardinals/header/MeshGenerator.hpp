@@ -15,7 +15,7 @@
 
 #include <AEEngine.h>
 
-AEGfxVertexList* RectMeshCentered();
+AEGfxVertexList* RectMeshCenter();
 AEGfxVertexList* RectMeshCorner();
 AEGfxVertexList* CircleMesh(u32 segments);
 

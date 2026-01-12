@@ -12,7 +12,7 @@
 **************************************************************************/
 #include "../header/MeshGenerator.hpp"
 
-AEGfxVertexList* RectMeshCentered() {
+AEGfxVertexList* RectMeshCenter() {
 	AEGfxMeshStart();
 
 	AEGfxTriAdd(
@@ -54,11 +54,11 @@ AEGfxVertexList* CircleMesh(u32 segments) {
 		f32 a1 = (f32)i / segments * 2.0f * PI;
 		f32 a2 = (f32)(i + 1) / segments * 2.0f * PI;
 
-		f32 x1 = r * cosf(a1);
-		f32 y1 = r * sinf(a1);
+		f32 x1 = r * AECos(a1);
+		f32 y1 = r * AESin(a1);
 
-		f32 x2 = r * cosf(a2);
-		f32 y2 = r * sinf(a2);
+		f32 x2 = r * AECos(a2);
+		f32 y2 = r * AESin(a2);
 
 		AEGfxTriAdd(
 			0.0f, 0.0f, 0xFF000000, 0.f, 1.f,
