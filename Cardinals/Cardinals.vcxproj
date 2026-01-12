@@ -98,16 +98,22 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\GameState.cpp" />
+    <ClCompile Include="src\GameStateManager.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MeshGenerator.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\RenderLayer.cpp" />
+    <ClCompile Include="src\RenderLayerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\GameObject.hpp" />
     <ClInclude Include="header\GameState.hpp" />
+    <ClInclude Include="header\GameStateManager.hpp" />
     <ClInclude Include="header\MeshGenerator.hpp" />
     <ClInclude Include="header\Physics.hpp" />
+    <ClInclude Include="header\RenderLayer.hpp" />
+    <ClInclude Include="header\RenderLayerManager.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
