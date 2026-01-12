@@ -1,18 +1,18 @@
-//
-// Sprite rendering demo
-// 
-// AUTHORS: 
-//   Gerald Wong
-//  
-// DESCRIPTION:
-//   The code below is the minimal code to render 
-//   a single sprite in the window.
-//
-//   Students should not take this code as a reference to
-//   "good architecture". That's not the point of this demo.
-// 
+/*!***********************************************************************
+\file	Main.cpp
+\author	Nil
+\date	12/01/2026
+\par	Last Updated by: Jerome Lim
+\par	Project: Cardinals
+
+\brief	Entry Point for project
+
+\par	Changes: None
+**************************************************************************/
 #include <crtdbg.h> // To check for memory leaks
-#include "AEEngine.h"
+#include <AEEngine.h>
+#include <iostream>
+#include "../header/MeshGenerator.hpp"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -35,57 +35,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysSetWindowTitle("Draw Sprite Demo!");
 
 	// Pointer to Mesh. All our sprites use the same mesh, so we can just have one.
-	AEGfxVertexList* pMesh = 0;
+	AEGfxVertexList* squareMesh = CircleMesh(32);
 
-	// Informing the library that we're about to start adding triangles
-	AEGfxMeshStart();
-
-	// This shape has 2 triangles that makes up a square
-	// Color parameters represent colours as ARGB
-	// UV coordinates to read from loaded textures
-	//AEGfxTriAdd(
-	//	-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,  // bottom-left: red
-	//	0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,   // bottom-right: green
-	//	-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);  // top-left: blue
-
-	//AEGfxTriAdd(
-	//	0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,   // bottom-right: green
-	//	0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,    // top-right: white
-	//	-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);  // top-left: blue
-
-	const int NUM_SEGMENTS = 128;   // increase for smoother circle
-	const float RADIUS = 0.5f;
-
-	for (int i = 0; i < NUM_SEGMENTS; ++i)
-	{
-		float angle1 = (float)i / NUM_SEGMENTS * 2.0f * PI;
-		float angle2 = (float)(i + 1) / NUM_SEGMENTS * 2.0f * PI;
-
-		// Center of the circle
-		float cx = 0.0f;
-		float cy = 0.0f;
-
-		// First point on the circle
-		float x1 = RADIUS * cosf(angle1);
-		float y1 = RADIUS * sinf(angle1);
-
-		// Second point on the circle
-		float x2 = RADIUS * cosf(angle2);
-		float y2 = RADIUS * sinf(angle2);
-
-		AEGfxTriAdd(
-			cx, cy, 0xFFFFFF00, 0.5f, 0.5f,
-			x1, y1, 0xFFFF00FF, 0.5f + x1, 0.5f - y1,
-			x2, y2, 0xFF00FFFF, 0.5f + x2, 0.5f - y2
-		);
-	}
-
-	// Saving the mesh (list of triangles) in pMesh
-	pMesh = AEGfxMeshEnd();
+	std::cout << squareMesh << std::endl;
 
 	// Create a scale matrix that scales by 500 x and y
 	AEMtx33 scale = { 0 };
-	AEMtx33Scale(&scale, 50.f, 50.f);
+	AEMtx33Scale(&scale, 400.f, 400.f);
 
 	// Create a rotation matrix that rotates by 90 degrees
 	// Note that PI in radians is 180 degrees.
@@ -113,7 +69,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		// Your own rendering logic goes here
 		// Set the background to black.
-		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
 
 		// Tell the engine to get ready to draw something with texture.
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
@@ -123,7 +79,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
 		// Set the color to add to nothing, so that we don't alter the sprite's color
-		AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
 
 		// Set blend mode to AE_GFX_BM_BLEND
 		// This will allow transparency.
@@ -137,7 +93,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetTransform(transform.m);
 
 		// Tell Alpha Engine to draw the mesh with the above settings.
-		AEGfxMeshDraw(pMesh, AE_GFX_MDM_TRIANGLES);
+		AEGfxMeshDraw(squareMesh, AE_GFX_MDM_TRIANGLES);
 
 		// Informing the system about the loop's end
 		AESysFrameEnd();
@@ -147,7 +103,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			gGameRunning = 0;
 	}
 
-	AEGfxMeshFree(pMesh);
+	AEGfxMeshFree(squareMesh);
 	// free the system
 	AESysExit();
 
