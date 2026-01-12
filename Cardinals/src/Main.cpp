@@ -53,7 +53,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//	0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,    // top-right: white
 	//	-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);  // top-left: blue
 
-	const int NUM_SEGMENTS = 5;   // increase for smoother circle
+	const int NUM_SEGMENTS = 128;   // increase for smoother circle
 	const float RADIUS = 0.5f;
 
 	for (int i = 0; i < NUM_SEGMENTS; ++i)
