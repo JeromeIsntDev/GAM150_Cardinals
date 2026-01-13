@@ -11,6 +11,15 @@
     <ClCompile Include="src\RenderLayerManager.cpp" />
     <ClCompile Include="src\test_jerome.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="src\GameState.cpp" />
+    <ClCompile Include="src\PlayerManager.cpp" />
+    <ClCompile Include="src\test.cpp" />
+    <ClCompile Include="imGUI\imgui.cpp" />
+    <ClCompile Include="imGUI\imgui_demo.cpp" />
+    <ClCompile Include="imGUI\imgui_draw.cpp" />
+    <ClCompile Include="imGUI\imgui_impl_win32.cpp" />
+    <ClCompile Include="imGUI\imgui_tables.cpp" />
+    <ClCompile Include="imGUI\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -20,5 +29,13 @@
     <ClInclude Include="header\RenderLayer.hpp" />
     <ClInclude Include="header\RenderLayerManager.hpp" />
     <ClInclude Include="header\GameManager.hpp" />
+    <ClInclude Include="header\PlayerManager.hpp" />
+    <ClInclude Include="imGUI\imconfig.h" />
+    <ClInclude Include="imGUI\imgui.h" />
+    <ClInclude Include="imGUI\imgui_impl_win32.h" />
+    <ClInclude Include="imGUI\imgui_internal.h" />
+    <ClInclude Include="imGUI\imstb_rectpack.h" />
+    <ClInclude Include="imGUI\imstb_textedit.h" />
+    <ClInclude Include="imGUI\imstb_truetype.h" />
   </ItemGroup>
 </Project>
