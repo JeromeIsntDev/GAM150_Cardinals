@@ -97,7 +97,6 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="header\GameStateManager.hpp" />
     <ClCompile Include="imGUI\imgui.cpp" />
     <ClCompile Include="imGUI\imgui_demo.cpp" />
     <ClCompile Include="imGUI\imgui_draw.cpp" />
@@ -106,9 +105,8 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="imGUI\imgui_impl_win32.cpp" />
     <ClCompile Include="imGUI\imgui_tables.cpp" />
     <ClCompile Include="imGUI\imgui_widgets.cpp" />
-    <ClCompile Include="src\GameState.cpp" />
-    <ClCompile Include="src\GameStateManager.cpp" />
     <ClCompile Include="src\ControlPanel.cpp" />
+    <ClCompile Include="src\GStateManager.cpp" />
     <ClCompile Include="src\PlayerManager.cpp" />
     <ClCompile Include="src\RenderLayer.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -122,6 +120,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="header\GameObject.hpp" />
     <ClInclude Include="header\GameState.hpp" />
     <ClInclude Include="header\ControlPanel.hpp" />
+    <ClInclude Include="header\GStateManager.hpp" />
     <ClInclude Include="header\MeshGenerator.hpp" />
     <ClInclude Include="header\Physics.hpp" />
     <ClInclude Include="header\PlayerManager.hpp" />

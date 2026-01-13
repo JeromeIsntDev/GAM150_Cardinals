@@ -1,5 +1,6 @@
 #pragma once
 #ifndef _Game_Object_Header_
+#define _Game_Object_Header_
 
 #include <AEEngine.h>
 

@@ -13,6 +13,9 @@
 #include <AEEngine.h>
 #include <iostream>
 #include "../header/MeshGenerator.hpp"
+#include "../header/GStateManager.hpp"
+
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -61,12 +64,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEMtx33Concat(&transform, &rotate, &scale);
 	AEMtx33Concat(&transform, &translate, &transform);
 
+	TestState testState1("Test State 1");
+	TestState testState2("Test State 2");
+	GameStateManager manager(&testState1);
+
+	//stateManager.SetGameState(&testState);
+	//manager.SetCurrentGameState(&testState);
+	manager.EnterCurrState();
+
 	// Game Loop
 	while (gGameRunning)
 	{
 		// Informing the system about the loop's start
 		AESysFrameStart();
 
+		if (AEInputCheckTriggered(AEVK_Q)) {
+			manager.SetCurrentGameState(&testState2);
+		}
+
+		manager.CurrStateUpdate();
 		// Your own rendering logic goes here
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);

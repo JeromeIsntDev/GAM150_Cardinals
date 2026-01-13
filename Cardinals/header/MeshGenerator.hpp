@@ -12,6 +12,7 @@
 **************************************************************************/
 #pragma once
 #ifndef _Mesh_Gen_Header_
+#define _Mesh_Gen_Header_
 
 #include <AEEngine.h>
 
