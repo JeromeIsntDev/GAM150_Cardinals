@@ -1,3 +1,14 @@
+/*!***********************************************************************
+\file	Main.cpp
+\author	Jerome Lim
+\date	12/01/2026
+\par	Last Updated by: Jerome Lim
+\par	Project: Cardinals
+
+\brief	SOURCE File for GameObject
+
+\par	Changes: None
+**************************************************************************/
 #include "../header/GameObject.hpp"
 
 void GameObject::ConcatTransform()
@@ -34,15 +45,15 @@ GameObject::GameObject(AEVec2 translate, f32 rotate, AEVec2 scale)
 	ConcatTransform();
 }
 
-AEVec2 GameObject::GetGlobalPosition() const {
+AEVec2 GameObject::GetPosition() const {
 	return globalPosition;
 }
 
-f32 GameObject::GetGlobalRotatation() const {
+f32 GameObject::GetRotatation() const {
 	return globalRotation;
 }
 
-AEVec2 GameObject::GetGlobalScale() const {
+AEVec2 GameObject::GetScale() const {
 	return globalScale;
 }
 

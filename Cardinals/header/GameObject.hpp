@@ -1,3 +1,14 @@
+/*!***********************************************************************
+\file	GameObject.hpp
+\author	Jerome Lim
+\date	12/01/2026
+\par	Last Updated by: Jerome Lim
+\par	Project: Cardinals
+
+\brief	HEADER File for GameObject class
+
+\par	Changes: None
+**************************************************************************/
 #pragma once
 #ifndef _Game_Object_Header_
 #define _Game_Object_Header_
@@ -26,9 +37,9 @@ public:
 	GameObject();
 	GameObject(AEVec2 translate, f32 rotate, AEVec2 scale);
 
-	AEVec2 GetGlobalPosition() const;
-	f32 GetGlobalRotatation() const;
-	AEVec2 GetGlobalScale() const;
+	AEVec2 GetPosition() const;
+	f32 GetRotatation() const;
+	AEVec2 GetScale() const;
 
 	AEVec2 GetLocalPosition() const;
 	f32 GetLocalRotatation() const;
