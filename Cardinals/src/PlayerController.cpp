@@ -23,8 +23,12 @@ Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump)
 //takes in the current player pos, deltaTime & movement vector to update the player pos
 void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVec2 velocityVec)
 {
-	f32 gravity{ -9.86f };
+	f32 gravity{ 0.f };
 	f32 gravityScale{ 1.f };
+
+	//default value to 200.f atm
+	f32 maxHeight{ pos.y + 200.f };
+
 	//initialize with 0
 	f64* pTime{ 0 };
 	//stores the value
@@ -35,7 +39,9 @@ void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVe
 		//replace this later
 		f32 initialHeight{ pos.y };
 		time = AEGetTime(pTime);
-		//change deltaTime to smth else later
+		velocityVec.y = (2 * (maxHeight * velocityVec.x) / time);
+		f32 upper_frac_grav = (-2 * (maxHeight * (velocityVec.x * velocityVec.x)));
+		gravity = (upper_frac_grav / (time * time));
 		//ax^2 + bx + c formula
 		pos.y += ((gravity / 2.f) * time) + (velocityVec.y * time) + (initialHeight);
 	}
