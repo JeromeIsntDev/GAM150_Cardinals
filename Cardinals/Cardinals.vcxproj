@@ -115,6 +115,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\RenderLayerManager.cpp" />
     <ClCompile Include="src\test.cpp" />
+    <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\GameObject.hpp" />
@@ -126,6 +127,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="header\PlayerController.hpp" />
     <ClInclude Include="header\RenderLayer.hpp" />
     <ClInclude Include="header\RenderLayerManager.hpp" />
+    <ClInclude Include="header\TextureManager.hpp" />
     <ClInclude Include="imGUI\glfw\include\GLFW\glfw3.h" />
     <ClInclude Include="imGUI\glfw\include\GLFW\glfw3native.h" />
     <ClInclude Include="imGUI\imconfig.h" />
