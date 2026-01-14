@@ -20,13 +20,17 @@ from GameObject class from GameObject
 #include "../header/GameObject.hpp"
 
 class Player : public GameObject {
-private:
-	f32 playerHealth{ 10.f };
-	f32 moveSpeed{150.f};
-	f32 score{ 0 };
+	
+	Player() = delete;
+
+	f32 playerHealth;
+	f32 moveSpeed;
+	f32 score;
 	//set a downforce for psuedo gravity on jump
-	f32 downForce;
-	bool canJump{ true };
+	f32 jumpForce;
+	bool canJump;
+
+	Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump);
 
 	void UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec);
 };

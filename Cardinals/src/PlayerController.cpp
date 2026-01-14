@@ -5,12 +5,13 @@
 \par	Last Updated by: Sadric
 \par	Project: Cardinals
 
-\brief	The Manager that holds everything related to player
+\brief	The Manager that holds everything related to player and will control
+the player movement etc
 
 \par	Changes: None
 **************************************************************************/
 
-#include "../header/PlayerManager.hpp"
+#include "../header/PlayerController.hpp"
 
 //takes in the current player pos, deltaTime & movement vector to update the player pos
 void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec)
@@ -18,6 +19,7 @@ void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec)
 	pos.x += movementVec.x * moveSpeed * deltaTime;
 	//possible change to this Y movement
 	if (AEInputCheckTriggered(AEVK_SPACE) && canJump) {
+		//replace this later
 		pos.y += movementVec.y * moveSpeed * deltaTime;
 	}
 
