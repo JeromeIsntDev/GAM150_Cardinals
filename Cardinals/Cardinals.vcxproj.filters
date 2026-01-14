@@ -7,7 +7,7 @@
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\RenderLayer.cpp" />
     <ClCompile Include="src\RenderLayerManager.cpp" />
-    <ClCompile Include="src\PlayerManager.cpp" />
+    <ClCompile Include="src\PlayerController.cpp" />
     <ClCompile Include="src\test.cpp" />
     <ClCompile Include="imGUI\imgui.cpp" />
     <ClCompile Include="imGUI\imgui_demo.cpp" />
@@ -27,7 +27,7 @@
     <ClInclude Include="header\GameState.hpp" />
     <ClInclude Include="header\RenderLayer.hpp" />
     <ClInclude Include="header\RenderLayerManager.hpp" />
-    <ClInclude Include="header\PlayerManager.hpp" />
+    <ClInclude Include="header\PlayerController.hpp" />
     <ClInclude Include="imGUI\imconfig.h" />
     <ClInclude Include="imGUI\imgui.h" />
     <ClInclude Include="imGUI\imgui_impl_win32.h" />

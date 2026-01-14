@@ -7,13 +7,14 @@
 
 \brief	Entry Point for project
 
-\par	Changes: None
+\par	Changes: Added temp mainPlayer values - Sadric 14/1/26
 **************************************************************************/
 #include <crtdbg.h> // To check for memory leaks
 #include <AEEngine.h>
 #include <iostream>
 #include "../header/MeshGenerator.hpp"
 #include "../header/GStateManager.hpp"
+#include "../header/PlayerController.hpp"
 
 
 
@@ -28,6 +29,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	int gGameRunning = 1;
+
+	//declare mainPlayer variable
+
+	Player mainPlayer(150.f, 100.f, 100.f, true);
 
 	// Initialization of your own variables go here
 
@@ -71,7 +76,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//stateManager.SetGameState(&testState);
 	//manager.SetCurrentGameState(&testState);
 	manager.EnterCurrState();
-
 	// Game Loop
 	while (gGameRunning)
 	{
@@ -81,7 +85,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		if (AEInputCheckTriggered(AEVK_Q)) {
 			manager.SetCurrentGameState(&testState2);
 		}
-
 		manager.CurrStateUpdate();
 		// Your own rendering logic goes here
 		// Set the background to black.
