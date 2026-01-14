@@ -33,7 +33,7 @@ public:
 	f32 playerHealth;
 	Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump);
 
-	void UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec);
+	void UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVec2 velocityVec);
 };
 
 #endif // !PLAYER_MANAGER

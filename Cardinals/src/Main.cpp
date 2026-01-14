@@ -17,7 +17,6 @@
 #include "../header/PlayerController.hpp"
 
 
-
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPWSTR    lpCmdLine,
@@ -40,7 +39,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);
 
 	// Changing the window title
-	AESysSetWindowTitle("Draw Sprite Demo!");
+	AESysSetWindowTitle("Cardinal");
 
 	// Pointer to Mesh. All our sprites use the same mesh, so we can just have one.
 	AEGfxVertexList* squareMesh = CircleMesh(32);
@@ -86,6 +85,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			manager.SetCurrentGameState(&testState2);
 		}
 		manager.CurrStateUpdate();
+
 		// Your own rendering logic goes here
 		// Set the background to black.
 		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);

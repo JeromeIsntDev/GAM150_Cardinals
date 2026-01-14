@@ -21,14 +21,32 @@ Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump)
 	std::cout << "Player Created" << std::endl;
 }
 //takes in the current player pos, deltaTime & movement vector to update the player pos
-void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec)
+void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVec2 velocityVec)
 {
-	pos.x += movementVec.x * moveSpeed * deltaTime;
-	//possible change to this Y movement
+	f32 gravity{ -9.86f };
+	f32 gravityScale{ 1.f };
+	//initialize with 0
+	f64* pTime{ 0 };
+	//stores the value
+	f64 time;
+	//input handling
+	//Jump logic
 	if (AEInputCheckTriggered(AEVK_SPACE) && canJump) {
 		//replace this later
-		pos.y += movementVec.y * moveSpeed * deltaTime;
+		f32 initialHeight{ pos.y };
+		time = AEGetTime(pTime);
+		//change deltaTime to smth else later
+		//ax^2 + bx + c formula
+		pos.y += ((gravity / 2.f) * time) + (velocityVec.y * time) + (initialHeight);
 	}
+	if (AEInputCheckCurr(AEVK_D)) {
+		movementVec.x = 1.f;
+	}
+	if (AEInputCheckCurr(AEVK_A)) {
+		movementVec.x = -1.f;
+	}
+	velocityVec.x = movementVec.x * moveSpeed;
+	pos.x += velocityVec.x * deltaTime;
 
 	GameObject::UpdatePosition(pos);
 }
