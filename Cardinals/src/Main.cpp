@@ -72,6 +72,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	Texture tex;
 	AEGfxTexture* texture = tex.Load_Image(Images::Planet);
 
+	s8 pFont = tex.Load_Font(Fonts::Main);
+	const char* pText = "Cardinal";
+
 	TestState testState1("Test State 1");
 	TestState testState2("Test State 2");
 	GameStateManager manager(&testState1);
@@ -119,6 +122,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Tell Alpha Engine to draw the mesh with the above settings.
 		AEGfxMeshDraw(squareMesh, AE_GFX_MDM_TRIANGLES);
 
+		tex.Draw_Text(pFont, pText, 0.f, 0.5f, 1.f, Colors::PastelPink);
 		// Informing the system about the loop's end
 		AESysFrameEnd();
 
@@ -128,6 +132,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	AEGfxMeshFree(squareMesh);
+	tex.Free_Image(texture);
+	tex.Free_Font(pFont);
 	// free the system
 	AESysExit();
 
