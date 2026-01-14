@@ -49,7 +49,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Create a scale matrix that scales by 500 x and y
 	AEMtx33 scale = { 0 };
-	AEMtx33Scale(&scale, 400.f, 400.f);
+	AEMtx33Scale(&scale, 1525.f, 445.f);
 
 	// Create a rotation matrix that rotates by 90 degrees
 	// Note that PI in radians is 180 degrees.
@@ -70,8 +70,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEMtx33Concat(&transform, &translate, &transform);
 	
 	Texture tex;
-	AEGfxTexture* texture = tex.Load_Image(Images::Planet);
-
+	AEGfxTexture* digipenLogo = tex.Load_Image(Images::DigipenLogo);
+	f32 logo_transparency = 0.f;
 	s8 pFont = tex.Load_Font(Fonts::Main);
 	const char* pText = "Cardinal";
 
@@ -110,10 +110,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Set blend mode to AE_GFX_BM_BLEND
 		// This will allow transparency.
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetTransparency(1.0f);
+
+		if (AEFrameRateControllerGetFrameCount() < 100) {
+			logo_transparency += 0.02f;
+		}
+		else if (AEFrameRateControllerGetFrameCount() > 100 && (AEFrameRateControllerGetFrameCount() < 200)) {
+			logo_transparency -= 0.02f;
+		}
+		else if (AEFrameRateControllerGetFrameCount() > 200){
+			logo_transparency = 0.f;
+		}
+		
+		AEGfxSetTransparency(logo_transparency);
 
 		// Set the texture to pTex
-		tex.Draw_Image(texture, 0.f, 0.f);
+		tex.Draw_Image(digipenLogo, 0.f, 0.f);
 
 		// Tell Alpha Engine to use the matrix in 'transform' to apply onto all
 		// the vertices of the mesh that we are about to choose to draw in the next line.
@@ -132,7 +143,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	}
 
 	AEGfxMeshFree(squareMesh);
-	tex.Free_Image(texture);
+	tex.Free_Image(digipenLogo);
 	tex.Free_Font(pFont);
 	// free the system
 	AESysExit();

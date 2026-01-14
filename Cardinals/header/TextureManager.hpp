@@ -36,6 +36,7 @@ namespace Colors
 namespace Images
 {
     constexpr const FilePath Planet{ "../../Assets/PlanetTexture.png" };
+    constexpr const FilePath DigipenLogo{ "../../Assets/DigiPen_WHITE.png" };
 }
 
 namespace Fonts
