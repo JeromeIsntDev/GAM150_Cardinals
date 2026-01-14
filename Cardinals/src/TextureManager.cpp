@@ -12,24 +12,23 @@
 
 #include "../header/TextureManager.hpp"
 
-class Texture
+void Texture::Fill_Color(const Color color) 
 {
-public:
+	AEGfxSetColorToAdd(color.r, color.g, color.b, color.a);
+}
 
-	void Fill_Color(const Color color) {
-		AEGfxSetColorToAdd(color.r, color.g, color.b, color.a);
-	}
+AEGfxTexture* Texture::Load_Image(const Image& image)
+{
+	AEGfxTexture* img = AEGfxTextureLoad(image.filename);
+	return img;
+}
 
-	AEGfxTexture* Load_Image(const Image& image) {
-		AEGfxTexture* img = AEGfxTextureLoad(image.filename);
-		return img;
-	}
+void Texture::Draw_Image(AEGfxTexture* image, f32 x, f32 y)
+{
+	AEGfxTextureSet(image, x, y);
+}
 
-	void Draw_Image(AEGfxTexture* image, f32 x, f32 y) {
-		AEGfxTextureSet(image, x, y);
-	}
-
-	void Free_Image(AEGfxTexture* image) {
-		AEGfxTextureUnload(image);
-	}
-};
+void Texture::Free_Image(AEGfxTexture* image)
+{
+	AEGfxTextureUnload(image);
+}

@@ -15,6 +15,7 @@
 #include "../header/MeshGenerator.hpp"
 #include "../header/GStateManager.hpp"
 #include "../header/PlayerController.hpp"
+#include "../header/TextureManager.hpp"
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -42,7 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysSetWindowTitle("Cardinal");
 
 	// Pointer to Mesh. All our sprites use the same mesh, so we can just have one.
-	AEGfxVertexList* squareMesh = CircleMesh(32);
+	AEGfxVertexList* squareMesh = RectMeshCenter();
 
 	std::cout << squareMesh << std::endl;
 
@@ -67,10 +68,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEMtx33 transform = { 0 };
 	AEMtx33Concat(&transform, &rotate, &scale);
 	AEMtx33Concat(&transform, &translate, &transform);
-
-	TestState testState1("Test State 1");
-	TestState testState2("Test State 2");
-	GameStateManager manager(&testState1);
+	
+	Texture tex;
+	AEGfxTexture* texture = tex.Load_Image(Images::Planet);
 
 	//stateManager.SetGameState(&testState);
 	//manager.SetCurrentGameState(&testState);
@@ -91,7 +91,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
 
 		// Tell the engine to get ready to draw something with texture.
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 
 		// Set the the color to multiply to white, so that the sprite can 
 		// display the full range of colors (default is black).
@@ -106,6 +106,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetTransparency(1.0f);
 
 		// Set the texture to pTex
+		tex.Draw_Image(texture, 0.f, 0.f);
 
 		// Tell Alpha Engine to use the matrix in 'transform' to apply onto all
 		// the vertices of the mesh that we are about to choose to draw in the next line.

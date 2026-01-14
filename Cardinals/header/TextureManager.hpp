@@ -35,4 +35,14 @@ namespace Images
     constexpr const Image Planet{ "../../Assets/PlanetTexture.png" };
 }
 
+class Texture
+{
+public:
+
+	void Fill_Color(const Color color);
+	AEGfxTexture* Load_Image(const Image& image);
+    void Draw_Image(AEGfxTexture* image, f32 x, f32 y);
+    void Free_Image(AEGfxTexture* image);
+};
+
 #endif // !_Texture_Man_Header_
