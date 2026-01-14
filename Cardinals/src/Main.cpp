@@ -72,6 +72,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	Texture tex;
 	AEGfxTexture* texture = tex.Load_Image(Images::Planet);
 
+	TestState testState1("Test State 1");
+	TestState testState2("Test State 2");
+	GameStateManager manager(&testState1);
+
 	//stateManager.SetGameState(&testState);
 	//manager.SetCurrentGameState(&testState);
 	manager.EnterCurrState();
