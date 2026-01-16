@@ -19,6 +19,8 @@
     <ClCompile Include="imGUI\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\ControlPanel.cpp" />
     <ClCompile Include="src\GStateManager.cpp" />
+    <ClCompile Include="src\TextureManager.cpp" />
+    <ClCompile Include="src\AudioManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -42,6 +44,8 @@
     <ClInclude Include="imGUI\imgui_impl_glfw.h" />
     <ClInclude Include="imGUI\imgui_impl_opengl3.h" />
     <ClInclude Include="imGUI\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="header\TextureManager.hpp" />
+    <ClInclude Include="header\AudioManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />
