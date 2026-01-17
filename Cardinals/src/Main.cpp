@@ -75,8 +75,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	s8 pFont = tex.Load_Font(Fonts::Main);
 	const char* pText = "Cardinal";
 
-	TestState testState1("Test State 1");
-	TestState testState2("Test State 2");
+	TestState testState1("Test State 1\n");
+	TestState testState2("Test State 2\n");
 	GameStateManager manager(&testState1);
 
 	//stateManager.SetGameState(&testState);

@@ -13,12 +13,13 @@ public:
 #endif // !_Game_State_Header_
 
 #include <iostream>
+#include <AEEngine.h>
 class TestState : public GameState {
 private:
 	const char* p_msg;
 public:
 	TestState(const char* msg) {
-		std::cout << msg << std::endl;
+		PRINT(msg);
 		p_msg = msg;
 	}
 
