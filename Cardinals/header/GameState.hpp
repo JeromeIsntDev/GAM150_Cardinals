@@ -28,7 +28,9 @@ public:
 	}
 
 	void StateUpdate() {
-		std::cout << "Update: " << p_msg << std::endl;
+		PRINT("Update: ");
+		PRINT(p_msg);
+		PRINT("\n");
 	}
 
 	void ExitState() {
