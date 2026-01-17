@@ -31,7 +31,8 @@ class Player : public GameObject {
 	//Constructor
 public:
 	f32 playerHealth;
-	Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump);
+	Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump
+		, AEGfxVertexList* mesh);
 
 	void UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVec2 velocityVec);
 };

@@ -45,15 +45,26 @@ namespace Fonts
 }
 class Texture
 {
-public:
+private:
+    AEGfxTexture* image;
 
+public:
 	void Fill_Color(const Color color);
-	AEGfxTexture* Load_Image(const FilePath& image);
-    void Draw_Image(AEGfxTexture* image, f32 x, f32 y);
-    void Free_Image(AEGfxTexture* image);
-    s8 Load_Font(const FilePath& font);
-    void Draw_Text(s8 font, const char* text, f32 x, f32 y, f32 scale, const Color color);
-    void Free_Font(s8 font);
+	void Load_Image(const FilePath& imageFilePath);
+    void Set_Image(f32 x, f32 y);
+    void Free_Image();
+    AEGfxTexture* Get_Image() const;
+};
+
+class Font {
+private:
+    s8 font;
+    //f32 size;
+
+public:
+    void Load_Font(const FilePath& fontFilePath, const f32 initHeight);
+    void Draw_Text(const char* text, f32 x, f32 y, f32 scale, const Color color) const;
+    void Free_Font() const;
 };
 
 #endif // !_Texture_Man_Header_

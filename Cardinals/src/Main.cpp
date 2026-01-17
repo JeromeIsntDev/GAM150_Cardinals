@@ -30,88 +30,58 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	int gGameRunning = 1;
 
-	//declare mainPlayer variable
-
-	Player mainPlayer(150.f, 100.f, 100.f, true);
-
-	// Initialization of your own variables go here
-
-	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);
 
 	// Changing the window title
-	AESysSetWindowTitle("Cardinal");
+	AESysSetWindowTitle("CARDINAL");
 
-	// Pointer to Mesh. All our sprites use the same mesh, so we can just have one.
 	AEGfxVertexList* squareMesh = RectMeshCenter();
-
-	std::cout << squareMesh << std::endl;
-
-	// Create a scale matrix that scales by 500 x and y
-	AEMtx33 scale = { 0 };
-	AEMtx33Scale(&scale, 1525.f, 445.f);
-
-	// Create a rotation matrix that rotates by 90 degrees
-	// Note that PI in radians is 180 degrees.
-	// Since 90 degrees is 180/2, 90 degrees in radians is PI/2
-	AEMtx33 rotate = { 0 };
-	AEMtx33Rot(&rotate, 0);
-
-	// Create a translation matrix that translates by
-	// 200 in the x-axis and 100 in the y-axis
-	AEMtx33 translate = { 0 };
-	AEMtx33Trans(&translate, 0, 0);
-
-	// Concatenate the matrices into the 'transform' variable.
-	// We concatenate in the order of translation * rotation * scale
-	// i.e. this means we scale, then rotate, then translate.
-	AEMtx33 transform = { 0 };
-	AEMtx33Concat(&transform, &rotate, &scale);
-	AEMtx33Concat(&transform, &translate, &transform);
 	
-	Texture tex;
-	AEGfxTexture* digipenLogo = tex.Load_Image(Images::DigipenLogo);
+	Texture digipenTexture{};
+	digipenTexture.Load_Image(Images::DigipenLogo);
+	Font digipenFont{};
+	digipenFont.Load_Font(Fonts::Main, 72.f);
+
 	f32 logo_transparency = 0.f;
-	s8 pFont = tex.Load_Font(Fonts::Main);
 	const char* pText = "Cardinal";
 
+<<<<<<< Updated upstream
 	TestState testState1("Test State 1\n");
 	TestState testState2("Test State 2\n");
 	GameStateManager manager(&testState1);
+=======
+	/*TestState testState1("Test State 1");
+	TestState testState2("Test State 2");
+	GameStateManager manager(&testState1);*/
+
+	Player player(100.f, 30.f, 100.f, true, squareMesh);
+	player.SetTexture(digipenTexture);
+>>>>>>> Stashed changes
 
 	//stateManager.SetGameState(&testState);
 	//manager.SetCurrentGameState(&testState);
-	manager.EnterCurrState();
-	// Game Loop
+	//manager.EnterCurrState();
+
+
 	while (gGameRunning)
 	{
-		// Informing the system about the loop's start
 		AESysFrameStart();
 
-		if (AEInputCheckTriggered(AEVK_Q)) {
+		/*if (AEInputCheckTriggered(AEVK_Q)) {
 			manager.SetCurrentGameState(&testState2);
 		}
-		manager.CurrStateUpdate();
+		manager.CurrStateUpdate();*/
 
-		// Your own rendering logic goes here
-		// Set the background to black.
-		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
-
-		// Tell the engine to get ready to draw something with texture.
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-
-		// Set the the color to multiply to white, so that the sprite can 
-		// display the full range of colors (default is black).
-		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-
-		// Set the color to add to nothing, so that we don't alter the sprite's color
-		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
-
-		// Set blend mode to AE_GFX_BM_BLEND
-		// This will allow transparency.
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
+		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
+		AEGfxSetTransparency(1.f);
 
-		if (AEFrameRateControllerGetFrameCount() < 100) {
+		//player.Draw();
+
+		/*if (AEFrameRateControllerGetFrameCount() < 100) {
 			logo_transparency += 0.02f;
 		}
 		else if (AEFrameRateControllerGetFrameCount() > 100 && (AEFrameRateControllerGetFrameCount() < 200)) {
@@ -119,32 +89,35 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else if (AEFrameRateControllerGetFrameCount() > 200){
 			logo_transparency = 0.f;
-		}
+		}*/
 		
-		AEGfxSetTransparency(logo_transparency);
 
 		// Set the texture to pTex
-		tex.Draw_Image(digipenLogo, 0.f, 0.f);
+		//digipenTexture.Set_Image(0.f, 0.f);
 
 		// Tell Alpha Engine to use the matrix in 'transform' to apply onto all
 		// the vertices of the mesh that we are about to choose to draw in the next line.
-		AEGfxSetTransform(transform.m);
+		//AEGfxSetTransform(transform.m);
 
 		// Tell Alpha Engine to draw the mesh with the above settings.
-		AEGfxMeshDraw(squareMesh, AE_GFX_MDM_TRIANGLES);
+		//AEGfxMeshDraw(squareMesh, AE_GFX_MDM_TRIANGLES);
 
-		tex.Draw_Text(pFont, pText, 0.f, 0.5f, 1.f, Colors::PastelPink);
+		//digipenTexture.Draw_Text(pFont, pText, 0.f, 0.5f, 1.f, Colors::PastelPink);
 		// Informing the system about the loop's end
-		AESysFrameEnd();
 
-		// check if forcing the application to quit
+		//player.Draw();
+
+
+		digipenFont.Draw_Text("Hello", 0.f, 0.f, 1.f, Colors::PastelPurple);
+
+		AESysFrameEnd();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			gGameRunning = 0;
 	}
 
 	AEGfxMeshFree(squareMesh);
-	tex.Free_Image(digipenLogo);
-	tex.Free_Font(pFont);
+	digipenTexture.Free_Image();
+	digipenFont.Free_Font();
 	// free the system
 	AESysExit();
 

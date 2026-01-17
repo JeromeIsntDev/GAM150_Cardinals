@@ -14,6 +14,7 @@
 #define _Game_Object_Header_
 
 #include <AEEngine.h>
+#include "../header/TextureManager.hpp"
 
 class GameObject {
 //Variables
@@ -26,6 +27,8 @@ private:
 	AEMtx33 mtx_scale;
 	AEMtx33 mtx_transform;
 	bool isChild;
+	AEGfxVertexList* mesh;
+	Texture tex { };
 	//To add texture/image and/or mesh
 
 //Functions
@@ -35,7 +38,8 @@ private:
 
 public:
 	GameObject();
-	GameObject(AEVec2 translate, f32 rotate, AEVec2 scale);
+	GameObject(AEGfxVertexList* mesh);
+	GameObject(AEGfxVertexList* mesh, AEVec2 translate, f32 rotate, AEVec2 scale);
 
 	AEVec2 GetPosition() const;
 	f32 GetRotatation() const;
@@ -48,6 +52,7 @@ public:
 	virtual void UpdatePosition(AEVec2 pos);
 	virtual void UpdateRotation(f32 rot);
 	virtual void UpdateScale(AEVec2 scale);
+	virtual void SetTexture(const Texture& texture);
 
 	void Draw() const;
 
