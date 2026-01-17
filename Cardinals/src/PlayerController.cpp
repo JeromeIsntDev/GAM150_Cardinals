@@ -16,6 +16,7 @@ the player movement etc
 
 //initialize player with values
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump)
 	//initializerList to initialize with values
 	: playerHealth(p_health), moveSpeed(p_movespeed),score(0.f), jumpForce(p_jumpForce), canJump(p_canjump)
@@ -26,6 +27,12 @@ Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, A
 >>>>>>> Stashed changes
 {
 	std::cout << "Player Created" << std::endl;
+=======
+Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, AEGfxVertexList* mesh)
+	: playerHealth(p_health), moveSpeed(p_movespeed),score(0.f), jumpForce(p_jumpForce), canJump(p_canjump),
+	GameObject(mesh, AEVec2{0.f,0.f}, 0.f, AEVec2{500.f,500.f})
+{
+>>>>>>> Stashed changes
 	PRINT("Player Created");
 }
 //takes in the current player pos, deltaTime & movement vector to update the player pos

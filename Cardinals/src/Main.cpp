@@ -46,16 +46,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	const char* pText = "Cardinal";
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	TestState testState1("Test State 1\n");
 	TestState testState2("Test State 2\n");
 	GameStateManager manager(&testState1);
 =======
+=======
+>>>>>>> Stashed changes
 	/*TestState testState1("Test State 1");
 	TestState testState2("Test State 2");
 	GameStateManager manager(&testState1);*/
 
 	Player player(100.f, 30.f, 100.f, true, squareMesh);
 	player.SetTexture(digipenTexture);
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 	//stateManager.SetGameState(&testState);

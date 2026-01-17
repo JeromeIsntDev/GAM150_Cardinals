@@ -15,6 +15,10 @@ public:
 #include <iostream>
 #include <AEEngine.h>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 =======
 
 >>>>>>> Stashed changes
@@ -28,11 +32,15 @@ public:
 	}
 
 	void EnterState() {
+<<<<<<< Updated upstream
 		std::cout << "Entered: " << p_msg << std::endl;
+=======
+>>>>>>> Stashed changes
 		PRINT("Entered: %s\n", p_msg);
 	}
 
 	void StateUpdate() {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 		PRINT("Update: ");
 		PRINT(p_msg);
@@ -44,6 +52,12 @@ public:
 
 	void ExitState() {
 		std::cout << "Exit: " << p_msg << std::endl;
+=======
+		PRINT("Update: %s\n", p_msg);
+	}
+
+	void ExitState() {
+>>>>>>> Stashed changes
 		PRINT("Exit: %s\n", p_msg);
 	}
 };
