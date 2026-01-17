@@ -16,6 +16,7 @@ the player movement etc
 
 //initialize player with values
 Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump)
+	//initializerList to initialize with values
 	: playerHealth(p_health), moveSpeed(p_movespeed),score(0.f), jumpForce(p_jumpForce), canJump(p_canjump)
 {
 	std::cout << "Player Created" << std::endl;
