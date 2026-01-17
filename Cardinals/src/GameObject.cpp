@@ -100,7 +100,7 @@ void GameObject::UpdateScale(AEVec2 scale)
 	ConcatTransform();
 }
 
-void GameObject::SetTexture(const Texture& texture)
+void GameObject::SetTexture(const Texture texture)
 {
 	tex = texture;
 }

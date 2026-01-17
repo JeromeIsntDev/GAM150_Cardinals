@@ -14,14 +14,7 @@ public:
 
 #include <iostream>
 #include <AEEngine.h>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
-=======
-
->>>>>>> Stashed changes
 class TestState : public GameState {
 private:
 	const char* p_msg;
@@ -32,32 +25,14 @@ public:
 	}
 
 	void EnterState() {
-<<<<<<< Updated upstream
-		std::cout << "Entered: " << p_msg << std::endl;
-=======
->>>>>>> Stashed changes
 		PRINT("Entered: %s\n", p_msg);
 	}
 
 	void StateUpdate() {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-		PRINT("Update: ");
-		PRINT(p_msg);
-		PRINT("\n");
-=======
-		PRINT("Update: %s\n", p_msg);
->>>>>>> Stashed changes
-	}
-
-	void ExitState() {
-		std::cout << "Exit: " << p_msg << std::endl;
-=======
 		PRINT("Update: %s\n", p_msg);
 	}
 
 	void ExitState() {
->>>>>>> Stashed changes
-		PRINT("Exit: %s\n", p_msg);
+		PRINT("Update: %s\n", p_msg);
 	}
 };
