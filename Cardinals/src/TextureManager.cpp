@@ -39,7 +39,7 @@ AEGfxTexture* Texture::Get_Image() const
 
 void Font::Load_Font(const FilePath& fontFilePath, const f32 initHeight)
 {
-	font = AEGfxCreateFont(fontFilePath.filename, initHeight);
+	font = AEGfxCreateFont(fontFilePath.filename, static_cast<int>(initHeight));
 }
 
 void Font::Draw_Text(const char* text, f32 x, f32 y, f32 scale, const Color color) const

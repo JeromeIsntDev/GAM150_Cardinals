@@ -31,6 +31,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	int gGameRunning = 1;
 
+	//declare mainPlayer variable
+	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 100.f };
+	bool playerCanJump{ true };
+
+	// Initialization of your own variables go here
+
+	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);
 
 	AudioFile musicFile{ "../../Assets/bouken.mp3" };
@@ -51,6 +58,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysSetWindowTitle("CARDINAL");
 
 	AEGfxVertexList* squareMesh = RectMeshCenter();
+	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump,squareMesh);
 	
 	Texture digipenTexture{};
 	digipenTexture.Load_Image(Images::DigipenLogo);
@@ -62,6 +70,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	TestState testState1("Test State 1\n");
 	TestState testState2("Test State 2\n");
+	//TO BE DELETED. TEST PLAYER GET AND SET
+	PRINT("PlayerHealth: %.2f\n",mainPlayer.GetPlayerHealth());
+	PRINT("PlayerScore: %.2f\n", mainPlayer.GetPlayerScore());
+	mainPlayer.SetPlayerScore(20.f);
+	PRINT("PlayerScore: %.2f\n", mainPlayer.GetPlayerScore());
 	GameStateManager manager(&testState1);
 
 	/*TestState testState1("Test State 1");
