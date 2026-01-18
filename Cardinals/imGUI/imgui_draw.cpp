@@ -2888,10 +2888,10 @@ void ImFontAtlasTextureBlockPostProcess(ImFontAtlasPostProcessData* data)
 void ImFontAtlasTextureBlockPostProcessMultiply(ImFontAtlasPostProcessData* data, float multiply_factor)
 {
     unsigned char* pixels = (unsigned char*)data->Pixels;
-    int pitch = data->Pitch;
+    int _pitch = data->Pitch;
     if (data->Format == ImTextureFormat_Alpha8)
     {
-        for (int ny = data->Height; ny > 0; ny--, pixels += pitch)
+        for (int ny = data->Height; ny > 0; ny--, pixels += _pitch)
         {
             ImU8* p = (ImU8*)pixels;
             for (int nx = data->Width; nx > 0; nx--, p++)
@@ -2903,7 +2903,7 @@ void ImFontAtlasTextureBlockPostProcessMultiply(ImFontAtlasPostProcessData* data
     }
     else if (data->Format == ImTextureFormat_RGBA32) //-V547
     {
-        for (int ny = data->Height; ny > 0; ny--, pixels += pitch)
+        for (int ny = data->Height; ny > 0; ny--, pixels += _pitch)
         {
             ImU32* p = (ImU32*)(void*)pixels;
             for (int nx = data->Width; nx > 0; nx--, p++)

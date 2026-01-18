@@ -11,8 +11,9 @@
 **************************************************************************/
 #pragma once
 #ifndef _Audio_Man_Header_
+#define _Audio_Man_Header_
 
-#include <AEAudio.h>
+#include <AEEngine.h>
 
 struct AudioFile {
     const char* filename;
@@ -30,17 +31,37 @@ namespace Audios
 
 class Audio
 {
-public:
+private:
+    AEAudio _sound;
+    AEAudioGroup _group;
+    f32 _volume;
+    f32 _pitch;
+    s32 _loop;
 
-    AEAudio Load_Sound(AudioFile audio);
-    AEAudio Load_Music(AudioFile audio);
-    AEAudioGroup Create_Audio_Group();
-    void Play_Audio(AEAudio audio, AEAudioGroup group, f32 volume, f32 pitch, s32 loop);
-    void Pause_Audio_Group(AEAudioGroup group);
-    void Resume_Audio_Group(AEAudioGroup group);
-    void Stop_Audio_Group(AEAudioGroup group);
-    void Free_Audio(AEAudio audio);
+public:
+    //Constructor Overload
+    Audio();
+
+    void Load_Sound(AudioFile audio);
+    void Load_Music(AudioFile audio);
+    void Play_Audio() const;
+    void Play_Audio(f32 _volume, f32 _pitch, s32 _loop);
+    void Free_Audio() const;
+    
+};
+
+class AudioGroup {
+private:
+    f32 _volume;
+    f32 _pitch;
+
+public:
+    void Create_Audio_Group();
+    void Pause_Audio_Group(AEAudioGroup _group);
+    void Resume_Audio_Group(AEAudioGroup _group);
+    void Stop_Audio_Group(AEAudioGroup _group);
     void Free_Audio_Group(AEAudioGroup audio_gp);
+
 };
 
 #endif // !_Texture_Man_Header_

@@ -16,6 +16,7 @@
 #include "../header/GStateManager.hpp"
 #include "../header/PlayerController.hpp"
 #include "../header/TextureManager.hpp"
+#include "../header/AudioManager.hpp"
 
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -31,6 +32,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	int gGameRunning = 1;
 
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);
+
+	AudioFile musicFile{ "../../Assets/bouken.mp3" };
+
+	AEAudioGroup _group = AEAudioCreateGroup();
+
+	Audio audioTest1;
+	audioTest1.Load_Music(musicFile);
+	audioTest1.Play_Audio(1.f, 1.f, 0.f);
+
+	/*AEAudio Audio::Load_Sound(AudioFile audio_file)
+	{
+		AEAudio audio = AEAudioLoadSound(audio_file.filename);
+		return audio;
+	}*/
 
 	// Changing the window title
 	AESysSetWindowTitle("CARDINAL");
@@ -69,6 +84,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			manager.SetCurrentGameState(&testState2);
 		}
 		manager.CurrStateUpdate();*/
+
 
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);

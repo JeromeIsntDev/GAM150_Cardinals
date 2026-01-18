@@ -13,52 +13,62 @@
 #include "../header/AudioManager.hpp"
 
 
-AEAudio Audio::Load_Sound(AudioFile audio_file)
+Audio::Audio() 
+	: _sound{}, _group{}, _volume(0.f), _pitch(0.f), _loop(0)
 {
-	AEAudio audio = AEAudioLoadSound(audio_file.filename);
-	return audio;
+	PRINT("Audio Created\n");
 }
 
-AEAudio Audio::Load_Music(AudioFile audio_file)
+void Audio::Load_Sound(AudioFile audio_file)
 {
-	AEAudio audio = AEAudioLoadMusic(audio_file.filename);
-	return audio;
+	_sound = AEAudioLoadSound(audio_file.filename);
 }
 
-AEAudioGroup Audio::Create_Audio_Group()
+void Audio::Load_Music(AudioFile audio_file)
 {
-	AEAudioGroup audio_gp = AEAudioCreateGroup();
-	AEAudioSetGroupVolume(audio_gp, 0.5f); //set default volume 50%
-	AEAudioSetGroupPitch(audio_gp, 0.5f); //set default volume 50%
-	return audio_gp;
+	_sound = AEAudioLoadMusic(audio_file.filename);
 }
 
-void Audio::Play_Audio(AEAudio audio, AEAudioGroup group, f32 volume, f32 pitch, s32 loop)
+
+void Audio::Play_Audio() const
 {
-	AEAudioPlay(audio, group, volume, pitch, loop);
+	PRINT("Play Audio Check\n");
+	AEAudioPlay(_sound, _group, _volume, _pitch, _loop);
 }
 
-void Audio::Pause_Audio_Group(AEAudioGroup audio_gp)
+void Audio::Play_Audio(f32 volume, f32 pitch, s32 loop)
 {
-	AEAudioPauseGroup(audio_gp);
+	if (_group.fmod_group == NULL) {
+		PRINT("MISSING GROUP");
+	}
+	PRINT("Play Audio Check with values set\n");
+	_volume = volume;
+	_pitch = pitch;
+	_loop = loop;
+	AEAudioPlay(_sound, _group, volume, pitch, loop);
 }
 
-void Audio::Resume_Audio_Group(AEAudioGroup audio_gp)
+void Audio::Free_Audio() const
 {
-	AEAudioResumeGroup(audio_gp);
+	AEAudioUnloadAudio(_sound);
 }
 
-void Audio::Stop_Audio_Group(AEAudioGroup audio_gp)
-{
-	AEAudioStopGroup(audio_gp);
+void AudioGroup::Create_Audio_Group() {
+
 }
 
-void Audio::Free_Audio(AEAudio audio)
-{
-	AEAudioUnloadAudio(audio);
+void AudioGroup::Pause_Audio_Group(AEAudioGroup _group) {
+
 }
 
-void Audio::Free_Audio_Group(AEAudioGroup audio_gp)
-{
-	AEAudioUnloadAudioGroup(audio_gp);
+void AudioGroup::Resume_Audio_Group(AEAudioGroup _group) {
+
+}
+
+void AudioGroup::Stop_Audio_Group(AEAudioGroup _group) {
+
+}
+
+void AudioGroup::Free_Audio_Group(AEAudioGroup audio_gp){
+
 }
