@@ -14,6 +14,7 @@ public:
 
 #include <iostream>
 #include <AEEngine.h>
+
 class TestState : public GameState {
 private:
 	const char* p_msg;
@@ -24,16 +25,14 @@ public:
 	}
 
 	void EnterState() {
-		std::cout << "Entered: " << p_msg << std::endl;
+		PRINT("Entered: %s\n", p_msg);
 	}
 
 	void StateUpdate() {
-		PRINT("Update: ");
-		PRINT(p_msg);
-		PRINT("\n");
+		PRINT("Update: %s\n", p_msg);
 	}
 
 	void ExitState() {
-		std::cout << "Exit: " << p_msg << std::endl;
+		PRINT("Update: %s\n", p_msg);
 	}
 };

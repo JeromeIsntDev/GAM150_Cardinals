@@ -17,35 +17,40 @@ void Texture::Fill_Color(const Color color)
 	AEGfxSetColorToAdd(color.r, color.g, color.b, color.a);
 }
 
-AEGfxTexture* Texture::Load_Image(const FilePath& image)
+void Texture::Load_Image(const FilePath& imageFilePath)
 {
-	AEGfxTexture* img = AEGfxTextureLoad(image.filename);
-	return img;
+	image = AEGfxTextureLoad(imageFilePath.filename);
 }
 
-void Texture::Draw_Image(AEGfxTexture* image, f32 x, f32 y)
+void Texture::Set_Image(f32 x, f32 y)
 {
 	AEGfxTextureSet(image, x, y);
 }
 
-void Texture::Free_Image(AEGfxTexture* image)
+void Texture::Free_Image()
 {
 	AEGfxTextureUnload(image);
 }
 
-s8 Texture::Load_Font(const FilePath& font)
+AEGfxTexture* Texture::Get_Image() const
 {
-	return AEGfxCreateFont(font.filename, 72.f);
+	return image;
 }
 
-void Texture::Draw_Text(s8 font, const char* text, f32 x, f32 y, f32 scale, const Color color)
+void Font::Load_Font(const FilePath& fontFilePath, const f32 initHeight)
 {
-	f32 w, h;
+	font = AEGfxCreateFont(fontFilePath.filename, initHeight);
+}
+
+void Font::Draw_Text(const char* text, f32 x, f32 y, f32 scale, const Color color) const
+{
+	f32 w{ 0 }, h{ 0 };
 	AEGfxGetPrintSize(font, text, scale, &w, &h);
-	AEGfxPrint(font, text, (- w / 2) + x, (- h / 2) + y, scale, color.r, color.g, color.b, color.a);
+	AEGfxPrint(font, text, (- w / 2) + x/800.f, (- h / 2) + y/450.f, 
+		scale, color.r, color.g, color.b, color.a);
 }
 
-void Texture::Free_Font(s8 font)
+void Font::Free_Font() const
 {
 	AEGfxDestroyFont(font);
 }

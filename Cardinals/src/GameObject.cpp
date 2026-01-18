@@ -27,17 +27,27 @@ GameObject::GameObject()
 		globalRotation(0.f),				localRotation(0.f),
 		globalScale(AEVec2{ 0.f,0.f }),		localScale(AEVec2{ 0.f,0.f }),
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-		isChild(false)
+		isChild(false), mesh(nullptr)
 {
 	ConcatTransform();
 }
 
-GameObject::GameObject(AEVec2 translate, f32 rotate, AEVec2 scale)
+GameObject::GameObject(AEGfxVertexList* mesh)
+	: globalPosition(AEVec2{ 0.f,0.f }), localPosition(AEVec2{ 0.f,0.f }),
+	globalRotation(0.f), localRotation(0.f),
+	globalScale(AEVec2{ 0.f,0.f }), localScale(AEVec2{ 0.f,0.f }),
+	mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
+	isChild(false), mesh(mesh)
+{
+	ConcatTransform();
+}
+
+GameObject::GameObject(AEGfxVertexList* mesh, AEVec2 translate, f32 rotate, AEVec2 scale)
 	:	globalPosition(translate),	localPosition(translate),
 		globalRotation(rotate),		localRotation(rotate),
 		globalScale(scale),			localScale(scale),
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-		isChild(false)
+		isChild(false), mesh(mesh)
 {
 	AEMtx33Trans(&mtx_translation, translate.x, translate.y);
 	AEMtx33Rot(&mtx_rotation, rotate);
@@ -90,10 +100,16 @@ void GameObject::UpdateScale(AEVec2 scale)
 	ConcatTransform();
 }
 
+void GameObject::SetTexture(const Texture texture)
+{
+	tex = texture;
+}
+
 void GameObject::Draw() const
 {
+	AEGfxTextureSet(tex.Get_Image(), 0.f, 0.f);
 	AEGfxSetTransform(GetTransform().m);
-	//AEGfxMeshDraw(_pMesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 
 bool GameObject::IsChild() const {
