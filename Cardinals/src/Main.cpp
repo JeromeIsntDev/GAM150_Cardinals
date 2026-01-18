@@ -31,8 +31,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	int gGameRunning = 1;
 
 	//declare mainPlayer variable
-
-	Player mainPlayer(150.f, 100.f, 100.f, true);
+	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 100.f };
+	bool playerCanJump{ true };
+	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump);
 
 	// Initialization of your own variables go here
 
@@ -77,6 +78,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	TestState testState1("Test State 1\n");
 	TestState testState2("Test State 2\n");
+	//TO BE DELETED. TEST PLAYER GET AND SET
+	PRINT("PlayerHealth: %.2f\n",mainPlayer.GetPlayerHealth());
+	PRINT("PlayerScore: %.2f\n", mainPlayer.GetPlayerScore());
+	mainPlayer.SetPlayerScore(20.f);
+	PRINT("PlayerScore: %.2f\n", mainPlayer.GetPlayerScore());
 	GameStateManager manager(&testState1);
 
 	//stateManager.SetGameState(&testState);
