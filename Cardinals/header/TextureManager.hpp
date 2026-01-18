@@ -9,8 +9,10 @@
 
 \par	Changes: None
 **************************************************************************/
+
 #pragma once
 #ifndef _Texture_Man_Header_
+#define _Texture_Man_Header_
 
 #include <AEEngine.h>
 
@@ -43,6 +45,7 @@ namespace Fonts
 {
     constexpr const FilePath Main{ "../../Assets/DynaPuff-Regular.ttf" };
 }
+
 class Texture
 {
 private:
