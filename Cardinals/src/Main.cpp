@@ -33,7 +33,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//declare mainPlayer variable
 	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 100.f };
 	bool playerCanJump{ true };
-	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump);
 
 	// Initialization of your own variables go here
 
@@ -44,6 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysSetWindowTitle("CARDINAL");
 
 	AEGfxVertexList* squareMesh = RectMeshCenter();
+	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump,squareMesh);
 	
 	Texture digipenTexture{};
 	digipenTexture.Load_Image(Images::DigipenLogo);

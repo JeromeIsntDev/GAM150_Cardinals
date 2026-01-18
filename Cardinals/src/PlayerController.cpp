@@ -45,7 +45,7 @@ void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVe
 		f32 upper_frac_grav = (-2 * (maxHeight * (velocityVec.x * velocityVec.x)));
 		gravity = (upper_frac_grav / static_cast<f32>((time * time)));
 		//ax^2 + bx + c formula
-		pos.y += ((gravity / 2.f) * time) + (velocityVec.y * time) + (initialHeight);
+		pos.y += (((gravity * gravityScale) / 2.f) * static_cast<f32>(time)) + (velocityVec.y * static_cast<f32>(time)) + (initialHeight);
 	}
 	if (AEInputCheckCurr(AEVK_D)) {
 		movementVec.x = 1.f;
