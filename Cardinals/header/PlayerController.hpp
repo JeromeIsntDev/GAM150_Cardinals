@@ -33,10 +33,10 @@ public:
 
 	void UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player health
-	f32 GetPlayerHealth();
-	f32 GetPlayerSpeed();
-	f32 GetPlayerJumpForce();
-	f32 GetPlayerScore();
+	f32 GetPlayerHealth() const;
+	f32 GetPlayerSpeed() const;
+	f32 GetPlayerJumpForce() const;
+	f32 GetPlayerScore() const;
 	//set the player health
 	void SetPlayerHealth(f32 healthDamage);
 	void SetPlayerScore(f32 scoreAdded);

@@ -68,16 +68,16 @@ void Player::SetPlayerScore(f32 scoreAdded) {
 	p_score += scoreAdded;
 }
 
-f32 Player::GetPlayerHealth() {
+f32 Player::GetPlayerHealth() const{
 	return p_playerHealth;
 }
-f32 Player::GetPlayerSpeed() {
+f32 Player::GetPlayerSpeed() const{
 	return p_moveSpeed;
 }
-f32 Player::GetPlayerJumpForce() {
+f32 Player::GetPlayerJumpForce() const{
 	return p_jumpForce;
 }
-f32 Player::GetPlayerScore() {
+f32 Player::GetPlayerScore() const{
 	return p_score;
 }
 
