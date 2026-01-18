@@ -15,7 +15,7 @@ the player movement etc
 #include <iostream>
 
 Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, AEGfxVertexList* mesh)
-	: playerHealth(p_health), moveSpeed(p_movespeed), score(0.f), jumpForce(p_jumpForce), canJump(p_canjump),
+	: p_playerHealth(p_health), p_moveSpeed(p_movespeed), p_score(0.f), p_jumpForce(p_jumpForce), p_canJump(p_canjump),
 	GameObject(mesh, AEVec2{ 0.f,0.f }, 0.f, AEVec2{ 500.f,500.f })
 {
 	PRINT("Player Created");
