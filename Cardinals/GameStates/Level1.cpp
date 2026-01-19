@@ -24,10 +24,10 @@ void Level1State::LoadState() {
 
 void Level1State::InitializeState()
 {
-	AEGfxVertexList* squareMesh;
-	squareMesh = RectMeshCenter();
+	AEGfxVertexList* squareMesh = RectMeshCenter();
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, playerJumpForce, false, 0.f, 0.f,squareMesh);
 	digipenTexture.Load_Image(Images::DigipenLogo);
+
 	PRINT("Initialize: %s", "Level 1\n");
 }
 
@@ -37,7 +37,7 @@ void Level1State::UpdateState() {
 	mainPlayer.SetTexture(digipenTexture);
 	mainPlayer.UpdateScale(AEVec2{ digipenTexture.Get_Image_Width(), digipenTexture.Get_Image_Height() });
 	mainPlayer.UpdateRotation(0.f);
-	//PRINT("Update: %s", "Main Menu\n");
+	
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetBackgroundColor(0.95f, 0.65f, 0.77f);
@@ -47,18 +47,23 @@ void Level1State::UpdateState() {
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
 	mainPlayer.PlayerMovement(dt, playerJumpForce);
-	mainPlayer.Draw();
+
+	//PRINT("Update: %s", "Main Menu\n");
 }
 
 void Level1State::StateDraw() {
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f);
+	mainPlayer.Draw();
+
 	PRINT("Draw: %s", "Level 1\n");
 }
 
 void Level1State::FreeState() {
+
 	PRINT("Free: %s", "Level 1\n");
 }
 
 void Level1State::UnloadState() {
+
 	PRINT("Unload: %s", "Level 1\n");
 }
