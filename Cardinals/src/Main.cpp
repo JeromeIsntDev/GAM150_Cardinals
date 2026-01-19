@@ -78,9 +78,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	Player player(100.f, 30.f, 100.f, true, squareMesh);
 	player.SetTexture(digipenTexture);
 	std::cout << player;
-	//stateManager.SetGameState(&testState);
-	//manager.SetCurrentGameState(&testState);
-	//manager.EnterCurrState();
 
 	while (gGameRunning)
 	{
@@ -88,10 +85,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 
-		/*if (AEInputCheckTriggered(AEVK_Q)) {
+		if (AEInputCheckTriggered(AEVK_Q)) {
 			manager.SetCurrentGameState(&testState2);
 		}
-		manager.CurrStateUpdate();*/
+		manager.UpdateCurrentState();
 
 
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
