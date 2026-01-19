@@ -59,6 +59,10 @@ AEVec2 GameObject::GetPosition() const {
 	return globalPosition;
 }
 
+AEVec2& GameObject::GetPosition() {
+	return globalPosition;
+}
+
 f32 GameObject::GetRotatation() const {
 	return globalRotation;
 }
