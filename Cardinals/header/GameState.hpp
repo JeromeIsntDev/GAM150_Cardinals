@@ -3,7 +3,8 @@
 #define _Game_State_Header_
 
 class GameState {
-
+protected:
+	const char* _name;
 public:
 	virtual void LoadState() = 0;
 	virtual void InitializeState() = 0;
@@ -28,26 +29,26 @@ public:
 	}
 
 	void LoadState() {
-		PRINT("Load: %s\n", p_msg);
+		PRINT("Load: %s", p_msg);
 	}
 
 	void InitializeState() {
-		PRINT("Initialize: %s\n", p_msg);
+		PRINT("Initialize: %s", p_msg);
 	}
 
 	void UpdateState() {
-		PRINT("Update: %s\n", p_msg);
+		PRINT("Update: %s", p_msg);
 	}
 
 	void StateDraw() {
-		PRINT("Draw: %s\n", p_msg);
+		PRINT("Draw: %s", p_msg);
 	}
 
 	void FreeState() {
-		PRINT("Free: %s\n", p_msg);
+		PRINT("Free: %s", p_msg);
 	}
 
 	void UnloadState() {
-		PRINT("Update: %s\n", p_msg);
+		PRINT("Unload: %s", p_msg);
 	}
 };

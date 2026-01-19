@@ -17,7 +17,7 @@
 #include "../header/PlayerController.hpp"
 #include "../header/TextureManager.hpp"
 #include "../header/AudioManager.hpp"
-
+#include "../GameStates/MainMenu.cpp"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -70,7 +70,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	const char* pText = "Cardinal";
 
 	TestState testState1("Test State 1\n");
-	TestState testState2("Test State 2\n");
+	MainMenuState state("Main Menu\n");
 	//TO BE DELETED. TEST PLAYER GET AND SET
 	//mainPlayer.UpdatePosition(_initP_pos);
 	//std::cout << "Player X: " << mainPlayer.GetPosition().x << " Y: " << mainPlayer.GetPosition().y << std::endl;
@@ -92,7 +92,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 		if (AEInputCheckTriggered(AEVK_Q)) {
-			manager.SetCurrentGameState(&testState2);
+			manager.SetCurrentGameState(&state);
 		}
 		manager.UpdateCurrentState();
 
