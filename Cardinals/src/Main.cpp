@@ -58,12 +58,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerIsJump, squareMesh);
 	mainPlayer.SetTexture(digipenTexture);
 	mainPlayer.UpdateScale(AEVec2{ digipenTexture.Get_Image_Width(), digipenTexture.Get_Image_Height() });
-	const char* pText = "Cardinal";
 	//TO BE DELETED. TEST PLAYER GET AND SET
 	//mainPlayer.UpdatePosition(_initP_pos);
 
 	GameStateManager manager;
-	manager.SetCurrentGameState(GameStateFactory::GetGameState(GameStates::MainMenu));
+	manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::MainMenu));
 
 	//Player player(100.f, 30.f, 100.f, true, squareMesh);
 	//player.SetTexture(digipenTexture);
@@ -77,13 +76,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		manager.UpdateCurrentState();
 
 		f32 dt = AEFrameRateControllerGetFrameTime();
-
-		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
-		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
-		AEGfxSetTransparency(1.f);
 
 		mainPlayer.PlayerMovement(dt);
 		
