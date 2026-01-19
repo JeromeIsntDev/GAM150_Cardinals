@@ -36,13 +36,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);
 
-	AudioFile musicFile{ "../../Assets/bouken.mp3" };
-
-	AEAudioGroup _group = AEAudioCreateGroup();
 
 	Audio audioTest1;
-	audioTest1.Load_Music(musicFile);
-	audioTest1.Play_Audio(1.f, 1.f, 0.f);
+	audioTest1.CreateAudioGroup();
+	audioTest1.Load_Audio(Audios::BGM);
+	audioTest1.Play_Audio();
 
 	/*AEAudio Audio::Load_Sound(AudioFile audio_file)
 	{

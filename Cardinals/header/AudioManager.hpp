@@ -22,10 +22,10 @@ struct AudioFile {
 namespace Audios
 {
     //Music file
-    constexpr const AudioFile BGM{ "../../Assets/PlanetTexture.png" };
+    constexpr const AudioFile BGM{ "../../Assets/bouken.mp3" };
 
     //Sound effect
-    constexpr const AudioFile Effect{ "../../Assets/PlanetTexture.png" };
+    constexpr const AudioFile Effect{ "../../Assets/ore.mp3" };
 }
 
 
@@ -42,26 +42,20 @@ public:
     //Constructor Overload
     Audio();
 
-    void Load_Sound(AudioFile audio);
-    void Load_Music(AudioFile audio);
+    void CreateAudioGroup();
+
+    void Load_Audio(AudioFile audio);
     void Play_Audio() const;
-    void Play_Audio(f32 _volume, f32 _pitch, s32 _loop);
+    void Play_Audio(s32 _loop);
     void Free_Audio() const;
-    
-};
 
-class AudioGroup {
-private:
-    f32 _volume;
-    f32 _pitch;
-
-public:
-    void Create_Audio_Group();
-    void Pause_Audio_Group(AEAudioGroup _group);
-    void Resume_Audio_Group(AEAudioGroup _group);
-    void Stop_Audio_Group(AEAudioGroup _group);
-    void Free_Audio_Group(AEAudioGroup audio_gp);
-
+    //Group
+    void Pause_Audio_Group();
+    void Resume_Audio_Group();
+    void Stop_Audio_Group();
+    void Set_Audio_Volume(f32 volume);
+    void Set_Audio_Pitch(f32 pitch);
+    void Free_Audio_Group();
 };
 
 #endif // !_Texture_Man_Header_
