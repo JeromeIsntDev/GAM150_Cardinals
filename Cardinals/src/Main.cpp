@@ -31,10 +31,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	int gGameRunning = 1;
 
-	//declare mainPlayer variable
-	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 100.f };
-	bool playerCanJump{ true };
-
 	// Initialization of your own variables go here
 
 	// Using custom window procedure
@@ -58,30 +54,37 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysSetWindowTitle("CARDINAL");
 
 	AEGfxVertexList* squareMesh = RectMeshCenter();
-	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump, squareMesh);
-
 	Texture digipenTexture{};
 	digipenTexture.Load_Image(Images::DigipenLogo);
 	Font digipenFont{};
 	digipenFont.Load_Font(Fonts::Main, 72.f);
-
 	f32 logo_transparency = 0.f;
+	//declare mainPlayer variable
+	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 100.f };
+	bool playerCanJump{ true };
+
+	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump, squareMesh);
+	mainPlayer.SetTexture(digipenTexture);
+
 	const char* pText = "Cardinal";
 
 	TestState testState1("Test State 1\n");
 	TestState testState2("Test State 2\n");
 	//TO BE DELETED. TEST PLAYER GET AND SET
 	AEVec2 _initP_pos{ 100.f,100.f };
+	std::cout << "Player X: " << mainPlayer.GetPosition().x << std::endl;
 	mainPlayer.UpdatePosition(_initP_pos);
+	std::cout << "Player X: " << mainPlayer.GetPosition().x << std::endl;
+
 	GameStateManager manager(&testState1);
 
 	/*TestState testState1("Test State 1");
 	TestState testState2("Test State 2");
 	GameStateManager manager(&testState1);*/
 
-	Player player(100.f, 30.f, 100.f, true, squareMesh);
-	player.SetTexture(digipenTexture);
-	std::cout << player;
+	//Player player(100.f, 30.f, 100.f, true, squareMesh);
+	//player.SetTexture(digipenTexture);
+	//std::cout << player;
 	//stateManager.SetGameState(&testState);
 	//manager.SetCurrentGameState(&testState);
 	//manager.EnterCurrState();
@@ -103,6 +106,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxSetTransparency(1.f);
+
+		mainPlayer.Draw();
 
 		//player.Draw();
 
