@@ -86,7 +86,7 @@ void Player::PlayerMovement(f32 dt, f32 jumpForce) {
 		StartJump(velocityVector, jumpForce);
 	}
 	PlayerJump(dt);
-	Player::UpdatePosition(GetPosition());
+	UpdatePosition(GetPosition());
 }
 
 //sets the player health to smth new depending on parameter

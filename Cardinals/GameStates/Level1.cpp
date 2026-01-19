@@ -34,9 +34,9 @@ void Level1State::InitializeState()
 void Level1State::UpdateState() {
 	f32 logo_transparency = 0.f;
 	//declare mainPlayer variable
-
 	mainPlayer.SetTexture(digipenTexture);
 	mainPlayer.UpdateScale(AEVec2{ digipenTexture.Get_Image_Width(), digipenTexture.Get_Image_Height() });
+	mainPlayer.UpdateRotation(0.f);
 	//PRINT("Update: %s", "Main Menu\n");
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
