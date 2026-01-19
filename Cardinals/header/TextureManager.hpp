@@ -71,12 +71,19 @@ public:
 
 class Font {
 private:
-    s8 font;
-    //f32 size;
+    s8 _font;
+    f32 _scale;
+    Color _color;
+    const char* _text;
 
 public:
+    Font();
+
     void Load_Font(const FontFile& fontFilePath, const f32 initHeight);
-    void Draw_Text(const char* text, f32 x, f32 y, f32 scale, const Color color) const;
+    void Input_Text(const char* text);
+    void Draw_Text() const;
+    void Draw_Text(f32 x, f32 y);
+    void Change_Text_Color(const Color color);
     void Free_Font() const;
 };
 
