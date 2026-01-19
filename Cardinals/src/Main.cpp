@@ -88,10 +88,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//manager.SetCurrentGameState(&testState);
 	//manager.EnterCurrState();
 
-	AEVec2 movementVector{ 0.f,0.f };
-	AEVec2 _initP_pos{ 0.f,0.f };
-	f32 moveSpeed{ 300.f };
-	mainPlayer.UpdatePosition(_initP_pos);
 	while (gGameRunning)
 	{
 		AESysFrameStart();
@@ -112,16 +108,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxSetTransparency(1.f);
 
-		if (AEInputCheckCurr(AEVK_D)) {
-			movementVector.x = 1.f * moveSpeed * dt;
-			_initP_pos.x += movementVector.x;
-		}
-		if (AEInputCheckCurr(AEVK_A)) {
-			movementVector.x = -1.f * moveSpeed * dt;
-			_initP_pos.x += movementVector.x;
-		}
-		mainPlayer.UpdatePosition(_initP_pos);
-
+		mainPlayer.PlayerMovement(dt);
 		
 		/*if (AEFrameRateControllerGetFrameCount() < 100) {
 			logo_transparency += 0.02f;

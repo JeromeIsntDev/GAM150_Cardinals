@@ -20,13 +20,18 @@ Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, A
 {
 	std::cout << "Player Created with PosX: " << globalPosition.x << " Pos Y: " << globalPosition.y
 	<< " Health: " << p_playerHealth << " Speed: " << p_moveSpeed
-	<< std::endl;
+	<< std::endl;	
 }
 
 
 //takes in the current player pos, deltaTime & movement vector to update the player pos
-void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVec2 velocityVec)
+void Player::UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec)
 {
+	//input handling
+	GameObject::UpdatePosition(pos);
+}
+
+void Player::PlayerJump(AEVec2 pos, AEVec2 velocityVec, AEVec2 movementVec) {
 	f32 gravity{ 0.f };
 	f32 gravityScale{ 1.f };
 
@@ -37,32 +42,33 @@ void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVe
 	f64* pTime{ 0 };
 	//stores the value
 	f64 time;
-	//input handling
-	//Jump logic
-	if (AEInputCheckTriggered(AEVK_SPACE) && p_canJump) {
-		//replace this later
-		f32 initialHeight{ pos.y };
-		time = AEGetTime(pTime);
-		velocityVec.y = (2 * (maxHeight * velocityVec.x) / static_cast<f32>(time));
-		f32 upper_frac_grav = (-2 * (maxHeight * (velocityVec.x * velocityVec.x)));
-		gravity = (upper_frac_grav / static_cast<f32>((time * time)));
-		//ax^2 + bx + c formula
-		pos.y += (((gravity * gravityScale) / 2.f) * static_cast<f32>(time)) + (velocityVec.y * static_cast<f32>(time)) + (initialHeight);
-	}
-	if (AEInputCheckCurr(AEVK_D)) {
-		movementVec.x = 1.f;
-	}
-	if (AEInputCheckCurr(AEVK_A)) {
-		movementVec.x = -1.f;
-	}
-	velocityVec.x = movementVec.x * p_moveSpeed;
-	pos.x += velocityVec.x * deltaTime;
-
-	GameObject::UpdatePosition(pos);
+	//replace this later
+	f32 initialHeight{ pos.y };
+	time = AEGetTime(pTime);
+	velocityVec.y = (2 * (maxHeight * velocityVec.x) / static_cast<f32>(time));
+	f32 upper_frac_grav = (-2 * (maxHeight * (velocityVec.x * velocityVec.x)));
+	gravity = (upper_frac_grav / static_cast<f32>((time * time)));
+	//ax^2 + bx + c formula
+	pos.y += (((gravity * gravityScale) / 2.f) * static_cast<f32>(time)) + (velocityVec.y * static_cast<f32>(time)) + (initialHeight);
 }
 
-void Player::PlayerJump() {
 
+void Player::PlayerMovement(f32 dt) {
+	AEVec2 movementVector{ 0.f,0.f };
+	f32 moveSpeed{ 300.f };
+
+	if (AEInputCheckCurr(AEVK_D)) {
+		movementVector.x = 1.f * moveSpeed * dt;
+		Player::GetPosition().x += movementVector.x;
+	}
+	if (AEInputCheckCurr(AEVK_A)) {
+		movementVector.x = -1.f * moveSpeed * dt;
+		Player::GetPosition().x += movementVector.x;
+	}
+	if (AEInputCheckTriggered(AEVK_SPACE) && Player::GetPlayerJump()) {
+		std::cout << "Jump Pressed" << std::endl;
+	}
+	Player::UpdatePosition(Player::GetPosition());
 }
 
 //sets the player health to smth new depending on parameter
@@ -85,5 +91,8 @@ f32 Player::GetPlayerJumpForce() const{
 }
 f32 Player::GetPlayerScore() const{
 	return p_score;
+}
+bool Player::GetPlayerJump() const {
+	return p_canJump;
 }
 
