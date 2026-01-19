@@ -53,23 +53,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	//declare mainPlayer variable
 	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 100.f };
-	bool playerCanJump{ true };
+	bool playerIsJump{ false };
 
-	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump, squareMesh);
+	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerIsJump, squareMesh);
 	mainPlayer.SetTexture(digipenTexture);
 	mainPlayer.UpdateScale(AEVec2{ digipenTexture.Get_Image_Width(), digipenTexture.Get_Image_Height() });
 	const char* pText = "Cardinal";
 	//TO BE DELETED. TEST PLAYER GET AND SET
 	//mainPlayer.UpdatePosition(_initP_pos);
-	//std::cout << "Player X: " << mainPlayer.GetPosition().x << " Y: " << mainPlayer.GetPosition().y << std::endl;
 
 	GameStateManager manager;
 	manager.SetCurrentGameState(GameStateFactory::GetGameState(GameStates::MainMenu));
 
-	Player player(100.f, 30.f, 100.f, true, squareMesh);
-	player.SetTexture(digipenTexture);
+	//Player player(100.f, 30.f, 100.f, true, squareMesh);
+	//player.SetTexture(digipenTexture);
 
-	std::cout << player;
+	//std::cout << player;
 
 	while (gGameRunning)
 	{
