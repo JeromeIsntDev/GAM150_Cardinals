@@ -71,7 +71,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	TestState testState1("Test State 1\n");
 	TestState testState2("Test State 2\n");
 	//TO BE DELETED. TEST PLAYER GET AND SET
-	AEVec2 _initP_pos{ 100.f,100.f };
+	AEVec2 _initP_pos{ 500.f,0.f };
 	std::cout << "Player X: " << mainPlayer.GetPosition().x << std::endl;
 	mainPlayer.UpdatePosition(_initP_pos);
 	std::cout << "Player X: " << mainPlayer.GetPosition().x << std::endl;
@@ -109,14 +109,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetTransparency(1.f);
 
 		if (AEInputCheckCurr(AEVK_W)) {
-			player.UpdatePosition(AEVec2{ 100.f, 0.f });
-		}
-		else {
-			player.UpdatePosition(AEVec2{-100.f, 0.f});
+			mainPlayer.UpdatePosition(AEVec2{ 100.f, 0.f });
 		}
 		
-		//player.Draw();
-
 		/*if (AEFrameRateControllerGetFrameCount() < 100) {
 			logo_transparency += 0.02f;
 		}
@@ -141,7 +136,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		//digipenTexture.Draw_Text(pFont, pText, 0.f, 0.5f, 1.f, Colors::PastelPink);
 		// Informing the system about the loop's end
 
-		player.Draw();
+		mainPlayer.Draw();
 
 
 		//digipenFont.Draw_Text(pText, 0.f, 0.f, 1.f, Colors::PastelPurple);
