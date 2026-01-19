@@ -8,9 +8,9 @@ GameStateManager::GameStateManager(GameState* state)
 
 void GameStateManager::SetCurrentGameState(GameState* state)
 {
-	pt_CurrentGameState->ExitState();
+	pt_CurrentGameState->UnloadState();
 	pt_CurrentGameState = state;
-	pt_CurrentGameState->EnterState();
+	pt_CurrentGameState->LoadState();
 }
 
 GameState* GameStateManager::GetCurrentGameState()
@@ -20,15 +20,15 @@ GameState* GameStateManager::GetCurrentGameState()
 
 void GameStateManager::EnterCurrState()
 {
-	pt_CurrentGameState->EnterState();
+	pt_CurrentGameState->LoadState();
 }
 
 void GameStateManager::CurrStateUpdate()
 {
-	pt_CurrentGameState->StateUpdate();
+	pt_CurrentGameState->UpdateState();
 }
 
 void GameStateManager::ExitCurrState()
 {
-	pt_CurrentGameState->ExitState();
+	pt_CurrentGameState->UnloadState();
 }
