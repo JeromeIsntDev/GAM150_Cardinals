@@ -20,18 +20,19 @@ from GameObject class from GameObject
 #include "../header/GameObject.hpp"
 
 class Player : public GameObject {
-	Player() = delete;
+	//Player() = delete;
 private:
+	f32 p_playerHealth;
 	f32 p_moveSpeed;
-	f32 p_score;
-	//set a jumpforce for psuedo gravity on jump
 	f32 p_jumpForce;
 	bool p_isJumping;
-	f32 p_playerHealth;
+	f32 p_score;
+	//set a jumpforce for psuedo gravity on jump
 	const f32 gravity{ -986.f };
 	const f32 maxHeight{ 200.f };
+	AEGfxVertexList* p_mesh;
 public:
-	Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh);
+	//Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh);
 
 	//public Variable for Player (Check if error)
 	f32 initialYPos;
@@ -40,6 +41,9 @@ public:
 
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
+
+	void InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh);
+
 	f32 GetPlayerHealth() const;
 	f32 GetPlayerSpeed() const;
 	f32 GetPlayerJumpForce() const;

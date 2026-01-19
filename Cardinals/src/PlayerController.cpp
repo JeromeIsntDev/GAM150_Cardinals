@@ -14,16 +14,25 @@ the player movement etc
 #include "../header/PlayerController.hpp"
 #include <iostream>
 
-Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh)
-	: p_playerHealth(p_health), p_moveSpeed(p_movespeed), p_jumpForce(p_jumpForce), p_isJumping(p_isJump), p_score(0.f),
-	GameObject(mesh, AEVec2{ 0.f,0.f }, 0.f, AEVec2{ 200.f,200.f }),initialYPos(0.f), initialVelocity(0.f),
-	jumpT(0.f)
-{
-	std::cout << "Player Created with PosX: " << globalPosition.x << " Pos Y: " << globalPosition.y
-	<< " Health: " << p_playerHealth << " Speed: " << p_moveSpeed
-	<< std::endl;	
-}
+//Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh)
+//	: p_playerHealth(p_health), p_moveSpeed(p_movespeed), p_jumpForce(p_jumpForce), p_isJumping(p_isJump), p_score(0.f),
+//	GameObject(mesh, AEVec2{ 0.f,0.f }, 0.f, AEVec2{ 200.f,200.f }),initialYPos(0.f), initialVelocity(0.f),
+//	jumpT(0.f)
+//{
+//	std::cout << "Player Created with PosX: " << globalPosition.x << " Pos Y: " << globalPosition.y
+//	<< " Health: " << p_playerHealth << " Speed: " << p_moveSpeed
+//	<< std::endl;	
+//}
 
+void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* mesh) {
+	p_playerHealth = health;
+	p_moveSpeed = moveSpeed;
+	p_jumpForce = jumpForce;
+	p_isJumping = isJump;
+	p_score = score;
+	initialYPos = initialVelocity = jumpT = zeroVal;
+	Player::mesh = mesh;
+}
 
 //takes in the current player pos, deltaTime & movement vector to update the player pos
 //void Player::UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec)

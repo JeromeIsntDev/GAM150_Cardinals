@@ -49,13 +49,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	digipenTexture.Load_Image(Images::DigipenLogo);
 	f32 logo_transparency = 0.f;
 
-	//declare mainPlayer variable
-	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 0.5f };
-	bool playerIsJump{ false };
-
-	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerIsJump, squareMesh);
-	mainPlayer.SetTexture(digipenTexture);
-	mainPlayer.UpdateScale(AEVec2{ digipenTexture.Get_Image_Width(), digipenTexture.Get_Image_Height() });
 	//TO BE DELETED. TEST PLAYER GET AND SET
 	//mainPlayer.UpdatePosition(_initP_pos);
 
@@ -85,10 +78,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		manager.UpdateCurrentState();
 		manager.DrawCurrentState();
-
-		f32 dt = AEFrameRateControllerGetFrameTime();
-
-		mainPlayer.PlayerMovement(dt, playerJumpForce);
 		
 		/*if (AEFrameRateControllerGetFrameCount() < 100) {
 			logo_transparency += 0.02f;
@@ -113,8 +102,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		//digipenTexture.Draw_Text(pFont, pText, 0.f, 0.5f, 1.f, Colors::PastelPink);
 		// Informing the system about the loop's end
-
-		mainPlayer.Draw();
 
 		AESysFrameEnd();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
