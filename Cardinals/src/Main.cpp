@@ -89,10 +89,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//manager.SetCurrentGameState(&testState);
 	//manager.EnterCurrState();
 
-
 	while (gGameRunning)
 	{
 		AESysFrameStart();
+
+
 
 		/*if (AEInputCheckTriggered(AEVK_Q)) {
 			manager.SetCurrentGameState(&testState2);
@@ -107,8 +108,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxSetTransparency(1.f);
 
-		mainPlayer.Draw();
-
+		if (AEInputCheckCurr(AEVK_W)) {
+			player.UpdatePosition(AEVec2{ 100.f, 0.f });
+		}
+		else {
+			player.UpdatePosition(AEVec2{-100.f, 0.f});
+		}
+		
 		//player.Draw();
 
 		/*if (AEFrameRateControllerGetFrameCount() < 100) {
@@ -135,10 +141,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		//digipenTexture.Draw_Text(pFont, pText, 0.f, 0.5f, 1.f, Colors::PastelPink);
 		// Informing the system about the loop's end
 
-		//player.Draw();
+		player.Draw();
 
 
-		digipenFont.Draw_Text(pText, 0.f, 0.f, 1.f, Colors::PastelPurple);
+		//digipenFont.Draw_Text(pText, 0.f, 0.f, 1.f, Colors::PastelPurple);
 
 		AESysFrameEnd();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
