@@ -79,16 +79,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		f32 dt = AEFrameRateControllerGetFrameTime();
 
-		if (AEInputCheckCurr(AEVK_D)) {
-			movementVector.x = 1.f * moveSpeed * dt;
-			_initP_pos.x += movementVector.x;
-		}
-		if (AEInputCheckCurr(AEVK_A)) {
-			movementVector.x = -1.f * moveSpeed * dt;
-			_initP_pos.x += movementVector.x;
-		}
-		mainPlayer.UpdatePosition(_initP_pos);
-
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
