@@ -107,6 +107,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="imGUI\imgui_widgets.cpp" />
     <ClCompile Include="src\AudioManager.cpp" />
     <ClCompile Include="src\ControlPanel.cpp" />
+    <ClCompile Include="src\GameSaver.cpp" />
     <ClCompile Include="src\GStateManager.cpp" />
     <ClCompile Include="src\PlayerController.cpp" />
     <ClCompile Include="src\RenderLayer.cpp" />
@@ -121,6 +122,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
   <ItemGroup>
     <ClInclude Include="header\AudioManager.hpp" />
     <ClInclude Include="header\GameObject.hpp" />
+    <ClInclude Include="header\GameSaver.hpp" />
     <ClInclude Include="header\GameState.hpp" />
     <ClInclude Include="header\ControlPanel.hpp" />
     <ClInclude Include="header\GStateManager.hpp" />

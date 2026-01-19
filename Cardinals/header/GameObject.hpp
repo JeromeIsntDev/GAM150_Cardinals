@@ -14,6 +14,7 @@
 #define _Game_Object_Header_
 
 #include <AEEngine.h>
+#include <iostream>
 #include "../header/TextureManager.hpp"
 
 class GameObject {
@@ -56,6 +57,8 @@ public:
 	void Draw() const;
 
 	bool IsChild() const;
+
+	friend std::ostream& operator<<(std::ostream& os, const GameObject& go);
 };
 
 #endif // !_Game_Object_Header_

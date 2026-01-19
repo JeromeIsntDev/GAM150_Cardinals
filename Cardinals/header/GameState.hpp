@@ -5,9 +5,11 @@
 class GameState {
 
 public:
-	virtual void EnterState() = 0;
-	virtual void StateUpdate() = 0;
-	virtual void ExitState() = 0;
+	virtual void LoadState() = 0;
+	virtual void InitializeState() = 0;
+	virtual void UpdateState() = 0;
+	virtual void FreeState() = 0;
+	virtual void UnloadState() = 0;
 };
 
 #endif // !_Game_State_Header_
@@ -24,15 +26,23 @@ public:
 		p_msg = msg;
 	}
 
-	void EnterState() {
-		PRINT("Entered: %s\n", p_msg);
+	void LoadState() {
+		PRINT("Load: %s\n", p_msg);
 	}
 
-	void StateUpdate() {
+	void InitializeState() {
+		PRINT("Initialize: %s\n", p_msg);
+	}
+
+	void UpdateState() {
 		PRINT("Update: %s\n", p_msg);
 	}
 
-	void ExitState() {
+	void FreeState() {
+		PRINT("Free: %s\n", p_msg);
+	}
+
+	void UnloadState() {
 		PRINT("Update: %s\n", p_msg);
 	}
 };

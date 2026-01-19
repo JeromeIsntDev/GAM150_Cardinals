@@ -115,3 +115,8 @@ void GameObject::Draw() const
 bool GameObject::IsChild() const {
 	return isChild;
 }
+
+std::ostream& operator<<(std::ostream& os, const GameObject& go) {
+	os << go.globalPosition.x << "," << go.globalPosition.y << std::endl;
+	return os;
+}

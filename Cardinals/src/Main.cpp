@@ -58,8 +58,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysSetWindowTitle("CARDINAL");
 
 	AEGfxVertexList* squareMesh = RectMeshCenter();
-	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump,squareMesh);
-	
+	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump, squareMesh);
+
 	Texture digipenTexture{};
 	digipenTexture.Load_Image(Images::DigipenLogo);
 	Font digipenFont{};
@@ -71,7 +71,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	TestState testState1("Test State 1\n");
 	TestState testState2("Test State 2\n");
 	//TO BE DELETED. TEST PLAYER GET AND SET
-	PRINT("PlayerHealth: %.2f\n",mainPlayer.GetPlayerHealth());
+	PRINT("PlayerHealth: %.2f\n", mainPlayer.GetPlayerHealth());
 	PRINT("PlayerScore: %.2f\n", mainPlayer.GetPlayerScore());
 	mainPlayer.SetPlayerScore(20.f);
 	PRINT("PlayerScore: %.2f\n", mainPlayer.GetPlayerScore());
@@ -83,7 +83,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	Player player(100.f, 30.f, 100.f, true, squareMesh);
 	player.SetTexture(digipenTexture);
-
+	std::cout << player;
 	//stateManager.SetGameState(&testState);
 	//manager.SetCurrentGameState(&testState);
 	//manager.EnterCurrState();
