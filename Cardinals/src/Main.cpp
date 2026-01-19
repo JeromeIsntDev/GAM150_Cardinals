@@ -71,10 +71,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	TestState testState1("Test State 1\n");
 	TestState testState2("Test State 2\n");
 	//TO BE DELETED. TEST PLAYER GET AND SET
-	PRINT("PlayerHealth: %.2f\n", mainPlayer.GetPlayerHealth());
-	PRINT("PlayerScore: %.2f\n", mainPlayer.GetPlayerScore());
-	mainPlayer.SetPlayerScore(20.f);
-	PRINT("PlayerScore: %.2f\n", mainPlayer.GetPlayerScore());
+	AEVec2 _initP_pos{ 100.f,100.f };
+	mainPlayer.UpdatePosition(_initP_pos);
 	GameStateManager manager(&testState1);
 
 	Player player(100.f, 30.f, 100.f, true, squareMesh);

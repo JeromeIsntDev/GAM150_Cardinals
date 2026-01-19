@@ -59,6 +59,10 @@ void Player::UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVe
 	GameObject::UpdatePosition(pos);
 }
 
+void Player::PlayerJump() {
+
+}
+
 //sets the player health to smth new depending on parameter
 void Player::SetPlayerHealth(f32 healthDamage) {
 	p_playerHealth -= healthDamage;
