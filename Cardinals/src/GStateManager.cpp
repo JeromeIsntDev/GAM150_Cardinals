@@ -9,7 +9,6 @@ GameStateManager::GameStateManager()
 void GameStateManager::SetCurrentGameState(GameState* state)
 {
 	if (pt_CurrentGameState != nullptr) {
-		delete pt_CurrentGameState;
 		pt_CurrentGameState->FreeState();
 		pt_CurrentGameState->UnloadState();
 	}

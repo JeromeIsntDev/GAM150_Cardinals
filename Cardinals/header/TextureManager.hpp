@@ -50,6 +50,8 @@ namespace Images
 namespace Fonts
 {
     constexpr FontFile Main{ "../../Assets/DynaPuff-Regular.ttf" };
+    constexpr FontFile Alt{ "../../Assets/sourgummy-font.ttf" };
+    constexpr FontFile Readable{ "../../Assets/alansans-font.ttf" };
 }
 
 class Texture
@@ -83,6 +85,7 @@ public:
     void Input_Text(const char* text);
     void Draw_Text() const;
     void Draw_Text(f32 x, f32 y);
+    void Draw_Text(AEVec2 pos, f32 scale);
     void Change_Text_Color(const Color color);
     void Free_Font() const;
 };

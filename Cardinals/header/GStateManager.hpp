@@ -4,7 +4,14 @@
 
 #include <AEEngine.h>
 #include "../header/GameState.hpp"
+
+//GameState includes
 #include "../GameStates/MainMenu.hpp"
+#include "../GameStates/Level1.hpp"
+#include "../GameStates/Level2.hpp"
+#include "../GameStates/Level3.hpp"
+
+typedef void(*FuncPtr)(void);
 
 enum GameStates {
 	MainMenu = 0,
@@ -39,11 +46,11 @@ public:
 		case MainMenu:
 			return new MainMenuState;
 		case Level1:
-			break;
+			return new Level1State;
 		case Level2:
-			break;
+			return new Level2State;
 		case Level3:
-			break;
+			return new Level3State;
 		case Level4:
 			break;
 		case Level5:

@@ -78,6 +78,15 @@ void Font::Draw_Text(f32 x, f32 y)
 		_scale, _color.r, _color.g, _color.b, _color.a);
 }
 
+void Font::Draw_Text(AEVec2 pos, f32 scale)
+{
+	f32 w{ 0 }, h{ 0 };
+	_scale = scale;
+	AEGfxGetPrintSize(_font, _text, scale, &w, &h);
+	AEGfxPrint(_font, _text, (-w / 2) + pos.x / 800.f, (-h / 2) + pos.y / 450.f,
+		_scale, _color.r, _color.g, _color.b, _color.a);
+}
+
 void Font::Change_Text_Color(const Color color)
 {
 	_color = color;

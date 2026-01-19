@@ -23,6 +23,9 @@
     <ClCompile Include="src\AudioManager.cpp" />
     <ClCompile Include="src\GameSaver.cpp" />
     <ClCompile Include="GameStates\MainMenu.cpp" />
+    <ClCompile Include="GameStates\Level1.cpp" />
+    <ClCompile Include="GameStates\Level2.cpp" />
+    <ClCompile Include="GameStates\Level3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -50,6 +53,9 @@
     <ClInclude Include="header\AudioManager.hpp" />
     <ClInclude Include="header\GameSaver.hpp" />
     <ClInclude Include="GameStates\MainMenu.hpp" />
+    <ClInclude Include="GameStates\Level1.hpp" />
+    <ClInclude Include="GameStates\Level2.hpp" />
+    <ClInclude Include="GameStates\Level3.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />

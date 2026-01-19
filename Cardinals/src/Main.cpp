@@ -47,8 +47,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxVertexList* squareMesh = RectMeshCenter();
 	Texture digipenTexture{};
 	digipenTexture.Load_Image(Images::DigipenLogo);
-	Font digipenFont{};
-	digipenFont.Load_Font(Fonts::Main, 72.f);
 	f32 logo_transparency = 0.f;
 
 	//declare mainPlayer variable
@@ -73,7 +71,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	{
 		AESysFrameStart();
 
+		if (AEInputCheckReleased(AEVK_0)) {
+			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::MainMenu));
+		}
+		if (AEInputCheckReleased(AEVK_1)) {
+			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Level1));
+		}
+		if (AEInputCheckReleased(AEVK_2)) {
+			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Level2));
+		}
+		if (AEInputCheckReleased(AEVK_3)) {
+			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Level3));
+		}
 		manager.UpdateCurrentState();
+		manager.DrawCurrentState();
 
 		f32 dt = AEFrameRateControllerGetFrameTime();
 
@@ -105,8 +116,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		mainPlayer.Draw();
 
-		//digipenFont.Draw_Text(pText, 0.f, 0.f, 1.f, Colors::PastelPurple);
-
 		AESysFrameEnd();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			gGameRunning = 0;
@@ -114,7 +123,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	AEGfxMeshFree(squareMesh);
 	digipenTexture.Free_Image();
-	digipenFont.Free_Font();
 	// free the system
 	AESysExit();
 
