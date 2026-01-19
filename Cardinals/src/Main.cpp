@@ -64,7 +64,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump, squareMesh);
 	mainPlayer.SetTexture(digipenTexture);
-
+	mainPlayer.UpdateScale(AEVec2{ digipenTexture.Get_Image_Width(), digipenTexture.Get_Image_Height() });
 	const char* pText = "Cardinal";
 
 	TestState testState1("Test State 1\n");
@@ -77,6 +77,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	Player player(100.f, 30.f, 100.f, true, squareMesh);
 	player.SetTexture(digipenTexture);
+
 	std::cout << player;
 
 	while (gGameRunning)
