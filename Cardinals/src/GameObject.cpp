@@ -1,5 +1,5 @@
 /*!***********************************************************************
-\file	Main.cpp
+\file	GameObject.cpp
 \author	Jerome Lim
 \date	12/01/2026
 \par	Last Updated by: Jerome Lim
@@ -82,6 +82,7 @@ AEVec2 GameObject::GetLocalScale() const {
 void GameObject::UpdatePosition(AEVec2 pos)
 {
 	globalPosition = pos;
+	AEMtx33Trans(&mtx_translation, pos.x, pos.y);
 	localPosition = isChild ? /*replace this with the local*/ pos : pos;
 	ConcatTransform();
 }
@@ -89,6 +90,7 @@ void GameObject::UpdatePosition(AEVec2 pos)
 void GameObject::UpdateRotation(f32 rot)
 {
 	globalRotation = rot;
+	AEMtx33Rot(&mtx_rotation, rot);
 	localRotation = isChild ? /*replace this with the local*/ rot : rot;
 	ConcatTransform();
 }
@@ -96,6 +98,7 @@ void GameObject::UpdateRotation(f32 rot)
 void GameObject::UpdateScale(AEVec2 scale)
 {
 	globalScale = scale;
+	AEMtx33Trans(&mtx_translation, scale.x, scale.y);
 	localScale = isChild ? /*replace this with the local*/ scale : scale;
 	ConcatTransform();
 }
