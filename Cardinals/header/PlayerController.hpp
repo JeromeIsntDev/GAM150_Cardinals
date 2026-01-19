@@ -31,7 +31,7 @@ private:
 	const f32 gravity{ -986.f };
 	const f32 maxHeight{ 200.f };
 public:
-	Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, AEGfxVertexList* mesh);
+	Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh);
 
 	//public Variable for Player (Check if error)
 	f32 initialYPos;
@@ -49,9 +49,11 @@ public:
 	void SetPlayerHealth(f32 healthDamage);
 	void SetPlayerScore(f32 scoreAdded);
 
-	void PlayerMovement(f32 dt);
-
-	void StartJump();
+	void PlayerMovement(f32 dt, f32 jumpForce);
+	//Function for Player Jump Logic
+	//Basically the initialize values for PreJumps
+	void StartJump(AEVec2 velocityVec, f32 jumpForce);
+	//The math and update for during the jump
 	void PlayerJump(f32 dt);
 };
 
