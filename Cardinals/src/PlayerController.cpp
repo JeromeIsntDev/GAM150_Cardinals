@@ -14,8 +14,8 @@ the player movement etc
 #include "../header/PlayerController.hpp"
 #include <iostream>
 
-Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, AEGfxVertexList* mesh)
-	: p_playerHealth(p_health), p_moveSpeed(p_movespeed), p_score(0.f), p_jumpForce(p_jumpForce), p_canJump(p_canjump),
+Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh)
+	: p_playerHealth(p_health), p_moveSpeed(p_movespeed), p_score(0.f), p_jumpForce(p_jumpForce), p_isJumping(p_isJump),
 	GameObject(mesh, AEVec2{ 0.f,0.f }, 0.f, AEVec2{ 200.f,200.f })
 {
 	std::cout << "Player Created with PosX: " << globalPosition.x << " Pos Y: " << globalPosition.y
@@ -25,50 +25,53 @@ Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, A
 
 
 //takes in the current player pos, deltaTime & movement vector to update the player pos
-void Player::UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec)
-{
-	//input handling
-	GameObject::UpdatePosition(pos);
+//void Player::UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec)
+//{
+//	//input handling
+//	GameObject::UpdatePosition(pos);
+//}
+
+void Player::StartJump() {
+	if (p_isJumping) return;
+	initialYPos = GetPosition().y;
+	initialVelocity = std::sqrt(2.f * (-gravity) * maxHeight);
+	jumpT = 0.f;
+	p_isJumping = true;
 }
 
-void Player::PlayerJump(AEVec2 pos, AEVec2 velocityVec, AEVec2 movementVec) {
-	f32 gravity{ 0.f };
-	f32 gravityScale{ 1.f };
+void Player::PlayerJump(f32 dt) {
+	if (!p_isJumping) return;
+	jumpT += dt;
+	GetPosition().y = initialYPos + initialVelocity * jumpT + 0.5f * gravity * (jumpT * jumpT);
 
-	//default value to 200.f atm
-	f32 maxHeight{ pos.y + 200.f };
+	if (GetPosition().y <= initialYPos) {
+		GetPosition().y = initialYPos;
+		p_isJumping = false;
+	}
 
-	//initialize with 0
-	f64* pTime{ 0 };
-	//stores the value
-	f64 time;
-	//replace this later
-	f32 initialHeight{ pos.y };
-	time = AEGetTime(pTime);
-	velocityVec.y = (2 * (maxHeight * velocityVec.x) / static_cast<f32>(time));
-	f32 upper_frac_grav = (-2 * (maxHeight * (velocityVec.x * velocityVec.x)));
-	gravity = (upper_frac_grav / static_cast<f32>((time * time)));
-	//ax^2 + bx + c formula
-	pos.y += (((gravity * gravityScale) / 2.f) * static_cast<f32>(time)) + (velocityVec.y * static_cast<f32>(time)) + (initialHeight);
 }
 
 
 void Player::PlayerMovement(f32 dt) {
 	AEVec2 movementVector{ 0.f,0.f };
+	AEVec2 velocityVector{ 0.f,0.f };
 	f32 moveSpeed{ 300.f };
 
 	if (AEInputCheckCurr(AEVK_D)) {
 		movementVector.x = 1.f * moveSpeed * dt;
-		Player::GetPosition().x += movementVector.x;
+		GetPosition().x += movementVector.x;
 	}
 	if (AEInputCheckCurr(AEVK_A)) {
 		movementVector.x = -1.f * moveSpeed * dt;
-		Player::GetPosition().x += movementVector.x;
+		GetPosition().x += movementVector.x;
 	}
-	if (AEInputCheckTriggered(AEVK_SPACE) && Player::GetPlayerJump()) {
-		std::cout << "Jump Pressed" << std::endl;
+	if (AEInputCheckTriggered(AEVK_SPACE) && !Player::GetPlayerJump()) {
+		std::cout << "Jumped" << std::endl;
+		velocityVector.y = 1.f;
+		StartJump();
 	}
-	Player::UpdatePosition(Player::GetPosition());
+	PlayerJump(dt);
+	Player::UpdatePosition(GetPosition());
 }
 
 //sets the player health to smth new depending on parameter
@@ -93,6 +96,6 @@ f32 Player::GetPlayerScore() const{
 	return p_score;
 }
 bool Player::GetPlayerJump() const {
-	return p_canJump;
+	return p_isJumping;
 }
 

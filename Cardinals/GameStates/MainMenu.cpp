@@ -10,7 +10,7 @@ void MainMenuState::InitializeState()
 }
 
 void MainMenuState::UpdateState() {
-	PRINT("Update: %s", "Main Menu\n");
+	//PRINT("Update: %s", "Main Menu\n");
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);

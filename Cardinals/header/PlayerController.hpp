@@ -26,12 +26,19 @@ private:
 	f32 p_score;
 	//set a jumpforce for psuedo gravity on jump
 	f32 p_jumpForce;
-	bool p_canJump;
+	bool p_isJumping;
 	f32 p_playerHealth;
+	const f32 gravity{ -986.f };
+	const f32 maxHeight{ 200.f };
 public:
 	Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, AEGfxVertexList* mesh);
 
-	void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
+	//public Variable for Player (Check if error)
+	f32 initialYPos;
+	f32 initialVelocity;
+	f32 jumpT;
+
+	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
 	f32 GetPlayerHealth() const;
 	f32 GetPlayerSpeed() const;
@@ -44,7 +51,8 @@ public:
 
 	void PlayerMovement(f32 dt);
 
-	void PlayerJump(AEVec2 pos, AEVec2 velocityVec, AEVec2 movementVec);
+	void StartJump();
+	void PlayerJump(f32 dt);
 };
 
 #endif // !PLAYER_MANAGER
