@@ -33,11 +33,6 @@ public:
 	void FreeCurrentState();
 	void UnloadCurrentState();
 
-};
-
-
-class GameStateFactory {
-public:
 	static GameState* GetGameState(GameStates state) {
 		switch (state)
 		{

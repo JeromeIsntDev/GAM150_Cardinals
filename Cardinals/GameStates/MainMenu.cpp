@@ -1,16 +1,16 @@
 #include "../GameStates/MainMenu.hpp"
 
 void MainMenuState::LoadState() {
-	PRINT("Load: %s", "Main Menu");
+	PRINT("Load: %s", "Main Menu\n");
 }
 
 void MainMenuState::InitializeState()
 {
-	PRINT("Initialize: %s", "Main Menu");
+	PRINT("Initialize: %s", "Main Menu\n");
 }
 
 void MainMenuState::UpdateState() {
-	PRINT("Update: %s", "Main Menu");
+	PRINT("Update: %s", "Main Menu\n");
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
@@ -19,13 +19,13 @@ void MainMenuState::UpdateState() {
 }
 
 void MainMenuState::StateDraw() {
-	PRINT("Draw: %s", "Main Menu");
+	PRINT("Draw: %s", "Main Menu\n");
 }
 
 void MainMenuState::FreeState() {
-	PRINT("Free: %s", "Main Menu");
+	PRINT("Free: %s", "Main Menu\n");
 }
 
 void MainMenuState::UnloadState() {
-	PRINT("Unload: %s", "Main Menu");
+	PRINT("Unload: %s", "Main Menu\n");
 }
