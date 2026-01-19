@@ -18,7 +18,7 @@
 
 class GameObject {
 //Variables
-private:
+protected:
 	AEVec2 globalPosition, localPosition;
 	f32 globalRotation, localRotation;
 	AEVec2 globalScale, localScale;
