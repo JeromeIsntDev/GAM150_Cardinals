@@ -15,8 +15,9 @@ the player movement etc
 #include <iostream>
 
 Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh)
-	: p_playerHealth(p_health), p_moveSpeed(p_movespeed), p_score(0.f), p_jumpForce(p_jumpForce), p_isJumping(p_isJump),
-	GameObject(mesh, AEVec2{ 0.f,0.f }, 0.f, AEVec2{ 200.f,200.f })
+	: p_playerHealth(p_health), p_moveSpeed(p_movespeed), p_jumpForce(p_jumpForce), p_isJumping(p_isJump), p_score(0.f),
+	GameObject(mesh, AEVec2{ 0.f,0.f }, 0.f, AEVec2{ 200.f,200.f }),initialYPos(0.f), initialVelocity(0.f),
+	jumpT(0.f)
 {
 	std::cout << "Player Created with PosX: " << globalPosition.x << " Pos Y: " << globalPosition.y
 	<< " Health: " << p_playerHealth << " Speed: " << p_moveSpeed
@@ -31,28 +32,32 @@ Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AE
 //	GameObject::UpdatePosition(pos);
 //}
 
-void Player::StartJump() {
+//Takes in the initial value of points for the code to reference during jump state
+void Player::StartJump(AEVec2 velocityVec, f32 jumpForce) {
 	if (p_isJumping) return;
 	initialYPos = GetPosition().y;
-	initialVelocity = std::sqrt(2.f * (-gravity) * maxHeight);
+	initialVelocity = velocityVec.y * (std::sqrt(2.f * (-gravity) * maxHeight));
 	jumpT = 0.f;
+	p_jumpForce = jumpForce;
 	p_isJumping = true;
 }
-
+//Math logic behind jump for parabola jump
 void Player::PlayerJump(f32 dt) {
 	if (!p_isJumping) return;
 	jumpT += dt;
-	GetPosition().y = initialYPos + initialVelocity * jumpT + 0.5f * gravity * (jumpT * jumpT);
-
+	p_jumpForce += dt * 0.2f;
+	std::cout << "Jump Force: " << p_jumpForce << std::endl;
+	//The Update for the Y position for Parabola
+	GetPosition().y = (initialYPos + initialVelocity * jumpT + p_jumpForce * gravity * (jumpT * jumpT));
+	//If Y pos is lower than initial, stop jumping (Change this logic in the future)
 	if (GetPosition().y <= initialYPos) {
 		GetPosition().y = initialYPos;
 		p_isJumping = false;
 	}
-
 }
-
-
-void Player::PlayerMovement(f32 dt) {
+//Input handle for player movement logic
+void Player::PlayerMovement(f32 dt, f32 jumpForce) {
+	//always reset to 0 value
 	AEVec2 movementVector{ 0.f,0.f };
 	AEVec2 velocityVector{ 0.f,0.f };
 	f32 moveSpeed{ 300.f };
@@ -67,8 +72,9 @@ void Player::PlayerMovement(f32 dt) {
 	}
 	if (AEInputCheckTriggered(AEVK_SPACE) && !Player::GetPlayerJump()) {
 		std::cout << "Jumped" << std::endl;
+		//adjust for jump height
 		velocityVector.y = 1.f;
-		StartJump();
+		StartJump(velocityVector, jumpForce);
 	}
 	PlayerJump(dt);
 	Player::UpdatePosition(GetPosition());

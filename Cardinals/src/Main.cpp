@@ -52,7 +52,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	f32 logo_transparency = 0.f;
 
 	//declare mainPlayer variable
-	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 100.f };
+	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 0.5f };
 	bool playerIsJump{ false };
 
 	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerIsJump, squareMesh);
@@ -77,7 +77,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		f32 dt = AEFrameRateControllerGetFrameTime();
 
-		mainPlayer.PlayerMovement(dt);
+		mainPlayer.PlayerMovement(dt, playerJumpForce);
 		
 		/*if (AEFrameRateControllerGetFrameCount() < 100) {
 			logo_transparency += 0.02f;
