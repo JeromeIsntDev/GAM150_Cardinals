@@ -77,10 +77,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	PRINT("PlayerScore: %.2f\n", mainPlayer.GetPlayerScore());
 	GameStateManager manager(&testState1);
 
-	/*TestState testState1("Test State 1");
-	TestState testState2("Test State 2");
-	GameStateManager manager(&testState1);*/
-
 	Player player(100.f, 30.f, 100.f, true, squareMesh);
 	player.SetTexture(digipenTexture);
 	std::cout << player;
@@ -88,10 +84,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	//manager.SetCurrentGameState(&testState);
 	//manager.EnterCurrState();
 
-
 	while (gGameRunning)
 	{
 		AESysFrameStart();
+
+
 
 		/*if (AEInputCheckTriggered(AEVK_Q)) {
 			manager.SetCurrentGameState(&testState2);
@@ -106,6 +103,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxSetTransparency(1.f);
 
+		if (AEInputCheckCurr(AEVK_W)) {
+			player.UpdatePosition(AEVec2{ 100.f, 0.f });
+		}
+		else {
+			player.UpdatePosition(AEVec2{-100.f, 0.f});
+		}
+		
 		//player.Draw();
 
 		/*if (AEFrameRateControllerGetFrameCount() < 100) {
@@ -132,10 +136,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		//digipenTexture.Draw_Text(pFont, pText, 0.f, 0.5f, 1.f, Colors::PastelPink);
 		// Informing the system about the loop's end
 
-		//player.Draw();
+		player.Draw();
 
 
-		digipenFont.Draw_Text(pText, 0.f, 0.f, 1.f, Colors::PastelPurple);
+		//digipenFont.Draw_Text(pText, 0.f, 0.f, 1.f, Colors::PastelPurple);
 
 		AESysFrameEnd();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
