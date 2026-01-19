@@ -31,10 +31,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	int gGameRunning = 1;
 
-	//declare mainPlayer variable
-	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 100.f };
-	bool playerCanJump{ true };
-
 	// Initialization of your own variables go here
 
 	// Using custom window procedure
@@ -58,27 +54,37 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysSetWindowTitle("CARDINAL");
 
 	AEGfxVertexList* squareMesh = RectMeshCenter();
-	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump, squareMesh);
-
 	Texture digipenTexture{};
 	digipenTexture.Load_Image(Images::DigipenLogo);
 	Font digipenFont{};
 	digipenFont.Load_Font(Fonts::Main, 72.f);
-
 	f32 logo_transparency = 0.f;
+
+	//declare mainPlayer variable
+	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 100.f };
+	bool playerCanJump{ true };
+
+	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump, squareMesh);
+	mainPlayer.SetTexture(digipenTexture);
+
 	const char* pText = "Cardinal";
 
 	TestState testState1("Test State 1\n");
 	TestState testState2("Test State 2\n");
 	//TO BE DELETED. TEST PLAYER GET AND SET
-	AEVec2 _initP_pos{ 100.f,100.f };
-	mainPlayer.UpdatePosition(_initP_pos);
+	//mainPlayer.UpdatePosition(_initP_pos);
+	//std::cout << "Player X: " << mainPlayer.GetPosition().x << " Y: " << mainPlayer.GetPosition().y << std::endl;
+
 	GameStateManager manager(&testState1);
 
 	Player player(100.f, 30.f, 100.f, true, squareMesh);
 	player.SetTexture(digipenTexture);
 	std::cout << player;
 
+	AEVec2 movementVector{ 0.f,0.f };
+	AEVec2 _initP_pos{ 0.f,0.f };
+	f32 moveSpeed{ 300.f };
+	mainPlayer.UpdatePosition(_initP_pos);
 	while (gGameRunning)
 	{
 		AESysFrameStart();
@@ -90,6 +96,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		manager.UpdateCurrentState();
 
+		f32 dt = AEFrameRateControllerGetFrameTime();
 
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -98,15 +105,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
 		AEGfxSetTransparency(1.f);
 
-		if (AEInputCheckCurr(AEVK_W)) {
-			player.UpdatePosition(AEVec2{ 100.f, 0.f });
+		if (AEInputCheckCurr(AEVK_D)) {
+			movementVector.x = 1.f * moveSpeed * dt;
+			_initP_pos.x += movementVector.x;
 		}
-		else {
-			player.UpdatePosition(AEVec2{-100.f, 0.f});
+		if (AEInputCheckCurr(AEVK_A)) {
+			movementVector.x = -1.f * moveSpeed * dt;
+			_initP_pos.x += movementVector.x;
 		}
-		
-		//player.Draw();
+		mainPlayer.UpdatePosition(_initP_pos);
 
+		
 		/*if (AEFrameRateControllerGetFrameCount() < 100) {
 			logo_transparency += 0.02f;
 		}
@@ -131,7 +140,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		//digipenTexture.Draw_Text(pFont, pText, 0.f, 0.5f, 1.f, Colors::PastelPink);
 		// Informing the system about the loop's end
 
-		player.Draw();
+		mainPlayer.Draw();
 
 
 		//digipenFont.Draw_Text(pText, 0.f, 0.f, 1.f, Colors::PastelPurple);

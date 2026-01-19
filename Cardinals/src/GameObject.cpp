@@ -1,5 +1,5 @@
 /*!***********************************************************************
-\file	Main.cpp
+\file	GameObject.cpp
 \author	Jerome Lim
 \date	12/01/2026
 \par	Last Updated by: Jerome Lim
