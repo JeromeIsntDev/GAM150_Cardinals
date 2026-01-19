@@ -8,7 +8,7 @@
 
 namespace {
 	Font digipenFont;
-	f32 playerHealth{ 150.f }, playerMovespeed{ 100.f }, playerJumpForce{ 0.5f };
+	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f }, playerJumpForce{ 0.5f };
 	bool playerIsJump{ false };
 	Player mainPlayer;
 	Texture digipenTexture{};

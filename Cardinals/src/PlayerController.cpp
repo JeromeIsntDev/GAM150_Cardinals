@@ -70,15 +70,41 @@ void Player::PlayerMovement(f32 dt, f32 jumpForce) {
 	AEVec2 movementVector{ 0.f,0.f };
 	AEVec2 velocityVector{ 0.f,0.f };
 	f32 moveSpeed{ 300.f };
+	bool isMoving{ false };
+	bool isSprint{ false };
 
 	if (AEInputCheckCurr(AEVK_D)) {
-		movementVector.x = 1.f * moveSpeed * dt;
+		movementVector.x = 1.f * p_moveSpeed * dt;
 		GetPosition().x += movementVector.x;
+		isMoving = true;
 	}
 	if (AEInputCheckCurr(AEVK_A)) {
-		movementVector.x = -1.f * moveSpeed * dt;
+		movementVector.x = -1.f * p_moveSpeed * dt;
 		GetPosition().x += movementVector.x;
+		isMoving = true;
 	}
+	if (AEInputCheckCurr(AEVK_LSHIFT) && isMoving) {	
+		isSprint = true;
+	}
+	if (AEInputCheckReleased(AEVK_LSHIFT)) {
+		isSprint = false;
+	}
+	//Temp sprint up and down logic
+	if (isSprint) {
+		f32 maxSpeed = moveSpeed * 3.f;
+		if (p_moveSpeed <= maxSpeed) {
+			p_moveSpeed += moveSpeed * dt;
+		}
+	}else {
+		if (p_moveSpeed > moveSpeed) {
+			p_moveSpeed -= (moveSpeed) * dt;
+		}
+		else {
+			p_moveSpeed = moveSpeed;
+		}
+	}
+
+	std::cout << "speed: " << p_moveSpeed << std::endl;
 	if (AEInputCheckTriggered(AEVK_SPACE) && !Player::GetPlayerJump()) {
 		std::cout << "Jumped" << std::endl;
 		//adjust for jump height
