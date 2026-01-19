@@ -1,16 +1,18 @@
 #include "../header/GStateManager.hpp"
 
-GameStateManager::GameStateManager(GameState* state)
-	: pt_CurrentGameState(state), 
-		pt_PreviousGameState(state), pt_NextGameState(state)
+GameStateManager::GameStateManager()
+	: pt_CurrentGameState(nullptr)
 {
 	
 }
 
 void GameStateManager::SetCurrentGameState(GameState* state)
 {
-	pt_CurrentGameState->FreeState();
-	pt_CurrentGameState->UnloadState();
+	if (pt_CurrentGameState != nullptr) {
+		delete pt_CurrentGameState;
+		pt_CurrentGameState->FreeState();
+		pt_CurrentGameState->UnloadState();
+	}
 	pt_CurrentGameState = state;
 	pt_CurrentGameState->LoadState();
 	pt_CurrentGameState->InitializeState();
@@ -33,6 +35,7 @@ void GameStateManager::InitCurrentState()
 
 void GameStateManager::UpdateCurrentState()
 {
+	if (pt_CurrentGameState == nullptr) PRINT("NO STATE!!!");
 	pt_CurrentGameState->UpdateState();
 }
 

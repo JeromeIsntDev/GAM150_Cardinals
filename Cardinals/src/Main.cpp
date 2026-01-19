@@ -13,11 +13,10 @@
 #include <AEEngine.h>
 #include <iostream>
 #include "../header/MeshGenerator.hpp"
-#include "../header/GStateManager.hpp"
-#include "../header/PlayerController.hpp"
 #include "../header/TextureManager.hpp"
 #include "../header/AudioManager.hpp"
-#include "../GameStates/MainMenu.cpp"
+#include "../header/GStateManager.hpp"
+#include "../header/PlayerController.hpp"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -42,12 +41,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	audioTest1.Load_Audio(Audios::BGM);
 	audioTest1.Play_Audio();
 
-	/*AEAudio Audio::Load_Sound(AudioFile audio_file)
-	{
-		AEAudio audio = AEAudioLoadSound(audio_file.filename);
-		return audio;
-	}*/
-
 	// Changing the window title
 	AESysSetWindowTitle("CARDINAL");
 
@@ -64,44 +57,27 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	Player mainPlayer(playerHealth, playerMovespeed, playerJumpForce, playerCanJump, squareMesh);
 	mainPlayer.SetTexture(digipenTexture);
-
+	mainPlayer.UpdateScale(AEVec2{ digipenTexture.Get_Image_Width(), digipenTexture.Get_Image_Height() });
 	const char* pText = "Cardinal";
-
-	TestState testState1("Test State 1\n");
-	MainMenuState state("Main Menu\n");
 	//TO BE DELETED. TEST PLAYER GET AND SET
 	//mainPlayer.UpdatePosition(_initP_pos);
 	//std::cout << "Player X: " << mainPlayer.GetPosition().x << " Y: " << mainPlayer.GetPosition().y << std::endl;
 
-	GameStateManager manager(&testState1);
+	GameStateManager manager;
+	manager.SetCurrentGameState(GameStateFactory::GetGameState(GameStates::MainMenu));
 
 	Player player(100.f, 30.f, 100.f, true, squareMesh);
 	player.SetTexture(digipenTexture);
+
 	std::cout << player;
 
-	AEVec2 movementVector{ 0.f,0.f };
-	AEVec2 _initP_pos{ 0.f,0.f };
-	f32 moveSpeed{ 300.f };
-	mainPlayer.UpdatePosition(_initP_pos);
 	while (gGameRunning)
 	{
 		AESysFrameStart();
 
-
-
-		if (AEInputCheckTriggered(AEVK_Q)) {
-			manager.SetCurrentGameState(&state);
-		}
 		manager.UpdateCurrentState();
 
 		f32 dt = AEFrameRateControllerGetFrameTime();
-
-		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
-		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
-		AEGfxSetTransparency(1.f);
 
 		if (AEInputCheckCurr(AEVK_D)) {
 			movementVector.x = 1.f * moveSpeed * dt;
@@ -113,6 +89,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		mainPlayer.UpdatePosition(_initP_pos);
 
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+		AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
+		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+		AEGfxSetColorToAdd(1.0f, 0.0f, 0.0f, 0.0f);
+		AEGfxSetTransparency(1.f);
+
+		mainPlayer.PlayerMovement(dt);
 		
 		/*if (AEFrameRateControllerGetFrameCount() < 100) {
 			logo_transparency += 0.02f;
@@ -139,7 +123,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// Informing the system about the loop's end
 
 		mainPlayer.Draw();
-
 
 		//digipenFont.Draw_Text(pText, 0.f, 0.f, 1.f, Colors::PastelPurple);
 

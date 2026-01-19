@@ -31,17 +31,20 @@ private:
 public:
 	Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, AEGfxVertexList* mesh);
 
-	void UpdatePlayerPos(AEVec2 pos, f32 deltaTime, AEVec2 movementVec, AEVec2 velocityVec);
+	void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
 	f32 GetPlayerHealth() const;
 	f32 GetPlayerSpeed() const;
 	f32 GetPlayerJumpForce() const;
 	f32 GetPlayerScore() const;
+	bool GetPlayerJump() const;
 	//set the player health
 	void SetPlayerHealth(f32 healthDamage);
 	void SetPlayerScore(f32 scoreAdded);
 
-	void PlayerJump();
+	void PlayerMovement(f32 dt);
+
+	void PlayerJump(AEVec2 pos, AEVec2 velocityVec, AEVec2 movementVec);
 };
 
 #endif // !PLAYER_MANAGER

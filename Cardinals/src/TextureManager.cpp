@@ -17,27 +17,39 @@ void Texture::Fill_Color(const Color color)
 	AEGfxSetColorToAdd(color.r, color.g, color.b, color.a);
 }
 
-void Texture::Load_Image(const FilePath& imageFilePath)
+void Texture::Load_Image(const ImageFile& imageFilePath)
 {
-	image = AEGfxTextureLoad(imageFilePath.filename);
+	_image = AEGfxTextureLoad(imageFilePath.filename);
+	_width = imageFilePath.width;
+	_height = imageFilePath.height;
 }
 
 void Texture::Set_Image(f32 x, f32 y)
+{	
+	AEGfxTextureSet(_image, x, y);
+}
+
+f32 Texture::Get_Image_Width()
 {
-	AEGfxTextureSet(image, x, y);
+	return _width;
+}
+
+f32 Texture::Get_Image_Height()
+{
+	return _height;
 }
 
 void Texture::Free_Image()
 {
-	AEGfxTextureUnload(image);
+	AEGfxTextureUnload(_image);
 }
 
 AEGfxTexture* Texture::Get_Image() const
 {
-	return image;
+	return _image;
 }
 
-void Font::Load_Font(const FilePath& fontFilePath, const f32 initHeight)
+void Font::Load_Font(const FontFile& fontFilePath, const f32 initHeight)
 {
 	font = AEGfxCreateFont(fontFilePath.filename, static_cast<int>(initHeight));
 }

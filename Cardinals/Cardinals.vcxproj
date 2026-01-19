@@ -121,6 +121,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameStates\MainMenu.hpp" />
     <ClInclude Include="header\AudioManager.hpp" />
     <ClInclude Include="header\GameObject.hpp" />
     <ClInclude Include="header\GameSaver.hpp" />

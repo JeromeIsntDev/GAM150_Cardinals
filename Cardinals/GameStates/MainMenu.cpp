@@ -1,35 +1,31 @@
-#include "../header/GameState.hpp"
-#include "../header/GStateManager.hpp"
+#include "../GameStates/MainMenu.hpp"
 
-class MainMenuState : public GameState {
-public:
-	MainMenuState(const char* name) {
-		_name = name;
-		PRINT("%s created.", _name);
-	}
+void MainMenuState::LoadState() {
+	PRINT("Load: %s", "Main Menu");
+}
 
-	void LoadState() {
-		PRINT("Load: %s", _name);
-	}
+void MainMenuState::InitializeState()
+{
+	PRINT("Initialize: %s", "Main Menu");
+}
 
-	void InitializeState() {
-		PRINT("Initialize: %s", _name);
-	}
+void MainMenuState::UpdateState() {
+	PRINT("Update: %s", "Main Menu");
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
+	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetTransparency(1.f);
+}
 
-	void UpdateState() {
-		PRINT("Update: %s", _name);
-	}
+void MainMenuState::StateDraw() {
+	PRINT("Draw: %s", "Main Menu");
+}
 
-	void StateDraw() {
-		PRINT("Draw: %s", _name);
-	}
+void MainMenuState::FreeState() {
+	PRINT("Free: %s", "Main Menu");
+}
 
-	void FreeState() {
-		PRINT("Free: %s", _name);
-	}
-
-	void UnloadState() {
-		PRINT("Unload: %s", _name);
-	}
-
-};
+void MainMenuState::UnloadState() {
+	PRINT("Unload: %s", "Main Menu");
+}

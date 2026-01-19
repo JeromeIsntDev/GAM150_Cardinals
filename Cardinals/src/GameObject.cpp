@@ -59,6 +59,10 @@ AEVec2 GameObject::GetPosition() const {
 	return globalPosition;
 }
 
+AEVec2& GameObject::GetPosition() {
+	return globalPosition;
+}
+
 f32 GameObject::GetRotatation() const {
 	return globalRotation;
 }
@@ -98,7 +102,7 @@ void GameObject::UpdateRotation(f32 rot)
 void GameObject::UpdateScale(AEVec2 scale)
 {
 	globalScale = scale;
-	AEMtx33Trans(&mtx_translation, scale.x, scale.y);
+	AEMtx33Scale(&mtx_scale, scale.x, scale.y);
 	localScale = isChild ? /*replace this with the local*/ scale : scale;
 	ConcatTransform();
 }
