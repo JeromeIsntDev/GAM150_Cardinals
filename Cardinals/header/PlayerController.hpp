@@ -30,7 +30,6 @@ private:
 	//set a jumpforce for psuedo gravity on jump
 	const f32 gravity{ -986.f };
 	const f32 maxHeight{ 200.f };
-	AEGfxVertexList* p_mesh;
 public:
 	//Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh);
 
