@@ -18,7 +18,9 @@ Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_canjump, A
 	: p_playerHealth(p_health), p_moveSpeed(p_movespeed), p_score(0.f), p_jumpForce(p_jumpForce), p_canJump(p_canjump),
 	GameObject(mesh, AEVec2{ 0.f,0.f }, 0.f, AEVec2{ 200.f,200.f })
 {
-	std::cout << "Player Created" << std::endl;
+	std::cout << "Player Created with PosX: " << globalPosition.x << " Pos Y: " << globalPosition.y
+	<< " Health: " << p_playerHealth << " Speed: " << p_moveSpeed
+	<< std::endl;
 }
 
 
