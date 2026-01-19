@@ -17,7 +17,7 @@
 #include "../header/PlayerController.hpp"
 #include "../header/TextureManager.hpp"
 #include "../header/AudioManager.hpp"
-
+#include "../GameStates/MainMenu.cpp"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -36,13 +36,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);
 
-	AudioFile musicFile{ "../../Assets/bouken.mp3" };
-
-	AEAudioGroup _group = AEAudioCreateGroup();
 
 	Audio audioTest1;
-	audioTest1.Load_Music(musicFile);
-	audioTest1.Play_Audio(1.f, 1.f, 0.f);
+	audioTest1.CreateAudioGroup();
+	audioTest1.Load_Audio(Audios::BGM);
+	audioTest1.Play_Audio();
 
 	/*AEAudio Audio::Load_Sound(AudioFile audio_file)
 	{
@@ -70,23 +68,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	const char* pText = "Cardinal";
 
 	TestState testState1("Test State 1\n");
-	TestState testState2("Test State 2\n");
+	MainMenuState state("Main Menu\n");
 	//TO BE DELETED. TEST PLAYER GET AND SET
 	//mainPlayer.UpdatePosition(_initP_pos);
 	//std::cout << "Player X: " << mainPlayer.GetPosition().x << " Y: " << mainPlayer.GetPosition().y << std::endl;
 
 	GameStateManager manager(&testState1);
 
-	/*TestState testState1("Test State 1");
-	TestState testState2("Test State 2");
-	GameStateManager manager(&testState1);*/
-
-	//Player player(100.f, 30.f, 100.f, true, squareMesh);
-	//player.SetTexture(digipenTexture);
-	//std::cout << player;
-	//stateManager.SetGameState(&testState);
-	//manager.SetCurrentGameState(&testState);
-	//manager.EnterCurrState();
+	Player player(100.f, 30.f, 100.f, true, squareMesh);
+	player.SetTexture(digipenTexture);
+	std::cout << player;
 
 	while (gGameRunning)
 	{
@@ -94,10 +85,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 
 
-		/*if (AEInputCheckTriggered(AEVK_Q)) {
-			manager.SetCurrentGameState(&testState2);
+		if (AEInputCheckTriggered(AEVK_Q)) {
+			manager.SetCurrentGameState(&state);
 		}
-		manager.CurrStateUpdate();*/
+		manager.UpdateCurrentState();
 
 		f32 dt = AEFrameRateControllerGetFrameTime();
 
