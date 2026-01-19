@@ -22,7 +22,7 @@ void Level1State::UpdateState() {
 	//PRINT("Update: %s", "Main Menu\n");
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
+	AEGfxSetBackgroundColor(0.95f, 0.65f, 0.77f);
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
 }
