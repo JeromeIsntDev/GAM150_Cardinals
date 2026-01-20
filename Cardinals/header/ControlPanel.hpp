@@ -6,18 +6,10 @@
 #include <gl/gl.h>
 #include <GLFW/glfw3.h>
 
-class gui {
-	//const window size
-	int WIDTH = 500;
-	int HEIGHT = 300;
 
-	bool exit = true;
-	HWND window = nullptr;
-	WNDCLASSEXA windowClass = {};
-
-	POINTS position = {};
-
-	
-};
+void ControlPanel_Load();
+void ControlPanel_Initialize(GLFWwindow* window);
+void ControlPanel_Update();
+void ControlPanel_Exit();
 
 #endif // !CONTROL_PANEL_HEADER
