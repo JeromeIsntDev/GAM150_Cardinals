@@ -27,6 +27,9 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJ
 	p_isJumping = isJump;
 	p_score = score;
 	initialYPos = initialVelocity = jumpT = zeroVal;
+	p_initialPos.x = zeroVal;
+	p_initialPos.y = zeroVal;
+	UpdatePosition(p_initialPos);
 	Player::mesh = mesh;
 }
 
