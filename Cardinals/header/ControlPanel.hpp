@@ -7,9 +7,17 @@
 #include <GLFW/glfw3.h>
 
 
-void ControlPanel_Load();
-void ControlPanel_Initialize(GLFWwindow* window);
-void ControlPanel_Update();
-void ControlPanel_Exit();
+class ControlPanel {
+protected:
+	GLFWwindow* window;
+	int screenWidth;
+	int screenHeight;
+
+public:
+	void ControlPanel_Load();
+	void ControlPanel_Initialize(GLFWwindow* window);
+	void ControlPanel_Update();
+	void ControlPanel_Exit();
+};
 
 #endif // !CONTROL_PANEL_HEADER

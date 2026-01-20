@@ -19,12 +19,12 @@
 #include <GLFW/glfw3.h>
 #include "../header/ControlPanel.hpp"
 
-void ControlPanel_Load() {
+void ControlPanel::ControlPanel_Load() {
 	GLFWwindow* window = glfwCreateWindow(1600, 900, "Test", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 }
 
-void ControlPanel_Initialize(GLFWwindow* window) {
+void ControlPanel::ControlPanel_Initialize(GLFWwindow* window) {
 	IMGUI_CHECKVERSION();
 
 	ImGui::CreateContext();
@@ -36,7 +36,7 @@ void ControlPanel_Initialize(GLFWwindow* window) {
 	ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void ControlPanel_Update() {
+void ControlPanel::ControlPanel_Update() {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
@@ -48,7 +48,7 @@ void ControlPanel_Update() {
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ControlPanel_Exit() {
+void ControlPanel::ControlPanel_Exit() {
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
