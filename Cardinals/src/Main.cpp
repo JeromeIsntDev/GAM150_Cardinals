@@ -44,21 +44,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Changing the window title
 	AESysSetWindowTitle("CARDINAL");
 
-	AEGfxVertexList* squareMesh = RectMeshCenter();
-	Texture digipenTexture{};
-	digipenTexture.Load_Image(Images::DigipenLogo);
-	//f32 logo_transparency = 0.f;
-
-	//TO BE DELETED. TEST PLAYER GET AND SET
-	//mainPlayer.UpdatePosition(_initP_pos);
-
 	GameStateManager manager;
 	manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::MainMenu));
-
-	//Player player(100.f, 30.f, 100.f, true, squareMesh);
-	//player.SetTexture(digipenTexture);
-
-	//std::cout << player;
 
 	while (gGameRunning)
 	{
@@ -78,38 +65,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		manager.UpdateCurrentState();
 		manager.DrawCurrentState();
-		
-		/*if (AEFrameRateControllerGetFrameCount() < 100) {
-			logo_transparency += 0.02f;
-		}
-		else if (AEFrameRateControllerGetFrameCount() > 100 && (AEFrameRateControllerGetFrameCount() < 200)) {
-			logo_transparency -= 0.02f;
-		}
-		else if (AEFrameRateControllerGetFrameCount() > 200){
-			logo_transparency = 0.f;
-		}*/
-		
-
-		// Set the texture to pTex
-		//digipenTexture.Set_Image(0.f, 0.f);
-
-		// Tell Alpha Engine to use the matrix in 'transform' to apply onto all
-		// the vertices of the mesh that we are about to choose to draw in the next line.
-		//AEGfxSetTransform(transform.m);
-
-		// Tell Alpha Engine to draw the mesh with the above settings.
-		//AEGfxMeshDraw(squareMesh, AE_GFX_MDM_TRIANGLES);
-
-		//digipenTexture.Draw_Text(pFont, pText, 0.f, 0.5f, 1.f, Colors::PastelPink);
-		// Informing the system about the loop's end
 
 		AESysFrameEnd();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			gGameRunning = 0;
 	}
 
-	AEGfxMeshFree(squareMesh);
-	digipenTexture.Free_Image();
 	// free the system
 	AESysExit();
 

@@ -26,16 +26,15 @@ void Level1State::InitializeState()
 {
 	AEGfxVertexList* squareMesh = RectMeshCenter();
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, playerJumpForce, false, 0.f, 0.f,squareMesh);
-	digipenTexture.Load_Image(Images::DigipenLogo);
+	digipenTexture.Load_Image(Images::Player);
 
 	PRINT("Initialize: %s", "Level 1\n");
 }
 
 void Level1State::UpdateState() {
-	f32 logo_transparency = 0.f;
 	//declare mainPlayer variable
 	mainPlayer.SetTexture(digipenTexture);
-	mainPlayer.UpdateScale(AEVec2{ digipenTexture.Get_Image_Width(), digipenTexture.Get_Image_Height() });
+	mainPlayer.UpdateScale(AEVec2{ 100.f, 100.f });
 	mainPlayer.UpdateRotation(0.f);
 	
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);

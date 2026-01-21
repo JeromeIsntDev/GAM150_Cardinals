@@ -45,6 +45,7 @@ namespace Images
 {
     constexpr ImageFile Planet{ "../../Assets/PlanetTexture.png", 500.f, 500.f };
     constexpr ImageFile DigipenLogo{ "../../Assets/DigiPen_WHITE.png", 1525.f, 445.f };
+    constexpr ImageFile Player{ "../../Assets/PlayerPlaceholder.png", 500.f,500.f };
 }
 
 namespace Fonts

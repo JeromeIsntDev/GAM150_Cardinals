@@ -26,6 +26,7 @@
     <ClCompile Include="GameStates\Level1.cpp" />
     <ClCompile Include="GameStates\Level2.cpp" />
     <ClCompile Include="GameStates\Level3.cpp" />
+    <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -56,6 +57,7 @@
     <ClInclude Include="GameStates\Level1.hpp" />
     <ClInclude Include="GameStates\Level2.hpp" />
     <ClInclude Include="GameStates\Level3.hpp" />
+    <ClInclude Include="header\UIManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />
