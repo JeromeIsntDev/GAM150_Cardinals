@@ -37,6 +37,8 @@ private:
 	AEMtx33 GetTransform() const;
 
 public:
+	virtual ~GameObject() = default; // destructor for polymorphism 
+
 	GameObject();
 	GameObject(AEGfxVertexList* mesh);
 	GameObject(AEGfxVertexList* mesh, AEVec2 translate, f32 rotate, AEVec2 scale);
@@ -57,7 +59,9 @@ public:
 	virtual void SetMesh(AEGfxVertexList* mesh);
 	virtual void SetTexture(const Texture texture);
 
-	void Draw() const;
+	// for UI, updates behavior
+	virtual void Update(float dt) {}
+	virtual void Draw() const;
 
 	bool IsChild() const;
 

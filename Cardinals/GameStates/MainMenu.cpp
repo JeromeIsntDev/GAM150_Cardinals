@@ -2,12 +2,15 @@
 #include "../header/TextureManager.hpp"
 #include "../header/MeshGenerator.hpp"
 #include "../header/PlayerController.hpp"
+#include "../header/UIManager.hpp"
 
 namespace {
 	Font cardinalsFont;
 
 	Texture startTexture{};
-	GameObject startBtn;
+	//GameObject startBtn;
+	std::unique_ptr<Button> startBtn; // hehe
+
 	Texture exitTexture{};
 	GameObject exitBtn;
 	Texture creditsTexture{};
@@ -37,8 +40,15 @@ void MainMenuState::InitializeState()
 	AEGfxVertexList* squareMesh = RectMeshCenter();
 	digipenLogo.SetMesh(squareMesh);
 
-	AEGfxVertexList* startMesh = RectMeshCenter();
-	startBtn.SetMesh(startMesh);
+	//AEGfxVertexList* startMesh = RectMeshCenter();
+	//startBtn.SetMesh(startMesh);
+
+	// holy shit it works
+	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
+	startBtn->SetTexture(startTexture);
+	startBtn->SetActive(true); 
+	startBtn->SetInteractable(true);
+
 	AEGfxVertexList* exitMesh = RectMeshCenter();
 	exitBtn.SetMesh(exitMesh); 
 	AEGfxVertexList* creditsMesh = RectMeshCenter();
@@ -78,10 +88,13 @@ void MainMenuState::UpdateState() {
 	}
 
 	if (logo_drawn) {
-		startBtn.SetTexture(startTexture);
-		startBtn.UpdatePosition(AEVec2{ 0.f, 0.f });
-		startBtn.UpdateScale(AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-		startBtn.UpdateRotation(0.f);
+
+		startBtn->Update(0.f); // dt = 0 for now lala
+
+		//startBtn.SetTexture(startTexture);
+		//startBtn.UpdatePosition(AEVec2{ 0.f, 0.f });
+		//startBtn.UpdateScale(AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
+		//startBtn.UpdateRotation(0.f);
 
 		startTexture.Set_Image(0, 0);
 
@@ -110,7 +123,9 @@ void MainMenuState::StateDraw() {
 	else {
 		cardinalsFont.Draw_Text(AEVec2{ 0, 200.f }, 2.5f);
 
-		startBtn.Draw();
+		//startBtn.Draw();
+		startBtn->Draw();
+
 		exitBtn.Draw();
 		creditsBtn.Draw();
 	}
