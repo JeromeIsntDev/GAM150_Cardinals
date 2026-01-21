@@ -47,7 +47,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxVertexList* squareMesh = RectMeshCenter();
 	Texture digipenTexture{};
 	digipenTexture.Load_Image(Images::DigipenLogo);
-	f32 logo_transparency = 0.f;
+	//f32 logo_transparency = 0.f;
 
 	//TO BE DELETED. TEST PLAYER GET AND SET
 	//mainPlayer.UpdatePosition(_initP_pos);

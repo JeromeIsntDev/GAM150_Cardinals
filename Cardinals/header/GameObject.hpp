@@ -54,6 +54,7 @@ public:
 	virtual void UpdatePosition(AEVec2 pos);
 	virtual void UpdateRotation(f32 rot);
 	virtual void UpdateScale(AEVec2 scale);
+	virtual void SetMesh(AEGfxVertexList* mesh);
 	virtual void SetTexture(const Texture texture);
 
 	void Draw() const;

@@ -22,6 +22,7 @@ void Texture::Load_Image(const ImageFile& imageFilePath)
 	_image = AEGfxTextureLoad(imageFilePath.filename);
 	_width = imageFilePath.width;
 	_height = imageFilePath.height;
+	PRINT("Load Image: %s\n", imageFilePath.filename);
 }
 
 void Texture::Set_Image(f32 x, f32 y)
