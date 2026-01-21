@@ -107,6 +107,11 @@ void GameObject::UpdateScale(AEVec2 scale)
 	ConcatTransform();
 }
 
+void GameObject::SetMesh(AEGfxVertexList* objectmesh)
+{
+	mesh = objectmesh;
+}
+
 void GameObject::SetTexture(const Texture texture)
 {
 	tex = texture;
@@ -117,6 +122,7 @@ void GameObject::Draw() const
 	AEGfxTextureSet(tex.Get_Image(), 0.f, 0.f);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+
 }
 
 bool GameObject::IsChild() const {
