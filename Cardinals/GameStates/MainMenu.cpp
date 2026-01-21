@@ -21,6 +21,7 @@ namespace {
 	GameObject digipenLogo;
 	f32 logo_transparency = 0.f;
 	s8 logo_drawn = 0;
+	s32 mouseX, mouseY;
 }
 
 
@@ -111,6 +112,31 @@ void MainMenuState::UpdateState() {
 		creditsBtn.UpdateRotation(0.f);
 
 		creditsTexture.Set_Image(0, 0);
+
+		AEInputGetCursorPosition(&mouseX, &mouseY);
+
+		//if (startBtn.HoverMesh(mouseX, mouseY))
+		//{
+		//	startBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
+		//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+		//		//start game
+		//	}
+		//}
+		//else 
+		if (creditsBtn.HoverMesh(mouseX, mouseY))
+		{
+			creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
+			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+				//credits page
+			}
+		}
+		else if (exitBtn.HoverMesh(mouseX, mouseY))
+		{
+			exitBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
+			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+				//exit
+			}
+		}
 	}
 }
 

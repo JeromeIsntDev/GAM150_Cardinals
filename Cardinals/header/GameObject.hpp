@@ -59,6 +59,8 @@ public:
 	virtual void SetMesh(AEGfxVertexList* mesh);
 	virtual void SetTexture(const Texture texture);
 
+	bool HoverMesh(s32 mouseX, s32 mouseY);
+
 	// for UI, updates behavior
 	virtual void Update(float dt) {}
 	virtual void Draw() const;

@@ -117,6 +117,23 @@ void GameObject::SetTexture(const Texture texture)
 	tex = texture;
 }
 
+bool GameObject::HoverMesh(s32 mouseX, s32 mouseY)
+{
+	s32 mouX = mouseX - 800;
+	s32 mouY = 450 - mouseY;
+	f32 minX = globalPosition.x - (globalScale.x / 2.f);
+	f32 maxX = globalPosition.x + (globalScale.x / 2.f);
+	f32 minY = globalPosition.y - (globalScale.y / 2.f);
+	f32 maxY = globalPosition.y + (globalScale.y / 2.f);
+	PRINT("Mouse Position Scale Y: %f %f\n", globalPosition.y, globalScale.y);
+	PRINT("Mouse min max Y: %f %f\n", minY, maxY);
+	PRINT("Mouse Triggered: %d %d\n", mouseY, mouY);
+	if (mouX > minX && mouX < maxX && mouY > minY && mouY < maxY) {
+		return true;
+	}
+	return false;
+}
+
 void GameObject::Draw() const
 {
 	AEGfxTextureSet(tex.Get_Image(), 0.f, 0.f);
