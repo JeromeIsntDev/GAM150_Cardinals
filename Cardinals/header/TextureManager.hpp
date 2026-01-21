@@ -43,9 +43,13 @@ namespace Colors
 
 namespace Images
 {
-    constexpr ImageFile Planet{ "../../Assets/PlanetTexture.png", 500.f, 500.f };
+    //constexpr ImageFile Background{ "../../Assets/Background.png", 1600.f, 900.f };
     constexpr ImageFile DigipenLogo{ "../../Assets/DigiPen_WHITE.png", 1525.f, 445.f };
     constexpr ImageFile Player{ "../../Assets/PlayerPlaceholder.png", 500.f,500.f };
+
+    constexpr ImageFile StartBtn{ "../../Assets/Start_Button.png", 412.f, 120.f };
+    constexpr ImageFile ExitBtn{ "../../Assets/Exit_Button.png", 412.f, 120.f };
+    constexpr ImageFile CreditsBtn{ "../../Assets/Credits_Button.png", 412.f, 120.f };
 }
 
 namespace Fonts

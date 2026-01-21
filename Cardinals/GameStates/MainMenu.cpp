@@ -4,10 +4,13 @@
 #include "../header/PlayerController.hpp"
 
 namespace {
-	Font digipenFont;
-	
+	Font cardinalsFont;
+
+	Texture startTexture{};
 	GameObject startBtn;
+	Texture exitTexture{};
 	GameObject exitBtn;
+	Texture creditsTexture{};
 	GameObject creditsBtn;
 	
 	//Digipen logo transition
@@ -20,17 +23,26 @@ namespace {
 
 void MainMenuState::LoadState() {
 	PRINT("Load: %s", "Main Menu\n");
-	digipenFont.Load_Font(Fonts::Alt, 72.f);
-	digipenFont.Input_Text("Main Menu");
-	digipenFont.Change_Text_Color(Colors::Black);
+	cardinalsFont.Load_Font(Fonts::Alt, 72.f);
+	cardinalsFont.Input_Text("cardinals");
 
 	digipenTexture.Load_Image(Images::DigipenLogo);
+	startTexture.Load_Image(Images::StartBtn);
+	exitTexture.Load_Image(Images::ExitBtn);
+	creditsTexture.Load_Image(Images::CreditsBtn);
 }
 
 void MainMenuState::InitializeState()
 {
 	AEGfxVertexList* squareMesh = RectMeshCenter();
 	digipenLogo.SetMesh(squareMesh);
+
+	AEGfxVertexList* startMesh = RectMeshCenter();
+	startBtn.SetMesh(startMesh);
+	AEGfxVertexList* exitMesh = RectMeshCenter();
+	exitBtn.SetMesh(exitMesh); 
+	AEGfxVertexList* creditsMesh = RectMeshCenter();
+	creditsBtn.SetMesh(creditsMesh);
 	PRINT("Initialize: %s", "Main Menu\n");
 }
 
@@ -39,8 +51,10 @@ void MainMenuState::UpdateState() {
 
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetBackgroundColor(0.5f, 0.5f, 0.5f);
+	Color bg = Colors::PastelPurple;
+	AEGfxSetBackgroundColor(bg.r, bg.g, bg.b);
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+	
 	AEGfxSetTransparency(logo_transparency);
 
 	if (!logo_drawn) {
@@ -64,24 +78,51 @@ void MainMenuState::UpdateState() {
 	}
 
 	if (logo_drawn) {
+		startBtn.SetTexture(startTexture);
+		startBtn.UpdatePosition(AEVec2{ 0.f, 0.f });
+		startBtn.UpdateScale(AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
+		startBtn.UpdateRotation(0.f);
 
+		startTexture.Set_Image(0, 0);
+
+		exitBtn.SetTexture(exitTexture);
+		exitBtn.UpdatePosition(AEVec2{ 0.f, -300.f });
+		exitBtn.UpdateScale(AEVec2{ exitTexture.Get_Image_Width(), exitTexture.Get_Image_Height() });
+		exitBtn.UpdateRotation(0.f);
+
+		exitTexture.Set_Image(0, 0);
+
+		creditsBtn.SetTexture(creditsTexture);
+		creditsBtn.UpdatePosition(AEVec2{ 0.f, -150.f });
+		creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
+		creditsBtn.UpdateRotation(0.f);
+
+		creditsTexture.Set_Image(0, 0);
 	}
 }
 
 void MainMenuState::StateDraw() {
 	PRINT("Draw: %s", "Main Menu\n");
 
-	digipenFont.Draw_Text(AEVec2{-700.f, -430.f}, .5f);
-
 	if (!logo_drawn) {
 		digipenLogo.Draw();
+	}
+	else {
+		cardinalsFont.Draw_Text(AEVec2{ 0, 200.f }, 2.5f);
+
+		startBtn.Draw();
+		exitBtn.Draw();
+		creditsBtn.Draw();
 	}
 
 }
 
 void MainMenuState::FreeState() {
-	digipenFont.Free_Font();
+	cardinalsFont.Free_Font();
 	digipenTexture.Free_Image();
+	startTexture.Free_Image();
+	exitTexture.Free_Image();
+	creditsTexture.Free_Image();
 	PRINT("Free: %s", "Main Menu\n");
 }
 
