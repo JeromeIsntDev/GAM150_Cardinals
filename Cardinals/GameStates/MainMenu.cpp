@@ -27,7 +27,7 @@ namespace {
 
 void MainMenuState::LoadState() {
 	PRINT("Load: %s", "Main Menu\n");
-	cardinalsFont.Load_Font(Fonts::Alt, 72.f);
+	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
 
 	digipenTexture.Load_Image(Images::DigipenLogo);
@@ -141,13 +141,13 @@ void MainMenuState::UpdateState() {
 }
 
 void MainMenuState::StateDraw() {
-	PRINT("Draw: %s", "Main Menu\n");
+	//PRINT("Draw: %s", "Main Menu\n");
 
 	if (!logo_drawn) {
 		digipenLogo.Draw();
 	}
 	else {
-		cardinalsFont.Draw_Text(AEVec2{ 0, 200.f }, 2.5f);
+		cardinalsFont.Draw_Text(AEVec2{ 0, 200.f }, 1.f);
 
 		//startBtn.Draw();
 		startBtn->Draw();
