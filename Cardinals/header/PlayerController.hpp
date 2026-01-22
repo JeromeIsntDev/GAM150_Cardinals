@@ -22,27 +22,28 @@ from GameObject class from GameObject
 class Player : public GameObject {
 	//Player() = delete;
 private:
-	f32 p_playerHealth;
-	f32 p_moveSpeed;
-	f32 p_jumpForce;
-	bool p_isJumping;
-	f32 p_score;
+	f32 p_playerHealth{ 100.f };
+	f32 p_moveSpeed{ 300.f };
+	f32 p_jumpForce{ 0.5f };
+	bool p_isJumping{ false };
+	bool p_isInverted{ false };
+	f32 p_score{ 0.f };
 	//set a jumpforce for psuedo gravity on jump
-	const f32 gravity{ -986.f };
+	f32 gravity{ -986.f };
 	const f32 maxHeight{ 200.f };
-	AEVec2 p_initialPos;
+	AEVec2 p_initialPos{ 0.f,0.f };
 public:
-	//Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh);
+	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
 	//public Variable for Player (Check if error)
-	f32 initialYPos;
-	f32 initialVelocity;
-	f32 jumpT;
+	f32 initialYPos{ 0.f };
+	f32 initialVelocity{ 0.f };
+	f32 jumpT{ 0.f };
 
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
 
-	void InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh);
+	void InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
 	f32 GetPlayerHealth() const;
 	f32 GetPlayerSpeed() const;
