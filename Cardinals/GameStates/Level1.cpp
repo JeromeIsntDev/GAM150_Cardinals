@@ -25,7 +25,7 @@ void Level1State::LoadState() {
 void Level1State::InitializeState()
 {
 	AEGfxVertexList* squareMesh = RectMeshCenter();
-	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, playerJumpForce, false, 0.f, 0.f,squareMesh);
+	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, playerJumpForce, false, 0.f, 0.f,squareMesh, 0.f, 150.f);
 	digipenTexture.Load_Image(Images::Player);
 
 	PRINT("Initialize: %s", "Level 1\n");

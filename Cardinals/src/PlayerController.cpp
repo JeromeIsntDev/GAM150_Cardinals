@@ -14,21 +14,22 @@ the player movement etc
 #include "../header/PlayerController.hpp"
 #include <iostream>
 
-//Player::Player(f32 p_health, f32 p_movespeed, f32 p_jumpForce, bool p_isJump, AEGfxVertexList* mesh)
-//	: p_playerHealth(p_health), p_moveSpeed(p_movespeed), p_jumpForce(p_jumpForce), p_isJumping(p_isJump), p_score(0.f),
-//	GameObject(mesh, AEVec2{ 0.f,0.f }, 0.f, AEVec2{ 200.f,200.f }),initialYPos(0.f), initialVelocity(0.f),
-//	jumpT(0.f)
+//Player::Player(f32 health ,f32 moveSpeed,f32 jumpForce ,bool isJump ,f32 score , f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) 
+//	: p_playerHealth(health), p_moveSpeed(moveSpeed), p_jumpForce(jumpForce),
+//	  p_isJumping(isJump),p_score(score),p_initialPos{xPos,yPos},
+//	  initialYPos(zeroVal),initialVelocity(zeroVal),jumpT(zeroVal),
+//	  GameObject(mesh,AEVec2{0.f,0.f},0.f,AEVec2{200.f,200.f})
 //{}
 
-void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* mesh) {
+void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) {
 	p_playerHealth = health;
 	p_moveSpeed = moveSpeed;
 	p_jumpForce = jumpForce;
 	p_isJumping = isJump;
 	p_score = score;
 	initialYPos = initialVelocity = jumpT = zeroVal;
-	p_initialPos.x = zeroVal;
-	p_initialPos.y = zeroVal;
+	p_initialPos.x = xPos;
+	p_initialPos.y = yPos;
 	UpdatePosition(p_initialPos);
 	Player::mesh = mesh;
 }
@@ -43,8 +44,11 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJ
 //Takes in the initial value of points for the code to reference during jump state
 void Player::StartJump(AEVec2 velocityVec, f32 jumpForce) {
 	if (p_isJumping) return;
+
 	initialYPos = GetPosition().y;
-	initialVelocity = velocityVec.y * (std::sqrt(2.f * (-gravity) * maxHeight));
+	f32 jumpSpeed = velocityVec.y * (std::sqrt(2.f * (-gravity) * maxHeight));
+	f32 direction = p_isInverted ? -1.f : 1.f;
+	initialVelocity = direction * jumpSpeed;
 	jumpT = 0.f;
 	p_jumpForce = jumpForce;
 	p_isJumping = true;
@@ -57,8 +61,10 @@ void Player::PlayerJump(f32 dt) {
 	std::cout << "Jump Force: " << p_jumpForce << std::endl;
 	//The Update for the Y position for Parabola
 	GetPosition().y = (initialYPos + initialVelocity * jumpT + p_jumpForce * gravity * (jumpT * jumpT));
-	//If Y pos is lower than initial, stop jumping (Change this logic in the future)
-	if (GetPosition().y <= initialYPos) {
+	//If displacement is lower than initial, stop jumping (Change this logic in the future)
+	f32 displacement = GetPosition().y - initialYPos;
+	if ((!p_isInverted && displacement <= 0.f) || (p_isInverted && displacement >= 0.f)){
+		//fix this logic
 		GetPosition().y = initialYPos;
 		p_isJumping = false;
 	}
@@ -88,6 +94,10 @@ void Player::PlayerMovement(f32 dt, f32 jumpForce) {
 	if (AEInputCheckReleased(AEVK_LSHIFT)) {
 		isSprint = false;
 	}
+	//if (AEInputCheckTriggered(AEVK_Q)) {
+	//	//toggle
+	//	p_isInverted = !p_isInverted;
+	//}
 	//Temp sprint up and down logic
 	if (isSprint) {
 		f32 maxSpeed = moveSpeed * 3.f;
