@@ -11,7 +11,9 @@ namespace {
 	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f }, playerJumpForce{ 0.5f };
 	bool playerIsJump{ false };
 	Player mainPlayer;
-	Texture digipenTexture{};
+	Texture playerTexture{};
+
+	AEGfxVertexList* squareMesh;
 }
 
 void Level1State::LoadState() {
@@ -24,18 +26,18 @@ void Level1State::LoadState() {
 
 void Level1State::InitializeState()
 {
-	AEGfxVertexList* squareMesh = RectMeshCenter();
+	squareMesh = RectMeshCenter();
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, playerJumpForce, false, 0.f, 0.f,squareMesh, 0.f, 150.f);
-	digipenTexture.Load_Image(Images::Player);
+	playerTexture.Load_Image(Images::Player);
+	mainPlayer.SetTexture(playerTexture);
+	mainPlayer.UpdateScale(AEVec2{ 100.f, 100.f });
+	mainPlayer.UpdateRotation(0.f);
 
 	PRINT("Initialize: %s", "Level 1\n");
 }
 
 void Level1State::UpdateState() {
 	//declare mainPlayer variable
-	mainPlayer.SetTexture(digipenTexture);
-	mainPlayer.UpdateScale(AEVec2{ 100.f, 100.f });
-	mainPlayer.UpdateRotation(0.f);
 	
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -58,6 +60,10 @@ void Level1State::StateDraw() {
 }
 
 void Level1State::FreeState() {
+
+	digipenFont.Free_Font();
+	playerTexture.Free_Image();
+	AEGfxMeshFree(squareMesh);
 
 	PRINT("Free: %s", "Level 1\n");
 }

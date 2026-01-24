@@ -30,12 +30,12 @@ void Texture::Set_Image(f32 x, f32 y)
 	AEGfxTextureSet(_image, x, y);
 }
 
-f32 Texture::Get_Image_Width()
+f32 Texture::Get_Image_Width() const
 {
 	return _width;
 }
 
-f32 Texture::Get_Image_Height()
+f32 Texture::Get_Image_Height() const
 {
 	return _height;
 }
@@ -50,9 +50,11 @@ AEGfxTexture* Texture::Get_Image() const
 	return _image;
 }
 
-Font::Font() :_font{0}, _scale{1.f}, _color { Colors::White } {
+Font::Font() 
+	:_font{ 0 }, _scale{ 1.f }, _color{ Colors::White }, _text{""} {
 
 }
+
 void Font::Load_Font(const FontFile& fontFilePath, const f32 initHeight)
 {
 	_font = AEGfxCreateFont(fontFilePath.filename, static_cast<int>(initHeight));

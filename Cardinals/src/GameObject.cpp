@@ -29,6 +29,9 @@ GameObject::GameObject()
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
 		isChild(false), mesh(nullptr)
 {
+	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
+	AEMtx33Rot(&mtx_rotation, globalRotation);
+	AEMtx33Scale(&mtx_scale, globalScale.x, globalScale.y);
 	ConcatTransform();
 }
 
@@ -39,6 +42,9 @@ GameObject::GameObject(AEGfxVertexList* mesh)
 	mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
 	isChild(false), mesh(mesh)
 {
+	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
+	AEMtx33Rot(&mtx_rotation, globalRotation);
+	AEMtx33Scale(&mtx_scale, globalScale.x, globalScale.y);
 	ConcatTransform();
 }
 
@@ -117,7 +123,7 @@ void GameObject::SetTexture(const Texture texture)
 	tex = texture;
 }
 
-bool GameObject::HoverMesh(s32 mouseX, s32 mouseY)
+bool GameObject::HoverMesh(s32 mouseX, s32 mouseY) const
 {
 	s32 mouX = mouseX - 800;
 	s32 mouY = 450 - mouseY;
@@ -126,10 +132,7 @@ bool GameObject::HoverMesh(s32 mouseX, s32 mouseY)
 	f32 minY = globalPosition.y - (globalScale.y / 2.f);
 	f32 maxY = globalPosition.y + (globalScale.y / 2.f);
 
-	if (mouX > minX && mouX < maxX && mouY > minY && mouY < maxY) {
-		return true;
-	}
-	return false;
+	return mouX > minX && mouX < maxX && mouY > minY && mouY < maxY;
 }
 
 void GameObject::Draw() const

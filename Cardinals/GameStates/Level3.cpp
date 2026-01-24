@@ -34,6 +34,8 @@ void Level3State::StateDraw() {
 }
 
 void Level3State::FreeState() {
+	digipenFont.Free_Font();
+
 	PRINT("Free: %s", "Level 3\n");
 }
 

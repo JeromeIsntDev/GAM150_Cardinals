@@ -71,8 +71,8 @@ public:
 	void Load_Image(const ImageFile& imageFilePath);
     void Set_Image(f32 x, f32 y);
     void Free_Image();
-    f32 Get_Image_Width();
-    f32 Get_Image_Height();
+    f32 Get_Image_Width() const;
+    f32 Get_Image_Height() const;
     AEGfxTexture* Get_Image() const;
 };
 

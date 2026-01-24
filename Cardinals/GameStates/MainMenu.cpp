@@ -13,15 +13,18 @@ namespace {
 
 	Texture exitTexture{};
 	GameObject exitBtn;
+
 	Texture creditsTexture{};
 	GameObject creditsBtn;
 	
 	//Digipen logo transition
-	Texture digipenTexture{};
-	GameObject digipenLogo;
+	Texture tex_digipenLogo{};
+	GameObject go_digipenLogo;
 	f32 logo_transparency = 0.f;
-	s8 logo_drawn = 0;
+	s8 isLogoDrawn = 0;
 	s32 mouseX, mouseY;
+
+	AEGfxVertexList* squareMesh;
 }
 
 
@@ -30,7 +33,7 @@ void MainMenuState::LoadState() {
 	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
 
-	digipenTexture.Load_Image(Images::DigipenLogo);
+	tex_digipenLogo.Load_Image(Images::DigipenLogo);
 	startTexture.Load_Image(Images::StartBtn);
 	exitTexture.Load_Image(Images::ExitBtn);
 	creditsTexture.Load_Image(Images::CreditsBtn);
@@ -38,8 +41,8 @@ void MainMenuState::LoadState() {
 
 void MainMenuState::InitializeState()
 {
-	AEGfxVertexList* squareMesh = RectMeshCenter();
-	digipenLogo.SetMesh(squareMesh);
+	squareMesh = RectMeshCenter();
+	go_digipenLogo.SetMesh(squareMesh);
 
 	//AEGfxVertexList* startMesh = RectMeshCenter();
 	//startBtn.SetMesh(startMesh);
@@ -50,10 +53,21 @@ void MainMenuState::InitializeState()
 	startBtn->SetActive(true); 
 	startBtn->SetInteractable(true);
 
-	AEGfxVertexList* exitMesh = RectMeshCenter();
-	exitBtn.SetMesh(exitMesh); 
-	AEGfxVertexList* creditsMesh = RectMeshCenter();
-	creditsBtn.SetMesh(creditsMesh);
+	//startBtn.SetTexture(startTexture);
+	//startBtn.UpdatePosition(AEVec2{ 0.f, 0.f });
+	//startBtn.UpdateScale(AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
+
+	creditsBtn.SetMesh(squareMesh);
+	creditsBtn.SetTexture(creditsTexture);
+	creditsBtn.UpdatePosition(AEVec2{ 0.f, -150.f });
+	creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
+
+	exitBtn.SetMesh(squareMesh);
+	exitBtn.SetTexture(exitTexture);
+	exitBtn.UpdatePosition(AEVec2{ 0.f, -300.f });
+	exitBtn.UpdateScale(AEVec2{ exitTexture.Get_Image_Width(), exitTexture.Get_Image_Height() });
+
+
 	PRINT("Initialize: %s", "Main Menu\n");
 }
 
@@ -68,13 +82,13 @@ void MainMenuState::UpdateState() {
 	
 	AEGfxSetTransparency(logo_transparency);
 
-	if (!logo_drawn) {
-		digipenLogo.SetTexture(digipenTexture);
-		digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
-		digipenLogo.UpdateScale(AEVec2{ digipenTexture.Get_Image_Width(), digipenTexture.Get_Image_Height() });
-		digipenLogo.UpdateRotation(0.f);
+	if (!isLogoDrawn) {
+		go_digipenLogo.SetTexture(tex_digipenLogo);
+		go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
+		go_digipenLogo.UpdateScale(AEVec2{ tex_digipenLogo.Get_Image_Width(), tex_digipenLogo.Get_Image_Height() });
+		go_digipenLogo.UpdateRotation(0.f);
 
-		digipenTexture.Set_Image(0, 0);
+		tex_digipenLogo.Set_Image(0, 0);
 	}
 
 	if (AEFrameRateControllerGetFrameCount() < 100) {
@@ -85,57 +99,41 @@ void MainMenuState::UpdateState() {
 	}
 	else if (AEFrameRateControllerGetFrameCount() > 200) {
 		logo_transparency = 1.f;
-		logo_drawn = 1;
+		isLogoDrawn = 1;
 	}
 
-	if (logo_drawn) {
+	if (!isLogoDrawn) return;
+	startBtn->Update(0.f); // dt = 0 for now lala
 
-		startBtn->Update(0.f); // dt = 0 for now lala
+	startTexture.Set_Image(0, 0);
 
-		//startBtn.SetTexture(startTexture);
-		//startBtn.UpdatePosition(AEVec2{ 0.f, 0.f });
-		//startBtn.UpdateScale(AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-		//startBtn.UpdateRotation(0.f);
+	creditsBtn.Draw();
+	exitBtn.Draw();
 
-		startTexture.Set_Image(0, 0);
+	AEInputGetCursorPosition(&mouseX, &mouseY);
 
-		exitBtn.SetTexture(exitTexture);
-		exitBtn.UpdatePosition(AEVec2{ 0.f, -300.f });
-		exitBtn.UpdateScale(AEVec2{ exitTexture.Get_Image_Width(), exitTexture.Get_Image_Height() });
-		exitBtn.UpdateRotation(0.f);
-
-		exitTexture.Set_Image(0, 0);
-
-		creditsBtn.SetTexture(creditsTexture);
-		creditsBtn.UpdatePosition(AEVec2{ 0.f, -150.f });
-		creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
-		creditsBtn.UpdateRotation(0.f);
-
-		creditsTexture.Set_Image(0, 0);
-
-		AEInputGetCursorPosition(&mouseX, &mouseY);
-
-		//if (startBtn.HoverMesh(mouseX, mouseY))
-		//{
-		//	startBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
-		//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-		//		//start game
-		//	}
-		//}
-		//else 
-		if (creditsBtn.HoverMesh(mouseX, mouseY))
-		{
-			creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
-			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-				//credits page
-			}
+	creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
+	exitBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
+	//if (startBtn.HoverMesh(mouseX, mouseY))
+	//{
+	//	startBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
+	//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+	//		//start game
+	//	}
+	//}
+	//else 
+	if (creditsBtn.HoverMesh(mouseX, mouseY))
+	{
+		creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
+		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+			//credits page
 		}
-		else if (exitBtn.HoverMesh(mouseX, mouseY))
-		{
-			exitBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
-			if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-				//exit
-			}
+	}
+	else if (exitBtn.HoverMesh(mouseX, mouseY))
+	{
+		exitBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
+		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+			//exit
 		}
 	}
 }
@@ -143,27 +141,26 @@ void MainMenuState::UpdateState() {
 void MainMenuState::StateDraw() {
 	//PRINT("Draw: %s", "Main Menu\n");
 
-	if (!logo_drawn) {
-		digipenLogo.Draw();
-	}
-	else {
-		cardinalsFont.Draw_Text(AEVec2{ 0, 200.f }, 1.f);
-
-		//startBtn.Draw();
-		startBtn->Draw();
-
-		exitBtn.Draw();
-		creditsBtn.Draw();
+	if (!isLogoDrawn) {
+		go_digipenLogo.Draw();
+		return;
 	}
 
+	cardinalsFont.Draw_Text(AEVec2{ 0, 200.f }, 1.f);
+
+	startBtn->Draw();
+	exitBtn.Draw();
+	creditsBtn.Draw();
 }
 
 void MainMenuState::FreeState() {
 	cardinalsFont.Free_Font();
-	digipenTexture.Free_Image();
+	tex_digipenLogo.Free_Image();
 	startTexture.Free_Image();
 	exitTexture.Free_Image();
 	creditsTexture.Free_Image();
+
+	AEGfxMeshFree(squareMesh);
 	PRINT("Free: %s", "Main Menu\n");
 }
 

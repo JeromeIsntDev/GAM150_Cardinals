@@ -12,6 +12,7 @@ void GameStateManager::SetCurrentGameState(GameState* state)
 		pt_CurrentGameState->FreeState();
 		pt_CurrentGameState->UnloadState();
 	}
+	delete pt_CurrentGameState;
 	pt_CurrentGameState = state;
 	pt_CurrentGameState->LoadState();
 	pt_CurrentGameState->InitializeState();
