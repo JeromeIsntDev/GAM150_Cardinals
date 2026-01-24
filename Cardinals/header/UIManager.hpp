@@ -17,8 +17,9 @@
 #include <AEEngine.h>
 #include <vector>
 #include "../header/GameObject.hpp"
+#include "../header/InputHandler.hpp"
 
-// this guy controls every ui element there is
+// this guy IS every ui element
 class UIElement : public GameObject 
 {
 protected:
@@ -35,12 +36,21 @@ public:
 	// grabbing shit from gameobj waoowww
 	UIElement(AEGfxVertexList* mesh, AEVec2 pos, float rot, AEVec2 scale) : GameObject(mesh, pos, rot, scale) {}
 
-	// working on input and interactivity later
+	// treat these like unity hehe
+	// element->setactive(false) type shit bro
 	void SetActive(bool active) { isActive = active; }
-	void SetInteractable(bool interactable) { isInteractable = interactable; }
+	void SetInteractable(bool interactable) 
+	{ 
+		isInteractable = interactable;
+		if (!isInteractable)
+		{
+			AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.f); // gay out the button lalala
+		}
+	}
 
 	bool IsActive() const { return isActive; }
 	bool IsInteractable() const { return isInteractable; }
+	bool IsPointInside(float x, float y) const;
 
 	virtual void Update(float dt) override {}
 	virtual void OnClick() {}
@@ -63,10 +73,11 @@ public:
 	void Update(float dt); // loops thru all elements and calls their updaate
 	void Draw() const; // same shit but just yoinks the draw from gameobj and draws bruh
 	void HandleClick(); // useless rn
+
 };
 
 ///
-///
+/// elements heeere
 /// 
 
 #include <functional> // im ngl idk much abt this i desperately just needed to debug
@@ -85,9 +96,10 @@ public:
 		if (!isActive || !isInteractable)
 			return;
 
-		// this does NNNOT work yet gimme a while more to tickle input handling
-		if (onClick)
-			std::cout << "yeowi";
+		if (onClick) 
+		{
+			onClick();
+		}
 	}
 
 private:

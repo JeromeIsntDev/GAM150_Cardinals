@@ -7,15 +7,7 @@
 namespace {
 	Font cardinalsFont;
 
-	Texture startTexture{};
-	//GameObject startBtn;
-	std::unique_ptr<Button> startBtn; // hehe
-
-	Texture exitTexture{};
-	GameObject exitBtn;
-
-	Texture creditsTexture{};
-	GameObject creditsBtn;
+	Texture startTexture{}, exitTexture{}, creditsTexture{};
 	
 	//Digipen logo transition
 	Texture tex_digipenLogo{};
@@ -23,8 +15,11 @@ namespace {
 	f32 logo_transparency = 0.f;
 	s8 isLogoDrawn = 0;
 	s32 mouseX, mouseY;
-
 	AEGfxVertexList* squareMesh;
+
+	// UI stuff
+	UIManager menuUI;
+	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn;
 }
 
 
@@ -47,26 +42,26 @@ void MainMenuState::InitializeState()
 	//AEGfxVertexList* startMesh = RectMeshCenter();
 	//startBtn.SetMesh(startMesh);
 
-	// holy shit it works
+	// creates button w relevant stuff stolen from gameobej
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-	startBtn->SetTexture(startTexture);
-	startBtn->SetActive(true); 
-	startBtn->SetInteractable(true);
+	startBtn->SetTexture(startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
 
-	//startBtn.SetTexture(startTexture);
-	//startBtn.UpdatePosition(AEVec2{ 0.f, 0.f });
-	//startBtn.UpdateScale(AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
+	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
+	exitBtn->SetTexture(exitTexture); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
 
-	creditsBtn.SetMesh(squareMesh);
-	creditsBtn.SetTexture(creditsTexture);
-	creditsBtn.UpdatePosition(AEVec2{ 0.f, -150.f });
-	creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
+	creditsBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -150.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
+	creditsBtn->SetTexture(creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
 
-	exitBtn.SetMesh(squareMesh);
-	exitBtn.SetTexture(exitTexture);
-	exitBtn.UpdatePosition(AEVec2{ 0.f, -300.f });
-	exitBtn.UpdateScale(AEVec2{ exitTexture.Get_Image_Width(), exitTexture.Get_Image_Height() });
+	// use them like this ik its weird asf but like. i'll make it better soon
+	exitBtn->SetOnClick([]() {
+		PRINT("fuck yall im out");
+		// exit func or whatever
+		});
 
+	// so we can control all buttons with a menuUI hehehehe
+	menuUI.Add(startBtn.get());
+	menuUI.Add(exitBtn.get());
+	menuUI.Add(creditsBtn.get());
 
 	PRINT("Initialize: %s", "Main Menu\n");
 }
@@ -102,39 +97,50 @@ void MainMenuState::UpdateState() {
 		isLogoDrawn = 1;
 	}
 
-	if (!isLogoDrawn) return;
-	startBtn->Update(0.f); // dt = 0 for now lala
+	if (isLogoDrawn) {
+
+		menuUI.Update(0.f); // dt = 0 for now lala
 
 	startTexture.Set_Image(0, 0);
 
-	creditsBtn.Draw();
-	exitBtn.Draw();
+		//exitBtn.SetTexture(exitTexture);
+		//exitBtn.UpdatePosition(AEVec2{ 0.f, -300.f });
+		//exitBtn.UpdateScale(AEVec2{ exitTexture.Get_Image_Width(), exitTexture.Get_Image_Height() });
+		//exitBtn.UpdateRotation(0.f);
+
+		exitTexture.Set_Image(0, 0);
+
+		//creditsBtn.SetTexture(creditsTexture);
+		//creditsBtn.UpdatePosition(AEVec2{ 0.f, -150.f });
+		//creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
+		//creditsBtn.UpdateRotation(0.f);
+
+		creditsTexture.Set_Image(0, 0);
 
 	AEInputGetCursorPosition(&mouseX, &mouseY);
 
-	creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
-	exitBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
-	//if (startBtn.HoverMesh(mouseX, mouseY))
-	//{
-	//	startBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
-	//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-	//		//start game
-	//	}
-	//}
-	//else 
-	if (creditsBtn.HoverMesh(mouseX, mouseY))
-	{
-		creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
-		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-			//credits page
-		}
-	}
-	else if (exitBtn.HoverMesh(mouseX, mouseY))
-	{
-		exitBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
-		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-			//exit
-		}
+		//if (startBtn.HoverMesh(mouseX, mouseY))
+		//{
+		//	startBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
+		//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+		//		//start game
+		//	}
+		//}
+		//else 
+		//if (creditsBtn.HoverMesh(mouseX, mouseY))
+		//{
+		//	creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
+		//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+		//		//credits page
+		//	}
+		//}
+		//else if (exitBtn.HoverMesh(mouseX, mouseY))
+		//{
+		//	exitBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
+		//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
+		//		//exit
+		//	}
+		//}
 	}
 }
 
@@ -148,10 +154,10 @@ void MainMenuState::StateDraw() {
 
 	cardinalsFont.Draw_Text(AEVec2{ 0, 200.f }, 1.f);
 
-	startBtn->Draw();
-	exitBtn.Draw();
-	creditsBtn.Draw();
-}
+		startBtn->Draw();
+		exitBtn->Draw();
+		creditsBtn->Draw();
+	}
 
 void MainMenuState::FreeState() {
 	cardinalsFont.Free_Font();
