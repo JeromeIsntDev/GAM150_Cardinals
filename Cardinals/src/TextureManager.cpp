@@ -51,43 +51,95 @@ AEGfxTexture* Texture::Get_Image() const
 }
 
 Font::Font() 
-	:_font{ 0 }, _scale{ 1.f }, _color{ Colors::White }, _text{""} {
+	:_font{ 0 }, _scale{ 1.f }, _color{ Colors::White }, _textArr{""} {
 
 }
 
 void Font::Load_Font(const FontFile& fontFilePath, const f32 initHeight)
 {
+	_fontSize = initHeight;
 	_font = AEGfxCreateFont(fontFilePath.filename, static_cast<int>(initHeight));
 }
 
 void Font::Input_Text(const char* text)
 {
-	_text = text;
+	_textArr.clear();
+	std::string str(text);
+	size_t start = 0;
+	size_t pos;
+
+	while ((pos = str.find('\n', start)) != std::string::npos) {
+		_textArr.push_back(str.substr(start, pos - start));
+		start = pos + 1;
+	}
+
+	_textArr.push_back(str.substr(start));
 }
 
 void Font::Draw_Text() const
 {
-	f32 w{ 0 }, h{ 0 };
-	AEGfxGetPrintSize(_font, _text, _scale, &w, &h);
-	AEGfxPrint(_font, _text, (-w / 2), (-h / 2),
-		_scale, _color.r, _color.g, _color.b, _color.a);
+	f32 yOffset = 0.0f;
+
+	for (const std::string& line : _textArr)
+	{
+		f32 w{ 0 }, h{ 0 };
+		AEGfxGetPrintSize(_font, line.c_str(), _scale, &w, &h);
+
+		AEGfxPrint(
+			_font,
+			line.c_str(),
+			(-w / 2),
+			(-h / 2) - yOffset,
+			_scale,
+			_color.r, _color.g, _color.b, _color.a
+		);
+
+		yOffset += _fontSize * 2 / 900.f;
+	}
 }
 
 void Font::Draw_Text(f32 x, f32 y)
 {
-	f32 w{ 0 }, h{ 0 };
-	AEGfxGetPrintSize(_font, _text, _scale, &w, &h);
-	AEGfxPrint(_font, _text, (- w / 2) + x/800.f, (- h / 2) + y/450.f, 
-		_scale, _color.r, _color.g, _color.b, _color.a);
+	f32 yOffset = 0.0f;
+
+	for (const std::string& line : _textArr)
+	{
+		f32 w{ 0 }, h{ 0 };
+
+		AEGfxGetPrintSize(_font, line.c_str(), _scale, &w, &h);
+
+		AEGfxPrint(
+			_font,
+			line.c_str(),
+			(-w / 2) + x / 800.f,
+			(-h / 2) + y / 450.f - yOffset,
+			_scale,
+			_color.r, _color.g, _color.b, _color.a
+		);
+
+		yOffset += _fontSize * 2 / 900.f;
+	}
 }
 
 void Font::Draw_Text(AEVec2 pos, f32 scale)
 {
-	f32 w{ 0 }, h{ 0 };
 	_scale = scale;
-	AEGfxGetPrintSize(_font, _text, scale, &w, &h);
-	AEGfxPrint(_font, _text, (-w / 2) + pos.x / 800.f, (-h / 2) + pos.y / 450.f,
-		_scale, _color.r, _color.g, _color.b, _color.a);
+	f32 yOffset = 0.0f;
+	for (const std::string& line : _textArr)
+	{
+		f32 w{ 0 }, h{ 0 };
+
+		AEGfxGetPrintSize(_font, line.c_str(), scale, &w, &h);
+		AEGfxPrint(
+			_font,
+			line.c_str(),
+			(-w / 2) + pos.x / 800.f,
+			(-h / 2) + pos.y / 450.f - yOffset,
+			_scale,
+			_color.r, _color.g, _color.b, _color.a
+		);
+		yOffset += _fontSize * 2 / 900.f;
+	}
 }
 
 void Font::Change_Text_Color(const Color color)

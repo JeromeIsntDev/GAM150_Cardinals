@@ -15,6 +15,8 @@
 #define _Texture_Man_Header_
 
 #include <AEEngine.h>
+#include <vector>
+#include <string>
 
 struct Color {
     f32 r, g, b, a;
@@ -79,9 +81,10 @@ public:
 class Font {
 private:
     s8 _font;
+    f32 _fontSize;
     f32 _scale;
     Color _color;
-    const char* _text;
+    std::vector<std::string> _textArr;
 
 public:
     Font();

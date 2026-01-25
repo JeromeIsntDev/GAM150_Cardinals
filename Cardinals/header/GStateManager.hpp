@@ -7,6 +7,7 @@
 
 //GameState includes
 #include "../GameStates/MainMenu.hpp"
+#include "../GameStates/Credits.hpp"
 #include "../GameStates/Level1.hpp"
 #include "../GameStates/Level2.hpp"
 #include "../GameStates/Level3.hpp"
@@ -15,6 +16,7 @@ typedef void(*FuncPtr)(void);
 
 enum GameStates {
 	MainMenu = 0,
+	Credits,
 	Level1,
 	Level2,
 	Level3,
@@ -45,6 +47,8 @@ public:
 		{
 		case MainMenu:
 			return new MainMenuState;
+		case Credits:
+			return new CreditsState;
 		case Level1:
 			return new Level1State;
 		case Level2:

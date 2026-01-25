@@ -63,7 +63,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Level2));
 		}
 		if (AEInputCheckReleased(AEVK_3)) {
-			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Level3));
+			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Credits));
 		}
 		manager.UpdateCurrentState();
 		manager.DrawCurrentState();

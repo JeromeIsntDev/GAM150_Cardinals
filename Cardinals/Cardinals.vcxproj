@@ -97,6 +97,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameStates\Credits.cpp" />
     <ClCompile Include="GameStates\Level1.cpp" />
     <ClCompile Include="GameStates\Level2.cpp" />
     <ClCompile Include="GameStates\Level3.cpp" />
@@ -126,6 +127,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameStates\Credits.hpp" />
     <ClInclude Include="GameStates\Level1.hpp" />
     <ClInclude Include="GameStates\Level2.hpp" />
     <ClInclude Include="GameStates\Level3.hpp" />
