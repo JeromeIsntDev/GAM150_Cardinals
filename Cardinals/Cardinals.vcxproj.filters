@@ -29,7 +29,6 @@
     <ClCompile Include="src\UIManager.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />
     <ClCompile Include="GameStates\Credits.cpp" />
-    <ClCompile Include="src\pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -63,7 +62,6 @@
     <ClInclude Include="header\UIManager.hpp" />
     <ClInclude Include="header\InputHandler.hpp" />
     <ClInclude Include="GameStates\Credits.hpp" />
-    <ClInclude Include="header\pch.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />
