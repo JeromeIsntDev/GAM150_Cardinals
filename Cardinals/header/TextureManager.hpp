@@ -52,6 +52,8 @@ namespace Images
     constexpr ImageFile StartBtn{ "../../Assets/Start_Button.png", 412.f, 120.f };
     constexpr ImageFile ExitBtn{ "../../Assets/Exit_Button.png", 412.f, 120.f };
     constexpr ImageFile CreditsBtn{ "../../Assets/Credits_Button.png", 412.f, 120.f };
+
+    constexpr ImageFile Background{ "../../Assets/MenuBG.png", 1600.f, 900.f };
 }
 
 namespace Fonts
@@ -93,7 +95,7 @@ public:
     void Input_Text(const char* text);
     void Draw_Text() const;
     void Draw_Text(f32 x, f32 y);
-    void Draw_Text(AEVec2 pos, f32 scale);
+    void Draw_Text(AEVec2 pos, f32 scale, f32 fading);
     void Change_Text_Color(const Color color);
     void Free_Font() const;
 };

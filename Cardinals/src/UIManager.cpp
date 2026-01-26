@@ -26,7 +26,7 @@ void UIManager::Update(float dt)
     // big fat update
     for (auto* element : uiElements)
     {
-        if (element->IsActive()) 
+        if (!element->IsActive())
             element->Update(dt);
     }
 

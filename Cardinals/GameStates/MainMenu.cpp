@@ -6,12 +6,13 @@
 
 namespace {
 	Font cardinalsFont;
-
+	Font digipenFont;
 	Texture startTexture{}, exitTexture{}, creditsTexture{};
+	Texture menuBGTexture{};
 	
 	//Digipen logo transition
 	Texture tex_digipenLogo{};
-	GameObject go_digipenLogo;
+	GameObject go_digipenLogo, menuBG;
 	f32 logo_transparency = 0.f;
 	s8 isLogoDrawn = 0;
 	s32 mouseX, mouseY;
@@ -28,6 +29,10 @@ void MainMenuState::LoadState() {
 	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
 
+	digipenFont.Load_Font(Fonts::Main, 30.f);
+	digipenFont.Input_Text("All content (C) 2025 Digipen Institute of Technology Singapore. All Rights Reserved");
+
+	menuBGTexture.Load_Image(Images::Background);
 	tex_digipenLogo.Load_Image(Images::DigipenLogo);
 	startTexture.Load_Image(Images::StartBtn);
 	exitTexture.Load_Image(Images::ExitBtn);
@@ -38,9 +43,6 @@ void MainMenuState::InitializeState()
 {
 	squareMesh = RectMeshCenter();
 	go_digipenLogo.SetMesh(squareMesh);
-
-	//AEGfxVertexList* startMesh = RectMeshCenter();
-	//startBtn.SetMesh(startMesh);
 
 	// creates button w relevant stuff stolen from gameobej
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
@@ -99,48 +101,14 @@ void MainMenuState::UpdateState() {
 
 	if (isLogoDrawn) {
 
-		menuUI.Update(0.f); // dt = 0 for now lala
+		menuUI.Update(0.f);
 
-	startTexture.Set_Image(0, 0);
-
-		//exitBtn.SetTexture(exitTexture);
-		//exitBtn.UpdatePosition(AEVec2{ 0.f, -300.f });
-		//exitBtn.UpdateScale(AEVec2{ exitTexture.Get_Image_Width(), exitTexture.Get_Image_Height() });
-		//exitBtn.UpdateRotation(0.f);
-
+		startTexture.Set_Image(0, 0);
 		exitTexture.Set_Image(0, 0);
-
-		//creditsBtn.SetTexture(creditsTexture);
-		//creditsBtn.UpdatePosition(AEVec2{ 0.f, -150.f });
-		//creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width(), creditsTexture.Get_Image_Height() });
-		//creditsBtn.UpdateRotation(0.f);
-
 		creditsTexture.Set_Image(0, 0);
+		menuBGTexture.Set_Image(0, 0);
 
 	AEInputGetCursorPosition(&mouseX, &mouseY);
-
-		//if (startBtn.HoverMesh(mouseX, mouseY))
-		//{
-		//	startBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
-		//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-		//		//start game
-		//	}
-		//}
-		//else 
-		//if (creditsBtn.HoverMesh(mouseX, mouseY))
-		//{
-		//	creditsBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
-		//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-		//		//credits page
-		//	}
-		//}
-		//else if (exitBtn.HoverMesh(mouseX, mouseY))
-		//{
-		//	exitBtn.UpdateScale(AEVec2{ creditsTexture.Get_Image_Width() * 1.1f, creditsTexture.Get_Image_Height() * 1.1f });
-		//	if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-		//		//exit
-		//	}
-		//}
 	}
 }
 
@@ -149,19 +117,32 @@ void MainMenuState::StateDraw() {
 
 	if (!isLogoDrawn) {
 		go_digipenLogo.Draw();
+		digipenFont.Draw_Text(AEVec2{ 0, -330.f }, 1.f, logo_transparency);
 		return;
 	}
 
-	cardinalsFont.Draw_Text(AEVec2{ 0, 200.f }, 1.f);
+	menuBG.SetMesh(squareMesh);
+	menuBG.SetTexture(menuBGTexture);
+	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f });
+	menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() });
+	menuBG.UpdateRotation(0.f);
+	menuBG.Draw();
 
-		startBtn->Draw();
-		exitBtn->Draw();
-		creditsBtn->Draw();
+	cardinalsFont.Draw_Text(0, 200.f);
+	startBtn->Draw();
+	exitBtn->Draw();
+	creditsBtn->Draw();
+
 	}
 
 void MainMenuState::FreeState() {
+	
 	cardinalsFont.Free_Font();
+	digipenFont.Free_Font();
+
 	tex_digipenLogo.Free_Image();
+
+	menuBGTexture.Free_Image();
 	startTexture.Free_Image();
 	exitTexture.Free_Image();
 	creditsTexture.Free_Image();
