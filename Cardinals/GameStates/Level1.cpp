@@ -8,7 +8,7 @@
 
 namespace {
 	Font digipenFont;
-	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f }, playerJumpForce{ 0.5f };
+	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f };
 	bool playerIsJump{ false };
 	Player mainPlayer;
 	Texture playerTexture{};
@@ -27,7 +27,7 @@ void Level1State::LoadState() {
 void Level1State::InitializeState()
 {
 	squareMesh = RectMeshCenter();
-	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, playerJumpForce, false, 0.f, 0.f,squareMesh, 0.f, 150.f);
+	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f,squareMesh, 0.f, 150.f);
 	playerTexture.Load_Image(Images::Player);
 	mainPlayer.SetTexture(playerTexture);
 	mainPlayer.UpdateScale(AEVec2{ 100.f, 100.f });
@@ -47,7 +47,7 @@ void Level1State::UpdateState() {
 
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
-	mainPlayer.PlayerMovement(dt, playerJumpForce);
+	mainPlayer.PlayerMovement(dt);
 
 	//PRINT("Update: %s", "Main Menu\n");
 }

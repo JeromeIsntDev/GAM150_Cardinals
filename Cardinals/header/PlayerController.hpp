@@ -24,14 +24,13 @@ class Player : public GameObject {
 private:
 	f32 p_playerHealth{ 100.f };
 	f32 p_moveSpeed{ 300.f };
-	f32 p_downForce{ 0.5f };
-	bool p_isJumping{ false };
+	f32 p_downForce{ 1.5f };
+	bool p_isJumping{ true };
 	bool p_isInverted{ false };
 	bool p_isGrounded{ true };
 	f32 p_score{ 0.f };
 	//set a jumpforce for psuedo gravity on jump
-	f32 gravity{ -986.f };
-	const f32 maxHeight{ 200.f };
+	f32 gravity{ -2000.f };
 	AEVec2 p_initialPos{ 0.f,0.f };
 	f32 p_leftMin{ 0.f };
 	f32 p_rightMax{ 0.f };
@@ -42,7 +41,7 @@ public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
 	//public Variable for Player (Check if error)
-	f32 maxJumpBuffer{ 0.10f };
+	f32 maxJumpBuffer{ 0.12f };
 	f32 jumpBuffer{ 0.f };
 	f32 maxCoyoteBuffer{ 0.8f };
 	f32 coyoteBuffer{ 0.f };
@@ -50,7 +49,7 @@ public:
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
 
-	void InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
+	void InitializePlayer(f32 health, f32 moveSpeed, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
 	f32 GetPlayerHealth() const;
 	f32 GetPlayerSpeed() const;
@@ -61,7 +60,7 @@ public:
 	void SetPlayerHealth(f32);
 	void SetPlayerScore(f32);
 	void PlayerInputHandle(f32);
-	void PlayerMovement(f32, f32);
+	void PlayerMovement(f32);
 	//Function for Player Jump Logic
 	//Basically the initialize values for PreJumps
 	void StartJump(AEVec2);

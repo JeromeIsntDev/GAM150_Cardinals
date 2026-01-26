@@ -21,16 +21,15 @@ the player movement etc
 //	  GameObject(mesh,AEVec2{0.f,0.f},0.f,AEVec2{200.f,200.f})
 //{}
 
-void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) {
+void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) {
 	p_playerHealth = health;
 	p_moveSpeed = moveSpeed;
-	p_downForce = jumpForce;
 	p_isJumping = isJump;
 	p_score = score;
 	p_initialPos.x = xPos;
 	p_initialPos.y = yPos;
 	UpdatePosition(p_initialPos);
-	p_velocityVector.y = 0.f;
+	p_velocityVector.y = zeroVal;
 	Player::mesh = mesh;
 }
 
@@ -49,9 +48,8 @@ void Player::StartJump(AEVec2 velocityVec) {
 //Math logic behind jump for parabola jump
 void Player::PlayerJump(f32 dt) {
 	if (!p_isJumping) return;
-	p_velocityVector.y = gravity * dt;
+	p_velocityVector.y += gravity * dt;
 	p_initialPos.y += p_velocityVector.y * dt;
-	p_isJumping = true;
 	jumpBuffer = 0.f;
 	coyoteBuffer = 0.f;
 }
@@ -94,9 +92,9 @@ void Player::PlayerInputHandle(f32 dt) {
 		}
 	}
 
-	if (AEInputCheckTriggered(AEVK_SPACE) && !Player::GetPlayerJump()) {
+	if (AEInputCheckTriggered(AEVK_SPACE) && !GetPlayerJump()) {
 		//adjust jump logic here
-		p_velocityVector.y = -gravity;
+		p_velocityVector.y = 850.f;
 		jumpBuffer = maxJumpBuffer;
 		coyoteBuffer = maxCoyoteBuffer;
 		p_isJumping = true;
@@ -104,7 +102,7 @@ void Player::PlayerInputHandle(f32 dt) {
 }
 
 //Input handle for player movement logic
-void Player::PlayerMovement(f32 dt, f32 jumpForce) {
+void Player::PlayerMovement(f32 dt) {
 	PlayerInputHandle(dt);
 
 	jumpBuffer = max(0, jumpBuffer - dt);
@@ -112,19 +110,24 @@ void Player::PlayerMovement(f32 dt, f32 jumpForce) {
 
 	//Collision logic here
 
-	if (jumpBuffer || coyoteBuffer) {
-		PlayerJump(dt);
-	}
+	//do some velocityVector Y = 0 check here
 
 	//down force velocity (always going downwards)
 	p_velocityVector.y += gravity * dt;
-	p_initialPos.y += p_velocityVector.y * dt;
+	p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
 
-	if (GetPosition().y <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
+	if (jumpBuffer > 0.f && (p_isGrounded || coyoteBuffer > 0.f)) {
+		PlayerJump(dt);
+	}
+
+	//std::cout << p_velocityVector.y << std::endl;
+
+	if (p_initialPos.y <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
 		std::cout << "grounded" << std::endl;
 		p_initialPos.y = GetPosition().y;
 		p_velocityVector.y = 0.f;
 		p_isJumping = false;
+		p_isGrounded = true;
 	}
 
 	UpdatePosition(p_initialPos);
