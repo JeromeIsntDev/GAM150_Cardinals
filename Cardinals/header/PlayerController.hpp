@@ -24,10 +24,10 @@ class Player : public GameObject {
 private:
 	f32 p_playerHealth{ 100.f };
 	f32 p_moveSpeed{ 300.f };
-	f32 p_jumpForce{ 0.5f };
+	f32 p_downForce{ 0.5f };
 	bool p_isJumping{ false };
 	bool p_isInverted{ false };
-	bool p_isFalling{ false };
+	bool p_isFalling{ true };
 	f32 p_score{ 0.f };
 	//set a jumpforce for psuedo gravity on jump
 	f32 gravity{ -986.f };
@@ -57,15 +57,15 @@ public:
 	f32 GetPlayerScore() const;
 	bool GetPlayerJump() const;
 	//set the player health
-	void SetPlayerHealth(f32 healthDamage);
-	void SetPlayerScore(f32 scoreAdded);
-	void PlayerInputHandle(f32 dt);
-	void PlayerMovement(f32 dt, f32 jumpForce);
+	void SetPlayerHealth(f32);
+	void SetPlayerScore(f32);
+	void PlayerInputHandle(f32);
+	void PlayerMovement(f32, f32);
 	//Function for Player Jump Logic
 	//Basically the initialize values for PreJumps
-	void StartJump(AEVec2 velocityVec);
+	void StartJump(AEVec2);
 	//The math and update for during the jump
-	void PlayerJump(f32 dt);
+	void PlayerJump(f32);
 };
 
 
