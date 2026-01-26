@@ -24,7 +24,7 @@ the player movement etc
 void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) {
 	p_playerHealth = health;
 	p_moveSpeed = moveSpeed;
-	p_jumpForce = jumpForce;
+	p_downForce = jumpForce;
 	p_isJumping = isJump;
 	p_score = score;
 	initialYPos = initialVelocity = jumpT = zeroVal;
@@ -32,6 +32,7 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJ
 	p_initialPos.y = yPos;
 	initialYPos = p_initialPos.y;
 	UpdatePosition(p_initialPos);
+	p_velocityVector.y = 0.f;
 	Player::mesh = mesh;
 }
 
@@ -50,7 +51,8 @@ void Player::StartJump(AEVec2 velocityVec) {
 //Math logic behind jump for parabola jump
 void Player::PlayerJump(f32 dt) {
 	if (!p_isJumping) return;
-	
+	p_velocityVector.y += (-2500.f * p_downForce)* dt;
+	p_initialPos.y += p_velocityVector.y * dt;
 }
 
 void Player::PlayerInputHandle(f32 dt) {
@@ -91,16 +93,32 @@ void Player::PlayerInputHandle(f32 dt) {
 		}
 	}
 
-	if (AEInputCheckTriggered(AEVK_SPACE) && !Player::GetPlayerJump() && !p_isFalling) {
+	if (AEInputCheckTriggered(AEVK_SPACE) && !Player::GetPlayerJump()) {
 		//adjust jump logic here
-		p_velocityVector.y = 1.f;
-		StartJump(p_velocityVector);
+		p_velocityVector.y = -gravity;
+		p_isJumping = true;
+		//StartJump(p_velocityVector);
 	}
 }
 
 //Input handle for player movement logic
 void Player::PlayerMovement(f32 dt, f32 jumpForce) {
-	//always reset to 0 value
+	//down force velocity (always going downwards)
+	if (GetPosition().y < AEGfxGetWindowHeight()) {
+		p_velocityVector.y += gravity * dt;
+		p_initialPos.y += (p_velocityVector.y * dt + p_downForce * (dt * dt));
+	}
+
+
+	std::cout << p_initialPos.y << " vs " << AEGfxGetWindowHeight() << std::endl;
+
+	if (GetPosition().y <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y/2.f)) {
+		std::cout << "grounded" << std::endl;
+		p_initialPos.y = GetPosition().y;
+		p_velocityVector.y = 0.f;
+		p_isJumping = false;
+	}
+
 	PlayerInputHandle(dt);
 	PlayerJump(dt);
 	UpdatePosition(p_initialPos);
@@ -122,7 +140,7 @@ f32 Player::GetPlayerSpeed() const{
 	return p_moveSpeed;
 }
 f32 Player::GetPlayerJumpForce() const{
-	return p_jumpForce;
+	return p_downForce;
 }
 f32 Player::GetPlayerScore() const{
 	return p_score;
