@@ -17,8 +17,9 @@
 #include "../header/AudioManager.hpp"
 #include "../header/GStateManager.hpp"
 #include "../header/PlayerController.hpp"
-
 #include "../header/UIManager.hpp"
+
+#include "../header/GameSaver.hpp"
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -48,6 +49,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	GameStateManager manager;
 	manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::MainMenu));
+
+	JsonRead("../../Saves/test.json");
 
 	while (gGameRunning)
 	{

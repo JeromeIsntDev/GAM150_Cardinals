@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 
-
+void JsonRead(const char* filePath);
+//void JsonPrint();
 
 #endif // !_Game_Saver_
