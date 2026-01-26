@@ -27,7 +27,7 @@ private:
 	f32 p_downForce{ 0.5f };
 	bool p_isJumping{ false };
 	bool p_isInverted{ false };
-	bool p_isFalling{ true };
+	bool p_isGrounded{ true };
 	f32 p_score{ 0.f };
 	//set a jumpforce for psuedo gravity on jump
 	f32 gravity{ -986.f };
@@ -42,9 +42,10 @@ public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
 	//public Variable for Player (Check if error)
-	f32 initialYPos{ 0.f };
-	f32 initialVelocity{ 0.f };
-	f32 jumpT{ 0.f };
+	f32 maxJumpBuffer{ 0.10f };
+	f32 jumpBuffer{ 0.f };
+	f32 maxCoyoteBuffer{ 0.8f };
+	f32 coyoteBuffer{ 0.f };
 
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
