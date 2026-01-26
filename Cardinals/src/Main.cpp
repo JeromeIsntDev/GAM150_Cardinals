@@ -36,9 +36,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);
-
-	UIManager menuUI;
-	std::unique_ptr<Button> testElement;
 	
 	Audio audioTest1;
 	audioTest1.CreateAudioGroup();
@@ -66,7 +63,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		if (AEInputCheckReleased(AEVK_3)) {
 			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Credits));
-
 		}
 		manager.UpdateCurrentState();
 		manager.DrawCurrentState();
