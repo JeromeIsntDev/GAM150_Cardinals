@@ -52,6 +52,8 @@ namespace Images
     constexpr ImageFile StartBtn{ "../../Assets/Start_Button.png", 412.f, 120.f };
     constexpr ImageFile ExitBtn{ "../../Assets/Exit_Button.png", 412.f, 120.f };
     constexpr ImageFile CreditsBtn{ "../../Assets/Credits_Button.png", 412.f, 120.f };
+
+    constexpr ImageFile Background{ "../../Assets/MenuBG.png", 1600.f, 900.f };
 }
 
 namespace Fonts

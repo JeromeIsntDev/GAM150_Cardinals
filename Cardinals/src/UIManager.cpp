@@ -28,7 +28,6 @@ void UIManager::Update(float dt)
     {
         if (!element->IsActive())
             element->Update(dt);
-
     }
 
     HandleClick();
