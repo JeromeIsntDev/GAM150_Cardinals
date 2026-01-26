@@ -30,6 +30,7 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJ
 	initialYPos = initialVelocity = jumpT = zeroVal;
 	p_initialPos.x = xPos;
 	p_initialPos.y = yPos;
+	initialYPos = p_initialPos.y;
 	UpdatePosition(p_initialPos);
 	Player::mesh = mesh;
 }
@@ -42,84 +43,65 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, f32 jumpForce, bool isJ
 //}
 
 //Takes in the initial value of points for the code to reference during jump state
-void Player::StartJump(AEVec2 velocityVec, f32 jumpForce) {
+void Player::StartJump(AEVec2 velocityVec) {
 	if (p_isJumping) return;
 
-	initialYPos = GetPosition().y;
-	f32 jumpSpeed = velocityVec.y * (std::sqrt(2.f * (-gravity) * maxHeight));
-	f32 direction = p_isInverted ? -1.f : 1.f;
-	initialVelocity = direction * jumpSpeed;
-	jumpT = 0.f;
-	p_jumpForce = jumpForce;
-	p_isJumping = true;
 }
 //Math logic behind jump for parabola jump
 void Player::PlayerJump(f32 dt) {
 	if (!p_isJumping) return;
-	jumpT += dt;
-	p_jumpForce += dt * 0.2f;
-	std::cout << "Jump Force: " << p_jumpForce << std::endl;
-	//The Update for the Y position for Parabola
-	GetPosition().y = (initialYPos + initialVelocity * jumpT + p_jumpForce * gravity * (jumpT * jumpT));
-	//If displacement is lower than initial, stop jumping (Change this logic in the future)
-	f32 displacement = GetPosition().y - initialYPos;
-	if ((!p_isInverted && displacement <= 0.f) || (p_isInverted && displacement >= 0.f)){
-		//fix this logic
-		GetPosition().y = initialYPos;
-		p_isJumping = false;
-	}
+	
 }
-//Input handle for player movement logic
-void Player::PlayerMovement(f32 dt, f32 jumpForce) {
-	//always reset to 0 value
-	AEVec2 movementVector{ 0.f,0.f };
-	AEVec2 velocityVector{ 0.f,0.f };
+
+void Player::PlayerInputHandle(f32 dt) {
 	f32 moveSpeed{ 300.f };
 	bool isMoving{ false };
 	bool isSprint{ false };
 
 	if (AEInputCheckCurr(AEVK_D)) {
-		movementVector.x = 1.f * p_moveSpeed * dt;
-		GetPosition().x += movementVector.x;
+		p_movementVector.x = 1.f * p_moveSpeed * dt;
+		GetPosition().x += p_movementVector.x;
 		isMoving = true;
 	}
 	if (AEInputCheckCurr(AEVK_A)) {
-		movementVector.x = -1.f * p_moveSpeed * dt;
-		GetPosition().x += movementVector.x;
+		p_movementVector.x = -1.f * p_moveSpeed * dt;
+		GetPosition().x += p_movementVector.x;
 		isMoving = true;
 	}
-	if (AEInputCheckCurr(AEVK_LSHIFT) && isMoving) {	
+	if (AEInputCheckCurr(AEVK_LSHIFT) && isMoving) {
 		isSprint = true;
 	}
 	if (AEInputCheckReleased(AEVK_LSHIFT)) {
 		isSprint = false;
 	}
-	//if (AEInputCheckTriggered(AEVK_Q)) {
-	//	//toggle
-	//	p_isInverted = !p_isInverted;
-	//}
-	//Temp sprint up and down logic
+
+	//Sprint speed logic
 	if (isSprint) {
 		f32 maxSpeed = moveSpeed * 3.f;
 		if (p_moveSpeed <= maxSpeed) {
 			p_moveSpeed += moveSpeed * dt;
 		}
-	}else {
+	}
+	else {
 		if (p_moveSpeed > moveSpeed) {
-			p_moveSpeed -= (moveSpeed) * dt;
+			p_moveSpeed -= (moveSpeed)*dt;
 		}
 		else {
 			p_moveSpeed = moveSpeed;
 		}
 	}
 
-	std::cout << "speed: " << p_moveSpeed << std::endl;
-	if (AEInputCheckTriggered(AEVK_SPACE) && !Player::GetPlayerJump()) {
-		std::cout << "Jumped" << std::endl;
-		//adjust for jump height
-		velocityVector.y = 1.f;
-		StartJump(velocityVector, jumpForce);
+	if (AEInputCheckTriggered(AEVK_SPACE) && !Player::GetPlayerJump() && !p_isFalling) {
+		//adjust jump logic here
+		p_velocityVector.y = 1.f;
+		StartJump(p_velocityVector);
 	}
+}
+
+//Input handle for player movement logic
+void Player::PlayerMovement(f32 dt, f32 jumpForce) {
+	//always reset to 0 value
+	PlayerInputHandle(dt);
 	PlayerJump(dt);
 	UpdatePosition(GetPosition());
 }
