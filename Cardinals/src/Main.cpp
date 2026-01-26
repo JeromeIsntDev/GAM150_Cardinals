@@ -49,7 +49,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	GameStateManager manager;
 	manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::MainMenu));
 
-	JsonRead("../../Saves/test.json");
 
 	while (gGameRunning)
 	{

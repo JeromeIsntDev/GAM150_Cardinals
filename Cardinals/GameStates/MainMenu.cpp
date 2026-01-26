@@ -76,7 +76,9 @@ void MainMenuState::InitializeState()
 	objs.push_back(*creditsBtn);
 	objs.push_back(*exitBtn);
 
-	JsonPrint(objs);
+	SaveObjectsToJson(objs);
+
+	ReadJsonToObjects("../../Saves/GameObjects.json");
 
 	PRINT("Initialize: %s", "Main Menu\n");
 }

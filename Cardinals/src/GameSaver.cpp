@@ -1,17 +1,21 @@
 #include <document.h>
-#include <istreamwrapper.h>
-#include <ostreamwrapper.h>
-#include <writer.h>
-#include <prettywriter.h>
-#include <vector>
-
 #include "../header/GameSaver.hpp"
 #include "../header/GameObject.hpp"
 
+GameObject DeserializeGameObject(const rapidjson::Value& v) {
+    GameObject obj;
 
-void JsonRead(const char* filePath)
+    if (v.HasMember("posx") && v.HasMember("posy")) {
+        obj.GetPosition().x = v["posx"].GetFloat();
+        obj.GetPosition().y = v["posy"].GetFloat();
+    }
+
+    return obj;
+}
+
+void ReadJsonToObjects(const char* filePath)
 {
-	std::ifstream inputFileStream{ "../../Saves/test.json" };
+	std::ifstream inputFileStream{ filePath };
     if (!inputFileStream.is_open()) {
         std::cerr << "Error: file cannot open.";
         return;
@@ -26,53 +30,17 @@ void JsonRead(const char* filePath)
     }
 
 	inputFileStream.close();
-
-    if (doc.HasMember("name") && doc["name"].IsString()) {
-        std::string name = doc["name"].GetString();
-        std::cout << "Name: " << name << std::endl;
-    }
-
-    // Get the "age" member
-    if (doc.HasMember("age") && doc["age"].IsInt()) {
-        int age = doc["age"].GetInt();
-        std::cout << "Age: " << age << std::endl;
-    }
-
-    // Get the "city" member
-    if (doc.HasMember("city") && doc["city"].IsString()) {
-        std::string city = doc["city"].GetString();
-        std::cout << "City: " << city << std::endl;
-    }
-
-    // Get the "skills" array
-    if (doc.HasMember("skills")
-        && doc["skills"].IsArray()) {
-        const rapidjson::Value& skills = doc["skills"];
-        std::cout << "Skills: ";
-        for (rapidjson::SizeType i = 0; i < skills.Size();
-            i++) {
-            if (skills[i].IsString()) {
-                std::string skill = skills[i].GetString();
-                std::cout << skill << " ";
-            }
+  
+    if (doc.HasMember("gameObjects")
+        && doc["gameObjects"].IsArray()) {
+        const auto& array = doc["gameObjects"];
+        std::cout << "GameObjects: \n";
+        for (const auto& v : array.GetArray()) {
+            GameObject obj = DeserializeGameObject(v);
+            std::cout << obj << "\n";
         }
         std::cout << std::endl;
     }
-
-    doc.AddMember("job", "Exorcist", doc.GetAllocator());
-    doc.AddMember("gender", "Male", doc.GetAllocator());
-
-    std::ofstream ofs("../../Saves/output.json");
-
-    if (!ofs.is_open()) {
-        std::cerr << "Error: cannot open output file";
-        return;
-    }
-
-    rapidjson::OStreamWrapper osw(ofs);
-    rapidjson::PrettyWriter<rapidjson::OStreamWrapper> writer(osw);
-    writer.SetIndent(' ', 2);
-    doc.Accept(writer);
 }
 
 rapidjson::Value SerializeGameObject(
@@ -81,14 +49,14 @@ rapidjson::Value SerializeGameObject(
 ) {
     rapidjson::Value v(rapidjson::kObjectType);
 
-    v.AddMember("x", go.GetPosition().x, allocator);
-    v.AddMember("y", go.GetPosition().y, allocator);
+    v.AddMember("posx", go.GetPosition().x, allocator);
+    v.AddMember("posy", go.GetPosition().y, allocator);
 
     return v; // moved, not copied
 }
 
 
-void JsonPrint(std::vector<GameObject> gameObjects)
+void SaveObjectsToJson(std::vector<GameObject> gameObjects)
 {
     rapidjson::Document doc;
     
