@@ -4,8 +4,11 @@
 
 #include <fstream>
 #include <iostream>
+#include <vector>
+
+#include "../header/GameObject.hpp"
 
 void JsonRead(const char* filePath);
-//void JsonPrint();
+void JsonPrint(std::vector<GameObject> gameObjects);
 
 #endif // !_Game_Saver_

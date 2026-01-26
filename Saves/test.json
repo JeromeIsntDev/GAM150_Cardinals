@@ -1,6 +1,6 @@
-//{
-//    "name", "John Smith",
-//    "age", 30,
-//    "city", "New York",
-//    "skills":  ["programming", "guitar", "singing"]
-//}
+{
+    "name": "John Smith",
+    "age": 30,
+    "city": "New York",
+    "skills":  ["programming", "guitar", "singing"]
+}

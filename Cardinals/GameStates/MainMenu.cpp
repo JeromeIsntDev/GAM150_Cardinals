@@ -4,6 +4,10 @@
 #include "../header/PlayerController.hpp"
 #include "../header/UIManager.hpp"
 
+#include "../header/GameObject.hpp"
+#include "../header/GameSaver.hpp"
+#include <vector>
+
 namespace {
 	Font cardinalsFont;
 	Font digipenFont;
@@ -64,6 +68,15 @@ void MainMenuState::InitializeState()
 	menuUI.Add(startBtn.get());
 	menuUI.Add(exitBtn.get());
 	menuUI.Add(creditsBtn.get());
+
+	std::vector<GameObject> objs;
+	objs.push_back(go_digipenLogo);
+	objs.push_back(menuBG);
+	objs.push_back(*startBtn);
+	objs.push_back(*creditsBtn);
+	objs.push_back(*exitBtn);
+
+	JsonPrint(objs);
 
 	PRINT("Initialize: %s", "Main Menu\n");
 }

@@ -1,0 +1,12 @@
+{
+  "name": "John Smith",
+  "age": 30,
+  "city": "New York",
+  "skills": [
+    "programming",
+    "guitar",
+    "singing"
+  ],
+  "job": "Exorcist",
+  "gender": "Male"
+}
