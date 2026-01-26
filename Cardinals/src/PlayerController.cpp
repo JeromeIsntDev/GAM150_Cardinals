@@ -60,12 +60,12 @@ void Player::PlayerInputHandle(f32 dt) {
 
 	if (AEInputCheckCurr(AEVK_D)) {
 		p_movementVector.x = 1.f * p_moveSpeed * dt;
-		GetPosition().x += p_movementVector.x;
+		p_initialPos.x += p_movementVector.x;
 		isMoving = true;
 	}
 	if (AEInputCheckCurr(AEVK_A)) {
 		p_movementVector.x = -1.f * p_moveSpeed * dt;
-		GetPosition().x += p_movementVector.x;
+		p_initialPos.x += p_movementVector.x;
 		isMoving = true;
 	}
 	if (AEInputCheckCurr(AEVK_LSHIFT) && isMoving) {
@@ -103,7 +103,7 @@ void Player::PlayerMovement(f32 dt, f32 jumpForce) {
 	//always reset to 0 value
 	PlayerInputHandle(dt);
 	PlayerJump(dt);
-	UpdatePosition(GetPosition());
+	UpdatePosition(p_initialPos);
 }
 
 //sets the player health to smth new depending on parameter
