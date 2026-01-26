@@ -6,7 +6,7 @@
 
 namespace {
 	Font cardinalsFont;
-
+	Font digipenFont;
 	Texture startTexture{}, exitTexture{}, creditsTexture{};
 	
 	//Digipen logo transition
@@ -27,6 +27,9 @@ void MainMenuState::LoadState() {
 	PRINT("Load: %s", "Main Menu\n");
 	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
+
+	digipenFont.Load_Font(Fonts::Main, 30.f);
+	digipenFont.Input_Text("All content (C) 2025 Digipen Institute of Technology Singapore. All Rights Reserved");
 
 	tex_digipenLogo.Load_Image(Images::DigipenLogo);
 	startTexture.Load_Image(Images::StartBtn);
@@ -149,10 +152,11 @@ void MainMenuState::StateDraw() {
 
 	if (!isLogoDrawn) {
 		go_digipenLogo.Draw();
+		digipenFont.Draw_Text(AEVec2{ 0, -330.f }, 1.f, logo_transparency);
 		return;
 	}
 
-	cardinalsFont.Draw_Text(AEVec2{ 0, 200.f }, 1.f);
+	cardinalsFont.Draw_Text(0, 200.f);
 
 		startBtn->Draw();
 		exitBtn->Draw();
@@ -161,6 +165,7 @@ void MainMenuState::StateDraw() {
 
 void MainMenuState::FreeState() {
 	cardinalsFont.Free_Font();
+	digipenFont.Free_Font();
 	tex_digipenLogo.Free_Image();
 	startTexture.Free_Image();
 	exitTexture.Free_Image();

@@ -28,7 +28,7 @@ void Level2State::UpdateState() {
 }
 
 void Level2State::StateDraw() {
-	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f);
+	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
 
 	PRINT("Draw: %s", "Level 2\n");
 }

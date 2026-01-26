@@ -53,7 +53,7 @@ void Level1State::UpdateState() {
 }
 
 void Level1State::StateDraw() {
-	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f);
+	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
 	mainPlayer.Draw();
 
 	PRINT("Draw: %s", "Level 1\n");

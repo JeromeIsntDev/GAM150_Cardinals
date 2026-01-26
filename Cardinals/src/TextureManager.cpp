@@ -101,7 +101,6 @@ void Font::Draw_Text() const
 void Font::Draw_Text(f32 x, f32 y)
 {
 	f32 yOffset = 0.0f;
-
 	for (const std::string& line : _textArr)
 	{
 		f32 w{ 0 }, h{ 0 };
@@ -121,7 +120,7 @@ void Font::Draw_Text(f32 x, f32 y)
 	}
 }
 
-void Font::Draw_Text(AEVec2 pos, f32 scale)
+void Font::Draw_Text(AEVec2 pos, f32 scale, f32 fading)
 {
 	_scale = scale;
 	f32 yOffset = 0.0f;
@@ -136,7 +135,7 @@ void Font::Draw_Text(AEVec2 pos, f32 scale)
 			(-w / 2) + pos.x / 800.f,
 			(-h / 2) + pos.y / 450.f - yOffset,
 			_scale,
-			_color.r, _color.g, _color.b, _color.a
+			_color.r, _color.g, _color.b, fading
 		);
 		yOffset += _fontSize * 2 / 900.f;
 	}

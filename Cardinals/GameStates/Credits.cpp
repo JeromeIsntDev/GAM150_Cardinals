@@ -17,7 +17,10 @@ void CreditsState::LoadState() {
 	titleFont.Input_Text("By Orbital Candy\n\n\n\nDIRECTOR and PROGRAMMER\n\n\n\nPRODUCER and DESIGN LEAD\n\n\n\n TECHNICAL LEAD\n\n\n\n ART LEAD\n\n\n\n AUDIO LEAD\n\n\n\n GRAPHICS PROGRAMMER\n\n\n\n LEVEL DESIGNER\n\n\n\n ENVIRONMENT ARTIST AND UI\n\n\n\n COMPOSER\n\n\n\nSPECIAL THANKS\n\n\n\nFACULTY and ADVISORS\n\n\n\nPRESIDENT\n\n\n\nEXECUTIVES");
 
 	nameFont.Input_Text("Cardinals");
-	//Gerald Wong\nSoroor Malekmohammadi Faradounbeh\nTommy Tan\n\n\n\nCreated at\n\n\n\n\n\n\nClaude Comair\n\nChu Jason Yeu Tat   Michael Gats\nTan Chek Ming   Prasanna Kumar Ghali\nMandy Wong   Johnny Deek");
+	//"WWW.DIGIPEN.EDU"
+	//"All content (C) 2025 Digipen Institute of Technology Singapore. All Rights Reserved", 800.f, 820.f
+
+	//Gerald Wong\nSoroor Malekmohammadi Faradounbeh\nTommy Tan\n\n\n\nCreated at\n\n\n\n\n\n\nClaude Comair\n\nChu Jason Yeu Tat   Michael Gats\nTan Chek Ming   Prasanna Kumar Ghali\nMandy Wong   Johnny Deek"
 
 	PRINT("Load: %s", "Credits\n");
 }
@@ -39,12 +42,13 @@ void CreditsState::UpdateState() {
 }
 
 void CreditsState::StateDraw() {
-	titleFont.Draw_Text(AEVec2{ 0.f, startY }, 1.f);
-	nameFont.Draw_Text(AEVec2{ 0.f, startY + 37.5f }, 1.f);
+	titleFont.Draw_Text(0.f, startY);
+	nameFont.Draw_Text(0.f, startY + 37.5f);
 }
 
 void CreditsState::FreeState() {
-
+	titleFont.Free_Font();
+	nameFont.Free_Font();
 	PRINT("Free: %s", "Credits\n");
 }
 

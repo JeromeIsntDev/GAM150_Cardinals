@@ -93,7 +93,7 @@ public:
     void Input_Text(const char* text);
     void Draw_Text() const;
     void Draw_Text(f32 x, f32 y);
-    void Draw_Text(AEVec2 pos, f32 scale);
+    void Draw_Text(AEVec2 pos, f32 scale, f32 fading);
     void Change_Text_Color(const Color color);
     void Free_Font() const;
 };
