@@ -19,14 +19,15 @@ Audio::Audio()
 	PRINT("Audio Created\n");
 }
 
-Audio::~Audio() 
+Audio::~Audio()
 {
 	PRINT("Audio Destroyed\n");
-
-void Audio::SetAudioGroup(AEAudioGroup group)
-{
-	_group = group;
 }
+
+//void Audio::SetAudioGroup(AEAudioGroup group)
+//{
+//	_group = group;
+//}
 
 void Audio::Init_Audio_System()
 {
@@ -118,28 +119,28 @@ void Audio::Free_Audio_System()
 	PRINT("Audio System Freed\n");
 }
 
-void Audio::Pause_Audio_Group() const {
-	AEAudioPauseGroup(_group);
-}
-
-void Audio::Resume_Audio_Group() const {
-	AEAudioResumeGroup(_group);
-}
-
-void Audio::Stop_Audio_Group() const {
-	AEAudioStopGroup(_group);
-}
-
-void Audio::Set_Audio_Volume(f32 volume) {
-	_volume = volume;
-	AEAudioSetGroupVolume(_group, volume);
-}
-
-void Audio::Set_Audio_Pitch(f32 pitch) {
-	_pitch = pitch;
-	AEAudioSetGroupPitch(_group, pitch);
-}
-
-void Audio::Free_Audio_Group() const{
-	AEAudioUnloadAudioGroup(_group);
-}
+//void Audio::Pause_Audio_Group() const {
+//	AEAudioPauseGroup(_group);
+//}
+//
+//void Audio::Resume_Audio_Group() const {
+//	AEAudioResumeGroup(_group);
+//}
+//
+//void Audio::Stop_Audio_Group() const {
+//	AEAudioStopGroup(_group);
+//}
+//
+//void Audio::Set_Audio_Volume(f32 volume) {
+//	_volume = volume;
+//	AEAudioSetGroupVolume(_group, volume);
+//}
+//
+//void Audio::Set_Audio_Pitch(f32 pitch) {
+//	_pitch = pitch;
+//	AEAudioSetGroupPitch(_group, pitch);
+//}
+//
+//void Audio::Free_Audio_Group() const{
+//	AEAudioUnloadAudioGroup(_group);
+//}
