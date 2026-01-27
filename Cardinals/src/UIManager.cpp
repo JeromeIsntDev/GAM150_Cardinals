@@ -79,6 +79,11 @@ void UIManager::HandleClick()
     }
 }
 
+void UIManager::Exit() 
+{
+    uiElements.clear(); // dangl;ing pointers fark you
+}
+
 bool UIElement::IsPointInside(float x, float y) const {
 	// calling from the parent class woawow
 	AEVec2 currentScale = GetScale();

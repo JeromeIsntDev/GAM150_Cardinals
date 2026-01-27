@@ -17,6 +17,13 @@
 #include <iostream>
 #include "../header/TextureManager.hpp"
 
+struct GameObjectIDAssigner {
+	u64 currIdCount{};
+	u64 GetID() {
+		return currIdCount++;
+	}
+};
+
 class GameObject {
 //Variables
 protected:
@@ -33,6 +40,7 @@ protected:
 
 //Functions
 private:
+	u64 _id;
 	void ConcatTransform();
 	AEMtx33 GetTransform() const;
 
@@ -52,6 +60,9 @@ public:
 	AEVec2 GetLocalPosition() const;
 	f32 GetLocalRotatation() const;
 	AEVec2 GetLocalScale() const;
+
+	virtual void SetID(u64 id);
+	virtual u64 GetID() const;
 
 	virtual void UpdatePosition(AEVec2 pos);
 	virtual void UpdateRotation(f32 rot);

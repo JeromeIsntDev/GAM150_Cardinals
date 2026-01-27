@@ -1,24 +1,31 @@
 #include <document.h>
 #include "../header/GameSaver.hpp"
-#include "../header/GameObject.hpp"
 
 GameObject DeserializeGameObject(const rapidjson::Value& v) {
     GameObject obj;
 
-    if (v.HasMember("posx") && v.HasMember("posy")) {
-        obj.GetPosition().x = v["posx"].GetFloat();
-        obj.GetPosition().y = v["posy"].GetFloat();
+    if (   v.HasMember("id")
+        && v.HasMember("posx") && v.HasMember("posy") 
+        && v.HasMember("rot")
+        && v.HasMember("scalex") && v.HasMember("scaley")
+        )
+    {
+        obj.SetID(v["id"].GetUint64());
+        obj.UpdatePosition(AEVec2{ v["posx"].GetFloat(), v["posy"].GetFloat() });
+        obj.UpdateRotation(v["rot"].GetFloat());
+        obj.UpdateScale(AEVec2{ v["scalex"].GetFloat(), v["scaley"].GetFloat() });
     }
 
     return obj;
 }
 
-void ReadJsonToObjects(const char* filePath)
+std::vector<GameObject> ReadJsonToObjects(const char* filePath)
 {
+    std::vector<GameObject> gameObjectArray{};
 	std::ifstream inputFileStream{ filePath };
     if (!inputFileStream.is_open()) {
         std::cerr << "Error: file cannot open.";
-        return;
+        return gameObjectArray;
     }
 
     rapidjson::IStreamWrapper isw(inputFileStream);
@@ -26,7 +33,7 @@ void ReadJsonToObjects(const char* filePath)
 	doc.ParseStream(isw);
     if (doc.HasParseError()) {
         std::cerr << "Error: parse error.";
-        return;
+        return gameObjectArray;
     }
 
 	inputFileStream.close();
@@ -37,10 +44,10 @@ void ReadJsonToObjects(const char* filePath)
         std::cout << "GameObjects: \n";
         for (const auto& v : array.GetArray()) {
             GameObject obj = DeserializeGameObject(v);
-            std::cout << obj << "\n";
+            gameObjectArray.push_back(obj);
         }
-        std::cout << std::endl;
     }
+    return gameObjectArray;
 }
 
 rapidjson::Value SerializeGameObject(
@@ -49,8 +56,12 @@ rapidjson::Value SerializeGameObject(
 ) {
     rapidjson::Value v(rapidjson::kObjectType);
 
+    v.AddMember("id", go.GetID(), allocator);
     v.AddMember("posx", go.GetPosition().x, allocator);
     v.AddMember("posy", go.GetPosition().y, allocator);
+    v.AddMember("rot", go.GetRotatation(), allocator);
+    v.AddMember("scalex", go.GetScale().x, allocator);
+    v.AddMember("scaley", go.GetScale().y, allocator);
 
     return v; // moved, not copied
 }

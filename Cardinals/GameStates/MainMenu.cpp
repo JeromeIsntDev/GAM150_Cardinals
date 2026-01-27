@@ -8,6 +8,8 @@
 #include "../header/GameSaver.hpp"
 #include <vector>
 
+extern int gGameRunning;
+
 namespace {
 	Font cardinalsFont;
 	Font digipenFont;
@@ -25,6 +27,8 @@ namespace {
 	// UI stuff
 	UIManager menuUI;
 	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn;
+
+	GameObjectIDAssigner assigner;
 }
 
 
@@ -47,21 +51,41 @@ void MainMenuState::InitializeState()
 {
 	squareMesh = RectMeshCenter();
 	go_digipenLogo.SetMesh(squareMesh);
+	go_digipenLogo.SetID(assigner.GetID());
+
+	menuBG.SetMesh(squareMesh);
+	menuBG.SetTexture(menuBGTexture);
+	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f });
+	menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() });
+	menuBG.UpdateRotation(0.f);
+	menuBG.SetID(assigner.GetID());
 
 	// creates button w relevant stuff stolen from gameobej
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	startBtn->SetTexture(startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
+	startBtn->SetID(assigner.GetID());
 
 	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	exitBtn->SetTexture(exitTexture); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
+	exitBtn->SetID(assigner.GetID());
 
 	creditsBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -150.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	creditsBtn->SetTexture(creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
+	creditsBtn->SetID(assigner.GetID());
 
 	// use them like this ik its weird asf but like. i'll make it better soon
+	startBtn->SetOnClick([]() {
+		PRINT("Start Pressed");
+		});
+	
+	creditsBtn->SetOnClick([]() {
+		PRINT("Credits Pressed");
+		});
+
 	exitBtn->SetOnClick([]() {
-		PRINT("fuck yall im out");
-		// exit func or whatever
+		PRINT("Exit Pressed");
+		gGameRunning = 0;
+		PRINT("Game Running = %d", gGameRunning);
 		});
 
 	// so we can control all buttons with a menuUI hehehehe
@@ -69,23 +93,26 @@ void MainMenuState::InitializeState()
 	menuUI.Add(exitBtn.get());
 	menuUI.Add(creditsBtn.get());
 
+	//Save to JSON
 	std::vector<GameObject> objs;
 	objs.push_back(go_digipenLogo);
 	objs.push_back(menuBG);
 	objs.push_back(*startBtn);
 	objs.push_back(*creditsBtn);
 	objs.push_back(*exitBtn);
-
 	SaveObjectsToJson(objs);
 
-	ReadJsonToObjects("../../Saves/GameObjects.json");
+	//Read From JSON
+	objs = ReadJsonToObjects("../../Saves/GameObjects.json");
+
+	for (GameObject& go : objs) {
+		std::cout << go << "\n";
+	}
 
 	PRINT("Initialize: %s", "Main Menu\n");
 }
 
 void MainMenuState::UpdateState() {
-	//PRINT("Update: %s", "Main Menu\n");
-
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	Color bg = Colors::PastelPurple;
@@ -123,7 +150,7 @@ void MainMenuState::UpdateState() {
 		creditsTexture.Set_Image(0, 0);
 		menuBGTexture.Set_Image(0, 0);
 
-	AEInputGetCursorPosition(&mouseX, &mouseY);
+		AEInputGetCursorPosition(&mouseX, &mouseY);
 	}
 }
 
@@ -136,19 +163,12 @@ void MainMenuState::StateDraw() {
 		return;
 	}
 
-	menuBG.SetMesh(squareMesh);
-	menuBG.SetTexture(menuBGTexture);
-	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f });
-	menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() });
-	menuBG.UpdateRotation(0.f);
 	menuBG.Draw();
-
 	cardinalsFont.Draw_Text(0, 200.f);
 	startBtn->Draw();
 	exitBtn->Draw();
 	creditsBtn->Draw();
-
-	}
+}
 
 void MainMenuState::FreeState() {
 	
@@ -163,6 +183,7 @@ void MainMenuState::FreeState() {
 	creditsTexture.Free_Image();
 
 	AEGfxMeshFree(squareMesh);
+	menuUI.Exit();
 	PRINT("Free: %s", "Main Menu\n");
 }
 
