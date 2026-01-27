@@ -1,6 +1,5 @@
 #include "../GameStates/Credits.hpp"
-#include <AEEngine.h>
-#include "../header/TextureManager.hpp"
+
 
 namespace {
 	Font titleFont;
@@ -9,7 +8,7 @@ namespace {
 	f32 endY;
 }
 
-void CreditsState::LoadState() {
+void Credits_Load() {
 	titleFont.Load_Font(Fonts::Main, 25.f);
 	nameFont.Load_Font(Fonts::Main, 50.f);
 
@@ -25,13 +24,13 @@ void CreditsState::LoadState() {
 	PRINT("Load: %s", "Credits\n");
 }
 
-void CreditsState::InitializeState()
+void Credits_Initialize()
 {
 	startY = -430.f;
 	PRINT("Initialize: %s", "Credits\n");
 }
 
-void CreditsState::UpdateState() {
+void Credits_Update() {
 
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -41,18 +40,18 @@ void CreditsState::UpdateState() {
 	startY += 5;
 }
 
-void CreditsState::StateDraw() {
+void Credits_Draw() {
 	titleFont.Draw_Text(0.f, startY);
 	nameFont.Draw_Text(0.f, startY + 37.5f);
 }
 
-void CreditsState::FreeState() {
+void Credits_Free() {
 	titleFont.Free_Font();
 	nameFont.Free_Font();
 	PRINT("Free: %s", "Credits\n");
 }
 
-void CreditsState::UnloadState() {
+void Credits_Unload() {
 
 	PRINT("Unload: %s", "Credits\n");
 }

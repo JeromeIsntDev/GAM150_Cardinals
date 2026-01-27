@@ -1,27 +1,22 @@
 #include "../GameStates/LevelMenu.hpp"
-#include "../header/TextureManager.hpp"
-#include "../header/MeshGenerator.hpp"
-#include "../header/PlayerController.hpp"
-#include "../header/UIManager.hpp"
 
 namespace {
 	Font levelFont;
 }
 
 
-void LevelMenuState::LoadState() {
+void LevelMenu_Load() {
 	PRINT("Load: %s", "Level Menu\n");
 	levelFont.Load_Font(Fonts::Main, 160.f);
 	levelFont.Input_Text("Level Menu");
-
 }
 
-void LevelMenuState::InitializeState()
+void LevelMenu_Initialize()
 {
 	PRINT("Initialize: %s", "Level Menu\n");
 }
 
-void LevelMenuState::UpdateState() {
+void LevelMenu_Update() {
 	//PRINT("Update: %s", "Main Menu\n");
 
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -31,21 +26,19 @@ void LevelMenuState::UpdateState() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
 	AEGfxSetTransparency(1.f);
-
 }
 
-void LevelMenuState::StateDraw() {
+void LevelMenu_Draw() {
 	//PRINT("Draw: %s", "Level Menu\n");
 
 	levelFont.Draw_Text(0, 200.f);
-
 }
 
-void LevelMenuState::FreeState() {
+void LevelMenu_Free() {
 	levelFont.Free_Font();
 	PRINT("Free: %s", "Level Menu\n");
 }
 
-void LevelMenuState::UnloadState() {
+void LevelMenu_Unload() {
 	PRINT("Unload: %s", "Level Menu\n");
 }

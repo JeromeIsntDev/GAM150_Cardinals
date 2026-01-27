@@ -1,12 +1,15 @@
+/*!***********************************************************************
+\file	.hpp
+\author	Jerome Lim
+\date	12/01/2026
+\par	Last Updated by: Jerome Lim
+\par	Project: Cardinals
+
+\brief	HEADER File for GameObject class
+
+\par	Changes: None
+**************************************************************************/
 #include "../GameStates/MainMenu.hpp"
-#include "../header/TextureManager.hpp"
-#include "../header/MeshGenerator.hpp"
-#include "../header/PlayerController.hpp"
-#include "../header/UIManager.hpp"
-#include "../header/AudioManager.hpp"
-#include "../header/GameObject.hpp"
-#include "../header/GameSaver.hpp"
-#include <vector>
 
 extern int gGameRunning;
 
@@ -34,7 +37,7 @@ namespace {
 }
 
 
-void MainMenuState::LoadState() {
+void MainMenu_Load() {
 	PRINT("Load: %s", "Main Menu\n");
 	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
@@ -49,7 +52,7 @@ void MainMenuState::LoadState() {
 	creditsTexture.Load_Image(Images::CreditsBtn);
 }
 
-void MainMenuState::InitializeState()
+void MainMenu_Initialize()
 {
 	bgm.CreateAudioGroup();
 	bgm.Load_Audio(Audios::BGM);
@@ -60,7 +63,7 @@ void MainMenuState::InitializeState()
 	go_digipenLogo.SetID(assigner.GetID());
 
 	menuBG.SetMesh(squareMesh);
-	menuBG.SetTexture(menuBGTexture);
+	menuBG.SetTexture(&menuBGTexture);
 	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f });
 	menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() });
 	menuBG.UpdateRotation(0.f);
@@ -68,15 +71,15 @@ void MainMenuState::InitializeState()
 
 	// creates button w relevant stuff stolen from gameobej
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-	startBtn->SetTexture(startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
+	startBtn->SetTexture(&startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
 	startBtn->SetID(assigner.GetID());
 
 	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-	exitBtn->SetTexture(exitTexture); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
+	exitBtn->SetTexture(&exitTexture); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
 	exitBtn->SetID(assigner.GetID());
 
 	creditsBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -150.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-	creditsBtn->SetTexture(creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
+	creditsBtn->SetTexture(&creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
 	creditsBtn->SetID(assigner.GetID());
 
 	// use them like this ik its weird asf but like. i'll make it better soon
@@ -115,7 +118,7 @@ void MainMenuState::InitializeState()
 		std::cout << go << "\n";
 	}
 
-	go_digipenLogo.SetTexture(tex_digipenLogo);
+	go_digipenLogo.SetTexture(&tex_digipenLogo);
 	go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
 	go_digipenLogo.UpdateScale(AEVec2{ tex_digipenLogo.Get_Image_Width(), tex_digipenLogo.Get_Image_Height() });
 	go_digipenLogo.UpdateRotation(0.f);
@@ -123,7 +126,7 @@ void MainMenuState::InitializeState()
 	PRINT("Initialize: %s", "Main Menu\n");
 }
 
-void MainMenuState::UpdateState() {
+void MainMenu_Update() {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	Color bg = Colors::PastelPurple;
@@ -156,7 +159,7 @@ void MainMenuState::UpdateState() {
 	}
 }
 
-void MainMenuState::StateDraw() {
+void MainMenu_Draw() {
 	//PRINT("Draw: %s", "Main Menu\n");
 
 	if (!isLogoDrawn) {
@@ -172,17 +175,17 @@ void MainMenuState::StateDraw() {
 	creditsBtn->Draw();
 }
 
-void MainMenuState::FreeState() {
+void MainMenu_Free() {
 	
 	cardinalsFont.Free_Font();
 	digipenFont.Free_Font();
 
-	tex_digipenLogo.Free_Image();
+	tex_digipenLogo.Unload_Image();
 
-	menuBGTexture.Free_Image();
-	startTexture.Free_Image();
-	exitTexture.Free_Image();
-	creditsTexture.Free_Image();
+	menuBGTexture.Unload_Image();
+	startTexture.Unload_Image();
+	exitTexture.Unload_Image();
+	creditsTexture.Unload_Image();
 	bgm.Free_Audio_Group();
 	bgm.Free_Audio();
 
@@ -191,6 +194,6 @@ void MainMenuState::FreeState() {
 	PRINT("Free: %s", "Main Menu\n");
 }
 
-void MainMenuState::UnloadState() {
+void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
 }
