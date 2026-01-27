@@ -1,24 +1,44 @@
 {
   "gameObjects": [
     {
+      "id": 0,
       "posx": 0.0,
-      "posy": 0.0
+      "posy": 0.0,
+      "rot": 0.0,
+      "scalex": 0.0,
+      "scaley": 0.0
     },
     {
+      "id": 1,
       "posx": 0.0,
-      "posy": 0.0
+      "posy": 0.0,
+      "rot": 0.0,
+      "scalex": 1600.0,
+      "scaley": 900.0
     },
     {
+      "id": 2,
       "posx": 0.0,
-      "posy": 0.0
+      "posy": 0.0,
+      "rot": 0.0,
+      "scalex": 412.0,
+      "scaley": 120.0
     },
     {
+      "id": 4,
       "posx": 0.0,
-      "posy": -150.0
+      "posy": -150.0,
+      "rot": 0.0,
+      "scalex": 412.0,
+      "scaley": 120.0
     },
     {
+      "id": 3,
       "posx": 0.0,
-      "posy": -300.0
+      "posy": -300.0,
+      "rot": 0.0,
+      "scalex": 412.0,
+      "scaley": 120.0
     }
   ]
 }

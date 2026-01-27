@@ -23,7 +23,8 @@ AEMtx33 GameObject::GetTransform() const
 }
 
 GameObject::GameObject()
-	:	globalPosition(AEVec2{ 0.f,0.f }),	localPosition(AEVec2{ 0.f,0.f }),
+	:	
+		globalPosition(AEVec2{ 0.f,0.f }),	localPosition(AEVec2{ 0.f,0.f }),
 		globalRotation(0.f),				localRotation(0.f),
 		globalScale(AEVec2{ 0.f,0.f }),		localScale(AEVec2{ 0.f,0.f }),
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
@@ -36,7 +37,8 @@ GameObject::GameObject()
 }
 
 GameObject::GameObject(AEGfxVertexList* mesh)
-	: globalPosition(AEVec2{ 0.f,0.f }), localPosition(AEVec2{ 0.f,0.f }),
+	: 
+	globalPosition(AEVec2{ 0.f,0.f }), localPosition(AEVec2{ 0.f,0.f }),
 	globalRotation(0.f), localRotation(0.f),
 	globalScale(AEVec2{ 0.f,0.f }), localScale(AEVec2{ 0.f,0.f }),
 	mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
@@ -49,7 +51,8 @@ GameObject::GameObject(AEGfxVertexList* mesh)
 }
 
 GameObject::GameObject(AEGfxVertexList* mesh, AEVec2 translate, f32 rotate, AEVec2 scale)
-	:	globalPosition(translate),	localPosition(translate),
+	:	
+		globalPosition(translate),	localPosition(translate),
 		globalRotation(rotate),		localRotation(rotate),
 		globalScale(scale),			localScale(scale),
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
@@ -87,6 +90,16 @@ f32 GameObject::GetLocalRotatation() const {
 
 AEVec2 GameObject::GetLocalScale() const {
 	return localScale;
+}
+
+void GameObject::SetID(u64 id)
+{
+	_id = id;
+}
+
+u64 GameObject::GetID() const
+{
+	return _id;
 }
 
 void GameObject::UpdatePosition(AEVec2 pos)
@@ -148,8 +161,9 @@ bool GameObject::IsChild() const {
 }
 
 std::ostream& operator<<(std::ostream& os, const GameObject& go) {
-	os	<< go.globalPosition.x << " " 
-		<< go.globalPosition.y << " "
-		<< go.globalRotation << " ";
+	os	<< "GameObject[" << go._id << "]: "
+		<< "Position: " << go.globalPosition.x << "," << go.globalPosition.y << "|"
+		<< "Rotation: " << go.globalRotation << "|"
+		<< "Scale: " << go.globalScale.x << "," << go.globalScale.y;
 	return os;
 }
