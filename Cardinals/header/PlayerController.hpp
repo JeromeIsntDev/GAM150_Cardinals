@@ -34,7 +34,6 @@ private:
 	AEVec2 p_initialPos{ 0.f,0.f };
 	f32 p_leftMin{ 0.f };
 	f32 p_rightMax{ 0.f };
-	f32 p_displacement{ 0.f };
 	AEVec2 p_movementVector{ 0.f,0.f };
 	AEVec2 p_velocityVector{ 0.f,0.f };
 public:
