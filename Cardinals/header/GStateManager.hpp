@@ -44,7 +44,7 @@ public:
 	void FreeCurrentState();
 	void UnloadCurrentState();
 
-	static GameState* GetGameState(GameStates state) {
+	GameState* GetGameState(GameStates state) {
 		switch (state)
 		{
 		case MainMenu:

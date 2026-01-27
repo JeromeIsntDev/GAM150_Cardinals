@@ -3,7 +3,7 @@
 #include "../header/MeshGenerator.hpp"
 #include "../header/PlayerController.hpp"
 #include "../header/UIManager.hpp"
-
+#include "../header/AudioManager.hpp"
 #include "../header/GameObject.hpp"
 #include "../header/GameSaver.hpp"
 #include <vector>
@@ -11,6 +11,7 @@
 extern int gGameRunning;
 
 namespace {
+
 	Font cardinalsFont;
 	Font digipenFont;
 	Texture startTexture{}, exitTexture{}, creditsTexture{};
@@ -29,6 +30,7 @@ namespace {
 	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn;
 
 	GameObjectIDAssigner assigner;
+	Audio bgm;
 }
 
 
@@ -49,6 +51,10 @@ void MainMenuState::LoadState() {
 
 void MainMenuState::InitializeState()
 {
+	bgm.CreateAudioGroup();
+	bgm.Load_Audio(Audios::BGM);
+	bgm.Play_Audio();
+
 	squareMesh = RectMeshCenter();
 	go_digipenLogo.SetMesh(squareMesh);
 	go_digipenLogo.SetID(assigner.GetID());
@@ -109,6 +115,11 @@ void MainMenuState::InitializeState()
 		std::cout << go << "\n";
 	}
 
+	go_digipenLogo.SetTexture(tex_digipenLogo);
+	go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
+	go_digipenLogo.UpdateScale(AEVec2{ tex_digipenLogo.Get_Image_Width(), tex_digipenLogo.Get_Image_Height() });
+	go_digipenLogo.UpdateRotation(0.f);
+
 	PRINT("Initialize: %s", "Main Menu\n");
 }
 
@@ -120,15 +131,6 @@ void MainMenuState::UpdateState() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	AEGfxSetTransparency(logo_transparency);
-
-	if (!isLogoDrawn) {
-		go_digipenLogo.SetTexture(tex_digipenLogo);
-		go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
-		go_digipenLogo.UpdateScale(AEVec2{ tex_digipenLogo.Get_Image_Width(), tex_digipenLogo.Get_Image_Height() });
-		go_digipenLogo.UpdateRotation(0.f);
-
-		tex_digipenLogo.Set_Image(0, 0);
-	}
 
 	if (AEFrameRateControllerGetFrameCount() < 100) {
 		logo_transparency += 0.02f;
@@ -181,6 +183,8 @@ void MainMenuState::FreeState() {
 	startTexture.Free_Image();
 	exitTexture.Free_Image();
 	creditsTexture.Free_Image();
+	bgm.Free_Audio_Group();
+	bgm.Free_Audio();
 
 	AEGfxMeshFree(squareMesh);
 	menuUI.Exit();

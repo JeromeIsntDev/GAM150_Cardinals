@@ -126,7 +126,7 @@ void GameObject::UpdateScale(AEVec2 scale)
 	ConcatTransform();
 }
 
-void GameObject::SetMesh(AEGfxVertexList* objectmesh)
+void GameObject::SetMesh(AEGfxVertexList* const objectmesh)
 {
 	mesh = objectmesh;
 }

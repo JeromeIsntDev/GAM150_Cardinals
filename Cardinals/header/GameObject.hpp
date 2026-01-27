@@ -36,7 +36,7 @@ protected:
 	AEMtx33 mtx_transform;
 	bool isChild;
 	AEGfxVertexList* mesh;
-	Texture tex { };
+	Texture tex;
 
 //Functions
 private:
@@ -67,7 +67,7 @@ public:
 	virtual void UpdatePosition(AEVec2 pos);
 	virtual void UpdateRotation(f32 rot);
 	virtual void UpdateScale(AEVec2 scale);
-	virtual void SetMesh(AEGfxVertexList* mesh);
+	virtual void SetMesh(AEGfxVertexList* const mesh);
 	virtual void SetTexture(const Texture texture);
 
 	bool HoverMesh(s32 mouseX, s32 mouseY) const;

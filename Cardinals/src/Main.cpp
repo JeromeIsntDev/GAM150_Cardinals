@@ -12,9 +12,6 @@
 #include <crtdbg.h> // To check for memory leaks
 #include <AEEngine.h>
 #include <iostream>
-#include "../header/MeshGenerator.hpp"
-#include "../header/TextureManager.hpp"
-#include "../header/AudioManager.hpp"
 #include "../header/GStateManager.hpp"
 #include "../header/PlayerController.hpp"
 #include "../header/UIManager.hpp"
@@ -36,17 +33,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, true, NULL);
-	
-	Audio audioTest1;
-	audioTest1.CreateAudioGroup();
-	audioTest1.Load_Audio(Audios::BGM);
-	audioTest1.Play_Audio();
 
 	// Changing the window title
 	AESysSetWindowTitle("CARDINAL");
 
 	GameStateManager manager;
-	manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::MainMenu));
+	manager.SetCurrentGameState(manager.GetGameState(GameStates::MainMenu));
 
 
 	while (gGameRunning)
@@ -54,16 +46,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		AESysFrameStart();
 
 		if (AEInputCheckReleased(AEVK_0)) {
-			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::MainMenu));
+			manager.SetCurrentGameState(manager.GetGameState(GameStates::MainMenu));
 		}
 		if (AEInputCheckReleased(AEVK_1)) {
-			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Level1));
+			manager.SetCurrentGameState(manager.GetGameState(GameStates::Level1));
 		}
 		if (AEInputCheckReleased(AEVK_2)) {
-			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Level2));
+			manager.SetCurrentGameState(manager.GetGameState(GameStates::Level2));
 		}
 		if (AEInputCheckReleased(AEVK_3)) {
-			manager.SetCurrentGameState(GameStateManager::GetGameState(GameStates::Credits));
+			manager.SetCurrentGameState(manager.GetGameState(GameStates::Credits));
 		}
 		manager.UpdateCurrentState();
 		manager.DrawCurrentState();
