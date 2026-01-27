@@ -30,7 +30,7 @@ namespace {
 	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn;
 
 	GameObjectIDAssigner assigner;
-	Audio bgm;
+	Audio& bgm = Audio::Instance();
 }
 
 
@@ -51,9 +51,9 @@ void MainMenuState::LoadState() {
 
 void MainMenuState::InitializeState()
 {
-	bgm.CreateAudioGroup();
-	bgm.Load_Audio(Audios::BGM);
-	bgm.Play_Audio();
+	bgm.Init_Audio_System();
+	bgm.Load_Audio("BGM", Audios::BGM);
+	bgm.Play_Audio("BGM", AudioType::MUSIC);
 
 	squareMesh = RectMeshCenter();
 	go_digipenLogo.SetMesh(squareMesh);
@@ -183,8 +183,8 @@ void MainMenuState::FreeState() {
 	startTexture.Free_Image();
 	exitTexture.Free_Image();
 	creditsTexture.Free_Image();
-	bgm.Free_Audio_Group();
-	bgm.Free_Audio();
+	bgm.Stop_Audio();
+	bgm.Free_Audio_System();
 
 	AEGfxMeshFree(squareMesh);
 	menuUI.Exit();
