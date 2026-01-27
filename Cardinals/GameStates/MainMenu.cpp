@@ -33,12 +33,15 @@ namespace {
 	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn;
 
 	GameObjectIDAssigner assigner;
-	Audio bgm;
+	Audio backgroundMusic;
+	AEAudioGroup bgmGroup;
 }
 
 
 void MainMenu_Load() {
 	PRINT("Load: %s", "Main Menu\n");
+	assigner.currIdCount = 0;
+
 	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
 
@@ -50,13 +53,16 @@ void MainMenu_Load() {
 	startTexture.Load_Image(Images::StartBtn);
 	exitTexture.Load_Image(Images::ExitBtn);
 	creditsTexture.Load_Image(Images::CreditsBtn);
+
+	bgmGroup = AEAudioCreateGroup();
+	backgroundMusic.Load_Audio(Audios::BGM);
 }
 
 void MainMenu_Initialize()
 {
-	bgm.CreateAudioGroup();
-	bgm.Load_Audio(Audios::BGM);
-	bgm.Play_Audio();
+	
+	backgroundMusic.SetAudioGroup(bgmGroup);
+	backgroundMusic.Play_Audio();
 
 	squareMesh = RectMeshCenter();
 	go_digipenLogo.SetMesh(squareMesh);
@@ -150,11 +156,6 @@ void MainMenu_Update() {
 
 		menuUI.Update(0.f);
 
-		startTexture.Set_Image(0, 0);
-		exitTexture.Set_Image(0, 0);
-		creditsTexture.Set_Image(0, 0);
-		menuBGTexture.Set_Image(0, 0);
-
 		AEInputGetCursorPosition(&mouseX, &mouseY);
 	}
 }
@@ -167,6 +168,12 @@ void MainMenu_Draw() {
 		digipenFont.Draw_Text(AEVec2{ 0, -330.f }, 1.f, logo_transparency);
 		return;
 	}
+	else {
+		startTexture.Set_Image(0, 0);
+		exitTexture.Set_Image(0, 0);
+		creditsTexture.Set_Image(0, 0);
+		menuBGTexture.Set_Image(0, 0);
+	}
 
 	menuBG.Draw();
 	cardinalsFont.Draw_Text(0, 200.f);
@@ -176,24 +183,24 @@ void MainMenu_Draw() {
 }
 
 void MainMenu_Free() {
-	
+	PRINT("Free: %s", "Main Menu\n");
+
 	cardinalsFont.Free_Font();
 	digipenFont.Free_Font();
 
-	tex_digipenLogo.Unload_Image();
-
-	menuBGTexture.Unload_Image();
-	startTexture.Unload_Image();
-	exitTexture.Unload_Image();
-	creditsTexture.Unload_Image();
-	bgm.Free_Audio_Group();
-	bgm.Free_Audio();
+	backgroundMusic.Free_Audio();
+	backgroundMusic.Free_Audio_Group();
 
 	AEGfxMeshFree(squareMesh);
 	menuUI.Exit();
-	PRINT("Free: %s", "Main Menu\n");
 }
 
 void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
+
+	tex_digipenLogo.Unload_Image();
+	menuBGTexture.Unload_Image();
+	startTexture.Unload_Image();
+	exitTexture.Unload_Image();
+	creditsTexture.Unload_Image();
 }

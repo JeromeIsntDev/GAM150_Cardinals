@@ -42,20 +42,19 @@ public:
     //Constructor Overload
     Audio();
 
-    void CreateAudioGroup();
-
+    void SetAudioGroup(AEAudioGroup group);
     void Load_Audio(AudioFile audio);
     void Play_Audio() const;
     void Play_Audio(s32 _loop);
     void Free_Audio() const;
 
     //Group
-    void Pause_Audio_Group();
-    void Resume_Audio_Group();
-    void Stop_Audio_Group();
+    void Pause_Audio_Group() const;
+    void Resume_Audio_Group() const;
+    void Stop_Audio_Group() const;
     void Set_Audio_Volume(f32 volume);
     void Set_Audio_Pitch(f32 pitch);
-    void Free_Audio_Group();
+    void Free_Audio_Group() const;
 };
 
 #endif // !_Texture_Man_Header_

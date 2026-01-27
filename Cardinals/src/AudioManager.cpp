@@ -19,9 +19,9 @@ Audio::Audio()
 	PRINT("Audio Created\n");
 }
 
-void Audio::CreateAudioGroup()
+void Audio::SetAudioGroup(AEAudioGroup group)
 {
-	_group = AEAudioCreateGroup();
+	_group = group;
 }
 
 void Audio::Load_Audio(AudioFile audio_file)
@@ -45,15 +45,15 @@ void Audio::Free_Audio() const
 	AEAudioUnloadAudio(_sound);
 }
 
-void Audio::Pause_Audio_Group() {
+void Audio::Pause_Audio_Group() const {
 	AEAudioPauseGroup(_group);
 }
 
-void Audio::Resume_Audio_Group() {
+void Audio::Resume_Audio_Group() const {
 	AEAudioResumeGroup(_group);
 }
 
-void Audio::Stop_Audio_Group() {
+void Audio::Stop_Audio_Group() const {
 	AEAudioStopGroup(_group);
 }
 
@@ -67,6 +67,6 @@ void Audio::Set_Audio_Pitch(f32 pitch) {
 	AEAudioSetGroupPitch(_group, pitch);
 }
 
-void Audio::Free_Audio_Group(){
+void Audio::Free_Audio_Group() const{
 	AEAudioUnloadAudioGroup(_group);
 }

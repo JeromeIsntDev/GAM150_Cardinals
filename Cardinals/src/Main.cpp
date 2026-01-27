@@ -39,8 +39,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	UpdateGameManagerState(GameStateEnum::MainMenu);
 
-	std::cout << pt_CurrentGameState << std::endl;
-
 	while (gGameRunning)
 	{
 		AESysFrameStart();
@@ -64,6 +62,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			gGameRunning = 0;
 	}
+
+	Free_State();
+	Unload_State();
 
 	// free the system
 	AESysExit();
