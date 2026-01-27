@@ -3,7 +3,6 @@
 #define _Game_State_Manager_
 
 #include <AEEngine.h>
-#include "../header/GameState.hpp"
 
 //GameState includes
 #include "../GameStates/MainMenu.hpp"
@@ -15,7 +14,7 @@
 
 typedef void(*FuncPtr)(void);
 
-enum GameStates {
+enum GameStateEnum {
 	MainMenu = 0,
 	Credits,
 	LevelMenu,
@@ -28,47 +27,16 @@ enum GameStates {
 	NumberOfGameStates
 };
 
-class GameStateManager {
-private:
-	GameState* pt_CurrentGameState;
+extern GameStateEnum pt_CurrentGameState;
 
-public:
-	GameStateManager();
-	void SetCurrentGameState(GameState* state);
-	GameState* GetCurrentGameState();
+void UpdateGameManagerState(GameStateEnum state);
+GameStateEnum GetCurrentGameState();
 
-	void LoadCurrentState();
-	void InitCurrentState();
-	void UpdateCurrentState();
-	void DrawCurrentState();
-	void FreeCurrentState();
-	void UnloadCurrentState();
-
-	GameState* GetGameState(GameStates state) {
-		switch (state)
-		{
-		case MainMenu:
-			return new MainMenuState;
-		case Credits:
-			return new CreditsState;
-		case LevelMenu:
-			return new LevelMenuState;
-		case Level1:
-			return new Level1State;
-		case Level2:
-			return new Level2State;
-		case Level3:
-			return new Level3State;
-		case Level4:
-			break;
-		case Level5:
-			break;
-		case NumberOfGameStates:
-			break;
-		default:
-			break;
-		}
-	}
-};
+extern FuncPtr Load_State;
+extern FuncPtr Init_State;
+extern FuncPtr Update_State;
+extern FuncPtr Draw_State;
+extern FuncPtr Free_State;
+extern FuncPtr Unload_State;
 
 #endif // !_Game_State_Manager_

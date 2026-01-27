@@ -97,10 +97,7 @@ public:
 		if (!isActive || !isInteractable)
 			return;
 
-		if (onClick) 
-		{
-			onClick();
-		}
+		if (onClick) onClick();
 	}
 
 private:

@@ -37,33 +37,34 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Changing the window title
 	AESysSetWindowTitle("CARDINAL");
 
-	GameStateManager manager;
-	manager.SetCurrentGameState(manager.GetGameState(GameStates::MainMenu));
-
+	UpdateGameManagerState(GameStateEnum::MainMenu);
 
 	while (gGameRunning)
 	{
 		AESysFrameStart();
 
 		if (AEInputCheckReleased(AEVK_0)) {
-			manager.SetCurrentGameState(manager.GetGameState(GameStates::MainMenu));
+			UpdateGameManagerState(GameStateEnum::MainMenu);
 		}
 		if (AEInputCheckReleased(AEVK_1)) {
-			manager.SetCurrentGameState(manager.GetGameState(GameStates::Level1));
+			UpdateGameManagerState(GameStateEnum::Level1);
 		}
 		if (AEInputCheckReleased(AEVK_2)) {
-			manager.SetCurrentGameState(manager.GetGameState(GameStates::Level2));
+			UpdateGameManagerState(GameStateEnum::Level2);
 		}
 		if (AEInputCheckReleased(AEVK_3)) {
-			manager.SetCurrentGameState(manager.GetGameState(GameStates::Credits));
+			UpdateGameManagerState(GameStateEnum::Credits);
 		}
-		manager.UpdateCurrentState();
-		manager.DrawCurrentState();
+		Update_State();
+		Draw_State();
 
 		AESysFrameEnd();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			gGameRunning = 0;
 	}
+
+	Free_State();
+	Unload_State();
 
 	// free the system
 	AESysExit();

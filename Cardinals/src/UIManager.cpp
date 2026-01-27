@@ -24,10 +24,11 @@ void UIManager::Add(UIElement* element)
 void UIManager::Update(float dt) 
 {
     // big fat update
-    for (auto* element : uiElements)
+    for (UIElement* element : uiElements)
     {
-        if (!element->IsActive())
-            element->Update(dt);
+        if (!element->IsActive()) {
+            //element->Update(dt);
+        }
     }
 
     HandleClick();

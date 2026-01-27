@@ -36,7 +36,6 @@
     <ClInclude Include="header\MeshGenerator.hpp" />
     <ClInclude Include="header\Physics.hpp" />
     <ClInclude Include="header\GameObject.hpp" />
-    <ClInclude Include="header\GameState.hpp" />
     <ClInclude Include="header\RenderLayer.hpp" />
     <ClInclude Include="header\RenderLayerManager.hpp" />
     <ClInclude Include="header\PlayerController.hpp" />

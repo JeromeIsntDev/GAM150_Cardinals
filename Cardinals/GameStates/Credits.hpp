@@ -3,19 +3,16 @@
 #define _Credits_Header_
 
 #include <iostream>
+
 #include <AEEngine.h>
-#include "../header/GameState.hpp"
 
-class CreditsState : public GameState {
-public:
+#include "../header/TextureManager.hpp"
 
-	void LoadState() override;
-	void InitializeState() override;
-	void UpdateState() override;
-	void StateDraw() override;
-	void FreeState() override;
-	void UnloadState() override;
-
-};
+void Credits_Load();
+void Credits_Initialize();
+void Credits_Update();
+void Credits_Draw();
+void Credits_Free();
+void Credits_Unload();
 
 #endif // !_Credits_Header_
