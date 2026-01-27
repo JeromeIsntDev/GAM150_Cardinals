@@ -183,6 +183,7 @@ void MainMenuState::FreeState() {
 	creditsTexture.Free_Image();
 
 	AEGfxMeshFree(squareMesh);
+	menuUI.Exit();
 	PRINT("Free: %s", "Main Menu\n");
 }
 

@@ -73,6 +73,7 @@ public:
 	void Update(float dt); // loops thru all elements and calls their updaate
 	void Draw() const; // same shit but just yoinks the draw from gameobj and draws bruh
 	void HandleClick(); // useless rn
+	void Exit(); // for the fucking VECTORS
 
 };
 
