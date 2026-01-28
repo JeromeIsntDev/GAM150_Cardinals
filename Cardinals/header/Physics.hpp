@@ -12,8 +12,7 @@ class Collider {
 public:
 	void InitializeCollider(AEVec2 centrePoint, f32 xLength, f32 yLtength);
 
-	bool IsCollidedGround();
-	bool IsCollidedWall();
+	bool CollisionDetected(const Collider&, const Collider&);
 
 };
 
