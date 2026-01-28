@@ -26,6 +26,8 @@ void Level1_Initialize()
 	mainPlayer.SetTexture(&playerTexture);
 	mainPlayer.UpdateScale(AEVec2{ 100.f, 100.f });
 	mainPlayer.UpdateRotation(0.f);
+	//set the initial Collider
+	mainPlayer.GetPlayerCollider().InitializeCollider(mainPlayer.GetPosition(), mainPlayer.GetScale().x, mainPlayer.GetScale().y);
 
 	PRINT("Initialize: %s", "Level 1\n");
 }
