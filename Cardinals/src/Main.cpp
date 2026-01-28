@@ -26,7 +26,21 @@ IMGUI
 #include "../imGUI/imgui_impl_win32.h"
 
 #include <glad.h>
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
+
+IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+static WNDPROC g_OrigWndProc = nullptr;
+
+static LRESULT CALLBACK ImGuiHookWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+		return 1;
+
+	return CallWindowProc(g_OrigWndProc, hWnd, msg, wParam, lParam);
+}
+
+static char buffer[128] = "";
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -45,21 +59,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Changing the window title
 	AESysSetWindowTitle("CARDINAL");
-
 	UpdateGameManagerState(GameStateEnum::MainMenu);
 
 	HWND hwnd = AESysGetWindowHandle();
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui_ImplWin32_Init(hwnd);
+	g_OrigWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)ImGuiHookWndProc);
 	ImGui_ImplOpenGL3_Init("#version 330");
-	ImGui::StyleColorsDark();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigWindowsResizeFromEdges = true;
-	io.DisplaySize = { 500.f,500.f };
+
+	ImGui::StyleColorsDark();
+
+	ImGuiStyle& style = ImGui::GetStyle();
 
 	bool panelOpen = false;
+	bool focusKB = false;
 
 	while (gGameRunning)
 	{
@@ -78,16 +96,35 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			UpdateGameManagerState(GameStateEnum::Credits);
 		}
 
+		if (AEInputCheckTriggered(AEVK_F1)) {
+			panelOpen = !panelOpen;
+			if (panelOpen)focusKB = true;
+		}
 
 		Update_State();
 		Draw_State();
-
+		//must be place here or smth
 		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
-		ImGui::Begin("Test");
-		ImGui::Text("Test text");
-		ImGui::End();
-
+		//command panel logic goes here
+		if (panelOpen) {
+			ImGui::Begin("Test");
+			ImGui::Text("Test text");
+			if (focusKB) {
+				ImGui::SetKeyboardFocusHere();
+				focusKB = false;
+			}
+			ImGui::Text("Command: %s", buffer);
+			if (ImGui::InputText("Command", buffer, IM_ARRAYSIZE(buffer),ImGuiInputTextFlags_EnterReturnsTrue)){
+				// Enter was pressed
+				std::cout << "Command entered: " << buffer << std::endl;
+				buffer[0] = '\0';
+				focusKB = true;
+			}
+			ImGui::End();
+		}
+		//render logic for IMGUI
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -95,7 +132,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 			gGameRunning = 0;
 	}
-
+	//resetting callback thing
+	if (g_OrigWndProc) {
+		SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)g_OrigWndProc);
+	}
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
