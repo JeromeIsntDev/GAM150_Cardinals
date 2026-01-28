@@ -25,6 +25,8 @@ class UIElement : public GameObject
 protected:
 	bool isActive = false;
 	bool isInteractable = false;
+	//Color tint = Colors::White; // full brightness
+	std::vector<UIElement*> children;
 
 public:
 
@@ -38,7 +40,8 @@ public:
 
 	// treat these like unity hehe
 	// element->setactive(false) type shit bro
-	void SetActive(bool active) { isActive = active; }
+	virtual void SetActive(bool active) { isActive = active; } // Add virtual!
+
 	void SetInteractable(bool interactable) 
 	{ 
 		isInteractable = interactable;
@@ -48,9 +51,16 @@ public:
 		}
 	}
 
+	void AddChild(UIElement* child) // for kiddos, mostly for popup to attach
+	{
+		children.push_back(child);
+		child->SetActive(false);
+	}
+
 	bool IsActive() const { return isActive; }
 	bool IsInteractable() const { return isInteractable; }
 	bool IsPointInside(float x, float y) const;
+	bool ToggleActive(u8 key);
 
 	virtual void Update(float dt) {}
 	virtual void OnClick() {}
@@ -71,10 +81,10 @@ public:
 
 	void Add(UIElement* element); // just adds it so it Exists
 	void Update(float dt); // loops thru all elements and calls their updaate
-	void Draw() const; // same shit but just yoinks the draw from gameobj and draws bruh
-	void HandleClick(); // useless rn
-	void Exit(); // for the fucking VECTORS
-
+	void Draw() const; 
+	void HandleClick();
+	void Disable();
+	void Exit(); // for the VECTORS
 };
 
 ///
@@ -102,6 +112,25 @@ public:
 
 private:
 	std::function<void()> onClick;
+};
+
+class PopUp : public UIElement
+{
+public:
+	using UIElement::UIElement;
+
+	//PopUp() = default;
+
+	// overrides setactive for the kiddos
+	void SetActive(bool active) override
+	{
+		isActive = active;
+		for (auto* child : children) 
+		{
+			child->SetActive(active);
+			child->SetInteractable(active);
+		}
+	}
 };
 
 #endif // !_UI_Manager_Header_
