@@ -14,7 +14,7 @@
 #include <iostream>
 
 Audio::Audio() 
-	: _musicGroup{}, _sfxGroup{}, _masterVol{ 1.0f }, _musicVol{ 1.0f }, _sfxVol{ 1.0f }
+	: _musicGroup{nullptr}, _sfxGroup{nullptr}, _masterVol{ 1.0f }, _musicVol{ 1.0f }, _sfxVol{ 1.0f }
 {
 	PRINT("Audio Created\n");
 }
@@ -46,25 +46,29 @@ void Audio::Load_Audio(const std::string& name, AudioFile audio_file)
 	// Check if audio already loaded
 	if (_audioMap.find(name) != _audioMap.end()) return;
 	AEAudio sound = AEAudioLoadSound(audio_file.filename);
-	_audioMap[name] = sound;
-	PRINT("Audio Loaded: %s\n", name.c_str());
+	//_audioMap[name] = sound;
+	//PRINT("Audio Loaded: %s\n", name.c_str());
+	if (sound.fmod_sound)
+	{
+		_audioMap[name] = sound;
+		PRINT("Audio Loaded: %s\n", name.c_str());
+	}
+	else
+	{
+		PRINT("Failed to load audio: %s\n", audio_file.filename);
+	}
 }
 
 void Audio::Play_Audio(const std::string& name, AudioType type, f32 pitch, s32 loop)
 {	
-	if (_audioMap.find(name) == _audioMap.end()) {
+	auto it = _audioMap.find(name);
+	if (it == _audioMap.end()) {
 		PRINT("Audio not found: %s\n", name.c_str());
 		return;
 	}
 	// Choose group based on type (Enum)
-	AEAudioGroup targetGroup;
-	if(type == AudioType::MUSIC) {
-		targetGroup = _musicGroup;
-	}
-	else {
-		targetGroup = _sfxGroup;
-	}
-	AEAudioPlay(_audioMap[name], targetGroup, 1.0f, pitch, loop);
+	AEAudioGroup targetGroup = (type == AudioType::MUSIC) ?  _musicGroup : _sfxGroup;
+	AEAudioPlay(it->second, targetGroup, 1.0f, pitch, loop);
 }
 
 void Audio::Set_Volume(AudioType type, f32 vol)
@@ -76,15 +80,9 @@ void Audio::Set_Volume(AudioType type, f32 vol)
 	// Set volume based on type
 	switch (type)
 	{
-		case AudioType::MASTER:
-			_masterVol = vol;
-			break;
-		case AudioType::MUSIC:
-			_musicVol = vol;
-			break;
-		case AudioType::SFX:
-			_sfxVol = vol;
-			break;
+		case AudioType::MASTER: _masterVol = vol; break;
+		case AudioType::MUSIC: _musicVol = vol; break;
+		case AudioType::SFX: _sfxVol = vol; break;
 	}
 	// Update group volumes
 	AEAudioSetGroupVolume(_musicGroup, _masterVol * _musicVol);
@@ -116,6 +114,8 @@ void Audio::Free_Audio_System()
 		AEAudioUnloadAudio(pair.second);
 	}
 	_audioMap.clear();
+	AEAudioUnloadAudioGroup(_musicGroup);
+	AEAudioUnloadAudioGroup(_sfxGroup);
 	PRINT("Audio System Freed\n");
 }
 
