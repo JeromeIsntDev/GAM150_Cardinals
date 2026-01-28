@@ -43,12 +43,7 @@ f32 Texture::Get_Image_Height() const
 void Texture::Unload_Image()
 {
 	PRINT("Unload Image\n");
-	if (_image == nullptr) {
-		return;
-	}	
-	
 	AEGfxTextureUnload(_image);
-
 	_image = nullptr;
 }
 
