@@ -191,12 +191,13 @@ void MainMenu_Free() {
 
 	cardinalsFont.Free_Font();
 	digipenFont.Free_Font();
-	tex_digipenLogo.Free_Image();
+	tex_digipenLogo.Unload_Image();
 
-	menuBGTexture.Free_Image();
-	startTexture.Free_Image();
-	exitTexture.Free_Image();
-	creditsTexture.Free_Image();
+	menuBGTexture.Unload_Image();
+	startTexture.Unload_Image();
+	exitTexture.Unload_Image();
+	creditsTexture.Unload_Image();
+
 	bgm.Stop_Audio();
 	bgm.Free_Audio_System();
 	//backgroundMusic.Free_Audio();
