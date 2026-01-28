@@ -73,11 +73,12 @@ class UIManager {
 private:
 	// dynamic array to store different elements
 	std::vector<UIElement*> uiElements;
-	//std::vector<std::unique_ptr<UIElement>> uiElements;
 
 public:
 
 	virtual ~UIManager() = default; // destructor!! IMPORTANT!!!
+
+	static AEVec2 GetNewMousePos();
 
 	void Add(UIElement* element); // just adds it so it Exists
 	void Update(float dt); // loops thru all elements and calls their updaate
