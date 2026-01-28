@@ -11,34 +11,33 @@
 **************************************************************************/
 
 #include "../imGUI/imgui.h"
-#include "../imGUI/imgui_impl_glfw.h"
 #include "../imGUI/imgui_impl_opengl3.h"
-#include "../imGUI/imgui_impl_opengl3_loader.h"
+#include "../imGUI/imgui_impl_win32.h"
 
-#include <Windows.h>
+#include <glad.h>
 #include <GLFW/glfw3.h>
+
+#include <AEEngine.h>
 #include "../header/ControlPanel.hpp"
 
-void ControlPanel::ControlPanel_Load() {
-	GLFWwindow* window = glfwCreateWindow(1600, 900, "Test", nullptr, nullptr);
-	glfwMakeContextCurrent(window);
+void ControlPanel::ControlPanel_Load() { 
 }
 
-void ControlPanel::ControlPanel_Initialize(GLFWwindow* window) {
-	IMGUI_CHECKVERSION();
 
+void ControlPanel::ControlPanel_Initialize() {
+	HWND hwnd = AESysGetWindowHandle();
+	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
+	ImGui_ImplWin32_Init(hwnd);
+	ImGui_ImplOpenGL3_Init("#version 330");
+	ImGui::StyleColorsDark();
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-
-	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 330");
+	io.ConfigWindowsResizeFromEdges = true;
 }
 
 void ControlPanel::ControlPanel_Update() {
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	ImGui::Begin("Test");
 	ImGui::Text("Test text");
@@ -50,7 +49,6 @@ void ControlPanel::ControlPanel_Update() {
 
 void ControlPanel::ControlPanel_Exit() {
 	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 }
 

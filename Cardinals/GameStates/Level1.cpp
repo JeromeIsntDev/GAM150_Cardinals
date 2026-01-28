@@ -1,12 +1,13 @@
 #include "../GameStates/Level1.hpp"
+#include "../header/ControlPanel.hpp"
 
 namespace {
 	Font digipenFont;
 	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f };
 	bool playerIsJump{ false };
+	//ControlPanel controlPanel;
 	Player mainPlayer;
 	Texture playerTexture{};
-
 	AEGfxVertexList* squareMesh;
 }
 
@@ -14,12 +15,12 @@ void Level1_Load() {
 	digipenFont.Load_Font(Fonts::Alt, 72.f);
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Change_Text_Color(Colors::Black);
-
 	PRINT("Load: %s", "Level 1\n");
 }
 
 void Level1_Initialize()
 {
+	//controlPanel.ControlPanel_Initialize();
 	squareMesh = RectMeshCenter();
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f,squareMesh, 0.f, 150.f);
 	playerTexture.Load_Image(Images::Player);
@@ -38,7 +39,7 @@ void Level1_Update() {
 	AEGfxSetBackgroundColor(0.95f, 0.65f, 0.77f);
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
-
+	//controlPanel.ControlPanel_Update();
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
 	mainPlayer.PlayerMovement(dt);
@@ -57,7 +58,6 @@ void Level1_Free() {
 
 	digipenFont.Free_Font();
 	AEGfxMeshFree(squareMesh);
-
 	PRINT("Free: %s", "Level 1\n");
 }
 
