@@ -16,6 +16,7 @@
 #include <AEEngine.h>
 #include <iostream>
 #include "../header/TextureManager.hpp"
+#include "../header/Physics.hpp"
 
 struct GameObjectIDAssigner {
 	u64 currIdCount{};
@@ -37,6 +38,7 @@ protected:
 	bool isChild;
 	AEGfxVertexList* mesh;
 	Texture* tex;
+	Collider collider;
 
 //Functions
 private:
@@ -50,6 +52,8 @@ public:
 	GameObject();
 	GameObject(AEGfxVertexList* mesh);
 	GameObject(AEGfxVertexList* mesh, AEVec2 translate, f32 rotate, AEVec2 scale);
+
+	Collider GetCollider() const;
 
 	AEVec2 GetPosition() const;
 	f32 GetRotatation() const;

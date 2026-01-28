@@ -37,7 +37,6 @@ private:
 	f32 p_rightMax{ 0.f };
 	AEVec2 p_movementVector{ 0.f,0.f };
 	AEVec2 p_velocityVector{ 0.f,0.f };
-	Collider playerCollider;
 public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
@@ -52,7 +51,6 @@ public:
 
 	void InitializePlayer(f32 health, f32 moveSpeed, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
-	Collider GetPlayerCollider() const;
 	f32 GetPlayerHealth() const;
 	f32 GetPlayerSpeed() const;
 	f32 GetPlayerJumpForce() const;

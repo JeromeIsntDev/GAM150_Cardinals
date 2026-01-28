@@ -64,6 +64,10 @@ GameObject::GameObject(AEGfxVertexList* mesh, AEVec2 translate, f32 rotate, AEVe
 	ConcatTransform();
 }
 
+Collider GameObject::GetCollider() const {
+	return collider;
+}
+
 AEVec2 GameObject::GetPosition() const {
 	return globalPosition;
 }
@@ -108,6 +112,7 @@ void GameObject::UpdatePosition(AEVec2 pos)
 	AEMtx33Trans(&mtx_translation, pos.x, pos.y);
 	localPosition = isChild ? /*replace this with the local*/ pos : pos;
 	ConcatTransform();
+	collider.UpdateCollider(globalPosition,GetScale().x,GetScale().y);
 }
 
 void GameObject::UpdateRotation(f32 rot)
@@ -124,6 +129,7 @@ void GameObject::UpdateScale(AEVec2 scale)
 	AEMtx33Scale(&mtx_scale, scale.x, scale.y);
 	localScale = isChild ? /*replace this with the local*/ scale : scale;
 	ConcatTransform();
+	collider.UpdateCollider(globalPosition, globalScale.x, globalScale.y);
 }
 
 void GameObject::SetMesh(AEGfxVertexList* const objectmesh)

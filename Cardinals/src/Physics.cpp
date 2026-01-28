@@ -17,7 +17,7 @@ from GameObject class from GameObject
 
 
 
-void Collider::InitializeCollider(AEVec2 centrePoint, f32 xLength, f32 yLength) {
+void Collider::UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLength) {
 	f32 halfWidth = xLength * 0.5f;
 	f32 halfHeight = yLength * 0.5f;
 	//minPoint
