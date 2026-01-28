@@ -16,6 +16,8 @@
 
 #include <AEEngine.h>
 #include <vector>
+#include <functional>
+
 #include "../header/GameObject.hpp"
 #include "../header/InputHandler.hpp"
 
@@ -42,13 +44,14 @@ public:
 	// element->setactive(false) type shit bro
 	virtual void SetActive(bool active) { isActive = active; } // Add virtual!
 
+	// doesnt work
 	void SetInteractable(bool interactable) 
 	{ 
 		isInteractable = interactable;
-		if (!isInteractable)
-		{
-			AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.f); // gay out the button lalala
-		}
+		//if (!isInteractable)
+		//{
+		//	AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.f); // gay out the button lalala
+		//}
 	}
 
 	void AddChild(UIElement* child) // for kiddos, mostly for popup to attach
@@ -82,16 +85,15 @@ public:
 	void Add(UIElement* element); // just adds it so it Exists
 	void Update(float dt); // loops thru all elements and calls their updaate
 	void Draw() const; 
+
+	void Freeze();
 	void HandleClick();
-	void Disable();
 	void Exit(); // for the VECTORS
 };
 
 ///
 /// elements heeere
 /// 
-
-#include <functional> // im ngl idk much abt this i desperately just needed to debug
 
 class Button : public UIElement
 {
@@ -118,8 +120,6 @@ class PopUp : public UIElement
 {
 public:
 	using UIElement::UIElement;
-
-	//PopUp() = default;
 
 	// overrides setactive for the kiddos
 	void SetActive(bool active) override

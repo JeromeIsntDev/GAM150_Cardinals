@@ -35,7 +35,7 @@ public:
 	InputHandler(const InputHandler&) = delete; // just makes sure theres only ONE manager
 	void operator=(const InputHandler&) = delete; // assignment operator, literally tells you auto input = instance is nuh uh
 
-	// PSA!! if u wanna access the UImanager do:
+	// PSA!! if u wanna access the handler do:
 	// auto& myInput = InputHandler::GetInstance();
 	// okayyy? :3
 

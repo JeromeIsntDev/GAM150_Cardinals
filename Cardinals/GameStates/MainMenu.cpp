@@ -132,18 +132,19 @@ void MainMenu_Initialize()
 		});
 
 	yesBtn->SetOnClick([]() {
-		PRINT("fuck you");
+		PRINT("I WORK");
 		});
 
 	noBtn->SetOnClick([]() {
-		PRINT("ni ma");
+		PRINT("ME TOO!!!!");
 		});
 
-	// so we can control all buttons with a menuUI hehehehe
+	// vec with all menu UI elements :p
 	menuUI.Add(startBtn.get());
 	menuUI.Add(exitBtn.get());
 	menuUI.Add(creditsBtn.get());
 
+	// vec with all popup UI elements :3
 	popUpUI.Add(quitPopUp.get());
 	popUpUI.Add(yesBtn.get());
 	popUpUI.Add(noBtn.get());
@@ -194,8 +195,6 @@ void MainMenu_Update() {
 
 	if (isLogoDrawn) {
 
-		//menuUI.Update(0.f); // for handling button clicks
-
 		// toggle
 		quitPopUp->ToggleActive(AEVK_6);
 
@@ -203,8 +202,7 @@ void MainMenu_Update() {
 			popUpUI.Update(0.f); 
 		}
 		else {
-			// freezes menuUI but i'll update this in the future to freeze the whole game
-			menuUI.Update(0.f);
+			menuUI.Update(0.f); // freezes menuUI but i'll update this in the future to freeze the whole game
 		}
 
 		AEInputGetCursorPosition(&mouseX, &mouseY);
@@ -219,19 +217,23 @@ void MainMenu_Draw() {
 		digipenFont.Draw_Text(AEVec2{ 0, -330.f }, 1.f, logo_transparency);
 		return;
 	}
-	//else {
-	//	startTexture.Set_Image(0, 0);
-	//	exitTexture.Set_Image(0, 0);
-	//	creditsTexture.Set_Image(0, 0);
-	//	menuBGTexture.Set_Image(0, 0);
-	//}
+
+	// BG DIMMING
+	// reuse this for future popups :3 because i cant add a draw to a bool function (duh) and i dont wannaaaa
+
+	if (quitPopUp->IsActive()) {
+		AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.0f); // 50%
+	}
+	else {
+		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f); // 100%
+	}
 
 	menuBG.Draw();
-
-	menuUI.Draw();
-	popUpUI.Draw();
-
 	cardinalsFont.Draw_Text(0, 200.f);
+	menuUI.Draw();
+
+	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f); // popup 100%
+	popUpUI.Draw();
 }
 
 void MainMenu_Free() {

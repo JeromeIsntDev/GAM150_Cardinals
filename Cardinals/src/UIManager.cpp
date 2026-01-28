@@ -42,7 +42,7 @@ void UIManager::Draw() const
 	}
 }
 
-void UIManager::Disable()
+void UIManager::Freeze()
 {
 
 }
@@ -113,6 +113,7 @@ bool UIElement::ToggleActive(u8 key)
         bool newState = !this->IsActive();
         this->SetActive(newState);
 
+        // sets the kids too
         for (auto child : children) {
             child->SetActive(newState);
             child->SetInteractable(newState);
@@ -122,5 +123,4 @@ bool UIElement::ToggleActive(u8 key)
     }
 
     return this->IsActive();
-
 }
