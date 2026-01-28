@@ -18,6 +18,7 @@ from GameObject class from GameObject
 #define PLAYER_MANAGER
 
 #include "../header/GameObject.hpp"
+#include "../header/Physics.hpp"
 
 class Player : public GameObject {
 	//Player() = delete;

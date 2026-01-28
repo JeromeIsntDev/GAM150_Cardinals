@@ -142,6 +142,10 @@ void Player::SetPlayerScore(f32 scoreAdded) {
 	p_score += scoreAdded;
 }
 
+Collider Player::GetPlayerCollider() const {
+	return playerCollider;
+}
+
 f32 Player::GetPlayerHealth() const{
 	return p_playerHealth;
 }
