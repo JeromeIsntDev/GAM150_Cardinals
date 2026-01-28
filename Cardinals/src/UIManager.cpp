@@ -23,23 +23,28 @@ void UIManager::Add(UIElement* element)
 
 void UIManager::Update(float dt) 
 {
-    //for (UIElement* element : uiElements)
-    //{
-    //    if (!element->IsActive()) {
-    //        element->Update(dt);
-    //    }
-    //}
+    for (UIElement* element : uiElements)
+    {
+        if (element->IsActive()) {
+            element->Update(dt); // update for the hover
+        }
+    }
 
     HandleClick();
 }
 
 void UIManager::Draw() const
 {
-	for (UIElement* e : uiElements)
-	{
-		if (e->IsActive())
-			e->Draw();
-	}
+    for (UIElement* e : uiElements) 
+    {
+        if (e->IsActive())
+        {
+            AEGfxSetColorToMultiply(e->GetTint().r, e->GetTint().g, e->GetTint().b, e->GetTint().a); // APPLY THE TINT RIGHT BEFORE DRAWING RAHHHH
+            e->Draw();
+
+            AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f); // reset
+        }
+    }
 }
 
 void UIManager::Freeze()
@@ -98,8 +103,7 @@ bool UIElement::IsPointInside(float x, float y) const {
 	AEVec2 currentScale = GetScale();
 	AEVec2 currentPos = GetPosition();
 
-	float halfW = currentScale.x / 2.0f;
-	float halfH = currentScale.y / 2.0f;
+	float halfW = currentScale.x / 2.0f, halfH = currentScale.y / 2.0f;
 
 	// wowww calculations zzzzz
 	return (x >= currentPos.x - halfW && x <= currentPos.x + halfW &&
@@ -123,4 +127,29 @@ bool UIElement::ToggleActive(u8 key)
     }
 
     return this->IsActive();
+}
+
+void Button::Update(float dt) 
+{
+    // for button hover
+
+    if (!isActive || !isInteractable) return;
+
+    auto& input = InputHandler::GetInstance();
+    float rawX, rawY;
+    input.getMousePos(rawX, rawY);
+    //std::cout << "bruh " << rawX << " " << rawY << std::endl;
+
+    // conv into game coordinates
+    float windowWidth = (float)AEGfxGetWindowWidth(), windowHeight = (float)AEGfxGetWindowHeight();
+    float translatedX = rawX - (windowWidth / 2.0f), translatedY = (windowHeight / 2.0f) - rawY;
+
+    if (IsPointInside(translatedX, translatedY)) 
+    {
+        tint = { 0.8f, 0.8f, 1.0f, 1.0f };
+    }
+    else 
+    {
+        tint = { 1.0f, 1.0f, 1.0f, 1.0f };
+    }
 }

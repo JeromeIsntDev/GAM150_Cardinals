@@ -27,31 +27,27 @@ class UIElement : public GameObject
 protected:
 	bool isActive = false;
 	bool isInteractable = false;
-	//Color tint = Colors::White; // full brightness
+	Color tint = Colors::White; // full brightness
 	std::vector<UIElement*> children;
 
 public:
 
 	// inheriting gameobject constructors
 	using GameObject::GameObject;
-
 	virtual ~UIElement() = default; // destructor
 
-	// grabbing shit from gameobj waoowww
 	UIElement(AEGfxVertexList* mesh, AEVec2 pos, float rot, AEVec2 scale) : GameObject(mesh, pos, rot, scale) {}
 
-	// treat these like unity hehe
-	// element->setactive(false) type shit bro
-	virtual void SetActive(bool active) { isActive = active; } // Add virtual!
+	virtual void SetActive(bool active) { isActive = active; }
 
 	// doesnt work
 	void SetInteractable(bool interactable) 
 	{ 
 		isInteractable = interactable;
-		//if (!isInteractable)
-		//{
-		//	AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.f); // gay out the button lalala
-		//}
+		if (!isInteractable)
+		{
+			tint = { 0.f, 0.f, 0.f, 1.0f };
+		}
 	}
 
 	void AddChild(UIElement* child) // for kiddos, mostly for popup to attach
@@ -64,6 +60,7 @@ public:
 	bool IsInteractable() const { return isInteractable; }
 	bool IsPointInside(float x, float y) const;
 	bool ToggleActive(u8 key);
+	Color GetTint() const { return tint; }
 
 	virtual void Update(float dt) {}
 	virtual void OnClick() {}
@@ -97,12 +94,15 @@ public:
 
 class Button : public UIElement
 {
-public:
+private:
+	std::function<void()> onClick;
 
+public:
 	using UIElement::UIElement;
 	Button() = default;
 
 	void SetOnClick(std::function<void()> func) { onClick = func; }
+	void Update(float dt) override;
 
 	void OnClick() override
 	{
@@ -111,9 +111,6 @@ public:
 
 		if (onClick) onClick();
 	}
-
-private:
-	std::function<void()> onClick;
 };
 
 class PopUp : public UIElement

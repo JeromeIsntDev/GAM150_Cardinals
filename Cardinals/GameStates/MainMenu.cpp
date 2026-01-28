@@ -77,14 +77,12 @@ void MainMenu_Initialize()
 	go_digipenLogo.SetMesh(squareMesh);
 	go_digipenLogo.SetID(assigner.GetID());
 
-	menuBG.SetMesh(squareMesh);
-	menuBG.SetTexture(&menuBGTexture);
-	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f });
-	menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() });
-	menuBG.UpdateRotation(0.f);
+	menuBG.SetMesh(squareMesh); menuBG.SetTexture(&menuBGTexture);
+	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f }); menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() }); menuBG.UpdateRotation(0.f);
 	menuBG.SetID(assigner.GetID());
 
-	// creates button w relevant stuff stolen from gameobej
+	// MENU UI
+
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	startBtn->SetTexture(&startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
 	startBtn->SetID(assigner.GetID());
@@ -97,7 +95,7 @@ void MainMenu_Initialize()
 	creditsBtn->SetTexture(&creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
 	creditsBtn->SetID(assigner.GetID());
 
-	//testing
+	// POPUP UI
 
 	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ -100.f, -50.f }, 0.f, AEVec2{ yesTexture.Get_Image_Width(), yesTexture.Get_Image_Height() });
 	yesBtn->SetTexture(&yesTexture); yesBtn->SetActive(true); yesBtn->SetInteractable(true);
@@ -110,8 +108,6 @@ void MainMenu_Initialize()
 	quitPopUp = std::make_unique<PopUp>(squareMesh, AEVec2{ 0,0 }, 0.f, AEVec2{ 600.f, 400.f });
 	quitPopUp->SetTexture(&popUpTexture);
 	quitPopUp->SetID(assigner.GetID());
-
-	quitPopUp->SetActive(false);
 
 	quitPopUp->AddChild(yesBtn.get());
 	quitPopUp->AddChild(noBtn.get());
