@@ -1,11 +1,10 @@
 #include "../GameStates/Level3.hpp"
-#include "../header/TextureManager.hpp"
 
 namespace {
 	Font digipenFont;
 }
 
-void Level3State::LoadState() {
+void Level3_Load() {
 	digipenFont.Load_Font(Fonts::Alt, 72.f);
 	digipenFont.Input_Text("Level 3");
 	digipenFont.Change_Text_Color(Colors::Black);
@@ -13,12 +12,12 @@ void Level3State::LoadState() {
 	PRINT("Load: %s", "Level 3\n");
 }
 
-void Level3State::InitializeState()
+void Level3_Initialize()
 {
 	PRINT("Initialize: %s", "Level 3\n");
 }
 
-void Level3State::UpdateState() {
+void Level3_Update() {
 	//PRINT("Update: %s", "Main Menu\n");
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -27,18 +26,18 @@ void Level3State::UpdateState() {
 	AEGfxSetTransparency(1.f);
 }
 
-void Level3State::StateDraw() {
+void Level3_Draw() {
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
 
 	PRINT("Draw: %s", "Level 3\n");
 }
 
-void Level3State::FreeState() {
+void Level3_Free() {
 	digipenFont.Free_Font();
 
 	PRINT("Free: %s", "Level 3\n");
 }
 
-void Level3State::UnloadState() {
+void Level3_Unload() {
 	PRINT("Unload: %s", "Level 3\n");
 }

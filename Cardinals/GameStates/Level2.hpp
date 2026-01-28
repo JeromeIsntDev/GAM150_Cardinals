@@ -3,19 +3,16 @@
 #define _Level2_Header_
 
 #include <iostream>
+
 #include <AEEngine.h>
-#include "../header/GameState.hpp"
 
-class Level2State : public GameState {
-public:
+#include "../header/TextureManager.hpp"
 
-	void LoadState() override;
-	void InitializeState() override;
-	void UpdateState() override;
-	void StateDraw() override;
-	void FreeState() override;
-	void UnloadState() override;
-
-};
+void Level2_Load();
+void Level2_Initialize();
+void Level2_Update();
+void Level2_Draw();
+void Level2_Free();
+void Level2_Unload();
 
 #endif // !_Level1_Header_

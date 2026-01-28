@@ -52,7 +52,7 @@ public:
 	bool IsInteractable() const { return isInteractable; }
 	bool IsPointInside(float x, float y) const;
 
-	virtual void Update(float dt) override {}
+	virtual void Update(float dt) {}
 	virtual void OnClick() {}
 };
 
@@ -97,10 +97,7 @@ public:
 		if (!isActive || !isInteractable)
 			return;
 
-		if (onClick) 
-		{
-			onClick();
-		}
+		if (onClick) onClick();
 	}
 
 private:

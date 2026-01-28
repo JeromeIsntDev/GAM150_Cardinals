@@ -40,9 +40,16 @@ f32 Texture::Get_Image_Height() const
 	return _height;
 }
 
-void Texture::Free_Image()
+void Texture::Unload_Image()
 {
+	PRINT("Unload Image\n");
+	if (_image == nullptr) {
+		return;
+	}	
+	
 	AEGfxTextureUnload(_image);
+
+	_image = nullptr;
 }
 
 AEGfxTexture* Texture::Get_Image() const
@@ -50,8 +57,11 @@ AEGfxTexture* Texture::Get_Image() const
 	return _image;
 }
 
+
+//Font
 Font::Font() 
-	:_font{ 0 }, _scale{ 1.f }, _color{ Colors::White }, _textArr{""} {
+	:_font{ 0 }, _fontSize{}, _scale {1.f},
+	_color{ Colors::White }, _textArr{ "" } {
 
 }
 

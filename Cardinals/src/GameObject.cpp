@@ -126,12 +126,12 @@ void GameObject::UpdateScale(AEVec2 scale)
 	ConcatTransform();
 }
 
-void GameObject::SetMesh(AEGfxVertexList* objectmesh)
+void GameObject::SetMesh(AEGfxVertexList* const objectmesh)
 {
 	mesh = objectmesh;
 }
 
-void GameObject::SetTexture(const Texture texture)
+void GameObject::SetTexture(Texture* const texture)
 {
 	tex = texture;
 }
@@ -150,7 +150,7 @@ bool GameObject::HoverMesh(s32 mouseX, s32 mouseY) const
 
 void GameObject::Draw() const
 {
-	AEGfxTextureSet(tex.Get_Image(), 0.f, 0.f);
+	AEGfxTextureSet(tex->Get_Image(), 0.f, 0.f);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 
