@@ -17,7 +17,7 @@ namespace {
 
 	Font cardinalsFont;
 	Font digipenFont;
-	Texture startTexture{}, exitTexture{}, creditsTexture{};
+	Texture startTexture{}, exitTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{};
 	Texture menuBGTexture{};
 	
 	//Digipen logo transition
@@ -29,8 +29,9 @@ namespace {
 	AEGfxVertexList* squareMesh;
 
 	// UI stuff
-	UIManager menuUI;
-	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn;
+	UIManager menuUI, popUpUI;
+	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn, yesBtn, noBtn;
+	std::unique_ptr<PopUp> quitPopUp;
 
 	GameObjectIDAssigner assigner;
 	Audio& bgm = Audio::Instance();
@@ -54,6 +55,10 @@ void MainMenu_Load() {
 	startTexture.Load_Image(Images::StartBtn);
 	exitTexture.Load_Image(Images::ExitBtn);
 	creditsTexture.Load_Image(Images::CreditsBtn);
+
+	// testing
+	yesTexture.Load_Image(Images::StartBtn); noTexture.Load_Image(Images::ExitBtn);
+	popUpTexture.Load_Image(Images::DigipenLogo); 
 
 	//bgmGroup = AEAudioCreateGroup();
 	//backgroundMusic.Load_Audio(Audios::BGM);
@@ -92,6 +97,25 @@ void MainMenu_Initialize()
 	creditsBtn->SetTexture(&creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
 	creditsBtn->SetID(assigner.GetID());
 
+	//testing
+
+	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ -100.f, -50.f }, 0.f, AEVec2{ yesTexture.Get_Image_Width(), yesTexture.Get_Image_Height() });
+	yesBtn->SetTexture(&yesTexture); yesBtn->SetActive(true); yesBtn->SetInteractable(true);
+	yesBtn->SetID(assigner.GetID());
+
+	noBtn = std::make_unique<Button>(squareMesh, AEVec2{ -100.f, -250.f }, 0.f, AEVec2{ noTexture.Get_Image_Width(), noTexture.Get_Image_Height() });
+	noBtn->SetTexture(&noTexture); noBtn->SetActive(true); noBtn->SetInteractable(true);
+	noBtn->SetID(assigner.GetID());
+
+	quitPopUp = std::make_unique<PopUp>(squareMesh, AEVec2{ 0,0 }, 0.f, AEVec2{ 600.f, 400.f });
+	quitPopUp->SetTexture(&popUpTexture);
+	quitPopUp->SetID(assigner.GetID());
+
+	quitPopUp->SetActive(false);
+
+	quitPopUp->AddChild(yesBtn.get());
+	quitPopUp->AddChild(noBtn.get());
+
 	// use them like this ik its weird asf but like. i'll make it better soon
 	startBtn->SetOnClick([]() {
 		PRINT("Start Pressed");
@@ -107,10 +131,22 @@ void MainMenu_Initialize()
 		PRINT("Game Running = %d", gGameRunning);
 		});
 
+	yesBtn->SetOnClick([]() {
+		PRINT("fuck you");
+		});
+
+	noBtn->SetOnClick([]() {
+		PRINT("ni ma");
+		});
+
 	// so we can control all buttons with a menuUI hehehehe
 	menuUI.Add(startBtn.get());
 	menuUI.Add(exitBtn.get());
 	menuUI.Add(creditsBtn.get());
+
+	popUpUI.Add(quitPopUp.get());
+	popUpUI.Add(yesBtn.get());
+	popUpUI.Add(noBtn.get());
 
 	//Save to JSON
 	std::vector<GameObject> objs;
@@ -158,7 +194,18 @@ void MainMenu_Update() {
 
 	if (isLogoDrawn) {
 
-		menuUI.Update(0.f);
+		//menuUI.Update(0.f); // for handling button clicks
+
+		// toggle
+		quitPopUp->ToggleActive(AEVK_6);
+
+		if (quitPopUp->IsActive()) {
+			popUpUI.Update(0.f); 
+		}
+		else {
+			// freezes menuUI but i'll update this in the future to freeze the whole game
+			menuUI.Update(0.f);
+		}
 
 		AEInputGetCursorPosition(&mouseX, &mouseY);
 	}
@@ -172,18 +219,19 @@ void MainMenu_Draw() {
 		digipenFont.Draw_Text(AEVec2{ 0, -330.f }, 1.f, logo_transparency);
 		return;
 	}
-	else {
-		startTexture.Set_Image(0, 0);
-		exitTexture.Set_Image(0, 0);
-		creditsTexture.Set_Image(0, 0);
-		menuBGTexture.Set_Image(0, 0);
-	}
+	//else {
+	//	startTexture.Set_Image(0, 0);
+	//	exitTexture.Set_Image(0, 0);
+	//	creditsTexture.Set_Image(0, 0);
+	//	menuBGTexture.Set_Image(0, 0);
+	//}
 
 	menuBG.Draw();
+
+	menuUI.Draw();
+	popUpUI.Draw();
+
 	cardinalsFont.Draw_Text(0, 200.f);
-	startBtn->Draw();
-	exitBtn->Draw();
-	creditsBtn->Draw();
 }
 
 void MainMenu_Free() {
@@ -191,12 +239,6 @@ void MainMenu_Free() {
 
 	cardinalsFont.Free_Font();
 	digipenFont.Free_Font();
-	tex_digipenLogo.Unload_Image();
-
-	menuBGTexture.Unload_Image();
-	startTexture.Unload_Image();
-	exitTexture.Unload_Image();
-	creditsTexture.Unload_Image();
 
 	bgm.Stop_Audio();
 	bgm.Free_Audio_System();
@@ -204,6 +246,7 @@ void MainMenu_Free() {
 	//backgroundMusic.Free_Audio_Group();
 
 	AEGfxMeshFree(squareMesh);
+	popUpUI.Exit();
 	menuUI.Exit();
 }
 

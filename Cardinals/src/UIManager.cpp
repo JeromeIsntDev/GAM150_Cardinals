@@ -23,13 +23,12 @@ void UIManager::Add(UIElement* element)
 
 void UIManager::Update(float dt) 
 {
-    // big fat update
-    for (UIElement* element : uiElements)
-    {
-        if (!element->IsActive()) {
-            //element->Update(dt);
-        }
-    }
+    //for (UIElement* element : uiElements)
+    //{
+    //    if (!element->IsActive()) {
+    //        element->Update(dt);
+    //    }
+    //}
 
     HandleClick();
 }
@@ -41,6 +40,11 @@ void UIManager::Draw() const
 		if (e->IsActive())
 			e->Draw();
 	}
+}
+
+void UIManager::Disable()
+{
+
 }
 
 // omg it handles
@@ -85,6 +89,10 @@ void UIManager::Exit()
     uiElements.clear(); // dangl;ing pointers fark you
 }
 
+///
+/// element-related stuff heeere
+/// 
+
 bool UIElement::IsPointInside(float x, float y) const {
 	// calling from the parent class woawow
 	AEVec2 currentScale = GetScale();
@@ -96,4 +104,23 @@ bool UIElement::IsPointInside(float x, float y) const {
 	// wowww calculations zzzzz
 	return (x >= currentPos.x - halfW && x <= currentPos.x + halfW &&
 		y >= currentPos.y - halfH && y <= currentPos.y + halfH);
+}
+
+bool UIElement::ToggleActive(u8 key) 
+{
+    if (AEInputCheckTriggered(key))
+    {
+        bool newState = !this->IsActive();
+        this->SetActive(newState);
+
+        for (auto child : children) {
+            child->SetActive(newState);
+            child->SetInteractable(newState);
+        }
+
+        return newState;
+    }
+
+    return this->IsActive();
+
 }
