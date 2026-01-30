@@ -19,7 +19,7 @@ namespace {
 	Font digipenFont;
 	Texture startTexture{}, exitTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{};
 	Texture menuBGTexture{};
-	
+
 	//Digipen logo transition
 	Texture tex_digipenLogo{};
 	GameObject go_digipenLogo, menuBG;
@@ -57,8 +57,8 @@ void MainMenu_Load() {
 	creditsTexture.Load_Image(Images::CreditsBtn);
 
 	// testing
-	yesTexture.Load_Image(Images::StartBtn); noTexture.Load_Image(Images::ExitBtn);
-	popUpTexture.Load_Image(Images::DigipenLogo); 
+	yesTexture.Load_Image(Images::YesBtn); noTexture.Load_Image(Images::NoBtn);
+	popUpTexture.Load_Image(Images::PopUp);
 
 	//bgmGroup = AEAudioCreateGroup();
 	//backgroundMusic.Load_Audio(Audios::BGM);
@@ -69,7 +69,7 @@ void MainMenu_Initialize()
 	bgm.Init_Audio_System();
 	bgm.Load_Audio("BGM", Audios::BGM);
 	bgm.Play_Audio("BGM", AudioType::MUSIC);
-	
+
 	//backgroundMusic.SetAudioGroup(bgmGroup);
 	//backgroundMusic.Play_Audio();
 
@@ -81,8 +81,7 @@ void MainMenu_Initialize()
 	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f }); menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() }); menuBG.UpdateRotation(0.f);
 	menuBG.SetID(assigner.GetID());
 
-	// MENU UI
-
+	// creates button w relevant stuff stolen from gameobej
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	startBtn->SetTexture(&startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
 	startBtn->SetID(assigner.GetID());
@@ -95,7 +94,7 @@ void MainMenu_Initialize()
 	creditsBtn->SetTexture(&creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
 	creditsBtn->SetID(assigner.GetID());
 
-	// POPUP UI
+	// 
 
 	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ -100.f, -50.f }, 0.f, AEVec2{ yesTexture.Get_Image_Width(), yesTexture.Get_Image_Height() });
 	yesBtn->SetTexture(&yesTexture); yesBtn->SetActive(true); yesBtn->SetInteractable(true);
@@ -116,7 +115,7 @@ void MainMenu_Initialize()
 	startBtn->SetOnClick([]() {
 		PRINT("Start Pressed");
 		});
-	
+
 	creditsBtn->SetOnClick([]() {
 		PRINT("Credits Pressed");
 		});
@@ -135,12 +134,11 @@ void MainMenu_Initialize()
 		PRINT("ME TOO!!!!");
 		});
 
-	// vec with all menu UI elements :p
+	// so we can control all buttons with a menuUI hehehehe
 	menuUI.Add(startBtn.get());
 	menuUI.Add(exitBtn.get());
 	menuUI.Add(creditsBtn.get());
 
-	// vec with all popup UI elements :3
 	popUpUI.Add(quitPopUp.get());
 	popUpUI.Add(yesBtn.get());
 	popUpUI.Add(noBtn.get());
@@ -175,7 +173,7 @@ void MainMenu_Update() {
 	Color bg = Colors::PastelPurple;
 	AEGfxSetBackgroundColor(bg.r, bg.g, bg.b);
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-	
+
 	AEGfxSetTransparency(logo_transparency);
 
 	if (AEFrameRateControllerGetFrameCount() < 100) {
@@ -191,18 +189,17 @@ void MainMenu_Update() {
 
 	if (isLogoDrawn) {
 
-		// toggle
 		quitPopUp->ToggleActive(AEVK_6);
 
 		if (quitPopUp->IsActive()) {
-			popUpUI.Update(0.f); 
+			popUpUI.Update(0.f);
 		}
 		else {
 			menuUI.Update(0.f); // freezes menuUI but i'll update this in the future to freeze the whole game
 		}
 
 		AEInputGetCursorPosition(&mouseX, &mouseY);
-	}
+	}	
 }
 
 void MainMenu_Draw() {
@@ -213,9 +210,6 @@ void MainMenu_Draw() {
 		digipenFont.Draw_Text(AEVec2{ 0, -330.f }, 1.f, logo_transparency);
 		return;
 	}
-
-	// BG DIMMING
-	// reuse this for future popups :3 because i cant add a draw to a bool function (duh) and i dont wannaaaa
 
 	if (quitPopUp->IsActive()) {
 		AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.0f); // 50%
@@ -256,4 +250,6 @@ void MainMenu_Unload() {
 	startTexture.Unload_Image();
 	exitTexture.Unload_Image();
 	creditsTexture.Unload_Image();
+
+	yesTexture.Unload_Image(); noTexture.Unload_Image(); popUpTexture.Unload_Image();
 }

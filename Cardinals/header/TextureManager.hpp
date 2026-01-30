@@ -53,6 +53,10 @@ namespace Images
     constexpr ImageFile ExitBtn{ "../../Assets/Exit_Button.png", 412.f, 120.f };
     constexpr ImageFile CreditsBtn{ "../../Assets/Credits_Button.png", 412.f, 120.f };
 
+    constexpr ImageFile YesBtn{ "../../Assets/Yes_Button.png", 412.f, 120.f };
+    constexpr ImageFile NoBtn{ "../../Assets/No_Button.png", 412.f, 120.f };
+    constexpr ImageFile PopUp{ "../../Assets/PopUp.png", 412.f, 120.f };
+
     constexpr ImageFile Background{ "../../Assets/MenuBG.png", 1600.f, 900.f };
 }
 
