@@ -58,15 +58,14 @@ void Player::PlayerInputHandle(f32 dt) {
 	f32 moveSpeed{ 300.f };
 	bool isMoving{ false };
 	bool isSprint{ false };
-
-	if (AEInputCheckCurr(AEVK_D)) {
-		p_movementVector.x = 1.f * p_moveSpeed * dt;
-		p_initialPos.x += p_movementVector.x;
+	if (AEInputCheckCurr(AEVK_D) && right) {
+		p_velocityVector.x = 1.f * p_moveSpeed * dt;
+		p_initialPos.x += p_velocityVector.x;
 		isMoving = true;
 	}
-	if (AEInputCheckCurr(AEVK_A)) {
-		p_movementVector.x = -1.f * p_moveSpeed * dt;
-		p_initialPos.x += p_movementVector.x;
+	if (AEInputCheckCurr(AEVK_A) && left) {
+		p_velocityVector.x = -1.f * p_moveSpeed * dt;
+		p_initialPos.x += p_velocityVector.x;
 		isMoving = true;
 	}
 	if (AEInputCheckCurr(AEVK_LSHIFT) && isMoving) {
@@ -107,7 +106,7 @@ void Player::PlayerInputHandle(f32 dt) {
 
 //Input handle for player movement logic
 void Player::PlayerMovement(f32 dt) {
-	std::cout << "dt: " << dt << std::endl;
+	//std::cout << "dt: " << dt << std::endl;
 	PlayerInputHandle(dt);
 
 	jumpBuffer = max(0, jumpBuffer - dt);

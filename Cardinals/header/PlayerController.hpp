@@ -40,6 +40,8 @@ public:
 
 	AEVec2 p_velocityVector{ 0.f,0.f };
 	bool p_isJumping{ true };
+	bool left{ true };
+	bool right{ true };
 	//public Variable for Player (Check if error)
 	bool p_isGrounded{ false };
 	f32 maxJumpBuffer{ 0.12f };

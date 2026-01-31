@@ -67,14 +67,14 @@ void Level1_Initialize()
 	platform.UpdateRotation(0.f);
 	platform.UpdatePosition(AEVec2{ 0.f, -200.f });
 
-	/*wall.SetMesh(squareMesh);
+	wall.SetMesh(squareMesh);
 	wall.SetTexture(&placeholderTexture);
 	wall.SetID(assigner.GetID());
 	wall.UpdateScale(AEVec2{ 100.f,500.f });
 	wall.UpdateRotation(0.f);
-	wall.UpdatePosition(AEVec2{ 0.f, -200.f });
+	wall.UpdatePosition(AEVec2{ 500.f, -200.f });
 
-	objects.push_back(&wall);*/
+	objects.push_back(&wall);
 	objects.push_back(&platform);
 	objects.push_back(&mainPlayer);
 }
@@ -124,6 +124,8 @@ void Level1_Update() {
 
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
+	mainPlayer.left = true;
+	mainPlayer.right = true;
 
 	for (GameObject* obj : objects) {
 		if (obj == &mainPlayer)
@@ -179,11 +181,20 @@ void Level1_Update() {
 			//temp side collision
 			AEVec2 tmpPos = mainPlayer.GetPosition();
 
-			if (mainPlayer.GetPosition().x > obj->GetPosition().x)
-				tmpPos.x += overlapX;
-			else
+			if (mainPlayer.GetCollider().p_maxPoint.x > obj->GetCollider().p_minPoint.x &&
+				mainPlayer.GetCollider().p_minPoint.x < obj->GetCollider().p_minPoint.x)
+			{
+				// Player hit object's LEFT side
 				tmpPos.x -= overlapX;
-
+				mainPlayer.right = false;
+			}
+			else
+			{
+				// Player hit object's RIGHT side
+				std::cout << "right hit" << std::endl;
+				tmpPos.x += overlapX;
+				mainPlayer.left = false;
+			}
 			mainPlayer.UpdatePosition(tmpPos);
 			mainPlayer.p_velocityVector.x = 0.f;
 		}
@@ -198,7 +209,7 @@ void Level1_Draw() {
 
 	platform.Draw();
 
-	/*wall.Draw();*/
+	wall.Draw();
 }
 
 void Level1_Free() {
