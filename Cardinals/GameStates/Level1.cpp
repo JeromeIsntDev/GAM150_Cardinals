@@ -54,7 +54,7 @@ void Level1_Initialize()
 	assigner.currIdCount = 0;
 
 	//Player Init
-	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f,squareMesh, 0.f, 150.f);
+	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f,squareMesh, AEGfxGetWinMinX() + 200.f, 150.f);
 	mainPlayer.SetTexture(&playerTexture);
 	mainPlayer.UpdateScale(AEVec2{ 100.f, 100.f });
 	mainPlayer.UpdateRotation(0.f);
@@ -63,9 +63,9 @@ void Level1_Initialize()
 	platform.SetMesh(squareMesh);
 	platform.SetTexture(&placeholderTexture);
 	platform.SetID(assigner.GetID());
-	platform.UpdateScale(AEVec2{ 500.f,100.f });
+	platform.UpdateScale(AEVec2{ 500.f,900.f });
 	platform.UpdateRotation(0.f);
-	platform.UpdatePosition(AEVec2{ 0.f, -200.f });
+	platform.UpdatePosition(AEVec2{ AEGfxGetWinMinX() + 200.f, AEGfxGetWinMinY()});
 
 	wall.SetMesh(squareMesh);
 	wall.SetTexture(&placeholderTexture);

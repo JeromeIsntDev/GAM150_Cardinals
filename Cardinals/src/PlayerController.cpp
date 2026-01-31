@@ -31,6 +31,7 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score,
 	UpdatePosition(p_initialPos);
 	p_velocityVector.y = zeroVal;
 	Player::mesh = mesh;
+	p_previousPos = p_initialPos;
 }
 
 //takes in the current player pos, deltaTime & movement vector to update the player pos
@@ -117,13 +118,10 @@ void Player::PlayerMovement(f32 dt) {
 		p_velocityVector.y += gravity * dt;
 		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
 	}
-
-	if (p_initialPos.y <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
-		std::cout << "grounded" << std::endl;
-		p_initialPos.y = GetPosition().y;
+	//if top of player goes past bottom of screen
+	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
+		p_initialPos = p_previousPos;
 		p_velocityVector.y = 0.f;
-		p_isJumping = false;
-		p_isGrounded = true;
 	}
 
 	UpdatePosition(p_initialPos);
