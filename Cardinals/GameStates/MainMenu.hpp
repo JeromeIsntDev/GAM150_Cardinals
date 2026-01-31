@@ -6,6 +6,7 @@
 #include <vector>
 #include <AEEngine.h>
 
+#include "GStateManager.hpp"
 #include "TextureManager.hpp"
 #include "MeshGenerator.hpp"
 #include "PlayerController.hpp"

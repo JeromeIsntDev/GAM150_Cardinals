@@ -124,6 +124,7 @@ void MainMenu_Initialize()
 	// use them like this ik its weird asf but like. i'll make it better soon
 	startBtn->SetOnClick([]() {
 		PRINT("Start Pressed");
+		UpdateGameManagerState(GameStateEnum::LevelMenu);
 		});
 
 	creditsBtn->SetOnClick([]() {
