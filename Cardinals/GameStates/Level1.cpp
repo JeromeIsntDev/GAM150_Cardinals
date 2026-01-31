@@ -17,6 +17,7 @@ namespace {
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
 	GameObject platform;
+	GameObject wall;
 	GameObjectIDAssigner assigner;
 
 	InputHandler& input = InputHandler::GetInstance();
@@ -62,10 +63,18 @@ void Level1_Initialize()
 	platform.SetMesh(squareMesh);
 	platform.SetTexture(&placeholderTexture);
 	platform.SetID(assigner.GetID());
-	platform.UpdateScale(AEVec2{ 100.f,100.f });
+	platform.UpdateScale(AEVec2{ 500.f,100.f });
 	platform.UpdateRotation(0.f);
 	platform.UpdatePosition(AEVec2{ 0.f, -200.f });
 
+	wall.SetMesh(squareMesh);
+	wall.SetTexture(&placeholderTexture);
+	wall.SetID(assigner.GetID());
+	wall.UpdateScale(AEVec2{ 100.f,500.f });
+	wall.UpdateRotation(0.f);
+	wall.UpdatePosition(AEVec2{ 0.f, -200.f });
+
+	objects.push_back(&wall);
 	objects.push_back(&platform);
 	objects.push_back(&mainPlayer);
 }
@@ -110,6 +119,7 @@ void Level1_Update() {
 		}
 	}
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
+	AEVec2 prevPos = mainPlayer.GetPosition();
 	mainPlayer.PlayerMovement(dt);
 
 	mainPlayer.p_isGrounded = false;
@@ -143,16 +153,28 @@ void Level1_Update() {
 		if (overlapY <= overlapX + 0.5f)
 		{
 			AEVec2 tmpPos = mainPlayer.GetPosition();
+			f32 playerHalfHeight =
+				(mainPlayer.GetCollider().p_maxPoint.y - mainPlayer.GetCollider().p_minPoint.y) * 0.5f;
+
+			f32 prevPlayerBottom = prevPos.y - playerHalfHeight;
+			f32 currPlayerBottom = mainPlayer.GetPosition().y - playerHalfHeight;
+
+			f32 platformTop = obj->GetCollider().p_maxPoint.y;
+
+			// "landed on top" ONLY if we were above last frame and now intersecting
+			bool landedOnTop =
+				(mainPlayer.p_velocityVector.y <= 0.f) &&
+				(prevPlayerBottom >= platformTop - 0.5f) &&
+				(currPlayerBottom <= platformTop + 0.5f);
 
 			// Player ABOVE the box ? stand on it
-			if (mainPlayer.GetPosition().y > obj->GetPosition().y)
-			{
-				tmpPos.y += overlapY;
+			if (landedOnTop){
+				tmpPos.y = platformTop + playerHalfHeight;
 				mainPlayer.UpdatePosition(tmpPos);
 
 				mainPlayer.p_velocityVector.y = 0.f;
-				mainPlayer.p_isGrounded = true;
 				mainPlayer.p_isJumping = false;
+				mainPlayer.p_isGrounded = true;
 			}
 			// Player BELOW the box ? hit head
 			else
@@ -166,7 +188,7 @@ void Level1_Update() {
 		}
 		else
 		{
-			// Optional: side collision resolution
+			//deal with side collisions
 			AEVec2 tmpPos = mainPlayer.GetPosition();
 
 			if (mainPlayer.GetPosition().x > obj->GetPosition().x)
@@ -187,6 +209,8 @@ void Level1_Draw() {
 	mainPlayer.Draw();
 
 	platform.Draw();
+
+	wall.Draw();
 }
 
 void Level1_Free() {

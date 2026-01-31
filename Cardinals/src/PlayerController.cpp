@@ -91,14 +91,14 @@ void Player::PlayerInputHandle(f32 dt) {
 			p_moveSpeed = moveSpeed;
 		}
 	}
-
-	if (AEInputCheckTriggered(AEVK_SPACE) && 
-	   (!GetPlayerJump())) {
+	std::cout << "jump bool: " << p_isJumping << std::endl;
+	if (AEInputCheckCurr(AEVK_SPACE) && !p_isJumping) {
 		//adjust jump logic here
 		p_velocityVector.y = 850.f;
 		jumpBuffer = maxJumpBuffer;
 		coyoteBuffer = maxCoyoteBuffer;
 		p_isJumping = true;
+		//PlayerJump(dt);
 		if (jumpBuffer > 0.f && (p_isGrounded || coyoteBuffer > 0.f)) {
 			PlayerJump(dt);
 		}
@@ -111,10 +111,6 @@ void Player::PlayerMovement(f32 dt) {
 
 	jumpBuffer = max(0, jumpBuffer - dt);
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
-
-	//Collision logic here
-
-	//do some velocityVector Y = 0 check here
 
 	//down force velocity (always going downwards)
 	if (!p_isGrounded) {

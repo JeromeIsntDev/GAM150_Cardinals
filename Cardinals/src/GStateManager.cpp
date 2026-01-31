@@ -11,6 +11,8 @@ void UpdateGameManagerState(GameStateEnum state)
 
 	if(Free_State) Free_State();
 	if(Unload_State) Unload_State();
+	
+	//player pointer
 
 	pt_CurrentGameState = state;
 	switch (state)
