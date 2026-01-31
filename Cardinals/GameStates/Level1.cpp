@@ -1,5 +1,5 @@
 #include "../GameStates/Level1.hpp"
-
+#include <algorithm>
 extern std::vector<Texture*> textures;
 extern std::vector<AEGfxVertexList**> meshes;
 extern std::vector<Text*> texts;
@@ -11,7 +11,6 @@ namespace {
 
 	//PLAYER VARIABLES
 	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f };
-	bool playerIsJump{ false };
 	Player mainPlayer;
 	Texture playerTexture{};
 
@@ -110,11 +109,75 @@ void Level1_Update() {
 			}
 		}
 	}
-
-
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
-
 	mainPlayer.PlayerMovement(dt);
+
+	mainPlayer.p_isGrounded = false;
+	mainPlayer.hasCollided = false;
+
+	for (GameObject* obj : objects) {
+		if (obj == &mainPlayer)
+			continue;
+
+		AEVec2 currentScale = obj->GetScale();
+		AEVec2 currentPos = obj->GetPosition();
+
+		if (!CollisionDetected(mainPlayer.GetCollider(), obj->GetCollider())) {
+			continue;
+		}
+
+		mainPlayer.hasCollided = true;
+
+		f32 overlapX =
+			(std::min)(mainPlayer.GetCollider().p_maxPoint.x, obj->GetCollider().p_maxPoint.x) -
+			(std::max)(mainPlayer.GetCollider().p_minPoint.x, obj->GetCollider().p_minPoint.x);
+
+		f32 overlapY =
+			(std::min)(mainPlayer.GetCollider().p_maxPoint.y, obj->GetCollider().p_maxPoint.y) -
+			(std::max)(mainPlayer.GetCollider().p_minPoint.y, obj->GetCollider().p_minPoint.y);
+
+		if (overlapX <= 0.f || overlapY <= 0.f)
+			continue;
+
+		// Resolve on smallest penetration axis
+		if (overlapY <= overlapX + 0.5f)
+		{
+			AEVec2 tmpPos = mainPlayer.GetPosition();
+
+			// Player ABOVE the box ? stand on it
+			if (mainPlayer.GetPosition().y > obj->GetPosition().y)
+			{
+				tmpPos.y += overlapY;
+				mainPlayer.UpdatePosition(tmpPos);
+
+				mainPlayer.p_velocityVector.y = 0.f;
+				mainPlayer.p_isGrounded = true;
+				mainPlayer.p_isJumping = false;
+			}
+			// Player BELOW the box ? hit head
+			else
+			{
+				tmpPos.y -= overlapY;
+				mainPlayer.UpdatePosition(tmpPos);
+
+				if (mainPlayer.p_velocityVector.y > 0.f)
+					mainPlayer.p_velocityVector.y = 0.f;
+			}
+		}
+		else
+		{
+			// Optional: side collision resolution
+			AEVec2 tmpPos = mainPlayer.GetPosition();
+
+			if (mainPlayer.GetPosition().x > obj->GetPosition().x)
+				tmpPos.x += overlapX;
+			else
+				tmpPos.x -= overlapX;
+
+			mainPlayer.UpdatePosition(tmpPos);
+			mainPlayer.p_velocityVector.x = 0.f;
+		}
+	}
 }
 
 void Level1_Draw() {

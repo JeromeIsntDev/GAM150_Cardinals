@@ -3,6 +3,7 @@
 #define _Level1_Header_
 
 #include <iostream>
+#define NOMINMAX
 #include <AEEngine.h>
 
 #include "MeshGenerator.hpp"
