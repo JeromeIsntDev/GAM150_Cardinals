@@ -15,11 +15,11 @@
 
 //GAME INCLUDES
 /*************************************************************************/
-#include "../header/GameObject.hpp"
-#include "../header/GameManager.hpp"
-#include "../header/GStateManager.hpp"
-#include "../header/PlayerController.hpp"
-#include "../header/UIManager.hpp"
+#include "GameObject.hpp"
+#include "GameManager.hpp"
+#include "GStateManager.hpp"
+#include "PlayerController.hpp"
+#include "UIManager.hpp"
 /*************************************************************************/
 
 //IMGUI
