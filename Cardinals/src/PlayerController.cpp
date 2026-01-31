@@ -107,6 +107,7 @@ void Player::PlayerInputHandle(f32 dt) {
 
 //Input handle for player movement logic
 void Player::PlayerMovement(f32 dt) {
+	std::cout << "dt: " << dt << std::endl;
 	PlayerInputHandle(dt);
 
 	jumpBuffer = max(0, jumpBuffer - dt);

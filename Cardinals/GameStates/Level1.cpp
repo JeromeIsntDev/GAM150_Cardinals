@@ -67,14 +67,14 @@ void Level1_Initialize()
 	platform.UpdateRotation(0.f);
 	platform.UpdatePosition(AEVec2{ 0.f, -200.f });
 
-	wall.SetMesh(squareMesh);
+	/*wall.SetMesh(squareMesh);
 	wall.SetTexture(&placeholderTexture);
 	wall.SetID(assigner.GetID());
 	wall.UpdateScale(AEVec2{ 100.f,500.f });
 	wall.UpdateRotation(0.f);
 	wall.UpdatePosition(AEVec2{ 0.f, -200.f });
 
-	objects.push_back(&wall);
+	objects.push_back(&wall);*/
 	objects.push_back(&platform);
 	objects.push_back(&mainPlayer);
 }
@@ -153,30 +153,18 @@ void Level1_Update() {
 		if (overlapY <= overlapX + 0.5f)
 		{
 			AEVec2 tmpPos = mainPlayer.GetPosition();
-			f32 playerHalfHeight =
-				(mainPlayer.GetCollider().p_maxPoint.y - mainPlayer.GetCollider().p_minPoint.y) * 0.5f;
 
-			f32 prevPlayerBottom = prevPos.y - playerHalfHeight;
-			f32 currPlayerBottom = mainPlayer.GetPosition().y - playerHalfHeight;
-
-			f32 platformTop = obj->GetCollider().p_maxPoint.y;
-
-			// "landed on top" ONLY if we were above last frame and now intersecting
-			bool landedOnTop =
-				(mainPlayer.p_velocityVector.y <= 0.f) &&
-				(prevPlayerBottom >= platformTop - 0.5f) &&
-				(currPlayerBottom <= platformTop + 0.5f);
-
-			// Player ABOVE the box ? stand on it
-			if (landedOnTop){
-				tmpPos.y = platformTop + playerHalfHeight;
+			//if player is above collidable
+			if (mainPlayer.GetPosition().y > obj->GetPosition().y)
+			{
+				tmpPos.y += overlapY;
 				mainPlayer.UpdatePosition(tmpPos);
 
 				mainPlayer.p_velocityVector.y = 0.f;
-				mainPlayer.p_isJumping = false;
 				mainPlayer.p_isGrounded = true;
+				mainPlayer.p_isJumping = false;
 			}
-			// Player BELOW the box ? hit head
+			//if player is under collidable
 			else
 			{
 				tmpPos.y -= overlapY;
@@ -188,7 +176,7 @@ void Level1_Update() {
 		}
 		else
 		{
-			//deal with side collisions
+			//temp side collision
 			AEVec2 tmpPos = mainPlayer.GetPosition();
 
 			if (mainPlayer.GetPosition().x > obj->GetPosition().x)
@@ -210,7 +198,7 @@ void Level1_Draw() {
 
 	platform.Draw();
 
-	wall.Draw();
+	/*wall.Draw();*/
 }
 
 void Level1_Free() {
