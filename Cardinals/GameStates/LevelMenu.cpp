@@ -48,6 +48,10 @@ void LevelMenu_Initialize()
 	lvl1Btn->SetTexture(&buttonTexture);
 	lvl1Btn->SetActive(true);
 	lvl1Btn->SetInteractable(true);
+	lvl1Btn->SetOnClick([]() {
+		PRINT("Level 1 Pressed\n");
+		UpdateGameManagerState(GameStateEnum::Level1);
+		});
 
 
 	lvl2Btn = std::make_unique<Button>(buttonMesh,
@@ -57,6 +61,10 @@ void LevelMenu_Initialize()
 	lvl2Btn->SetTexture(&buttonTexture);
 	lvl2Btn->SetActive(true);
 	lvl2Btn->SetInteractable(true);
+	lvl2Btn->SetOnClick([]() {
+		PRINT("Level 2 Pressed\n");
+		UpdateGameManagerState(GameStateEnum::Level2);
+		});
 
 
 	lvl3Btn = std::make_unique<Button>(buttonMesh,
@@ -66,6 +74,10 @@ void LevelMenu_Initialize()
 	lvl3Btn->SetTexture(&buttonTexture);
 	lvl3Btn->SetActive(true);
 	lvl3Btn->SetInteractable(true);
+	lvl3Btn->SetOnClick([]() {
+		PRINT("Level 3 Pressed\n");
+		UpdateGameManagerState(GameStateEnum::Level3);
+		});
 
 
 	lvl4Btn = std::make_unique<Button>(buttonMesh,
@@ -121,8 +133,21 @@ void LevelMenu_Update() {
 void LevelMenu_Draw() {
 	//PRINT("Draw: %s", "Level Menu\n");
 
-	textToUse.Draw_Text(0, 300.f);
+	textToUse.Input_Text("Select Your Level");
+	textToUse.Draw_Text(0.f, 300.f);
+
 	uiManager.Draw();
+
+	textToUse.Input_Text("1");
+	textToUse.Draw_Text(-300.f, 50.f);
+	textToUse.Input_Text("2");
+	textToUse.Draw_Text(0.f, 50.f);
+	textToUse.Input_Text("3");
+	textToUse.Draw_Text(300.f, 50.f);
+	textToUse.Input_Text("4");
+	textToUse.Draw_Text(-150.f, -200.f);
+	textToUse.Input_Text("5");
+	textToUse.Draw_Text(150.f, -200.f);
 }
 
 void LevelMenu_Free() {
