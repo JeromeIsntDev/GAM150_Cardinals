@@ -2,8 +2,8 @@
 
 
 namespace {
-	Font titleFont;
-	Font nameFont;
+	Text titleFont;
+	Text nameFont;
 	f32 startY;
 	f32 endY;
 }

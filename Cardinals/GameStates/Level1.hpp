@@ -3,13 +3,13 @@
 #define _Level1_Header_
 
 #include <iostream>
-
 #include <AEEngine.h>
 
 #include "../header/MeshGenerator.hpp"
 #include "../header/TextureManager.hpp"
 #include "../header/AudioManager.hpp"
 #include "../header/PlayerController.hpp"
+#include "../header/ControlPanel.hpp"
 
 void Level1_Load();
 void Level1_Initialize();

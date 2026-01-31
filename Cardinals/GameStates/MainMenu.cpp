@@ -9,14 +9,15 @@
 
 \par	Changes: None
 **************************************************************************/
-#include "../GameStates/MainMenu.hpp"
+#include "MainMenu.hpp"
 
 extern int gGameRunning;
+extern std::vector<Texture> textures;
 
 namespace {
 
-	Font cardinalsFont;
-	Font digipenFont;
+	Text cardinalsFont;
+	Text digipenFont;
 	Texture startTexture{}, exitTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{};
 	Texture menuBGTexture{};
 
@@ -35,8 +36,6 @@ namespace {
 
 	GameObjectIDAssigner assigner;
 	Audio& bgm = Audio::Instance();
-	//Audio backgroundMusic;
-	//AEAudioGroup bgmGroup;
 }
 
 
@@ -59,6 +58,17 @@ void MainMenu_Load() {
 	// testing
 	yesTexture.Load_Image(Images::YesBtn); noTexture.Load_Image(Images::NoBtn);
 	popUpTexture.Load_Image(Images::PopUp);
+
+	//Store Textures to Unload
+	if (!textures.empty()) textures.clear();
+	textures.push_back(tex_digipenLogo);
+	textures.push_back(menuBGTexture);
+	textures.push_back(startTexture);
+	textures.push_back(exitTexture);
+	textures.push_back(creditsTexture);
+	textures.push_back(yesTexture);
+	textures.push_back(noTexture);
+	textures.push_back(popUpTexture);
 
 	//bgmGroup = AEAudioCreateGroup();
 	//backgroundMusic.Load_Audio(Audios::BGM);
@@ -144,25 +154,26 @@ void MainMenu_Initialize()
 	popUpUI.Add(noBtn.get());
 
 	//Save to JSON
-	std::vector<GameObject> objs;
-	objs.push_back(go_digipenLogo);
-	objs.push_back(menuBG);
-	objs.push_back(*startBtn);
-	objs.push_back(*creditsBtn);
-	objs.push_back(*exitBtn);
-	SaveObjectsToJson(objs);
+	//std::vector<GameObject> objs;
+	//objs.push_back(go_digipenLogo);
+	//objs.push_back(menuBG);
+	//objs.push_back(*startBtn);
+	//objs.push_back(*creditsBtn);
+	//objs.push_back(*exitBtn);
+	//SaveObjectsToJson(objs);
 
-	//Read From JSON
-	objs = ReadJsonToObjects("../../Saves/GameObjects.json");
+	////Read From JSON
+	//objs = ReadJsonToObjects("../../Saves/GameObjects.json");
 
-	for (GameObject& go : objs) {
-		std::cout << go << "\n";
-	}
+	//for (GameObject& go : objs) {
+	//	std::cout << go << "\n";
+	//}
 
 	go_digipenLogo.SetTexture(&tex_digipenLogo);
 	go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
 	go_digipenLogo.UpdateScale(AEVec2{ tex_digipenLogo.Get_Image_Width(), tex_digipenLogo.Get_Image_Height() });
 	go_digipenLogo.UpdateRotation(0.f);
+
 
 	PRINT("Initialize: %s", "Main Menu\n");
 }
@@ -234,8 +245,6 @@ void MainMenu_Free() {
 
 	bgm.Stop_Audio();
 	bgm.Free_Audio_System();
-	//backgroundMusic.Free_Audio();
-	//backgroundMusic.Free_Audio_Group();
 
 	AEGfxMeshFree(squareMesh);
 	popUpUI.Exit();
@@ -245,11 +254,7 @@ void MainMenu_Free() {
 void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
 
-	tex_digipenLogo.Unload_Image();
-	menuBGTexture.Unload_Image();
-	startTexture.Unload_Image();
-	exitTexture.Unload_Image();
-	creditsTexture.Unload_Image();
-
-	yesTexture.Unload_Image(); noTexture.Unload_Image(); popUpTexture.Unload_Image();
+	for (Texture& t : textures) {
+		t.Unload_Image();
+	}
 }

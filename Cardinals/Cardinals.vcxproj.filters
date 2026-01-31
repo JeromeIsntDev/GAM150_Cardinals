@@ -5,10 +5,7 @@
     <ClCompile Include="src\MeshGenerator.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
-    <ClCompile Include="src\RenderLayer.cpp" />
-    <ClCompile Include="src\RenderLayerManager.cpp" />
     <ClCompile Include="src\PlayerController.cpp" />
-    <ClCompile Include="src\test.cpp" />
     <ClCompile Include="imGUI\imgui.cpp" />
     <ClCompile Include="imGUI\imgui_demo.cpp" />
     <ClCompile Include="imGUI\imgui_draw.cpp" />
@@ -36,8 +33,6 @@
     <ClInclude Include="header\MeshGenerator.hpp" />
     <ClInclude Include="header\Physics.hpp" />
     <ClInclude Include="header\GameObject.hpp" />
-    <ClInclude Include="header\RenderLayer.hpp" />
-    <ClInclude Include="header\RenderLayerManager.hpp" />
     <ClInclude Include="header\PlayerController.hpp" />
     <ClInclude Include="imGUI\imconfig.h" />
     <ClInclude Include="imGUI\imgui.h" />

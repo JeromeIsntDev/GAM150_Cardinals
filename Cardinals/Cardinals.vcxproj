@@ -45,13 +45,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)Extern\AlphaEngine\include;$(SolutionDir)Cardinals\imGUI\glfw\include;$(SolutionDir)Cardinals\include\rapidjson;$(SolutionDir)Extern\glad\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Extern\AlphaEngine\include;$(SolutionDir)Cardinals\imGUI\glfw\include;$(SolutionDir)Cardinals\include\rapidjson;$(SolutionDir)Extern\glad\include;$(SolutionDir)Cardinals\header;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Extern\AlphaEngine\lib;$(SolutionDir)Cardinals\imGUI\glfw\lib-vc2010-64;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\</OutDir>
     <IntDir>$(SolutionDir).tmp\$(Configuration)-$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)Extern\AlphaEngine\include;$(SolutionDir)Cardinals\imGUI\glfw\include;$(SolutionDir)Cardinals\include\rapidjson;$(SolutionDir)Extern\glad\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Extern\AlphaEngine\include;$(SolutionDir)Cardinals\imGUI\glfw\include;$(SolutionDir)Cardinals\include\rapidjson;$(SolutionDir)Extern\glad\include;$(SolutionDir)Cardinals\header;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Extern\AlphaEngine\lib;$(SolutionDir)Cardinals\imGUI\glfw\lib-vc2010-64;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\</OutDir>
     <IntDir>$(SolutionDir).tmp\$(Configuration)-$(Platform)\</IntDir>
@@ -118,13 +118,10 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="src\GStateManager.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />
     <ClCompile Include="src\PlayerController.cpp" />
-    <ClCompile Include="src\RenderLayer.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\MeshGenerator.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
-    <ClCompile Include="src\RenderLayerManager.cpp" />
-    <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
@@ -145,8 +142,6 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="header\MeshGenerator.hpp" />
     <ClInclude Include="header\Physics.hpp" />
     <ClInclude Include="header\PlayerController.hpp" />
-    <ClInclude Include="header\RenderLayer.hpp" />
-    <ClInclude Include="header\RenderLayerManager.hpp" />
     <ClInclude Include="header\TextureManager.hpp" />
     <ClInclude Include="header\UIManager.hpp" />
     <ClInclude Include="imGUI\glfw\include\GLFW\glfw3.h" />

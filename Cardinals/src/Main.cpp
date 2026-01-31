@@ -12,21 +12,24 @@
 #include <crtdbg.h> // To check for memory leaks
 #include <AEEngine.h>
 #include <iostream>
+
+//GAME INCLUDES
+/*************************************************************************/
+#include "../header/GameObject.hpp"
+#include "../header/GameManager.hpp"
 #include "../header/GStateManager.hpp"
 #include "../header/PlayerController.hpp"
 #include "../header/UIManager.hpp"
-#include "../header/GameObject.hpp"
-#include "../header/GameManager.hpp"
+/*************************************************************************/
 
-/*
-IMGUI
-*/
+//IMGUI
+/*************************************************************************/
 #include "../imGUI/imgui.h"
 #include "../imGUI/imgui_impl_opengl3.h"
 #include "../imGUI/imgui_impl_win32.h"
-
 #include <glad.h>
 //#include <GLFW/glfw3.h>
+/*************************************************************************/
 
 IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

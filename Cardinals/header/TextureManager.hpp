@@ -58,6 +58,7 @@ namespace Images
     constexpr ImageFile PopUp{ "../../Assets/PopUp.png", 412.f, 120.f };
 
     constexpr ImageFile Background{ "../../Assets/MenuBG.png", 1600.f, 900.f };
+    constexpr ImageFile Placeholder{ "../../Assets/MissingTexture.png", 1600.f, 900.f };
 }
 
 namespace Fonts
@@ -84,7 +85,7 @@ public:
     AEGfxTexture* Get_Image() const;
 };
 
-class Font {
+class Text {
 private:
     s8 _font;
     f32 _fontSize;
@@ -93,7 +94,7 @@ private:
     std::vector<std::string> _textArr;
 
 public:
-    Font();
+    Text();
 
     void Load_Font(const FontFile& fontFilePath, const f32 initHeight);
     void Input_Text(const char* text);

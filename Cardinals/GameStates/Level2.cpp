@@ -1,7 +1,9 @@
 #include "../GameStates/Level2.hpp"
 
+extern std::vector<Texture> textures;
+
 namespace {
-	Font digipenFont;
+	Text digipenFont;
 }
 
 void Level2_Load() {

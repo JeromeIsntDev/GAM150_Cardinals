@@ -6,13 +6,13 @@
 #include <vector>
 #include <AEEngine.h>
 
-#include "../header/TextureManager.hpp"
-#include "../header/MeshGenerator.hpp"
-#include "../header/PlayerController.hpp"
-#include "../header/UIManager.hpp"
-#include "../header/AudioManager.hpp"
-#include "../header/GameObject.hpp"
-#include "../header/GameSaver.hpp"
+#include "TextureManager.hpp"
+#include "MeshGenerator.hpp"
+#include "PlayerController.hpp"
+#include "UIManager.hpp"
+#include "AudioManager.hpp"
+#include "GameObject.hpp"
+#include "GameSaver.hpp"
 
 
 void MainMenu_Load();

@@ -1,7 +1,7 @@
 #include "../GameStates/LevelMenu.hpp"
 
 namespace {
-	Font levelFont;
+	Text levelFont;
 }
 
 

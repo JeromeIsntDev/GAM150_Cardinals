@@ -54,19 +54,19 @@ AEGfxTexture* Texture::Get_Image() const
 
 
 //Font
-Font::Font() 
+Text::Text() 
 	:_font{ 0 }, _fontSize{}, _scale {1.f},
 	_color{ Colors::White }, _textArr{ "" } {
 
 }
 
-void Font::Load_Font(const FontFile& fontFilePath, const f32 initHeight)
+void Text::Load_Font(const FontFile& fontFilePath, const f32 initHeight)
 {
 	_fontSize = initHeight;
 	_font = AEGfxCreateFont(fontFilePath.filename, static_cast<int>(initHeight));
 }
 
-void Font::Input_Text(const char* text)
+void Text::Input_Text(const char* text)
 {
 	_textArr.clear();
 	std::string str(text);
@@ -81,7 +81,7 @@ void Font::Input_Text(const char* text)
 	_textArr.push_back(str.substr(start));
 }
 
-void Font::Draw_Text() const
+void Text::Draw_Text() const
 {
 	f32 yOffset = 0.0f;
 
@@ -103,7 +103,7 @@ void Font::Draw_Text() const
 	}
 }
 
-void Font::Draw_Text(f32 x, f32 y)
+void Text::Draw_Text(f32 x, f32 y)
 {
 	f32 yOffset = 0.0f;
 	for (const std::string& line : _textArr)
@@ -125,7 +125,7 @@ void Font::Draw_Text(f32 x, f32 y)
 	}
 }
 
-void Font::Draw_Text(AEVec2 pos, f32 scale, f32 fading)
+void Text::Draw_Text(AEVec2 pos, f32 scale, f32 fading)
 {
 	_scale = scale;
 	f32 yOffset = 0.0f;
@@ -146,12 +146,12 @@ void Font::Draw_Text(AEVec2 pos, f32 scale, f32 fading)
 	}
 }
 
-void Font::Change_Text_Color(const Color color)
+void Text::Change_Text_Color(const Color color)
 {
 	_color = color;
 }
 
-void Font::Free_Font() const
+void Text::Free_Font() const
 {
 	AEGfxDestroyFont(_font);
 }
