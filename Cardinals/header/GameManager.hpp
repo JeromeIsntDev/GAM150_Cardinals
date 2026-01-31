@@ -4,7 +4,8 @@
 
 #include "TextureManager.hpp"
 
-int gGameRunning = 1;
+int isGamePaused = 0;
+int isGameRunning = 1;
 std::vector<Texture*> textures;
 std::vector<AEGfxVertexList**> meshes;
 std::vector<Text*> texts;

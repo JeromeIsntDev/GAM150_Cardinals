@@ -11,7 +11,7 @@
 **************************************************************************/
 #include "MainMenu.hpp"
 
-extern int gGameRunning;
+extern int isGameRunning;
 extern std::vector<Texture*> textures;
 extern std::vector<AEGfxVertexList**> meshes;
 extern std::vector<Text*> texts;
@@ -143,8 +143,8 @@ void MainMenu_Initialize()
 
 	exitBtn->SetOnClick([]() {
 		PRINT("Exit Pressed");
-		gGameRunning = 0;
-		PRINT("Game Running = %d", gGameRunning);
+		isGameRunning = 0;
+		PRINT("Game Running = %d", isGameRunning);
 		});
 
 	yesBtn->SetOnClick([]() {
