@@ -82,7 +82,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	bool panelOpen = false;
 	bool focusKB = false;
 
-	while (gGameRunning)
+	while (isGameRunning)
 	{
 		AESysFrameStart();
 
@@ -130,7 +130,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		AESysFrameEnd();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
-			gGameRunning = 0;
+			isGameRunning = 0;
 	}
 	//resetting callback thing
 	if (g_OrigWndProc) {

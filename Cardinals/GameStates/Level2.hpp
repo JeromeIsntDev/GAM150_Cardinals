@@ -6,7 +6,12 @@
 
 #include <AEEngine.h>
 
-#include "../header/TextureManager.hpp"
+#include "TextureManager.hpp"
+#include "GameObject.hpp"
+#include "MeshGenerator.hpp"
+#include "InputHandler.hpp"
+#include "UIManager.hpp"
+#include "GStateManager.hpp"
 
 void Level2_Load();
 void Level2_Initialize();
