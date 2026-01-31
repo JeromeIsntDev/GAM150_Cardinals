@@ -101,7 +101,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		if (AEInputCheckTriggered(AEVK_F1)) {
 			panelOpen = !panelOpen;
-			if (panelOpen)focusKB = true;
 		}
 
 		Update_State();
@@ -112,18 +111,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		ImGui::NewFrame();
 		//command panel logic goes here
 		if (panelOpen) {
-			ImGui::Begin("Test");
-			ImGui::Text("Test text");
-			if (focusKB) {
-				ImGui::SetKeyboardFocusHere();
-				focusKB = false;
+			//change hardcode to smth else later
+			ImGui::SetNextWindowSize(ImVec2(400.f, 300.f), ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowPos(ImVec2(850.f, 50.f));
+			ImGui::Begin("Panel");
+			if (ImGui::Button("Test Command")) {
+				std::cout << "boat goes binted" << std::endl;
 			}
-			ImGui::Text("Command: %s", buffer);
-			if (ImGui::InputText("Command", buffer, IM_ARRAYSIZE(buffer),ImGuiInputTextFlags_EnterReturnsTrue)){
-				// Enter was pressed
-				std::cout << "Command entered: " << buffer << std::endl;
-				buffer[0] = '\0';
-				focusKB = true;
+			ImGui::SameLine();
+			if (ImGui::Button("Test Command 2")) {
+				std::cout << "your mom" << std::endl;
 			}
 			ImGui::End();
 		}
