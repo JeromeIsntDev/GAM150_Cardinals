@@ -117,10 +117,10 @@ void Player::PlayerMovement(f32 dt) {
 	//do some velocityVector Y = 0 check here
 
 	//down force velocity (always going downwards)
-	p_velocityVector.y += gravity * dt;
-	p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
-
-	//std::cout << p_velocityVector.y << std::endl;
+	if (!p_isGrounded) {
+		p_velocityVector.y += gravity * dt;
+		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+	}
 
 	if (p_initialPos.y <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
 		std::cout << "grounded" << std::endl;
@@ -140,6 +140,18 @@ void Player::SetPlayerHealth(f32 healthDamage) {
 //sets the new score on the param
 void Player::SetPlayerScore(f32 scoreAdded) {
 	p_score += scoreAdded;
+}
+
+bool Player::GetPlayerCollide() const{
+	return hasCollided;
+}
+
+void Player::SetPlayerCollide(bool collide) {
+	hasCollided = collide;
+}
+
+AEVec2 Player::GetPrevPos() const {
+	return p_previousPos;
 }
 
 f32 Player::GetPlayerHealth() const{

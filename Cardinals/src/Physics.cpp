@@ -17,19 +17,22 @@ from GameObject class from GameObject
 
 
 
-void Collider::UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLength) {
+void Collider::UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLength)
+{
 	f32 halfWidth = xLength * 0.5f;
 	f32 halfHeight = yLength * 0.5f;
-	//minPoint
-	p_minPoint = { centrePoint.x - halfHeight - halfWidth, centrePoint.y - halfWidth - halfHeight };
-	//maxPoint
-	p_maxPoint = { centrePoint.x + halfWidth + halfHeight, centrePoint.y + halfHeight + halfWidth };
+
+	p_minPoint = { centrePoint.x - halfWidth,  centrePoint.y - halfHeight };
+	p_maxPoint = { centrePoint.x + halfWidth,  centrePoint.y + halfHeight };
 }
 
 //collider logic
-bool Collider::CollisionDetected(const Collider& collider1, const Collider& collider2) {
+bool CollisionDetected(const Collider& collider1, const Collider& collider2) {
 	return !(collider1.p_maxPoint.x < collider2.p_minPoint.x ||
 			 collider1.p_minPoint.x > collider2.p_maxPoint.x ||
 			 collider1.p_maxPoint.y < collider2.p_minPoint.y ||
 			 collider1.p_minPoint.y > collider2.p_maxPoint.y);
 }
+
+
+
