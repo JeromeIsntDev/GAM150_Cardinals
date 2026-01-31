@@ -20,7 +20,8 @@ namespace {
 	GameObject platform;
 	GameObjectIDAssigner assigner;
 
-
+	InputHandler& input = InputHandler::GetInstance();
+	std::vector<GameObject*> objects;
 	//IMGUI
 	//ControlPanel controlPanel;
 }
@@ -65,6 +66,9 @@ void Level1_Initialize()
 	platform.UpdateScale(AEVec2{ 100.f,100.f });
 	platform.UpdateRotation(0.f);
 	platform.UpdatePosition(AEVec2{ 0.f, -200.f });
+
+	objects.push_back(&platform);
+	objects.push_back(&mainPlayer);
 }
 
 void Level1_Update() {
@@ -77,6 +81,32 @@ void Level1_Update() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
 	//controlPanel.ControlPanel_Update();
+
+	if (input.isMouseBtnPressed(AEVK_LBUTTON)) {
+		AEVec2 mousePos{0.f,0.f};
+		input.getMousePos(mousePos.x, mousePos.y);
+		mousePos.x += AEGfxGetWinMaxX() - AEGfxGetWindowWidth();
+		mousePos.y += AEGfxGetWinMaxY() - AEGfxGetWindowHeight();
+		for (GameObject* obj : objects) {
+			AEVec2 currentScale = obj->GetScale();
+			AEVec2 currentPos = obj->GetPosition();
+
+			float halfW = currentScale.x / 2.0f, halfH = currentScale.y / 2.0f;
+
+			// wowww calculations zzzzz
+			if (mousePos.x >= currentPos.x - halfW && mousePos.x <= currentPos.x + halfW &&
+				-mousePos.y >= currentPos.y - halfH && -mousePos.y <= currentPos.y + halfH) {
+				PRINT("Object touched: %f, %f", currentPos.x, currentPos.y);
+
+				int mx, my;
+				AEInputGetCursorPositionDelta(&mx, &my);
+
+				obj->UpdatePosition(AEVec2{ currentPos.x + mx, currentPos.y - my });
+			}
+		}
+	}
+
+
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
 	mainPlayer.PlayerMovement(dt);
