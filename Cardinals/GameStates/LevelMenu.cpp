@@ -1,27 +1,38 @@
-#include "../GameStates/LevelMenu.hpp"
+#include "LevelMenu.hpp"
 
-extern std::vector<Texture> textures;
+extern std::vector<Texture*> textures;
+extern std::vector<AEGfxVertexList**> meshes;
+extern std::vector<Text*> texts;
+extern bool MassUnload();
 
 namespace {
 	AEGfxVertexList* buttonMesh;
 
 	Text textToUse;
 	Texture buttonTexture;
+	Texture exitTexture;
 	std::unique_ptr<Button> lvl1Btn, lvl2Btn, lvl3Btn, lvl4Btn, lvl5Btn;
-	std::unique_ptr<Button> backToMainBtn;
+	std::unique_ptr<Button> backBtn;
 	UIManager uiManager;
 }
 
 
 void LevelMenu_Load() {
 	PRINT("Load: %s", "Level Menu\n");
-	textToUse.Load_Font(Fonts::Main, 160.f);
+	textToUse.Load_Font(Fonts::Main, 100.f);
 	textToUse.Input_Text("Level Menu");
 
 	buttonTexture.Load_Image(Images::Button);
+	exitTexture.Load_Image(Images::ExitBtn);
 
 	if (!textures.empty()) textures.clear();
-	textures.push_back(buttonTexture);
+	textures.push_back(&buttonTexture);
+	textures.push_back(&exitTexture);
+
+	if (!meshes.empty()) meshes.clear();
+	meshes.push_back(&buttonMesh);
+
+	if (!texts.empty()) texts.clear();
 }
 
 void LevelMenu_Initialize()
@@ -29,16 +40,69 @@ void LevelMenu_Initialize()
 	PRINT("Initialize: %s", "Level Menu\n");
 
 	buttonMesh = RectMeshCenter();
-
+	
 	lvl1Btn = std::make_unique<Button>(buttonMesh, 
-		AEVec2{ 0.f, 0.f }, 
+		AEVec2{ -300.f, 50.f }, 
 		0.f, 
-		AEVec2{ buttonTexture.Get_Image_Width(), buttonTexture.Get_Image_Height() });
-	lvl1Btn->SetTexture(&buttonTexture); 
+		AEVec2{ 200.f, 200.f });
+	lvl1Btn->SetTexture(&buttonTexture);
 	lvl1Btn->SetActive(true);
 	lvl1Btn->SetInteractable(true);
 
+
+	lvl2Btn = std::make_unique<Button>(buttonMesh,
+		AEVec2{ 0.f, 50.f },
+		0.f,
+		AEVec2{ 200.f, 200.f });
+	lvl2Btn->SetTexture(&buttonTexture);
+	lvl2Btn->SetActive(true);
+	lvl2Btn->SetInteractable(true);
+
+
+	lvl3Btn = std::make_unique<Button>(buttonMesh,
+		AEVec2{ 300.f, 50.f },
+		0.f,
+		AEVec2{ 200.f, 200.f });
+	lvl3Btn->SetTexture(&buttonTexture);
+	lvl3Btn->SetActive(true);
+	lvl3Btn->SetInteractable(true);
+
+
+	lvl4Btn = std::make_unique<Button>(buttonMesh,
+		AEVec2{ -150.f, -200.f },
+		0.f,
+		AEVec2{ 200.f, 200.f });
+	lvl4Btn->SetTexture(&buttonTexture);
+	lvl4Btn->SetActive(true);
+	lvl4Btn->SetInteractable(true);
+
+
+	lvl5Btn = std::make_unique<Button>(buttonMesh,
+		AEVec2{ 150.f, -200.f },
+		0.f,
+		AEVec2{ 200.f, 200.f });
+	lvl5Btn->SetTexture(&buttonTexture);
+	lvl5Btn->SetActive(true);
+	lvl5Btn->SetInteractable(true);
+
+	backBtn = std::make_unique<Button>(buttonMesh,
+		AEVec2{ -625.f, 375.f },
+		0.f,
+		AEVec2{ 280.f, 80.f });
+	backBtn->SetTexture(&exitTexture);
+	backBtn->SetActive(true);
+	backBtn->SetInteractable(true);
+	backBtn->SetOnClick([]() {
+		PRINT("Back Pressed");
+		UpdateGameManagerState(GameStateEnum::MainMenu);
+		});
+
 	uiManager.Add(lvl1Btn.get());
+	uiManager.Add(lvl2Btn.get());
+	uiManager.Add(lvl3Btn.get());
+	uiManager.Add(lvl4Btn.get());
+	uiManager.Add(lvl5Btn.get());
+	uiManager.Add(backBtn.get());
 }
 
 void LevelMenu_Update() {
@@ -57,7 +121,7 @@ void LevelMenu_Update() {
 void LevelMenu_Draw() {
 	//PRINT("Draw: %s", "Level Menu\n");
 
-	textToUse.Draw_Text(0, 200.f);
+	textToUse.Draw_Text(0, 300.f);
 	uiManager.Draw();
 }
 
@@ -70,7 +134,5 @@ void LevelMenu_Free() {
 void LevelMenu_Unload() {
 	PRINT("Unload: %s", "Level Menu\n");
 
-	for (Texture& t : textures) {
-		t.Unload_Image();
-	}
+	if (MassUnload()) PRINT("Unload Success!");
 }

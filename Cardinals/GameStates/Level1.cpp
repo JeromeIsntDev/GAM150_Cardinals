@@ -1,6 +1,9 @@
 #include "../GameStates/Level1.hpp"
 
-extern std::vector<Texture> textures;
+extern std::vector<Texture*> textures;
+extern std::vector<AEGfxVertexList**> meshes;
+extern std::vector<Text*> texts;
+extern bool MassUnload();
 
 namespace {
 	AEGfxVertexList* squareMesh;
@@ -32,8 +35,14 @@ void Level1_Load() {
 	placeholderTexture.Load_Image(Images::Placeholder);
 
 	if (!textures.empty()) textures.clear();
-	textures.push_back(playerTexture);
-	textures.push_back(placeholderTexture);
+	textures.push_back(&playerTexture);
+	textures.push_back(&placeholderTexture);
+
+	if (!meshes.empty()) meshes.clear();
+	meshes.push_back(&squareMesh);
+
+	if (!texts.empty()) texts.clear();
+	texts.push_back(&digipenFont);
 }
 
 void Level1_Initialize()
@@ -85,14 +94,11 @@ void Level1_Draw() {
 void Level1_Free() {
 	PRINT("Free: %s", "Level 1\n");
 
-	digipenFont.Free_Font();
-	AEGfxMeshFree(squareMesh);
+	//digipenFont.Free_Font();
 }
 
 void Level1_Unload() {
 	PRINT("Unload: %s", "Level 1\n");
 	
-	for (Texture& t : textures) {
-		t.Unload_Image();
-	}
+	if (MassUnload()) PRINT("Unload Success!");
 }

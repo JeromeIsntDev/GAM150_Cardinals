@@ -10,6 +10,7 @@
 #include "MeshGenerator.hpp"
 #include "PlayerController.hpp"
 #include "UIManager.hpp"
+#include "GStateManager.hpp"
 
 void LevelMenu_Load();
 void LevelMenu_Initialize();

@@ -1,6 +1,9 @@
 #include "../GameStates/Level3.hpp"
 
-extern std::vector<Texture> textures;
+extern std::vector<Texture*> textures;
+extern std::vector<AEGfxVertexList**> meshes;
+extern std::vector<Text*> texts;
+extern bool MassUnload();
 
 namespace {
 	Text digipenFont;
@@ -17,6 +20,13 @@ void Level3_Load() {
 void Level3_Initialize()
 {
 	PRINT("Initialize: %s", "Level 3\n");
+
+	if (!textures.empty()) textures.clear();
+
+	if (!meshes.empty()) meshes.clear();
+
+	if (!texts.empty()) texts.clear();
+	texts.push_back(&digipenFont);
 }
 
 void Level3_Update() {
@@ -35,11 +45,10 @@ void Level3_Draw() {
 }
 
 void Level3_Free() {
-	digipenFont.Free_Font();
-
 	PRINT("Free: %s", "Level 3\n");
 }
 
 void Level3_Unload() {
 	PRINT("Unload: %s", "Level 3\n");
+	if (MassUnload()) PRINT("Unload Success");
 }

@@ -12,10 +12,14 @@
 #include "MainMenu.hpp"
 
 extern int gGameRunning;
-extern std::vector<Texture> textures;
+extern std::vector<Texture*> textures;
+extern std::vector<AEGfxVertexList**> meshes;
+extern std::vector<Text*> texts;
+extern bool MassUnload();
 
 namespace {
 
+	AEGfxVertexList* squareMesh;
 	Text cardinalsFont;
 	Text digipenFont;
 	Texture startTexture{}, exitTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{};
@@ -27,7 +31,6 @@ namespace {
 	f32 logo_transparency = 0.f;
 	s8 isLogoDrawn = 0;
 	s32 mouseX, mouseY;
-	AEGfxVertexList* squareMesh;
 
 	// UI stuff
 	UIManager menuUI, popUpUI;
@@ -61,14 +64,21 @@ void MainMenu_Load() {
 
 	//Store Textures to Unload
 	if (!textures.empty()) textures.clear();
-	textures.push_back(tex_digipenLogo);
-	textures.push_back(menuBGTexture);
-	textures.push_back(startTexture);
-	textures.push_back(exitTexture);
-	textures.push_back(creditsTexture);
-	textures.push_back(yesTexture);
-	textures.push_back(noTexture);
-	textures.push_back(popUpTexture);
+	textures.push_back(&tex_digipenLogo);
+	textures.push_back(&menuBGTexture);
+	textures.push_back(&startTexture);
+	textures.push_back(&exitTexture);
+	textures.push_back(&creditsTexture);
+	textures.push_back(&yesTexture);
+	textures.push_back(&noTexture);
+	textures.push_back(&popUpTexture);
+
+	if (!meshes.empty()) meshes.clear();
+	meshes.push_back(&squareMesh);
+
+	if (!texts.empty()) texts.clear();
+	texts.push_back(&cardinalsFont);
+	texts.push_back(&digipenFont);
 
 	//bgmGroup = AEAudioCreateGroup();
 	//backgroundMusic.Load_Audio(Audios::BGM);
@@ -188,13 +198,7 @@ void MainMenu_Update() {
 
 	AEGfxSetTransparency(logo_transparency);
 
-	if (AEFrameRateControllerGetFrameCount() < 100) {
-		logo_transparency += 0.02f;
-	}
-	else if (AEFrameRateControllerGetFrameCount() > 100 && (AEFrameRateControllerGetFrameCount() < 200)) {
-		logo_transparency -= 0.02f;
-	}
-	else if (AEFrameRateControllerGetFrameCount() > 200) {
+	if (AEInputCheckTriggered(AEVK_SPACE)) {
 		logo_transparency = 1.f;
 		isLogoDrawn = 1;
 	}
@@ -211,7 +215,19 @@ void MainMenu_Update() {
 		}
 
 		AEInputGetCursorPosition(&mouseX, &mouseY);
-	}	
+	}
+	else {
+		if (AEFrameRateControllerGetFrameCount() < 100) {
+			logo_transparency += 0.02f;
+		}
+		else if (AEFrameRateControllerGetFrameCount() > 100 && (AEFrameRateControllerGetFrameCount() < 200)) {
+			logo_transparency -= 0.02f;
+		}
+		else if (AEFrameRateControllerGetFrameCount() > 200) {
+			logo_transparency = 1.f;
+			isLogoDrawn = 1;
+		}
+	}
 }
 
 void MainMenu_Draw() {
@@ -241,13 +257,9 @@ void MainMenu_Draw() {
 void MainMenu_Free() {
 	PRINT("Free: %s", "Main Menu\n");
 
-	cardinalsFont.Free_Font();
-	digipenFont.Free_Font();
-
 	bgm.Stop_Audio();
 	bgm.Free_Audio_System();
 
-	AEGfxMeshFree(squareMesh);
 	popUpUI.Exit();
 	menuUI.Exit();
 }
@@ -255,7 +267,5 @@ void MainMenu_Free() {
 void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
 
-	for (Texture& t : textures) {
-		t.Unload_Image();
-	}
+	if (MassUnload()) PRINT("Unload Success");
 }
