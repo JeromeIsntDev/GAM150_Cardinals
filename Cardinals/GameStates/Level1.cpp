@@ -93,15 +93,20 @@ void Level1_Update() {
 
 			float halfW = currentScale.x / 2.0f, halfH = currentScale.y / 2.0f;
 
-			// wowww calculations zzzzz
 			if (mousePos.x >= currentPos.x - halfW && mousePos.x <= currentPos.x + halfW &&
 				-mousePos.y >= currentPos.y - halfH && -mousePos.y <= currentPos.y + halfH) {
 				PRINT("Object touched: %f, %f", currentPos.x, currentPos.y);
 
 				int mx, my;
 				AEInputGetCursorPositionDelta(&mx, &my);
-
 				obj->UpdatePosition(AEVec2{ currentPos.x + mx, currentPos.y - my });
+
+				AEInputMouseWheelDelta(&mx);
+				if (input.isMouseBtnPressed(AEVK_LSHIFT)) {
+					mx*=10;
+				}
+				my = mx;
+				obj->UpdateScale(AEVec2{ currentScale.x + mx, currentScale.y + my });
 			}
 		}
 	}
