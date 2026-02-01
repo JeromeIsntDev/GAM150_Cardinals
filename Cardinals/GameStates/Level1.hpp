@@ -2,9 +2,10 @@
 #ifndef _Level1_Header_
 #define _Level1_Header_
 
-#include <iostream>
 #define NOMINMAX
+
 #include <AEEngine.h>
+#include <iostream>
 
 #include "MeshGenerator.hpp"
 #include "TextureManager.hpp"

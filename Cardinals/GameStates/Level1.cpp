@@ -1,5 +1,5 @@
 #include "../GameStates/Level1.hpp"
-#include <algorithm>
+
 extern std::vector<Texture*> textures;
 extern std::vector<AEGfxVertexList**> meshes;
 extern std::vector<Text*> texts;
@@ -17,7 +17,10 @@ namespace {
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
 	GameObject platform;
-	GameObject wall;
+	GameObject wall0;
+	GameObject wall1;
+	GameObject wall2;
+	GameObject wall3;
 	GameObjectIDAssigner assigner;
 
 	InputHandler& input = InputHandler::GetInstance();
@@ -26,14 +29,9 @@ namespace {
 	//IMGUI
 	//ControlPanel controlPanel;
 
+	Player::GravityDirection dir = Player::GravityDirection::Down;
+
 	bool isReadFromFile = false;
-
-	enum class GravityDirection {
-		Up, Down, Left, Right,
-		GravNum
-	};
-
-	GravityDirection grav;
 }
 
 void Level1_Load() {
@@ -65,7 +63,7 @@ void Level1_Initialize()
 	assigner.currIdCount = 0;
 
 	//Player Init
-	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f,squareMesh, AEGfxGetWinMinX() + 200.f, 150.f);
+	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 150.f);
 	mainPlayer.SetTexture(&playerTexture);
 	mainPlayer.UpdateScale(AEVec2{ 100.f, 100.f });
 	mainPlayer.UpdateRotation(0.f);
@@ -79,17 +77,41 @@ void Level1_Initialize()
 	platform.UpdateRotation(0.f);
 	platform.UpdatePosition(AEVec2{ AEGfxGetWinMinX() + 200.f, AEGfxGetWinMinY()});
 
-	wall.SetMesh(squareMesh);
-	wall.SetTexture(&placeholderTexture);
-	wall.SetID(assigner.GetID());
-	wall.UpdateScale(AEVec2{ 100.f,500.f });
-	wall.UpdateRotation(0.f);
-	wall.UpdatePosition(AEVec2{ 500.f, -200.f });
+	wall0.SetMesh(squareMesh);
+	wall0.SetTexture(&placeholderTexture);
+	wall0.SetID(assigner.GetID());
+	wall0.UpdateScale(AEVec2{ 100.f,500.f });
+	wall0.UpdateRotation(0.f);
+	wall0.UpdatePosition(AEVec2{ 500.f, -200.f });
+
+	wall1.SetMesh(squareMesh);
+	wall1.SetTexture(&placeholderTexture);
+	wall1.SetID(assigner.GetID());
+	wall1.UpdateScale(AEVec2{ 100.f,500.f });
+	wall1.UpdateRotation(0.f);
+	wall1.UpdatePosition(AEVec2{ 200.f, -200.f });
+
+	wall2.SetMesh(squareMesh);
+	wall2.SetTexture(&placeholderTexture);
+	wall2.SetID(assigner.GetID());
+	wall2.UpdateScale(AEVec2{ 500.f,100.f });
+	wall2.UpdateRotation(0.f);
+	wall2.UpdatePosition(AEVec2{ 0.f, -200.f });
+
+	wall3.SetMesh(squareMesh);
+	wall3.SetTexture(&placeholderTexture);
+	wall3.SetID(assigner.GetID());
+	wall3.UpdateScale(AEVec2{ 500.f,100.f });
+	wall3.UpdateRotation(0.f);
+	wall3.UpdatePosition(AEVec2{ 500.f, 200.f });
 
 	objects.clear();
 	objects.push_back(&mainPlayer);
 	objects.push_back(&platform);
-	objects.push_back(&wall);
+	objects.push_back(&wall0);
+	objects.push_back(&wall1);
+	objects.push_back(&wall2);
+	objects.push_back(&wall3);
 
 
 	if (!isReadFromFile) return;
@@ -111,25 +133,6 @@ void Level1_Initialize()
 void Level1_Update() {
 	//declare mainPlayer variable
 	//PRINT("Update: %s", "Main Menu\n");
-	
-	AEVec2 gravityVector{};
-	switch (grav)
-	{
-	case GravityDirection::Up:
-		AEVec2Set(&gravityVector, 0, 1);
-		break;
-	case GravityDirection::Down:
-		AEVec2Set(&gravityVector, 0, -1);
-		break;
-	case GravityDirection::Left:
-		AEVec2Set(&gravityVector, -1, 0);
-		break;
-	case GravityDirection::Right:
-		AEVec2Set(&gravityVector, 1, 0);
-		break;
-	default:
-		break;
-	}
 
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -138,15 +141,14 @@ void Level1_Update() {
 	AEGfxSetTransparency(1.f);
 	//controlPanel.ControlPanel_Update();
 
-	
 
 	if (input.isMouseBtnPressed(AEVK_LCTRL)) {
 		if (input.isMouseBtnTriggered(AEVK_S)) {
 			//Save to JSON
 			objData.clear();
-			objData.push_back(mainPlayer);
-			objData.push_back(platform);
-			objData.push_back(wall);
+			for (GameObject* obj : objects) {
+				objData.push_back(*obj);
+			}
 			SaveObjectsToJson(objData, "../../Saves/Level1_GameObjects.json");
 		}
 		if (input.isMouseBtnTriggered(AEVK_M)) {
@@ -188,9 +190,23 @@ void Level1_Update() {
 
 
 	/*PLAYER STUFF*/
+
+	if (input.isMouseBtnTriggered(AEVK_DOWN)) {
+		dir = Player::GravityDirection::Down;
+	}
+	if (input.isMouseBtnTriggered(AEVK_UP)) {
+		dir = Player::GravityDirection::Up;
+	}
+	if (input.isMouseBtnTriggered(AEVK_LEFT)) {
+		dir = Player::GravityDirection::Left;
+	}
+	if (input.isMouseBtnTriggered(AEVK_RIGHT)) {
+		dir = Player::GravityDirection::Right;
+	}
+
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	AEVec2 prevPos = mainPlayer.GetPosition();
-	mainPlayer.PlayerMovement(dt);
+	mainPlayer.PlayerMovement(dt, dir);
 
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
@@ -205,7 +221,10 @@ void Level1_Draw() {
 
 	platform.Draw();
 
-	wall.Draw();
+	wall0.Draw();
+	wall1.Draw();
+	wall2.Draw();
+	wall3.Draw();
 
 	mainPlayer.Draw();
 

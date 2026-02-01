@@ -105,18 +105,40 @@ void Player::PlayerInputHandle(f32 dt) {
 }
 
 //Player Movement Logic
-void Player::PlayerMovement(f32 dt) {
+void Player::PlayerMovement(f32 dt, GravityDirection dir) {
 	//std::cout << "dt: " << dt << std::endl;
-	PlayerInputHandle(dt);
+	
 
 	jumpBuffer = max(0, jumpBuffer - dt);
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
 
 	//down force velocity (always going downwards)
 	if (!p_isGrounded) {
-		p_velocityVector.y += gravity * dt;
-		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+		switch (dir)
+		{
+		case Player::GravityDirection::Up:
+			p_velocityVector.y += gravity * dt;
+			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+			break;
+		case Player::GravityDirection::Down:
+			p_velocityVector.y += -gravity * dt;
+			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+			break;
+		case Player::GravityDirection::Left:
+			p_velocityVector.x += -gravity * dt;
+			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
+			break;
+		case Player::GravityDirection::Right:
+			p_velocityVector.x += gravity * dt;
+			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
+			break;
+		default:
+			break;
+		}
+		/*p_velocityVector.y += gravity * dt;
+		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
+	PlayerInputHandle(dt);
 	//if top of player goes past bottom of screen
 	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
 		p_initialPos = p_previousPos;

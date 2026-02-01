@@ -21,13 +21,14 @@ from GameObject class from GameObject
 #include "../header/Physics.hpp"
 
 class Player : public GameObject {
+
 	//Player() = delete;
 private:
 	f32 p_playerHealth{ 100.f };
 	f32 p_moveSpeed{ 300.f };
 	f32 p_downForce{ 1.5f };
 	//set a jumpforce for psuedo gravity on jump
-	f32 gravity{ -2000.f };
+	f32 gravity{ 200.f };
 	AEVec2 p_initialPos{ 0.f,0.f };
 	f32 p_leftMin{ 0.f };
 	f32 p_rightMax{ 0.f };
@@ -36,6 +37,11 @@ private:
 
 public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
+
+	enum class GravityDirection {
+		Up, Down, Left, Right,
+		GravNum
+	};
 
 	AEVec2 p_velocityVector{ 0.f,0.f };
 	bool p_isJumping{ true };
@@ -47,7 +53,7 @@ public:
 	f32 jumpBuffer{ 0.f };
 	f32 maxCoyoteBuffer{ 0.8f };
 	f32 coyoteBuffer{ 0.f };
-
+	GravityDirection grav;
 	bool hasCollided{ false };
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
@@ -64,7 +70,7 @@ public:
 	void SetPlayerCollide(bool);
 	void SetPlayerHealth(f32);
 	void PlayerInputHandle(f32);
-	void PlayerMovement(f32);
+	void PlayerMovement(f32, GravityDirection dir);
 	void PlayerCollision(std::vector<GameObject*> objs);
 	//Function for Player Jump Logic
 	//Basically the initialize values for PreJumps
