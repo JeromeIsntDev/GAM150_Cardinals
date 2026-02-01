@@ -115,7 +115,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	if (input.isKeyPressed(AEVK_LSHIFT) && isMoving) {
 		isSprint = true;
 	}
-	if (input.AEInputCheckReleased(AEVK_LSHIFT)) {
+	if (AEInputCheckReleased(AEVK_LSHIFT)) {
 		isSprint = false;
 	}
 
@@ -136,7 +136,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	}
 	std::cout << "left bool: " << canMoveLeft << std::endl;
 	std::cout << "right bool: " << canMoveRight << std::endl;
-	if (input.isKeyTriggered(AEVK_SPACE) && !p_isJumping) {
+	if (input.isKeyPressed(AEVK_SPACE) && !p_isJumping) {
 		//adjust jump logic here
 		switch(dir){
 		case Player::GravityDirection::Up:
