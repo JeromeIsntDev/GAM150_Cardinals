@@ -91,7 +91,8 @@ void Player::PlayerInputHandle(f32 dt) {
 			p_moveSpeed = moveSpeed;
 		}
 	}
-	std::cout << "jump bool: " << p_isJumping << std::endl;
+	//std::cout << "jump bool: " << p_isJumping << std::endl;
+
 	if (AEInputCheckCurr(AEVK_SPACE) && !p_isJumping) {
 		//adjust jump logic here
 		p_velocityVector.y = 850.f;

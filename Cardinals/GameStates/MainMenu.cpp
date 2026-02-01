@@ -164,22 +164,6 @@ void MainMenu_Initialize()
 	popUpUI.Add(yesBtn.get());
 	popUpUI.Add(noBtn.get());
 
-	//Save to JSON
-	//std::vector<GameObject> objs;
-	//objs.push_back(go_digipenLogo);
-	//objs.push_back(menuBG);
-	//objs.push_back(*startBtn);
-	//objs.push_back(*creditsBtn);
-	//objs.push_back(*exitBtn);
-	//SaveObjectsToJson(objs);
-
-	////Read From JSON
-	//objs = ReadJsonToObjects("../../Saves/GameObjects.json");
-
-	//for (GameObject& go : objs) {
-	//	std::cout << go << "\n";
-	//}
-
 	go_digipenLogo.SetTexture(&tex_digipenLogo);
 	go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
 	go_digipenLogo.UpdateScale(AEVec2{ tex_digipenLogo.Get_Image_Width(), tex_digipenLogo.Get_Image_Height() });

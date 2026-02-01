@@ -7,7 +7,7 @@ GameStateEnum pt_CurrentGameState = NumberOfGameStates;
 
 void UpdateGameManagerState(GameStateEnum state)
 {
-	if (state == pt_CurrentGameState) return;
+	//if (state == pt_CurrentGameState) return;
 
 	if(Free_State) Free_State();
 	if(Unload_State) Unload_State();

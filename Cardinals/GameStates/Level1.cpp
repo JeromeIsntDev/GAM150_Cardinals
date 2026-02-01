@@ -22,8 +22,11 @@ namespace {
 
 	InputHandler& input = InputHandler::GetInstance();
 	std::vector<GameObject*> objects;
+	std::vector<GameObject> objData;
 	//IMGUI
 	//ControlPanel controlPanel;
+
+	bool isReadFromFile = false;
 }
 
 void Level1_Load() {
@@ -49,6 +52,7 @@ void Level1_Load() {
 void Level1_Initialize()
 {
 	PRINT("Initialize: %s", "Level 1\n");
+
 	//controlPanel.ControlPanel_Initialize();
 	squareMesh = RectMeshCenter();
 	assigner.currIdCount = 0;
@@ -74,9 +78,26 @@ void Level1_Initialize()
 	wall.UpdateRotation(0.f);
 	wall.UpdatePosition(AEVec2{ 500.f, -200.f });
 
-	objects.push_back(&wall);
-	objects.push_back(&platform);
+	objects.clear();
 	objects.push_back(&mainPlayer);
+	objects.push_back(&platform);
+	objects.push_back(&wall);
+
+
+	if (!isReadFromFile) return;
+	//Read From JSON
+	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
+
+	for (int i{}; i < objData.size(); ++i) {
+		for (int j{}; j < objects.size(); ++j) {
+			if (objData[i].GetID() == objects[j]->GetID()) {
+				GameObject* curr = objects[j];
+				curr->UpdatePosition(objData[i].GetPosition());
+				curr->UpdateRotation(objData[i].GetRotatation());
+				curr->UpdateScale(objData[i].GetScale());
+			}
+		}
+	}
 }
 
 void Level1_Update() {
@@ -89,6 +110,23 @@ void Level1_Update() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
 	//controlPanel.ControlPanel_Update();
+
+	if (input.isMouseBtnPressed(AEVK_LCTRL)) {
+		if (input.isMouseBtnTriggered(AEVK_S)) {
+			//Save to JSON
+			objData.clear();
+			objData.push_back(mainPlayer);
+			objData.push_back(platform);
+			objData.push_back(wall);
+			SaveObjectsToJson(objData, "../../Saves/Level1_GameObjects.json");
+		}
+		if (input.isMouseBtnTriggered(AEVK_M)) {
+			isReadFromFile = !isReadFromFile;
+		}
+		if (input.isMouseBtnTriggered(AEVK_R)) {
+			UpdateGameManagerState(Level1);
+		}
+	}
 
 	if (input.isMouseBtnPressed(AEVK_LBUTTON)) {
 		AEVec2 mousePos{0.f,0.f};
@@ -202,14 +240,21 @@ void Level1_Update() {
 }
 
 void Level1_Draw() {
-	PRINT("Draw: %s", "Level 1\n");
-	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
-
-	mainPlayer.Draw();
+	//PRINT("Draw: %s", "Level 1\n");
 
 	platform.Draw();
 
 	wall.Draw();
+
+	mainPlayer.Draw();
+
+	if (isReadFromFile) {
+		digipenFont.Input_Text("Reading");
+		digipenFont.Draw_Text(AEVec2{ 650.f, 430.f }, .5f, 1.f);
+	}
+
+	digipenFont.Input_Text("Level 1");
+	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
 }
 
 void Level1_Free() {
@@ -220,6 +265,6 @@ void Level1_Free() {
 
 void Level1_Unload() {
 	PRINT("Unload: %s", "Level 1\n");
-	
+
 	if (MassUnload()) PRINT("Unload Success!");
 }

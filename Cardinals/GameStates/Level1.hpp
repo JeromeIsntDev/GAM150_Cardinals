@@ -12,6 +12,8 @@
 #include "PlayerController.hpp"
 #include "ControlPanel.hpp"
 #include "InputHandler.hpp"
+#include "GameSaver.hpp"
+#include "GStateManager.hpp"
 
 void Level1_Load();
 void Level1_Initialize();

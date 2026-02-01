@@ -41,7 +41,6 @@ std::vector<GameObject> ReadJsonToObjects(const char* filePath)
     if (doc.HasMember("gameObjects")
         && doc["gameObjects"].IsArray()) {
         const auto& array = doc["gameObjects"];
-        std::cout << "GameObjects: \n";
         for (const auto& v : array.GetArray()) {
             GameObject obj = DeserializeGameObject(v);
             gameObjectArray.push_back(obj);
@@ -67,7 +66,7 @@ rapidjson::Value SerializeGameObject(
 }
 
 
-void SaveObjectsToJson(std::vector<GameObject> gameObjects)
+void SaveObjectsToJson(std::vector<GameObject> gameObjects, std::string filepath)
 {
     rapidjson::Document doc;
     
@@ -86,7 +85,7 @@ void SaveObjectsToJson(std::vector<GameObject> gameObjects)
 
     doc.AddMember("gameObjects", objectArray, allocator);
 
-    std::ofstream ofs("../../Saves/GameObjects.json");
+    std::ofstream ofs(filepath);
     if (!ofs.is_open()) {
         std::cerr << "Error: cannot open output file";
         return;
