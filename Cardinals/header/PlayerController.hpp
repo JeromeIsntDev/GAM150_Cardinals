@@ -28,7 +28,7 @@ private:
 	f32 p_moveSpeed{ 300.f };
 	f32 p_downForce{ 1.5f };
 	//set a jumpforce for psuedo gravity on jump
-	f32 gravity{ 200.f };
+	f32 gravity{ 2000.f };
 	AEVec2 p_initialPos{ 0.f,0.f };
 	f32 p_leftMin{ 0.f };
 	f32 p_rightMax{ 0.f };
@@ -47,6 +47,8 @@ public:
 	bool p_isJumping{ true };
 	bool canMoveLeft{ true };
 	bool canMoveRight{ true };
+	bool canMoveUp{ false };
+	bool canMoveDown{ false };
 	//public Variable for Player (Check if error)
 	bool p_isGrounded{ false };
 	f32 maxJumpBuffer{ 0.12f };
@@ -69,14 +71,14 @@ public:
 	//set the player health
 	void SetPlayerCollide(bool);
 	void SetPlayerHealth(f32);
-	void PlayerInputHandle(f32);
-	void PlayerMovement(f32, GravityDirection dir);
-	void PlayerCollision(std::vector<GameObject*> objs);
+	void PlayerInputHandle(f32&, GravityDirection&);
+	void PlayerMovement(f32&, GravityDirection& dir);
+	void PlayerCollision(std::vector<GameObject*> objs,GravityDirection&);
 	//Function for Player Jump Logic
 	//Basically the initialize values for PreJumps
 	void StartJump(AEVec2);
 	//The math and update for during the jump
-	void PlayerJump(f32);
+	void PlayerJump(f32&, GravityDirection&);
 };
 
 

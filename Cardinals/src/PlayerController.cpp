@@ -8,7 +8,7 @@
 \brief	The Manager that holds everything related to player and will control
 the player movement etc
 
-\par	Changes: Added Player Constructor
+\par	Changes: Added Physics stuff
 **************************************************************************/
 
 #include "../header/PlayerController.hpp"
@@ -46,26 +46,67 @@ void Player::StartJump(AEVec2 velocityVec) {
 
 }
 //Math logic behind jump for parabola jump
-void Player::PlayerJump(f32 dt) {
+void Player::PlayerJump(f32& dt, GravityDirection& dir) {
 	if (!p_isJumping) return;
-	p_velocityVector.y += gravity * dt;
-	p_initialPos.y += p_velocityVector.y * dt;
+	switch (dir) {
+	case GravityDirection::Up:
+	case GravityDirection::Down:
+		p_velocityVector.y += gravity * dt;
+		p_initialPos.y += p_velocityVector.y * dt;
+		break;
+	case GravityDirection::Left:
+	case GravityDirection::Right:
+		p_velocityVector.x += gravity * dt;
+		p_initialPos.x += p_velocityVector.x * dt;
+		break;
+	}
+	
 	jumpBuffer = 0.f;
 	coyoteBuffer = 0.f;
 }
 
-void Player::PlayerInputHandle(f32 dt) {
+void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	f32 moveSpeed{ 300.f };
 	bool isMoving{ false };
 	bool isSprint{ false };
-	if (AEInputCheckCurr(AEVK_D) && canMoveRight) {
-		p_velocityVector.x = 1.f * p_moveSpeed * dt;
-		p_initialPos.x += p_velocityVector.x;
+	if (AEInputCheckCurr(AEVK_D)) {
+		if (canMoveRight) {
+			switch (dir) {
+			case GravityDirection::Up:
+			case GravityDirection::Down:
+				p_velocityVector.x = 1.f * p_moveSpeed * dt;
+				p_initialPos.x += p_velocityVector.x;
+				break;
+			case GravityDirection::Left:
+			case GravityDirection::Right:
+				p_velocityVector.y = -1.f * p_moveSpeed * dt;
+				p_initialPos.y += p_velocityVector.y;
+				break;
+			default:
+				break;
+			}
+		}
+		
 		isMoving = true;
 	}
-	if (AEInputCheckCurr(AEVK_A) && canMoveLeft) {
-		p_velocityVector.x = -1.f * p_moveSpeed * dt;
-		p_initialPos.x += p_velocityVector.x;
+	if (AEInputCheckCurr(AEVK_A)) {
+		if (canMoveLeft) {
+			switch (dir) {
+			case GravityDirection::Up:
+			case GravityDirection::Down:
+				p_velocityVector.x = -1.f * p_moveSpeed * dt;
+				p_initialPos.x += p_velocityVector.x;
+				break;
+			case GravityDirection::Left:
+			case GravityDirection::Right:
+				p_velocityVector.y = 1.f * p_moveSpeed * dt;
+				p_initialPos.y += p_velocityVector.y;
+				break;
+			default:
+				break;
+			}
+		}
+		
 		isMoving = true;
 	}
 	if (AEInputCheckCurr(AEVK_LSHIFT) && isMoving) {
@@ -90,47 +131,61 @@ void Player::PlayerInputHandle(f32 dt) {
 			p_moveSpeed = moveSpeed;
 		}
 	}
-	std::cout << "jump bool: " << p_isJumping << std::endl;
-
+	std::cout << "left bool: " << canMoveLeft << std::endl;
+	std::cout << "right bool: " << canMoveRight << std::endl;
 	if (AEInputCheckCurr(AEVK_SPACE) && !p_isJumping) {
 		//adjust jump logic here
-		p_velocityVector.y = 850.f;
+		switch(dir){
+		case Player::GravityDirection::Up:
+			p_velocityVector.y = -850.f;
+			break;
+		case Player::GravityDirection::Down:
+			p_velocityVector.y = 850.f;
+			break;
+		case Player::GravityDirection::Left:
+			p_velocityVector.x = 850.f;
+			break;
+		case Player::GravityDirection::Right:
+			p_velocityVector.x = -850.f;
+			break;
+		default:
+			break;
+		}
 		jumpBuffer = maxJumpBuffer;
 		coyoteBuffer = maxCoyoteBuffer;
 		p_isJumping = true;
 		if (jumpBuffer > 0.f && (p_isGrounded || coyoteBuffer > 0.f)) {
-			PlayerJump(dt);
+			PlayerJump(dt,dir);
 		}
 	}
 }
 
 //Player Movement Logic
-void Player::PlayerMovement(f32 dt, GravityDirection dir) {
+void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	//std::cout << "dt: " << dt << std::endl;
 	
-
 	jumpBuffer = max(0, jumpBuffer - dt);
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
 
-	//down force velocity (always going downwards)
+	//down force velocity (always going downwards) depend on location
 	if (!p_isGrounded) {
 		switch (dir)
 		{
 		case Player::GravityDirection::Up:
-			p_velocityVector.y += gravity * dt;
-			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+				p_velocityVector.y += gravity * dt;
+				p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
 			break;
 		case Player::GravityDirection::Down:
-			p_velocityVector.y += -gravity * dt;
-			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+				p_velocityVector.y += -gravity * dt;
+				p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
 			break;
 		case Player::GravityDirection::Left:
-			p_velocityVector.x += -gravity * dt;
-			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
+				p_velocityVector.x += -gravity * dt;
+				p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
 			break;
 		case Player::GravityDirection::Right:
-			p_velocityVector.x += gravity * dt;
-			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
+				p_velocityVector.x += gravity * dt;
+				p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
 			break;
 		default:
 			break;
@@ -138,8 +193,8 @@ void Player::PlayerMovement(f32 dt, GravityDirection dir) {
 		/*p_velocityVector.y += gravity * dt;
 		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
-	PlayerInputHandle(dt);
-	//if top of player goes past bottom of screen
+	PlayerInputHandle(dt,dir);
+	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
 	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
 		p_initialPos = p_previousPos;
 		p_velocityVector.y = 0.f;
@@ -148,7 +203,7 @@ void Player::PlayerMovement(f32 dt, GravityDirection dir) {
 	UpdatePosition(p_initialPos);
 }
 
-void Player::PlayerCollision(std::vector<GameObject*> objs)
+void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& dir)
 {
 	for (GameObject* obj : objs) {
 		if (this->_tag == obj->_tag) continue;
@@ -169,29 +224,74 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 
 		if (overlapX <= 0.f || overlapY <= 0.f) continue;
 
-		// Resolve on smallest penetration axis
+		// Resolve on smallest penetration axis (Y axis)
 		if (overlapY <= overlapX + 0.5f)
 		{
 			AEVec2 tmpPos = this->GetPosition();
+			switch (dir) {
+				case Player::GravityDirection::Up:
+					if (this->GetPosition().y < obj->GetPosition().y)
+					{
+						tmpPos.y -= overlapY;
+						this->UpdatePosition(tmpPos);
 
-			//if player is above collidable
-			if (this->GetPosition().y > obj->GetPosition().y)
-			{
-				tmpPos.y += overlapY;
-				this->UpdatePosition(tmpPos);
+						this->p_velocityVector.y = 0.f;
+						this->p_isGrounded = true;
+						this->p_isJumping = false;
+					}
+					//if player is under collidable
+					else
+					{
+						tmpPos.y += overlapY;
+						this->UpdatePosition(tmpPos);
 
-				this->p_velocityVector.y = 0.f;
-				this->p_isGrounded = true;
-				this->p_isJumping = false;
-			}
-			//if player is under collidable
-			else
-			{
-				tmpPos.y -= overlapY;
-				this->UpdatePosition(tmpPos);
+						if (this->p_velocityVector.y > 0.f)
+							this->p_velocityVector.y = 0.f;
+					}
+					break;
+				case Player::GravityDirection::Down:
+					//if player is above collidable
+					if (this->GetPosition().y > obj->GetPosition().y)
+					{
+						tmpPos.y += overlapY;
+						this->UpdatePosition(tmpPos);
 
-				if (this->p_velocityVector.y > 0.f)
+						this->p_velocityVector.y = 0.f;
+						this->p_isGrounded = true;
+						this->p_isJumping = false;
+					}
+					//if player is under collidable
+					else
+					{
+						tmpPos.y -= overlapY;
+						this->UpdatePosition(tmpPos);
+
+						if (this->p_velocityVector.y > 0.f)
+							this->p_velocityVector.y = 0.f;
+					}
+					break;
+				case Player::GravityDirection::Left:
+				case Player::GravityDirection::Right:
+					if (this->GetCollider().p_maxPoint.y > obj->GetCollider().p_minPoint.y &&
+						this->GetCollider().p_minPoint.y < obj->GetCollider().p_minPoint.y)
+					{
+						// Player hit OBJECT BOTTOM side
+						std::cout << "left hit" << std::endl;
+						tmpPos.y -= overlapY;
+						this->canMoveLeft = false;
+					}
+					else
+					{
+						// Player hit OBJECT TOP side
+						std::cout << "right hit" << std::endl;
+						tmpPos.y += overlapY;
+						this->canMoveRight = false;
+					}
+					this->UpdatePosition(tmpPos);
 					this->p_velocityVector.y = 0.f;
+					break;
+				default:
+					break;
 			}
 		}
 		else
@@ -199,22 +299,70 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 			//temp side collision
 			AEVec2 tmpPos = this->GetPosition();
 
-			if (this->GetCollider().p_maxPoint.x > obj->GetCollider().p_minPoint.x &&
-				this->GetCollider().p_minPoint.x < obj->GetCollider().p_minPoint.x)
-			{
-				// Player hit object's LEFT side
-				tmpPos.x -= overlapX;
-				this->canMoveRight = false;
+			switch (dir) {
+				//this two cases is for normal vertical check. when X offset is smaller than Y (push X)
+				case Player::GravityDirection::Up:
+				case Player::GravityDirection::Down:
+					if (this->GetCollider().p_maxPoint.x > obj->GetCollider().p_minPoint.x &&
+						this->GetCollider().p_minPoint.x < obj->GetCollider().p_minPoint.x)
+					{
+						// Player hit object's LEFT side
+						tmpPos.x -= overlapX;
+						this->canMoveRight = false;
+					}
+					else
+					{
+						// Player hit object's RIGHT side
+						tmpPos.x += overlapX;
+						this->canMoveLeft = false;
+					}
+					this->UpdatePosition(tmpPos);
+					this->p_velocityVector.x = 0.f;
+					break;
+
+				case Player::GravityDirection::Left:
+					if (this->GetPosition().x > obj->GetPosition().x)
+					{
+						tmpPos.x += overlapX;
+						this->UpdatePosition(tmpPos);
+
+						this->p_velocityVector.x = 0.f;
+						this->p_isGrounded = true;
+						this->p_isJumping = false;
+					}
+					//if player is under collidable
+					else
+					{
+						tmpPos.x -= overlapX;
+						this->UpdatePosition(tmpPos);
+
+						if (this->p_velocityVector.x > 0.f)
+							this->p_velocityVector.x = 0.f;
+					}
+					break;
+				case Player::GravityDirection::Right:
+					if (this->GetPosition().x < obj->GetPosition().x)
+					{
+						tmpPos.x -= overlapX;
+						this->UpdatePosition(tmpPos);
+
+						this->p_velocityVector.x = 0.f;
+						this->p_isGrounded = true;
+						this->p_isJumping = false;
+					}
+					//if player is under collidable
+					else
+					{
+						tmpPos.x += overlapX;
+						this->UpdatePosition(tmpPos);
+
+						if (this->p_velocityVector.x < 0.f)
+							this->p_velocityVector.x = 0.f;
+					}
+					break;
+				default:
+					break;
 			}
-			else
-			{
-				// Player hit object's RIGHT side
-				std::cout << "right hit" << std::endl;
-				tmpPos.x += overlapX;
-				this->canMoveLeft = false;
-			}
-			this->UpdatePosition(tmpPos);
-			this->p_velocityVector.x = 0.f;
 		}
 	}
 }

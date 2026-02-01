@@ -213,7 +213,7 @@ void Level1_Update() {
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 
-	mainPlayer.PlayerCollision(objects);
+	mainPlayer.PlayerCollision(objects,dir);
 }
 
 void Level1_Draw() {
