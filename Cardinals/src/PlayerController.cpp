@@ -166,32 +166,37 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	
 	jumpBuffer = max(0, jumpBuffer - dt);
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
-
+	GravityDirection currDir = dir;
 	//down force velocity (always going downwards) depend on location
 	if (!p_isGrounded) {
 		switch (dir)
 		{
 		case Player::GravityDirection::Up:
-				p_velocityVector.y += gravity * dt;
-				p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+			p_velocityVector.y += gravity * dt;
+			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
 			break;
 		case Player::GravityDirection::Down:
-				p_velocityVector.y += -gravity * dt;
-				p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+			p_velocityVector.y += -gravity * dt;
+			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
 			break;
 		case Player::GravityDirection::Left:
-				p_velocityVector.x += -gravity * dt;
-				p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
+			p_velocityVector.x += -gravity * dt;
+			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
 			break;
 		case Player::GravityDirection::Right:
-				p_velocityVector.x += gravity * dt;
-				p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
+			p_velocityVector.x += gravity * dt;
+			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
 			break;
 		default:
 			break;
 		}
 		/*p_velocityVector.y += gravity * dt;
 		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;*/
+	}
+	//resets velocity to avoid random snapping or teleporting
+	if (currDir != prevDir) {
+		p_velocityVector = { 0.f,0.f };
+		prevDir = currDir;
 	}
 	PlayerInputHandle(dt,dir);
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)

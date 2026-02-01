@@ -34,7 +34,6 @@ private:
 	f32 p_rightMax{ 0.f };
 	AEVec2 p_GravityVector{ 0.f,0.f };
 	AEVec2 p_previousPos{ 0.f,0.f };
-
 public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
@@ -42,7 +41,7 @@ public:
 		Up, Down, Left, Right,
 		GravNum
 	};
-
+	GravityDirection prevDir = GravityDirection::Down;
 	AEVec2 p_velocityVector{ 0.f,0.f };
 	bool p_isJumping{ true };
 	bool canMoveLeft{ true };
