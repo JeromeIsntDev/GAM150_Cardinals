@@ -72,7 +72,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	f32 moveSpeed{ 300.f };
 	bool isMoving{ false };
 	bool isSprint{ false };
-	if (input.isKeyTriggered(AEVK_D)) {
+	if (input.isKeyPressed(AEVK_D)) {
 		if (canMoveRight) {
 			switch (dir) {
 			case GravityDirection::Up:
@@ -92,7 +92,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 		
 		isMoving = true;
 	}
-	if (input.isKeyTriggered(AEVK_A)) {
+	if (input.isKeyPressed(AEVK_A)) {
 		if (canMoveLeft) {
 			switch (dir) {
 			case GravityDirection::Up:
@@ -112,10 +112,10 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 		
 		isMoving = true;
 	}
-	if (input.isKeyTriggered(AEVK_LSHIFT) && isMoving) {
+	if (input.isKeyPressed(AEVK_LSHIFT) && isMoving) {
 		isSprint = true;
 	}
-	if (input.isKeyTriggered(AEVK_LSHIFT)) {
+	if (input.AEInputCheckReleased(AEVK_LSHIFT)) {
 		isSprint = false;
 	}
 
