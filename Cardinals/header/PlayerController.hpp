@@ -28,7 +28,7 @@ private:
 	f32 p_moveSpeed{ 300.f };
 	f32 p_downForce{ 1.5f };
 	//set a jumpforce for psuedo gravity on jump
-	f32 gravity{ 200.f };
+	f32 gravity{ 2000.f };
 	AEVec2 p_initialPos{ 0.f,0.f };
 	f32 p_leftMin{ 0.f };
 	f32 p_rightMax{ 0.f };
