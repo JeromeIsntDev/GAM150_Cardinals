@@ -18,6 +18,13 @@
 #include "../header/TextureManager.hpp"
 #include "../header/Physics.hpp"
 
+enum class GameObjectTag {
+	Static,
+	Dynamic,
+	Platform,
+	Player
+};
+
 struct GameObjectIDAssigner {
 	u64 currIdCount{};
 	u64 GetID() {
@@ -47,6 +54,8 @@ private:
 	AEMtx33 GetTransform() const;
 
 public:
+	GameObjectTag _tag;
+
 	virtual ~GameObject() = default; // destructor for polymorphism 
 
 	GameObject();

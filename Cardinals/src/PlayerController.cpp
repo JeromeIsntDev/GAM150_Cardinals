@@ -25,7 +25,6 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score,
 	p_playerHealth = health;
 	p_moveSpeed = moveSpeed;
 	p_isJumping = isJump;
-	p_score = score;
 	p_initialPos.x = xPos;
 	p_initialPos.y = yPos;
 	UpdatePosition(p_initialPos);
@@ -91,7 +90,7 @@ void Player::PlayerInputHandle(f32 dt) {
 			p_moveSpeed = moveSpeed;
 		}
 	}
-	//std::cout << "jump bool: " << p_isJumping << std::endl;
+	std::cout << "jump bool: " << p_isJumping << std::endl;
 
 	if (AEInputCheckCurr(AEVK_SPACE) && !p_isJumping) {
 		//adjust jump logic here
@@ -128,13 +127,80 @@ void Player::PlayerMovement(f32 dt) {
 	UpdatePosition(p_initialPos);
 }
 
+void Player::PlayerCollision(std::vector<GameObject*> objs)
+{
+	for (GameObject* obj : objs) {
+		if (this->_tag == obj->_tag) continue;
+		if (!CollisionDetected(this->GetCollider(), obj->GetCollider())) continue;
+
+		AEVec2 currentScale = obj->GetScale();
+		AEVec2 currentPos = obj->GetPosition();
+
+		this->hasCollided = true;
+
+		f32 overlapX =
+			(std::min)(this->GetCollider().p_maxPoint.x, obj->GetCollider().p_maxPoint.x) -
+			(std::max)(this->GetCollider().p_minPoint.x, obj->GetCollider().p_minPoint.x);
+
+		f32 overlapY =
+			(std::min)(this->GetCollider().p_maxPoint.y, obj->GetCollider().p_maxPoint.y) -
+			(std::max)(this->GetCollider().p_minPoint.y, obj->GetCollider().p_minPoint.y);
+
+		if (overlapX <= 0.f || overlapY <= 0.f) continue;
+
+		// Resolve on smallest penetration axis
+		if (overlapY <= overlapX + 0.5f)
+		{
+			AEVec2 tmpPos = this->GetPosition();
+
+			//if player is above collidable
+			if (this->GetPosition().y > obj->GetPosition().y)
+			{
+				tmpPos.y += overlapY;
+				this->UpdatePosition(tmpPos);
+
+				this->p_velocityVector.y = 0.f;
+				this->p_isGrounded = true;
+				this->p_isJumping = false;
+			}
+			//if player is under collidable
+			else
+			{
+				tmpPos.y -= overlapY;
+				this->UpdatePosition(tmpPos);
+
+				if (this->p_velocityVector.y > 0.f)
+					this->p_velocityVector.y = 0.f;
+			}
+		}
+		else
+		{
+			//temp side collision
+			AEVec2 tmpPos = this->GetPosition();
+
+			if (this->GetCollider().p_maxPoint.x > obj->GetCollider().p_minPoint.x &&
+				this->GetCollider().p_minPoint.x < obj->GetCollider().p_minPoint.x)
+			{
+				// Player hit object's LEFT side
+				tmpPos.x -= overlapX;
+				this->right = false;
+			}
+			else
+			{
+				// Player hit object's RIGHT side
+				std::cout << "right hit" << std::endl;
+				tmpPos.x += overlapX;
+				this->left = false;
+			}
+			this->UpdatePosition(tmpPos);
+			this->p_velocityVector.x = 0.f;
+		}
+	}
+}
+
 //sets the player health to smth new depending on parameter
 void Player::SetPlayerHealth(f32 healthDamage) {
 	p_playerHealth -= healthDamage;
-}
-//sets the new score on the param
-void Player::SetPlayerScore(f32 scoreAdded) {
-	p_score += scoreAdded;
 }
 
 bool Player::GetPlayerCollide() const{
@@ -157,9 +223,6 @@ f32 Player::GetPlayerSpeed() const{
 }
 f32 Player::GetPlayerJumpForce() const{
 	return p_downForce;
-}
-f32 Player::GetPlayerScore() const{
-	return p_score;
 }
 bool Player::GetPlayerJump() const {
 	return p_isJumping;

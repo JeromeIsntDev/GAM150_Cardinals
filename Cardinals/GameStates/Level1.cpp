@@ -27,6 +27,13 @@ namespace {
 	//ControlPanel controlPanel;
 
 	bool isReadFromFile = false;
+
+	enum class GravityDirection {
+		Up, Down, Left, Right,
+		GravNum
+	};
+
+	GravityDirection grav;
 }
 
 void Level1_Load() {
@@ -63,6 +70,7 @@ void Level1_Initialize()
 	mainPlayer.UpdateScale(AEVec2{ 100.f, 100.f });
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer.SetID(assigner.GetID());
+	mainPlayer._tag = GameObjectTag::Player;
 
 	platform.SetMesh(squareMesh);
 	platform.SetTexture(&placeholderTexture);
@@ -104,12 +112,33 @@ void Level1_Update() {
 	//declare mainPlayer variable
 	//PRINT("Update: %s", "Main Menu\n");
 	
+	AEVec2 gravityVector{};
+	switch (grav)
+	{
+	case GravityDirection::Up:
+		AEVec2Set(&gravityVector, 0, 1);
+		break;
+	case GravityDirection::Down:
+		AEVec2Set(&gravityVector, 0, -1);
+		break;
+	case GravityDirection::Left:
+		AEVec2Set(&gravityVector, -1, 0);
+		break;
+	case GravityDirection::Right:
+		AEVec2Set(&gravityVector, 1, 0);
+		break;
+	default:
+		break;
+	}
+
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetBackgroundColor(0.95f, 0.65f, 0.77f);
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
 	//controlPanel.ControlPanel_Update();
+
+	
 
 	if (input.isMouseBtnPressed(AEVK_LCTRL)) {
 		if (input.isMouseBtnTriggered(AEVK_S)) {
@@ -156,6 +185,9 @@ void Level1_Update() {
 			}
 		}
 	}
+
+
+	/*PLAYER STUFF*/
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	AEVec2 prevPos = mainPlayer.GetPosition();
 	mainPlayer.PlayerMovement(dt);
@@ -165,78 +197,7 @@ void Level1_Update() {
 	mainPlayer.left = true;
 	mainPlayer.right = true;
 
-	for (GameObject* obj : objects) {
-		if (obj == &mainPlayer)
-			continue;
-
-		AEVec2 currentScale = obj->GetScale();
-		AEVec2 currentPos = obj->GetPosition();
-
-		if (!CollisionDetected(mainPlayer.GetCollider(), obj->GetCollider())) {
-			continue;
-		}
-
-		mainPlayer.hasCollided = true;
-
-		f32 overlapX =
-			(std::min)(mainPlayer.GetCollider().p_maxPoint.x, obj->GetCollider().p_maxPoint.x) -
-			(std::max)(mainPlayer.GetCollider().p_minPoint.x, obj->GetCollider().p_minPoint.x);
-
-		f32 overlapY =
-			(std::min)(mainPlayer.GetCollider().p_maxPoint.y, obj->GetCollider().p_maxPoint.y) -
-			(std::max)(mainPlayer.GetCollider().p_minPoint.y, obj->GetCollider().p_minPoint.y);
-
-		if (overlapX <= 0.f || overlapY <= 0.f)
-			continue;
-
-		// Resolve on smallest penetration axis
-		if (overlapY <= overlapX + 0.5f)
-		{
-			AEVec2 tmpPos = mainPlayer.GetPosition();
-
-			//if player is above collidable
-			if (mainPlayer.GetPosition().y > obj->GetPosition().y)
-			{
-				tmpPos.y += overlapY;
-				mainPlayer.UpdatePosition(tmpPos);
-
-				mainPlayer.p_velocityVector.y = 0.f;
-				mainPlayer.p_isGrounded = true;
-				mainPlayer.p_isJumping = false;
-			}
-			//if player is under collidable
-			else
-			{
-				tmpPos.y -= overlapY;
-				mainPlayer.UpdatePosition(tmpPos);
-
-				if (mainPlayer.p_velocityVector.y > 0.f)
-					mainPlayer.p_velocityVector.y = 0.f;
-			}
-		}
-		else
-		{
-			//temp side collision
-			AEVec2 tmpPos = mainPlayer.GetPosition();
-
-			if (mainPlayer.GetCollider().p_maxPoint.x > obj->GetCollider().p_minPoint.x &&
-				mainPlayer.GetCollider().p_minPoint.x < obj->GetCollider().p_minPoint.x)
-			{
-				// Player hit object's LEFT side
-				tmpPos.x -= overlapX;
-				mainPlayer.right = false;
-			}
-			else
-			{
-				// Player hit object's RIGHT side
-				std::cout << "right hit" << std::endl;
-				tmpPos.x += overlapX;
-				mainPlayer.left = false;
-			}
-			mainPlayer.UpdatePosition(tmpPos);
-			mainPlayer.p_velocityVector.x = 0.f;
-		}
-	}
+	mainPlayer.PlayerCollision(objects);
 }
 
 void Level1_Draw() {

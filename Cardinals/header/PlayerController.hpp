@@ -26,8 +26,6 @@ private:
 	f32 p_playerHealth{ 100.f };
 	f32 p_moveSpeed{ 300.f };
 	f32 p_downForce{ 1.5f };
-	bool p_isInverted{ false };
-	f32 p_score{ 0.f };
 	//set a jumpforce for psuedo gravity on jump
 	f32 gravity{ -2000.f };
 	AEVec2 p_initialPos{ 0.f,0.f };
@@ -59,16 +57,15 @@ public:
 	f32 GetPlayerHealth() const;
 	f32 GetPlayerSpeed() const;
 	f32 GetPlayerJumpForce() const;
-	f32 GetPlayerScore() const;
 	bool GetPlayerJump() const;
 	bool GetPlayerCollide() const;
 	AEVec2 GetPrevPos() const;
 	//set the player health
 	void SetPlayerCollide(bool);
 	void SetPlayerHealth(f32);
-	void SetPlayerScore(f32);
 	void PlayerInputHandle(f32);
 	void PlayerMovement(f32);
+	void PlayerCollision(std::vector<GameObject*> objs);
 	//Function for Player Jump Logic
 	//Basically the initialize values for PreJumps
 	void StartJump(AEVec2);
