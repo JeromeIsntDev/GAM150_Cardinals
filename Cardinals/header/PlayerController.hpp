@@ -31,7 +31,7 @@ private:
 	AEVec2 p_initialPos{ 0.f,0.f };
 	f32 p_leftMin{ 0.f };
 	f32 p_rightMax{ 0.f };
-	AEVec2 p_movementVector{ 0.f,0.f };
+	AEVec2 p_GravityVector{ 0.f,0.f };
 	AEVec2 p_previousPos{ 0.f,0.f };
 
 public:
@@ -39,8 +39,8 @@ public:
 
 	AEVec2 p_velocityVector{ 0.f,0.f };
 	bool p_isJumping{ true };
-	bool left{ true };
-	bool right{ true };
+	bool canMoveLeft{ true };
+	bool canMoveRight{ true };
 	//public Variable for Player (Check if error)
 	bool p_isGrounded{ false };
 	f32 maxJumpBuffer{ 0.12f };

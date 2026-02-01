@@ -194,8 +194,8 @@ void Level1_Update() {
 
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
-	mainPlayer.left = true;
-	mainPlayer.right = true;
+	mainPlayer.canMoveLeft = true;
+	mainPlayer.canMoveRight = true;
 
 	mainPlayer.PlayerCollision(objects);
 }

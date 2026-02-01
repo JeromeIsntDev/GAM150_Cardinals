@@ -58,12 +58,12 @@ void Player::PlayerInputHandle(f32 dt) {
 	f32 moveSpeed{ 300.f };
 	bool isMoving{ false };
 	bool isSprint{ false };
-	if (AEInputCheckCurr(AEVK_D) && right) {
+	if (AEInputCheckCurr(AEVK_D) && canMoveRight) {
 		p_velocityVector.x = 1.f * p_moveSpeed * dt;
 		p_initialPos.x += p_velocityVector.x;
 		isMoving = true;
 	}
-	if (AEInputCheckCurr(AEVK_A) && left) {
+	if (AEInputCheckCurr(AEVK_A) && canMoveLeft) {
 		p_velocityVector.x = -1.f * p_moveSpeed * dt;
 		p_initialPos.x += p_velocityVector.x;
 		isMoving = true;
@@ -98,14 +98,13 @@ void Player::PlayerInputHandle(f32 dt) {
 		jumpBuffer = maxJumpBuffer;
 		coyoteBuffer = maxCoyoteBuffer;
 		p_isJumping = true;
-		//PlayerJump(dt);
 		if (jumpBuffer > 0.f && (p_isGrounded || coyoteBuffer > 0.f)) {
 			PlayerJump(dt);
 		}
 	}
 }
 
-//Input handle for player movement logic
+//Player Movement Logic
 void Player::PlayerMovement(f32 dt) {
 	//std::cout << "dt: " << dt << std::endl;
 	PlayerInputHandle(dt);
@@ -183,14 +182,14 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 			{
 				// Player hit object's LEFT side
 				tmpPos.x -= overlapX;
-				this->right = false;
+				this->canMoveRight = false;
 			}
 			else
 			{
 				// Player hit object's RIGHT side
 				std::cout << "right hit" << std::endl;
 				tmpPos.x += overlapX;
-				this->left = false;
+				this->canMoveLeft = false;
 			}
 			this->UpdatePosition(tmpPos);
 			this->p_velocityVector.x = 0.f;
