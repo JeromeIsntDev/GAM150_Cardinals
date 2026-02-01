@@ -12,6 +12,7 @@ the player movement etc
 **************************************************************************/
 
 #include "../header/PlayerController.hpp"
+#include "../header/InputHandler.hpp"
 #include <iostream>
 
 //Player::Player(f32 health ,f32 moveSpeed,f32 jumpForce ,bool isJump ,f32 score , f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) 
@@ -20,6 +21,8 @@ the player movement etc
 //	  initialYPos(zeroVal),initialVelocity(zeroVal),jumpT(zeroVal),
 //	  GameObject(mesh,AEVec2{0.f,0.f},0.f,AEVec2{200.f,200.f})
 //{}
+
+auto& input = InputHandler::GetInstance();
 
 void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) {
 	p_playerHealth = health;
@@ -69,7 +72,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	f32 moveSpeed{ 300.f };
 	bool isMoving{ false };
 	bool isSprint{ false };
-	if (AEInputCheckCurr(AEVK_D)) {
+	if (input.isKeyTriggered(AEVK_D)) {
 		if (canMoveRight) {
 			switch (dir) {
 			case GravityDirection::Up:
@@ -89,7 +92,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 		
 		isMoving = true;
 	}
-	if (AEInputCheckCurr(AEVK_A)) {
+	if (input.isKeyTriggered(AEVK_A)) {
 		if (canMoveLeft) {
 			switch (dir) {
 			case GravityDirection::Up:
@@ -109,10 +112,10 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 		
 		isMoving = true;
 	}
-	if (AEInputCheckCurr(AEVK_LSHIFT) && isMoving) {
+	if (input.isKeyTriggered(AEVK_LSHIFT) && isMoving) {
 		isSprint = true;
 	}
-	if (AEInputCheckReleased(AEVK_LSHIFT)) {
+	if (input.isKeyTriggered(AEVK_LSHIFT)) {
 		isSprint = false;
 	}
 
@@ -133,7 +136,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	}
 	std::cout << "left bool: " << canMoveLeft << std::endl;
 	std::cout << "right bool: " << canMoveRight << std::endl;
-	if (AEInputCheckCurr(AEVK_SPACE) && !p_isJumping) {
+	if (input.isKeyTriggered(AEVK_SPACE) && !p_isJumping) {
 		//adjust jump logic here
 		switch(dir){
 		case Player::GravityDirection::Up:
