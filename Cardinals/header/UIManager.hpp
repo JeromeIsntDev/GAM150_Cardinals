@@ -22,13 +22,14 @@
 #include "../header/InputHandler.hpp"
 
 // this guy IS every ui element
-class UIElement : public GameObject 
+class UIElement : public GameObject
 {
 protected:
 	bool isActive = false;
 	bool isInteractable = false;
 	Color tint = Colors::White; // full brightness
 	std::vector<UIElement*> children;
+	Texture* currentTexture{};
 
 public:
 
@@ -103,7 +104,28 @@ public:
 	Button() = default;
 
 	void SetOnClick(std::function<void()> func) { onClick = func; }
-	void Update(float dt) override;
+
+	void Update(float dt) override
+	{
+		currentTexture = tex;
+
+		if (!isActive || !isInteractable || currentTexture == nullptr) return;
+
+		float scaleMultiplier = 1.1f;
+
+		AEVec2 mousePos = UIManager::GetNewMousePos();
+
+		if (IsPointInside(mousePos.x, mousePos.y) && currentTexture)
+		{
+			std::cout << "bruh " << mousePos.x << " " << mousePos.y << std::endl;
+			GameObject::UpdateScale({ currentTexture->Get_Image_Width() * scaleMultiplier, currentTexture->Get_Image_Height() * scaleMultiplier });
+		}
+		else
+		{
+			scaleMultiplier = 1.0f;
+			GameObject::UpdateScale({ currentTexture->Get_Image_Width() * scaleMultiplier, currentTexture->Get_Image_Height() * scaleMultiplier });
+		}
+	}
 
 	void OnClick() override
 	{

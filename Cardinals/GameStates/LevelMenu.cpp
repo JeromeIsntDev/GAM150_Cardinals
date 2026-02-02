@@ -40,11 +40,7 @@ void LevelMenu_Initialize()
 	PRINT("Initialize: %s", "Level Menu\n");
 
 	buttonMesh = RectMeshCenter();
-	
-	lvl1Btn = std::make_unique<Button>(buttonMesh, 
-		AEVec2{ -300.f, 50.f }, 
-		0.f, 
-		AEVec2{ 200.f, 200.f });
+	lvl1Btn = std::make_unique<Button>(buttonMesh, AEVec2{ -300.f, 50.f }, 0.f, AEVec2{ buttonTexture.Get_Image_Width(), buttonTexture.Get_Image_Height() });
 	lvl1Btn->SetTexture(&buttonTexture);
 	lvl1Btn->SetActive(true);
 	lvl1Btn->SetInteractable(true);
