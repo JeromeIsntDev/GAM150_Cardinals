@@ -198,6 +198,12 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	}
 	//resets velocity to avoid random snapping or teleporting
 	if (currDir != prevDir) {
+		currCD += dt;
+		p_isJumping = true;
+		if (currCD >= maxCD) {
+			p_isJumping = false;
+			currCD = 0.f;
+		}
 		p_velocityVector = { 0.f,0.f };
 		prevDir = currDir;
 	}
