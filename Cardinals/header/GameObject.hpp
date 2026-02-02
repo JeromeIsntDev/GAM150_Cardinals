@@ -86,7 +86,10 @@ public:
 	bool HoverMesh(s32 mouseX, s32 mouseY) const;
 
 	// for UI, updates behavior
-	virtual void Update(float dt) {}
+	virtual void Update(float dt) 
+	{
+		UNREFERENCED_PARAMETER(dt);
+	}
 	virtual void Draw() const;
 
 	bool IsChild() const;

@@ -32,6 +32,8 @@ namespace {
 	bool isReadFromFile = false;
 
 	f32 levelTime{};
+
+	//UIManager tempUI;
 }
 
 void Level1_Load() {
@@ -39,6 +41,8 @@ void Level1_Load() {
 	digipenFont.Load_Font(Fonts::Alt, 72.f);
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Change_Text_Color(Colors::Black);
+
+	//tempUI.InitTooltipFont(Fonts::Main, 30.f);
 
 	playerTexture.Load_Image(Images::Player);
 	placeholderTexture.Load_Image(Images::Placeholder);

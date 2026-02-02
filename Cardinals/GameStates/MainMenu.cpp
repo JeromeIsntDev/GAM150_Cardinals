@@ -20,8 +20,8 @@ extern bool MassUnload();
 namespace {
 
 	AEGfxVertexList* squareMesh;
-	Text cardinalsFont;
-	Text digipenFont;
+	Text cardinalsFont, digipenFont, tooltipFont;
+
 	Texture startTexture{}, exitTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{}, settingsTexture{};
 	Texture menuBGTexture{};
 
@@ -52,6 +52,8 @@ void MainMenu_Load() {
 
 	digipenFont.Load_Font(Fonts::Main, 30.f);
 	digipenFont.Input_Text("All content (C) 2025 Digipen Institute of Technology Singapore. All Rights Reserved");
+
+	menuUI.InitTooltipFont(Fonts::Main, 30.f); popUpUI.InitTooltipFont(Fonts::Main, 30.f);
 
 	menuBGTexture.Load_Image(Images::Background);
 	tex_digipenLogo.Load_Image(Images::DigipenLogo);
@@ -108,6 +110,7 @@ void MainMenu_Initialize()
 	// creates button w relevant stuff stolen from gameobej
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	startBtn->SetTexture(&startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
+	startBtn->SetTooltipText("ur mom");
 	startBtn->SetID(assigner.GetID());
 
 	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
@@ -132,6 +135,7 @@ void MainMenu_Initialize()
 	pauseMenu = std::make_unique<PauseMenu>(false);
 	pauseMenu->SetTextures(&menuBGTexture, &startTexture, &exitTexture);
 	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{710.f,360.f}, 0.f, AEVec2{settingsTexture.Get_Image_Width(), settingsTexture.Get_Image_Height()});
+	
 	// placeholder for settings button
 	settingsBtn->SetTexture(&settingsTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
 	settingsBtn->SetID(assigner.GetID());
@@ -146,8 +150,6 @@ void MainMenu_Initialize()
 
 	quitPopUp->AddChild(yesBtn.get());
 	quitPopUp->AddChild(noBtn.get());
-
-
 
 	// use them like this ik its weird asf but like. i'll make it better soon
 	startBtn->SetOnClick([]() {
@@ -188,7 +190,6 @@ void MainMenu_Initialize()
 	go_digipenLogo.UpdateScale(AEVec2{ tex_digipenLogo.Get_Image_Width(), tex_digipenLogo.Get_Image_Height() });
 	go_digipenLogo.UpdateRotation(0.f);
 
-
 	PRINT("Initialize: %s", "Main Menu\n");
 }
 
@@ -201,6 +202,8 @@ void MainMenu_Update() {
 
 	AEGfxSetTransparency(logo_transparency);
 
+	float dt = AEFrameRateControllerGetFrameTime();
+
 	if (AEInputCheckTriggered(AEVK_SPACE)) {
 		logo_transparency = 1.f;
 		isLogoDrawn = 1;
@@ -211,13 +214,13 @@ void MainMenu_Update() {
 		quitPopUp->ToggleActive(AEVK_6);
 
 		if (pauseMenu->isVisible()) {
-			pauseMenu->Update(0.f);
+			pauseMenu->Update(dt);
 		}
 		else if (quitPopUp->IsActive()) {
-			popUpUI.Update(0.f);
+			popUpUI.Update(dt);
 		}
 		else {
-			menuUI.Update(0.f); // freezes menuUI but i'll update this in the future to freeze the whole game
+			menuUI.Update(dt); // freezes menuUI but i'll update this in the future to freeze the whole game
 		}
 
 		AEInputGetCursorPosition(&mouseX, &mouseY);

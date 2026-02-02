@@ -36,10 +36,12 @@ void UIManager::Add(UIElement* element)
 
 void UIManager::Update(float dt) 
 {
-    for (UIElement* element : uiElements)
+    for (UIElement* e : uiElements)
     {
-        if (element->IsActive()) {
-            element->Update(dt); // update for the hover
+        if (e->IsActive()) 
+        {
+            e->ResetTooltip(); // turn off by default
+            e->Update(dt); // update for the hover
         }
     }
 
@@ -48,21 +50,32 @@ void UIManager::Update(float dt)
 
 void UIManager::Draw() const
 {
+    // tint
     for (UIElement* e : uiElements) 
     {
         if (e->IsActive())
         {
             AEGfxSetColorToMultiply(e->GetTint().r, e->GetTint().g, e->GetTint().b, e->GetTint().a); // APPLY THE TINT RIGHT BEFORE DRAWING RAHHHH
             e->Draw();
-
-            AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f); // reset
         }
     }
-}
 
-void UIManager::Freeze()
-{
+    AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f); // reset
 
+    if (!isFontLoaded) return; // fuck yo warnings
+
+    // tool tip
+    for (UIElement* e : uiElements) 
+    {
+        if (e->IsActive() && e->IsShowingTooltip()) 
+        {
+            AEVec2 pos = e->GetTooltipPos();
+
+            // std::cout << "drawin tooltip: " << e->GetTooltipText() << " at " << e->GetTooltipPos().x << std::endl;
+            tooltipRenderer.Input_Text(e->GetTooltipText().c_str());
+            tooltipRenderer.Draw_Text(pos.x + 20.f, GetNewMousePos().y + 20.f);
+        }
+    }
 }
 
 // omg it handles
@@ -78,14 +91,15 @@ void UIManager::HandleClick()
     {
         AEVec2 mousePos = GetNewMousePos();
 
-        for (auto* element : uiElements)
+        // can also use auto but imma use uielement for btr clarity
+        for (UIElement* e : uiElements)
         {
             // use the trnalsated mouse coordinates
-            if (element->IsActive() && element->IsInteractable())
+            if (e->IsActive() && e->IsInteractable())
             {
-                if (element->IsPointInside(mousePos.x, mousePos.y))
+                if (e->IsPointInside(mousePos.x, mousePos.y))
                 {
-                    element->OnClick();
+                    e->OnClick();
                     std::cout << "Element clicked at: " << mousePos.x << ", " << mousePos.y << std::endl;
                     break;
                 }
@@ -96,7 +110,8 @@ void UIManager::HandleClick()
 
 void UIManager::Exit() 
 {
-    uiElements.clear(); // dangl;ing pointers fark you
+    uiElements.clear(); // get rid of them dangling pointers 
+    isFontLoaded = false;
 }
 
 ///
@@ -133,18 +148,3 @@ bool UIElement::ToggleActive(u8 key)
 
     return this->IsActive();
 }
-
-//void Button::Update(float dt) 
-//{
-//    // for button hover
-//    if (!isActive || !isInteractable) return;
-//
-//    AEVec2 mousePos = UIManager::GetNewMousePos();
-//    //std::cout << "bruh " << mousePos.x << " " << mousePos.y << std::endl;
-//
-//    //if (IsPointInside(mousePos.x, mousePos.y)) 
-//    //{ tint = { Colors::PastelPurple }; } // yayy purple
-//    //else 
-//    //{ tint = { 1.0f, 1.0f, 1.0f, 1.0f };  } // reset
-//
-//}

@@ -14,24 +14,29 @@
 
 // errrr yeah
 
-bool InputHandler::isKeyPressed(u32 key) 
+bool InputHandler::isKeyPressed(u8 key) 
 {
 	return AEInputCheckCurr(key);
 }
 
-bool InputHandler::isKeyTriggered(u32 key)
+bool InputHandler::isKeyTriggered(u8 key)
 {
 	return AEInputCheckTriggered(key);
 }
 
-bool InputHandler::isMouseBtnPressed(u32 button) 
+bool InputHandler::isMouseBtnPressed(u8 button)
 {
 	return AEInputCheckCurr(button);
 }
 
-bool InputHandler::isMouseBtnTriggered(u32 button)
+bool InputHandler::isMouseBtnTriggered(u8 button)
 {
 	return AEInputCheckTriggered(button);
+}
+
+bool InputHandler::isKeyReleased(u8 key)
+{
+	return AEInputCheckReleased(key);
 }
 
 void InputHandler::getMousePos(float& x, float& y)

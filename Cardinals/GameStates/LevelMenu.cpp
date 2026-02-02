@@ -13,6 +13,7 @@ namespace {
 	Texture exitTexture;
 	std::unique_ptr<Button> lvl1Btn, lvl2Btn, lvl3Btn, lvl4Btn, lvl5Btn;
 	std::unique_ptr<Button> backBtn;
+	
 	UIManager uiManager;
 }
 
@@ -33,6 +34,9 @@ void LevelMenu_Load() {
 	meshes.push_back(&buttonMesh);
 
 	if (!texts.empty()) texts.clear();
+
+	// only uncomment if you want tooltips here bruh
+	//uiManager.InitTooltipFont(Fonts::Main, 30.f);
 }
 
 void LevelMenu_Initialize()
@@ -123,7 +127,7 @@ void LevelMenu_Update() {
 
 	AEGfxSetTransparency(1.f);
 
-	uiManager.Update(0.f);
+	uiManager.Update(AEFrameRateControllerGetFrameTime());
 }
 
 void LevelMenu_Draw() {

@@ -39,10 +39,12 @@ public:
 	// auto& myInput = InputHandler::GetInstance();
 	// okayyy? :3
 
-	bool isKeyPressed(u32 key); // held
-	bool isKeyTriggered(u32 key); // jst once
-	bool isMouseBtnPressed(u32 button);
-	bool isMouseBtnTriggered(u32 button);
+	bool isKeyPressed(u8 key); // held
+	bool isKeyTriggered(u8 key); // jst once
+	bool isMouseBtnPressed(u8 button);
+	bool isMouseBtnTriggered(u8 button);
+
+	bool isKeyReleased(u8 key);
 
 	void getMousePos(float& x, float& y);
 };

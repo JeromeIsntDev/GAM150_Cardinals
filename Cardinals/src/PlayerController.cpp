@@ -115,7 +115,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	if (input.isKeyPressed(AEVK_LSHIFT) && isMoving) {
 		isSprint = true;
 	}
-	if (AEInputCheckReleased(AEVK_LSHIFT)) {
+	if (input.isKeyReleased(AEVK_LSHIFT)) {
 		isSprint = false;
 	}
 
