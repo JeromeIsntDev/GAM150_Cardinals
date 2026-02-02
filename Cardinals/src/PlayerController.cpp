@@ -170,6 +170,9 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	jumpBuffer = max(0, jumpBuffer - dt);
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
 	GravityDirection currDir = dir;
+
+	//CLAMP HERE
+
 	//down force velocity (always going downwards) depend on location
 	if (!p_isGrounded) {
 		switch (dir)
@@ -182,11 +185,13 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		case Player::GravityDirection::Down:
 			p_velocityVector.y += -gravity * dt;
 			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
 
 			break;
 		case Player::GravityDirection::Left:
 			p_velocityVector.x += -gravity * dt;
 			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
+			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
 			break;
 		case Player::GravityDirection::Right:
 			p_velocityVector.x += gravity * dt;
@@ -215,22 +220,22 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
 	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
 		p_initialPos = p_previousPos;
-		p_velocityVector.y = 0.f;
+		p_velocityVector = { 0.f, 0.f };
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_initialPos.y >= 400.f) {
 		p_initialPos = p_previousPos;
-		p_velocityVector.y = 0.f;
+		p_velocityVector = { 0.f, 0.f };
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_initialPos.x >= 750.f) {
 		p_initialPos = p_previousPos;
-		p_velocityVector.y = 0.f;
+		p_velocityVector = { 0.f, 0.f };
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_initialPos.x <= -750.f) {
 		p_initialPos = p_previousPos;
-		p_velocityVector.y = 0.f;
+		p_velocityVector = { 0.f, 0.f };
 		grav = Player::GravityDirection::Down;
 	}
 
