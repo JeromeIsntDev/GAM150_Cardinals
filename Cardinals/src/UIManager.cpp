@@ -11,6 +11,7 @@
 **************************************************************************/
 
 #include "../header/UIManager.hpp"
+#include "../header/InputHandler.hpp"
 
 ///
 /// UI ELEMENTS
@@ -205,7 +206,6 @@ void UIManager::Draw() const
     }
 }
 
-// omg it handles
 void UIManager::HandleClick()
 {
     // just tells the compiler to find the instance using referencing olololol

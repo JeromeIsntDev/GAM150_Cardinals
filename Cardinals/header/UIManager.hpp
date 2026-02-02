@@ -19,7 +19,6 @@
 #include <functional>
 
 #include "../header/GameObject.hpp"
-#include "../header/InputHandler.hpp"
 
 // this guy IS every ui element
 class UIElement : public GameObject
