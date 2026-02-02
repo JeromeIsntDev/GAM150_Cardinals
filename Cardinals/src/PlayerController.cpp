@@ -198,6 +198,12 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	}
 	//resets velocity to avoid random snapping or teleporting
 	if (currDir != prevDir) {
+		currCD += dt;
+		p_isJumping = true;
+		if (currCD >= maxCD) {
+			p_isJumping = false;
+			currCD = 0.f;
+		}
 		p_velocityVector = { 0.f,0.f };
 		prevDir = currDir;
 	}
@@ -206,7 +212,15 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
 		p_initialPos = p_previousPos;
 		p_velocityVector.y = 0.f;
+		dir = GravityDirection::Down;
 	}
+	if (p_initialPos.y >= 400.f) {
+		p_initialPos = p_previousPos;
+		p_velocityVector.y = 0.f;
+		grav = Player::GravityDirection::Down;
+	}
+
+	p_initialPos.x = AEClamp(p_initialPos.x, -750.f, 750.f);
 
 	UpdatePosition(p_initialPos);
 }

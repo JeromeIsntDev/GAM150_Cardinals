@@ -29,9 +29,9 @@ namespace {
 	//IMGUI
 	//ControlPanel controlPanel;
 
-	Player::GravityDirection dir = Player::GravityDirection::Down;
-
 	bool isReadFromFile = false;
+
+	f32 levelTime{};
 }
 
 void Level1_Load() {
@@ -63,7 +63,7 @@ void Level1_Initialize()
 	assigner.currIdCount = 0;
 
 	//Player Init
-	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 150.f);
+	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 75.f);
 	mainPlayer.SetTexture(&playerTexture);
 	mainPlayer.UpdateScale(AEVec2{ 100.f, 100.f });
 	mainPlayer.UpdateRotation(0.f);
@@ -140,6 +140,7 @@ void Level1_Update() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
 	//controlPanel.ControlPanel_Update();
+	levelTime += AEFrameRateControllerGetFrameTime();
 
 
 	if (input.isMouseBtnPressed(AEVK_LCTRL)) {
@@ -192,28 +193,28 @@ void Level1_Update() {
 	/*PLAYER STUFF*/
 
 	if (input.isMouseBtnTriggered(AEVK_DOWN)) {
-		dir = Player::GravityDirection::Down;
+		mainPlayer.grav = Player::GravityDirection::Down;
 	}
 	if (input.isMouseBtnTriggered(AEVK_UP)) {
-		dir = Player::GravityDirection::Up;
+		mainPlayer.grav = Player::GravityDirection::Up;
 	}
 	if (input.isMouseBtnTriggered(AEVK_LEFT)) {
-		dir = Player::GravityDirection::Left;
+		mainPlayer.grav = Player::GravityDirection::Left;
 	}
 	if (input.isMouseBtnTriggered(AEVK_RIGHT)) {
-		dir = Player::GravityDirection::Right;
+		mainPlayer.grav = Player::GravityDirection::Right;
 	}
 
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
-	AEVec2 prevPos = mainPlayer.GetPosition();
-	mainPlayer.PlayerMovement(dt, dir);
+
+	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
 
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 
-	mainPlayer.PlayerCollision(objects,dir);
+	mainPlayer.PlayerCollision(objects, mainPlayer.grav);
 }
 
 void Level1_Draw() {
@@ -232,6 +233,12 @@ void Level1_Draw() {
 		digipenFont.Input_Text("Reading");
 		digipenFont.Draw_Text(AEVec2{ 650.f, 430.f }, .5f, 1.f);
 	}
+
+
+	digipenFont.Input_Text("Time: ");
+	digipenFont.Draw_Text(675.f, 400.f);
+	digipenFont.Input_Float(levelTime);
+	digipenFont.Draw_Text_Corner(725.f, 387.f);
 
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);

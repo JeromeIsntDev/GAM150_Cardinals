@@ -17,6 +17,7 @@
 #include <AEEngine.h>
 #include <vector>
 #include <string>
+#include <iostream>
 
 struct Color {
     f32 r, g, b, a;
@@ -99,8 +100,10 @@ public:
 
     void Load_Font(const FontFile& fontFilePath, const f32 initHeight);
     void Input_Text(const char* text);
+    void Input_Float(float t);
     void Draw_Text() const;
     void Draw_Text(f32 x, f32 y);
+    void Draw_Text_Corner(f32 x, f32 y);
     void Draw_Text(AEVec2 pos, f32 scale, f32 fading);
     void Change_Text_Color(const Color color);
     void Free_Font() const;
