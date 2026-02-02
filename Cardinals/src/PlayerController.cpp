@@ -212,6 +212,7 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
 		p_initialPos = p_previousPos;
 		p_velocityVector.y = 0.f;
+		dir = GravityDirection::Down;
 	}
 
 	UpdatePosition(p_initialPos);
