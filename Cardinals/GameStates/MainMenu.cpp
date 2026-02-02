@@ -58,7 +58,7 @@ void MainMenu_Load() {
 	startTexture.Load_Image(Images::StartBtn);
 	exitTexture.Load_Image(Images::ExitBtn);
 	creditsTexture.Load_Image(Images::CreditsBtn);
-	//settingsTexture.Load_Image(Images::SettingsBtn);
+	settingsTexture.Load_Image(Images::SettingsBtn);
 
 	// testing
 	yesTexture.Load_Image(Images::YesBtn); noTexture.Load_Image(Images::NoBtn);
@@ -74,6 +74,7 @@ void MainMenu_Load() {
 	textures.push_back(&yesTexture);
 	textures.push_back(&noTexture);
 	textures.push_back(&popUpTexture);
+	textures.push_back(&settingsTexture);
 
 	if (!meshes.empty()) meshes.clear();
 	meshes.push_back(&squareMesh);
@@ -130,9 +131,9 @@ void MainMenu_Initialize()
 	// not in game yet
 	pauseMenu = std::make_unique<PauseMenu>(false);
 	pauseMenu->SetTextures(&menuBGTexture, &startTexture, &exitTexture);
-	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{0.f,-75.f}, 0.f, AEVec2{startTexture.Get_Image_Width(), startTexture.Get_Image_Height()});
+	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{710.f,360.f}, 0.f, AEVec2{settingsTexture.Get_Image_Width(), settingsTexture.Get_Image_Height()});
 	// placeholder for settings button
-	settingsBtn->SetTexture(&startTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
+	settingsBtn->SetTexture(&settingsTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
 	settingsBtn->SetID(assigner.GetID());
 	settingsBtn->SetOnClick([]() {
 		PRINT("Settings Pressed");

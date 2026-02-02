@@ -58,6 +58,9 @@ namespace Images
     constexpr ImageFile NoBtn{ "../../Assets/No_Button.png", 412.f, 120.f };
     constexpr ImageFile PopUp{ "../../Assets/PopUp.png", 412.f, 120.f };
 
+
+	constexpr ImageFile SettingsBtn{ "../../Assets/Settings_Button.png", 120.f, 120.f };
+
     constexpr ImageFile Background{ "../../Assets/MenuBG.png", 1600.f, 900.f };
     constexpr ImageFile Placeholder{ "../../Assets/MissingTexture.png", 1600.f, 900.f };
     constexpr ImageFile BG_BACKMOST{ "../../Assets/BG_BACKMOST.png", 1600.f, 900.f };
