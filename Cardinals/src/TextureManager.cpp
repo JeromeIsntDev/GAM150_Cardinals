@@ -81,6 +81,21 @@ void Text::Input_Text(const char* text)
 	_textArr.push_back(str.substr(start));
 }
 
+void Text::Input_Float(float t) {
+	_textArr.clear();
+	u32 levelTrunc = static_cast<int>(t);
+	std::string str = std::to_string(levelTrunc);
+	size_t start = 0;
+	size_t pos;
+
+	while ((pos = str.find('\n', start)) != std::string::npos) {
+		_textArr.push_back(str.substr(start, pos - start));
+		start = pos + 1;
+	}
+
+	_textArr.push_back(str.substr(start));
+}
+
 void Text::Draw_Text() const
 {
 	f32 yOffset = 0.0f;
@@ -112,11 +127,23 @@ void Text::Draw_Text(f32 x, f32 y)
 
 		AEGfxGetPrintSize(_font, line.c_str(), _scale, &w, &h);
 
-		AEGfxPrint(
-			_font,
-			line.c_str(),
-			(-w / 2) + x / 800.f,
-			(-h / 2) + y / 450.f - yOffset,
+		AEGfxPrint(_font, line.c_str(), (-w / 2) + x / 800.f, (-h / 2) + y / 450.f - yOffset,
+			_scale,
+			_color.r, _color.g, _color.b, _color.a
+		);
+
+		yOffset += _fontSize * 2 / 900.f;
+	}
+}
+
+void Text::Draw_Text_Corner(f32 x, f32 y)
+{
+	f32 yOffset = 0.0f;
+	for (const std::string& line : _textArr)
+	{
+		f32 w{ 0 }, h{ 0 };
+		AEGfxGetPrintSize(_font, line.c_str(), _scale, &w, &h);
+		AEGfxPrint(_font, line.c_str(), x / 800.f,  y / 450.f - yOffset,
 			_scale,
 			_color.r, _color.g, _color.b, _color.a
 		);

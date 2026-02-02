@@ -213,6 +213,13 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		p_initialPos = p_previousPos;
 		p_velocityVector.y = 0.f;
 	}
+	if (p_initialPos.y >= 400.f) {
+		p_initialPos = p_previousPos;
+		p_velocityVector.y = 0.f;
+		grav = Player::GravityDirection::Down;
+	}
+
+	p_initialPos.x = AEClamp(p_initialPos.x, -750.f, 750.f);
 
 	UpdatePosition(p_initialPos);
 }
