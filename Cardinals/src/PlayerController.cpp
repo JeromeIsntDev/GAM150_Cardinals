@@ -177,10 +177,12 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		case Player::GravityDirection::Up:
 			p_velocityVector.y += gravity * dt;
 			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
 			break;
 		case Player::GravityDirection::Down:
 			p_velocityVector.y += -gravity * dt;
 			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+
 			break;
 		case Player::GravityDirection::Left:
 			p_velocityVector.x += -gravity * dt;
@@ -189,6 +191,7 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		case Player::GravityDirection::Right:
 			p_velocityVector.x += gravity * dt;
 			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
+			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
 			break;
 		default:
 			break;
@@ -196,6 +199,7 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		/*p_velocityVector.y += gravity * dt;
 		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
+	std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
 	//resets velocity to avoid random snapping or teleporting
 	if (currDir != prevDir) {
 		currCD += dt;
@@ -204,7 +208,7 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 			p_isJumping = false;
 			currCD = 0.f;
 		}
-		p_velocityVector = { 0.f,0.f };
+		//p_velocityVector = { 0.f,0.f };
 		prevDir = currDir;
 	}
 	PlayerInputHandle(dt, dir);

@@ -134,17 +134,17 @@ bool UIElement::ToggleActive(u8 key)
     return this->IsActive();
 }
 
-void Button::Update(float dt) 
-{
-    // for button hover
-    if (!isActive || !isInteractable) return;
-
-    AEVec2 mousePos = UIManager::GetNewMousePos();
-    //std::cout << "bruh " << mousePos.x << " " << mousePos.y << std::endl;
-
-    if (IsPointInside(mousePos.x, mousePos.y)) 
-    { tint = { Colors::PastelPurple }; } // yayy purple
-    else 
-    { tint = { 1.0f, 1.0f, 1.0f, 1.0f };  } // reset
-
-}
+//void Button::Update(float dt) 
+//{
+//    // for button hover
+//    if (!isActive || !isInteractable) return;
+//
+//    AEVec2 mousePos = UIManager::GetNewMousePos();
+//    //std::cout << "bruh " << mousePos.x << " " << mousePos.y << std::endl;
+//
+//    //if (IsPointInside(mousePos.x, mousePos.y)) 
+//    //{ tint = { Colors::PastelPurple }; } // yayy purple
+//    //else 
+//    //{ tint = { 1.0f, 1.0f, 1.0f, 1.0f };  } // reset
+//
+//}
