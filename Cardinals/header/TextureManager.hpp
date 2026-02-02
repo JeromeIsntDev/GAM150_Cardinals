@@ -61,6 +61,7 @@ namespace Images
     constexpr ImageFile Background{ "../../Assets/MenuBG.png", 1600.f, 900.f };
     constexpr ImageFile Placeholder{ "../../Assets/MissingTexture.png", 1600.f, 900.f };
     constexpr ImageFile Button{ "../../Assets/Button.png", 200.f, 200.f };
+    constexpr ImageFile Lollipop{ "../../Assets/Lollipop.png", 100.f, 100.f };
 }
 
 namespace Fonts
