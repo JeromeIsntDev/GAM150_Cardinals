@@ -22,7 +22,7 @@
 class VolSlider : public UIElement
 {
 public:
-	VolSlider(AudioType type, AEVec2 pos, f32 width);
+	VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 width);
 	void Update(f32 dt) override; // from UIElement
 	void Draw() const override; // from GameObject
 	void SetTextures(Texture* barTex, Texture* knobTex); // unique to VolSlider
@@ -52,6 +52,7 @@ private:
 	GameObject _bg;
 	// store sliders and buttons etc.
 	std::vector<std::unique_ptr<UIElement>>_elements;
+	AEGfxVertexList* _commonMesh = nullptr;
 };
 
 #endif
