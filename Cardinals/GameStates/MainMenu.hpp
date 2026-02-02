@@ -14,7 +14,7 @@
 #include "AudioManager.hpp"
 #include "GameObject.hpp"
 #include "GameSaver.hpp"
-
+#include "PauseMenu.hpp"
 
 void MainMenu_Load();
 void MainMenu_Initialize();

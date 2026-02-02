@@ -28,6 +28,7 @@
     <ClCompile Include="GameStates\Credits.cpp" />
     <ClCompile Include="GameStates\LevelMenu.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
+    <ClCompile Include="GameStates\PauseMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="rapidjson\writer.h" />
     <ClInclude Include="GameStates\LevelMenu.hpp" />
     <ClInclude Include="header\GameManager.hpp" />
+    <ClInclude Include="GameStates\PauseMenu.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />

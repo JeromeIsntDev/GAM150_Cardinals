@@ -1,5 +1,5 @@
 /*!***********************************************************************
-\file	.hpp
+\file	MainMenu.hpp
 \author	Jerome Lim
 \date	12/01/2026
 \par	Last Updated by: Jerome Lim
@@ -22,7 +22,7 @@ namespace {
 	AEGfxVertexList* squareMesh;
 	Text cardinalsFont;
 	Text digipenFont;
-	Texture startTexture{}, exitTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{};
+	Texture startTexture{}, exitTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{}, settingsTexture{};
 	Texture menuBGTexture{};
 
 	//Digipen logo transition
@@ -34,8 +34,9 @@ namespace {
 
 	// UI stuff
 	UIManager menuUI, popUpUI;
-	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn, yesBtn, noBtn;
+	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn, yesBtn, noBtn, settingsBtn;
 	std::unique_ptr<PopUp> quitPopUp;
+	std::unique_ptr<PauseMenu> pauseMenu;
 
 	GameObjectIDAssigner assigner;
 	Audio& bgm = Audio::Instance();
@@ -57,6 +58,7 @@ void MainMenu_Load() {
 	startTexture.Load_Image(Images::StartBtn);
 	exitTexture.Load_Image(Images::ExitBtn);
 	creditsTexture.Load_Image(Images::CreditsBtn);
+	//settingsTexture.Load_Image(Images::SettingsBtn);
 
 	// testing
 	yesTexture.Load_Image(Images::YesBtn); noTexture.Load_Image(Images::NoBtn);
@@ -82,6 +84,7 @@ void MainMenu_Load() {
 
 	//bgmGroup = AEAudioCreateGroup();
 	//backgroundMusic.Load_Audio(Audios::BGM);
+
 }
 
 void MainMenu_Initialize()
@@ -124,12 +127,26 @@ void MainMenu_Initialize()
 	noBtn->SetTexture(&noTexture); noBtn->SetActive(true); noBtn->SetInteractable(true);
 	noBtn->SetID(assigner.GetID());
 
+	// not in game yet
+	pauseMenu = std::make_unique<PauseMenu>(false);
+	pauseMenu->SetTextures(&menuBGTexture, &startTexture, &exitTexture);
+	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{0.f,-75.f}, 0.f, AEVec2{startTexture.Get_Image_Width(), startTexture.Get_Image_Height()});
+	// placeholder for settings button
+	settingsBtn->SetTexture(&startTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
+	settingsBtn->SetID(assigner.GetID());
+	settingsBtn->SetOnClick([]() {
+		PRINT("Settings Pressed");
+		pauseMenu->ShowMenu();
+		});
+
 	quitPopUp = std::make_unique<PopUp>(squareMesh, AEVec2{ 0,0 }, 0.f, AEVec2{ 600.f, 400.f });
 	quitPopUp->SetTexture(&popUpTexture);
 	quitPopUp->SetID(assigner.GetID());
 
 	quitPopUp->AddChild(yesBtn.get());
 	quitPopUp->AddChild(noBtn.get());
+
+
 
 	// use them like this ik its weird asf but like. i'll make it better soon
 	startBtn->SetOnClick([]() {
@@ -159,6 +176,7 @@ void MainMenu_Initialize()
 	menuUI.Add(startBtn.get());
 	menuUI.Add(exitBtn.get());
 	menuUI.Add(creditsBtn.get());
+	menuUI.Add(settingsBtn.get());
 
 	popUpUI.Add(quitPopUp.get());
 	popUpUI.Add(yesBtn.get());
@@ -191,7 +209,10 @@ void MainMenu_Update() {
 
 		quitPopUp->ToggleActive(AEVK_6);
 
-		if (quitPopUp->IsActive()) {
+		if (pauseMenu->isVisible()) {
+			pauseMenu->Update(0.f);
+		}
+		else if (quitPopUp->IsActive()) {
 			popUpUI.Update(0.f);
 		}
 		else {
@@ -230,12 +251,25 @@ void MainMenu_Draw() {
 		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f); // 100%
 	}
 
+	if(pauseMenu->isVisible())
+		pauseMenu->Draw();
+
 	menuBG.Draw();
 	cardinalsFont.Draw_Text(0, 200.f);
+	// dim bg when popup or settings is active
+	if(quitPopUp->IsActive() || pauseMenu->isVisible())
+		AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.0f); // 50%
+	else {
+		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f); // 100%
+	}
 	menuUI.Draw();
 
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f); // popup 100%
 	popUpUI.Draw();
+
+	if (pauseMenu->isVisible()) {
+		pauseMenu->Draw();
+	}
 }
 
 void MainMenu_Free() {
@@ -250,6 +284,7 @@ void MainMenu_Free() {
 
 void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
+	pauseMenu.reset();
 
 	if (MassUnload()) PRINT("Unload Success");
 }
