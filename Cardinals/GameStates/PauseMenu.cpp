@@ -18,12 +18,13 @@
 
 extern int isGamePaused;
 
-VolSlider::VolSlider(AudioType type, AEVec2 pos, f32 width)
-	: UIElement(RectMeshCenter(), pos, 0.f, AEVec2{ width, 20.f }), // bar mesh
+VolSlider::VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 width)
+	: UIElement(mesh, pos, 0.f, AEVec2{ width, 20.f }), // bar mesh
 	_audioType(type),
 	_width(width),
-	_knob(RectMeshCenter(), AEVec2{ pos.x + (width / 2.f), pos.y }, 0.f, AEVec2{30.f, 30.f})
+	_knob(mesh, AEVec2{ pos.x + (width / 2.f), pos.y }, 0.f, AEVec2{30.f, 30.f})
 {
+
 	SetActive(true);
 	SetInteractable(true);
 	_knob.SetActive(true);
@@ -77,30 +78,36 @@ void VolSlider::SetTextures(Texture* barTex, Texture* knobTex)
 PauseMenu::~PauseMenu()
 {
 	_pauseMenuUI.Exit();
+	if (_commonMesh) {
+		AEGfxMeshFree(_commonMesh);
+		_commonMesh = nullptr;
+	}
 }
 
 PauseMenu::PauseMenu(bool isInGame)
 {
+	_commonMesh = RectMeshCenter();
+
 	// setup background
-	_bg.SetMesh(RectMeshCenter());
+	_bg.SetMesh(_commonMesh);
 	_bg.UpdateScale(AEVec2{ 1600.f, 900.f });
 	_bg.UpdatePosition(AEVec2{ 0.f, 0.f });
 
 	// setup volume sliders
-	auto masterSlider = std::make_unique<VolSlider>(AudioType::MASTER, AEVec2{ 0.f, 100.f }, 300.f);
+	auto masterSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MASTER, AEVec2{ 0.f, 100.f }, 300.f);
 	_pauseMenuUI.Add(masterSlider.get());
 	_elements.push_back(std::move(masterSlider));
 
-	auto musicSlider = std::make_unique<VolSlider>(AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 300.f);
+	auto musicSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 300.f);
 	_pauseMenuUI.Add(musicSlider.get());
 	_elements.push_back(std::move(musicSlider));
 
-	auto sfxSlider = std::make_unique<VolSlider>(AudioType::SFX, AEVec2{ 0.f, -100.f }, 300.f);
+	auto sfxSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::SFX, AEVec2{ 0.f, -100.f }, 300.f);
 	_pauseMenuUI.Add(sfxSlider.get());
 	_elements.push_back(std::move(sfxSlider));
 
 	// back btn
-	auto backBtn = std::make_unique<Button>(RectMeshCenter(), AEVec2{0.f, -200.f}, 0.f, AEVec2{200.f, 50.f});
+	auto backBtn = std::make_unique<Button>(_commonMesh, AEVec2{0.f, -200.f}, 0.f, AEVec2{200.f, 50.f});
 	backBtn->SetOnClick([this, isInGame]() {
 		this->HideMenu();
 		// unpause game if in-game
@@ -115,7 +122,7 @@ PauseMenu::PauseMenu(bool isInGame)
 
 	// quit btn
 	if (isInGame) {
-		auto quitBtn = std::make_unique<Button>(RectMeshCenter(), AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ 200.f, 50.f });
+		auto quitBtn = std::make_unique<Button>(_commonMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ 200.f, 50.f });
 		quitBtn->SetOnClick([]() {
 			isGamePaused = 0;
 			UpdateGameManagerState(GameStateEnum::MainMenu);
