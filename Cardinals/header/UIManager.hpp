@@ -28,7 +28,7 @@ protected:
 	bool isActive = false;
 	bool isInteractable = false;
 
-	Color tint = Colors::White; // full brightness
+	Color tint = Colors::White;
 	std::vector<UIElement*> children;
 	Texture* currentTexture{};
 
@@ -41,46 +41,26 @@ public:
 	// inheriting gameobject constructors
 	using GameObject::GameObject;
 	virtual ~UIElement() = default; // destructor
-
 	UIElement(AEGfxVertexList* mesh, AEVec2 pos, float rot, AEVec2 scale) : GameObject(mesh, pos, rot, scale) {}
 
-	virtual void SetActive(bool active) { isActive = active; }
+	virtual void SetActive(bool active);
+	void SetInteractable(bool interactable);
+	void AddChild(UIElement* child);
 
-	// doesnt work
-	void SetInteractable(bool interactable) 
-	{ 
-		isInteractable = interactable;
-		if (!isInteractable)
-		{
-			tint = { 0.f, 0.f, 0.f, 1.0f };
-		}
-	}
+	void SetTooltip(std::string text, AEVec2 pos);
 
-	void AddChild(UIElement* child) // for kiddos, mostly for popup to attach
-	{
-		children.push_back(child);
-		child->SetActive(false);
-	}
-
-	void SetTooltip(std::string text, AEVec2 pos)
-	{
-		tooltipToDraw = text;
-		tooltipPos = pos;
-		isToolTipShown = true;
-	}
-
-	// getters
+	// regular getters
 	bool IsActive() const { return isActive; }
 	bool IsInteractable() const { return isInteractable; }
 	bool IsPointInside(float x, float y) const;
 	bool ToggleActive(u8 key);
 	Color GetTint() const { return tint; }
 
-	// tool tip shit
+	// tool tip getters
 	bool IsShowingTooltip() const { return isToolTipShown; }
 	std::string GetTooltipText() const { return tooltipToDraw; }
 	AEVec2 GetTooltipPos() const { return tooltipPos; }
-	void ResetTooltip() { isToolTipShown = false; } // reset every frame so tooltips dont smooch
+	void ResetTooltip();
 
 	virtual void Update(float dt) {}
 	virtual void OnClick() {}
@@ -103,22 +83,15 @@ private:
 public:
 
 	virtual ~UIManager() = default; // destructor!! IMPORTANT!!!
-
 	static AEVec2 GetNewMousePos(); // ssingleton
 
-	void InitTooltipFont(const FontFile& font, float size) 
-	{ 
-		tooltipRenderer.Load_Font(font, size);
-		isFontLoaded = true;
-	}
+	void InitTooltipFont(const FontFile& font, float size);
 
 	void Add(UIElement* element); // just adds it so it Exists
 	void Update(float dt); // loops thru all elements and calls their updaate
 	void Draw() const;
-
 	void HandleClick();
 	void Exit(); // for the VECTORS
-
 };
 
 ///
@@ -137,49 +110,11 @@ public:
 	Button() = default;
 
 	// use like startBtn->SetTooltipText("ur mom"); okayyy :3
-	void SetTooltipText(const std::string& text) { toolTipText = text; }
-	void SetOnClick(std::function<void()> func) { onClick = func; }
+	void SetTooltipText(const std::string& text);
+	void SetOnClick(std::function<void()> func);
 
-	void Update(float dt) override
-	{
-		currentTexture = tex; // pointer to text in gameobj
-		if (!isActive || !isInteractable || currentTexture == nullptr) return;
-
-		float scaleMultiplier = 1.1f;
-		AEVec2 mousePos = UIManager::GetNewMousePos();
-
-		// hover code, combined tints + scales texture when mouse is within button pos
-		if (IsPointInside(mousePos.x, mousePos.y) && currentTexture)
-		{
-			//std::cout << "bruh " << mousePos.x << " " << mousePos.y << std::endl;
-			tint = { Colors::PastelPurple };
-			GameObject::UpdateScale({ currentTexture->Get_Image_Width() * scaleMultiplier, currentTexture->Get_Image_Height() * scaleMultiplier });
-
-			// small delay because having it shoved in ur face is ass
-			hoverTimer += dt;
-			if (hoverTimer > 0.5f) 
-			{
-				this->SetTooltip(toolTipText, mousePos);
-			}
-		}
-		else
-		{
-			tint = { 1.0f, 1.0f, 1.0f, 1.0f };
-			scaleMultiplier = 1.0f;
-
-			GameObject::UpdateScale({ currentTexture->Get_Image_Width() * scaleMultiplier, currentTexture->Get_Image_Height() * scaleMultiplier });
-			hoverTimer = 0.0f;
-		}
-	}
-
-	void OnClick() override
-	{
-		// literally just error checks and then handles onclick lmao
-		if (!isActive || !isInteractable)
-			return;
-
-		if (onClick) onClick();
-	}
+	void Update(float dt) override;
+	void OnClick() override;
 };
 
 class PopUp : public UIElement
@@ -189,15 +124,7 @@ public:
 
 	// overrides setactive for the kiddos
 	// refactor stuff using this in the future -2/2/26
-	void SetActive(bool active) override
-	{
-		isActive = active;
-		for (auto* child : children) 
-		{
-			child->SetActive(active);
-			child->SetInteractable(active);
-		}
-	}
+	void SetActive(bool active) override;
 };
 
 #endif // !_UI_Manager_Header_

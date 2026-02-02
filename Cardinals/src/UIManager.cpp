@@ -12,9 +12,130 @@
 
 #include "../header/UIManager.hpp"
 
-// adds every new element to the dynamic array 
-// so we can explode ALL the UIs whenever we want
-// all of this is rudimentary as fuck rn so..
+///
+/// UI ELEMENTS
+/// 
+
+void UIElement::SetActive(bool active) { isActive = active; }
+
+void UIElement::SetInteractable(bool interactable)
+{
+    isInteractable = interactable;
+    if (!isInteractable) { tint = { 0.f, 0.f, 0.f, 1.0f }; }
+}
+
+void UIElement::AddChild(UIElement* child)
+{
+    // attach to parent, parent overrides kids
+    children.push_back(child);
+    child->SetActive(false);
+}
+
+void UIElement::SetTooltip(std::string text, AEVec2 pos)
+{
+    tooltipToDraw = text; tooltipPos = pos; isToolTipShown = true;
+}
+
+void UIElement::ResetTooltip() { isToolTipShown = false; } // reset every frame so tooltips dont smooch
+
+bool UIElement::IsPointInside(float x, float y) const 
+{
+    // calling from the parent class woawow
+    AEVec2 currentScale = GetScale();
+    AEVec2 currentPos = GetPosition();
+
+    float halfW = currentScale.x / 2.0f, halfH = currentScale.y / 2.0f;
+
+    // wowww calculations zzzzz
+    return (x >= currentPos.x - halfW && x <= currentPos.x + halfW &&
+        y >= currentPos.y - halfH && y <= currentPos.y + halfH);
+}
+
+bool UIElement::ToggleActive(u8 key)
+{
+    if (AEInputCheckTriggered(key))
+    {
+        bool newState = !this->IsActive();
+        this->SetActive(newState);
+
+        // sets the kids too
+        for (auto child : children) {
+            child->SetActive(newState);
+            child->SetInteractable(newState);
+        }
+
+        return newState;
+    }
+
+    return this->IsActive();
+}
+
+/// 
+/// UI BUTTONS
+/// 
+
+    // use like startBtn->SetTooltipText("ur mom"); okayyy :3
+    void Button::SetTooltipText(const std::string& text) { toolTipText = text; }
+    void Button::SetOnClick(std::function<void()> func) { onClick = func; }
+
+    void Button::Update(float dt)
+    {
+        currentTexture = tex; // pointer to text in gameobj
+        if (!isActive || !isInteractable || currentTexture == nullptr) return;
+
+        float scaleMultiplier = 1.1f;
+        AEVec2 mousePos = UIManager::GetNewMousePos();
+
+        // hover code, combined tints + scales texture when mouse is within button pos
+        if (IsPointInside(mousePos.x, mousePos.y) && currentTexture)
+        {
+            //std::cout << "bruh " << mousePos.x << " " << mousePos.y << std::endl;
+            tint = { Colors::PastelPurple };
+            GameObject::UpdateScale({ currentTexture->Get_Image_Width() * scaleMultiplier, currentTexture->Get_Image_Height() * scaleMultiplier });
+
+            // small delay because having it shoved in ur face is ass
+            hoverTimer += dt;
+            if (hoverTimer > 0.5f)
+            {
+                this->SetTooltip(toolTipText, mousePos);
+            }
+        }
+        else
+        {
+            tint = { 1.0f, 1.0f, 1.0f, 1.0f };
+            scaleMultiplier = 1.0f;
+
+            GameObject::UpdateScale({ currentTexture->Get_Image_Width() * scaleMultiplier, currentTexture->Get_Image_Height() * scaleMultiplier });
+            hoverTimer = 0.0f;
+        }
+    }
+
+    void Button::OnClick()
+    {
+        // literally just error checks and then handles onclick lmao
+        if (!isActive || !isInteractable)
+            return;
+
+        if (onClick) onClick();
+    }
+
+///
+/// UI POPUPS
+/// 
+
+    void PopUp::SetActive(bool active)
+    {
+        isActive = active;
+        for (auto* child : children)
+        {
+            child->SetActive(active);
+            child->SetInteractable(active);
+        }
+    }
+
+///
+/// UI MANAGER
+/// 
 
 AEVec2 UIManager::GetNewMousePos()
 {
@@ -27,6 +148,12 @@ AEVec2 UIManager::GetNewMousePos()
     float windowWidth = (float)AEGfxGetWindowWidth(), windowHeight = (float)AEGfxGetWindowHeight();
 
     return AEVec2 { rawX - (windowWidth / 2.0f), (windowHeight / 2.0f) - rawY };
+}
+
+void UIManager::InitTooltipFont(const FontFile& font, float size)
+{
+    tooltipRenderer.Load_Font(font, size);
+    isFontLoaded = true;
 }
 
 void UIManager::Add(UIElement* element)
@@ -112,39 +239,4 @@ void UIManager::Exit()
 {
     uiElements.clear(); // get rid of them dangling pointers 
     isFontLoaded = false;
-}
-
-///
-/// element-related stuff heeere
-/// 
-
-bool UIElement::IsPointInside(float x, float y) const {
-	// calling from the parent class woawow
-	AEVec2 currentScale = GetScale();
-	AEVec2 currentPos = GetPosition();
-
-	float halfW = currentScale.x / 2.0f, halfH = currentScale.y / 2.0f;
-
-	// wowww calculations zzzzz
-	return (x >= currentPos.x - halfW && x <= currentPos.x + halfW &&
-		y >= currentPos.y - halfH && y <= currentPos.y + halfH);
-}
-
-bool UIElement::ToggleActive(u8 key) 
-{
-    if (AEInputCheckTriggered(key))
-    {
-        bool newState = !this->IsActive();
-        this->SetActive(newState);
-
-        // sets the kids too
-        for (auto child : children) {
-            child->SetActive(newState);
-            child->SetInteractable(newState);
-        }
-
-        return newState;
-    }
-
-    return this->IsActive();
 }
