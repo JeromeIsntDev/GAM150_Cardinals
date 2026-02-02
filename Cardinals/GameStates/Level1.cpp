@@ -114,6 +114,8 @@ void Level1_Initialize()
 	objects.push_back(&wall3);
 
 
+	levelTime = 0.f;
+
 	if (!isReadFromFile) return;
 	//Read From JSON
 	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");

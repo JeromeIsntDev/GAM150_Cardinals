@@ -166,7 +166,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 //Player Movement Logic
 void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	//std::cout << "dt: " << dt << std::endl;
-	
+
 	jumpBuffer = max(0, jumpBuffer - dt);
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
 	GravityDirection currDir = dir;
@@ -207,19 +207,30 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		p_velocityVector = { 0.f,0.f };
 		prevDir = currDir;
 	}
-	PlayerInputHandle(dt,dir);
+	PlayerInputHandle(dt, dir);
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
 	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
 		p_initialPos = p_previousPos;
 		p_velocityVector.y = 0.f;
+		grav = Player::GravityDirection::Down;
 	}
 	if (p_initialPos.y >= 400.f) {
 		p_initialPos = p_previousPos;
 		p_velocityVector.y = 0.f;
 		grav = Player::GravityDirection::Down;
 	}
+	if (p_initialPos.x >= 750.f) {
+		p_initialPos = p_previousPos;
+		p_velocityVector.y = 0.f;
+		grav = Player::GravityDirection::Down;
+	}
+	if (p_initialPos.x <= -750.f) {
+		p_initialPos = p_previousPos;
+		p_velocityVector.y = 0.f;
+		grav = Player::GravityDirection::Down;
+	}
 
-	p_initialPos.x = AEClamp(p_initialPos.x, -750.f, 750.f);
+	PRINT("Momentum: %f,%f", p_velocityVector.x, p_velocityVector.y);
 
 	UpdatePosition(p_initialPos);
 }
