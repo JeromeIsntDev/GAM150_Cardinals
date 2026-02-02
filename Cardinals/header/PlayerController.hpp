@@ -56,7 +56,7 @@ public:
 	f32 jumpBuffer{ 0.f };
 	f32 maxCoyoteBuffer{ 0.8f };
 	f32 coyoteBuffer{ 0.f };
-	GravityDirection grav;
+	GravityDirection grav = Player::GravityDirection::Down;
 	bool hasCollided{ false };
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
