@@ -136,7 +136,7 @@ void Level1_Initialize()
 
 	levelTime = 0.f;
 
-	if (!IsEditorActive()) return;
+	if (!IsUsingSaveFile()) return;
 	//Read From JSON
 	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
 
@@ -174,7 +174,11 @@ void Level1_Update() {
 				RestartLevel(UpdateGameManagerState, Level1);
 
 			if (input.isMouseBtnTriggered(AEVK_S))
-				SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", levelObjList);
+				SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json"
+					, levelObjList);
+
+			if (input.isMouseBtnTriggered(AEVK_Q))
+				ToggleSaveFileMode();
 		}
 	}
 
@@ -224,6 +228,10 @@ void Level1_Draw() {
 	if (IsEditorActive()) {
 		digipenFont.Input_Text("Editor Active");
 		digipenFont.Draw_Text(AEVec2{ -650.f, 430.f }, .5f, 1.f);
+		if (IsUsingSaveFile()) {
+			digipenFont.Input_Text("Using Save File");
+			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
+		}
 	}
 
 	digipenFont.Input_Text("Time: ");

@@ -20,13 +20,15 @@
 
 namespace {
 	bool canEdit = false;
+	bool useSaveFile = false;
 }
 
 void DragObject(std::vector<GameObject*> objs);
 void SaveGameObjectToFilepath(std::string filepathSave, std::vector<GameObject*> objs);
 void ToggleEditorMode();
+void ToggleSaveFileMode();
 void RestartLevel(void (*restart)(GameStateEnum), GameStateEnum state);
 bool IsEditorActive();
-
+bool IsUsingSaveFile();
 
 #endif // !_GAME_EDITOR_HEADER_
