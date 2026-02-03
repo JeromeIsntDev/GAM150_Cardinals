@@ -1,0 +1,5 @@
+# Name, Path
+# can you believe this works haha hahhahahaahaha ahahahahahhahahaha
+# i'll do this for the images another time lol
+BGM, ../../Assets/Music/bouken.mp3
+SFX, ../../Assets/Music/ore.mp3

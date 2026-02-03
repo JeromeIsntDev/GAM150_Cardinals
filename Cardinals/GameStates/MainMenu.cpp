@@ -43,7 +43,7 @@ namespace {
 	std::unique_ptr<PauseMenu> pauseMenu;
 	std::unique_ptr<Button> settingsBtn;
 
-	Audio& bgm = Audio::Instance();
+	AudioManager& bgm = AudioManager::Instance();
 }
 
 
@@ -99,20 +99,13 @@ void MainMenu_Load() {
 	if (!texts.empty()) texts.clear();
 	texts.push_back(&cardinalsFont);
 	texts.push_back(&digipenFont);
-
-	//bgmGroup = AEAudioCreateGroup();
-	//backgroundMusic.Load_Audio(Audios::BGM);
-
 }
 
 void MainMenu_Initialize()
 {
-	bgm.Init_Audio_System();
-	bgm.Load_Audio("BGM", Audios::BGM);
-	bgm.Play_Audio("BGM", AudioType::MUSIC);
-
-	//backgroundMusic.SetAudioGroup(bgmGroup);
-	//backgroundMusic.Play_Audio();
+	bgm.Init();
+	bgm.LoadManifest("../../Assets/AudioManifest.txt");
+	bgm.PlayAudio("BGM", AudioType::MUSIC);
 
 	squareMesh = RectMeshCenter();
 	go_digipenLogo.SetMesh(squareMesh);
@@ -120,18 +113,17 @@ void MainMenu_Initialize()
 	menuBG.SetMesh(squareMesh); menuBG.SetTexture(&menuBGTexture);
 	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f }); menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() }); menuBG.UpdateRotation(0.f);
 
-	// creates button w relevant stuff stolen from gameobej
+	// BUTTONS
+
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	startBtn->SetTexture(&startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
 	startBtn->SetTooltipText("ur mom");
-	//initialScale = 
 
 	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	exitBtn->SetTexture(&exitTexture); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
 
 	creditsBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -150.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	creditsBtn->SetTexture(&creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true); 
-
 
 	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -50.f }, 0.f, AEVec2{ 200.f, 100.f });
 	yesBtn->SetTexture(&yesTexture); yesBtn->SetActive(true); yesBtn->SetInteractable(true);
@@ -156,8 +148,8 @@ void MainMenu_Initialize()
 	quitUI.Add(yesBtn.get());
 	quitUI.Add(noBtn.get());
 
+	// BUTTON CLICKS
 
-	// use them like this ik its weird asf but like. i'll make it better soon
 	startBtn->SetOnClick([]() {
 		PRINT("Start Pressed");
 		UpdateGameManagerState(GameStateEnum::LevelMenu);
@@ -186,11 +178,8 @@ void MainMenu_Initialize()
 		quitMenuOpen = false;
 		});
 
-	// so we can control all buttons with a menuUI hehehehe
-	menuUI.Add(startBtn.get());
-	menuUI.Add(exitBtn.get());
-	menuUI.Add(creditsBtn.get());
-	menuUI.Add(settingsBtn.get());
+	// control all buttons with the manager
+	menuUI.Add(startBtn.get()); menuUI.Add(exitBtn.get()); menuUI.Add(creditsBtn.get()); menuUI.Add(settingsBtn.get());
 
 	go_digipenLogo.SetTexture(&tex_digipenLogo);
 	go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
@@ -280,8 +269,8 @@ void MainMenu_Draw() {
 void MainMenu_Free() {
 	PRINT("Free: %s", "Main Menu\n");
 
-	bgm.Stop_Audio();
-	bgm.Free_Audio_System();
+	bgm.StopAudio();
+	bgm.Free();
 
 	quitUI.Exit();
 	menuUI.Exit();

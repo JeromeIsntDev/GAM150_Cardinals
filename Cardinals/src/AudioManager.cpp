@@ -12,66 +12,63 @@
 
 #include "../header/AudioManager.hpp"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
-Audio::Audio() 
-	: _musicGroup{nullptr}, _sfxGroup{nullptr}, _masterVol{ 1.0f }, _musicVol{ 1.0f }, _sfxVol{ 1.0f }
+AudioManager::AudioManager()
+	: musicGroup{nullptr}, sfxGroup{nullptr}, masterVol{ 1.0f }, musicVol{ 1.0f }, sfxVol{ 1.0f }
 {
 	PRINT("Audio Created\n");
 }
 
-Audio::~Audio()
+AudioManager::~AudioManager()
 {
 	PRINT("Audio Destroyed\n");
 }
 
-//void Audio::SetAudioGroup(AEAudioGroup group)
-//{
-//	_group = group;
-//}
-
-void Audio::Init_Audio_System()
+void AudioManager::Init()
 {
-	_musicGroup = AEAudioCreateGroup();
-	_sfxGroup = AEAudioCreateGroup();
+	musicGroup = AEAudioCreateGroup();
+	sfxGroup = AEAudioCreateGroup();
 	PRINT("Audio System Initialized\n");
 }
 
-void Audio::Update_Audio_System()
+void AudioManager::Update()
 {
 	
 }
 
-void Audio::Load_Audio(const std::string& name, AudioFile audio_file)
+void AudioManager::LoadAudio(const std::string& name, const std::string& path)
 {
-	// Check if audio already loaded
-	if (_audioMap.find(name) != _audioMap.end()) return;
-	AEAudio sound = AEAudioLoadSound(audio_file.filename);
-	//_audioMap[name] = sound;
-	//PRINT("Audio Loaded: %s\n", name.c_str());
+	if (audioMap.find(name) != audioMap.end()) return;
+	AEAudio sound = AEAudioLoadSound(path.c_str());
+
 	if (sound.fmod_sound)
 	{
-		_audioMap[name] = sound;
-		PRINT("Audio Loaded: %s\n", name.c_str());
+		audioMap[name] = sound;
+		PRINT("Audio Loaded: %s from %s\n", name.c_str(), path.c_str());
 	}
 	else
 	{
-		PRINT("Failed to load audio: %s\n", audio_file.filename);
+		PRINT("Failed to load audio: %s\n", path.c_str());
 	}
 }
 
-void Audio::Play_Audio(const std::string& name, AudioType type, f32 pitch, s32 loop)
+void AudioManager::PlayAudio(const std::string& name, AudioType type, f32 pitch, s32 loop)
 {	
-	auto it = _audioMap.find(name);
-	if (it == _audioMap.end()) {
+	auto it = audioMap.find(name);
+	if (it == audioMap.end()) 
+	{
 		PRINT("Audio not found: %s\n", name.c_str());
 		return;
 	}
+
 	// Choose group based on type (Enum)
-	AEAudioGroup targetGroup = (type == AudioType::MUSIC) ?  _musicGroup : _sfxGroup;
+	AEAudioGroup targetGroup = (type == AudioType::MUSIC) ?  musicGroup : sfxGroup;
 	AEAudioPlay(it->second, targetGroup, 1.0f, pitch, loop);
 }
 
-void Audio::Set_Volume(AudioType type, f32 vol)
+void AudioManager::SetVolume(AudioType type, f32 vol)
 {
 	// Keep volume between 0% and 100%
 	if (vol < 0.0f) vol = 0.0f;
@@ -80,67 +77,68 @@ void Audio::Set_Volume(AudioType type, f32 vol)
 	// Set volume based on type
 	switch (type)
 	{
-		case AudioType::MASTER: _masterVol = vol; break;
-		case AudioType::MUSIC: _musicVol = vol; break;
-		case AudioType::SFX: _sfxVol = vol; break;
+		case AudioType::MASTER: masterVol = vol; break;
+		case AudioType::MUSIC: musicVol = vol; break;
+		case AudioType::SFX: sfxVol = vol; break;
 	}
+
 	// Update group volumes
-	AEAudioSetGroupVolume(_musicGroup, _masterVol * _musicVol);
-	AEAudioSetGroupVolume(_sfxGroup, _masterVol * _sfxVol);
-
+	AEAudioSetGroupVolume(musicGroup, masterVol * musicVol);
+	AEAudioSetGroupVolume(sfxGroup, masterVol * sfxVol);
 }
 
-void Audio::Pause_Audio()
+void AudioManager::PauseAudio()
 {
-	AEAudioPauseGroup(_musicGroup);
-	AEAudioPauseGroup(_sfxGroup);
+	AEAudioPauseGroup(musicGroup);
+	AEAudioPauseGroup(sfxGroup);
 }
 
-void Audio::Resume_Audio()
+void AudioManager::ResumeAudio()
 {
-	AEAudioResumeGroup(_musicGroup);
-	AEAudioResumeGroup(_sfxGroup);
+	AEAudioResumeGroup(musicGroup);
+	AEAudioResumeGroup(sfxGroup);
 }
 
-void Audio::Stop_Audio()
+void AudioManager::StopAudio()
 {
-	AEAudioStopGroup(_musicGroup);
-	AEAudioStopGroup(_sfxGroup);
+	AEAudioStopGroup(musicGroup);
+	AEAudioStopGroup(sfxGroup);
 }
 
-void Audio::Free_Audio_System()
+void AudioManager::Free()
 {
-	for(auto const& pair : _audioMap) {
+	for(auto const& pair : audioMap) 
+	{
 		AEAudioUnloadAudio(pair.second);
 	}
-	_audioMap.clear();
-	AEAudioUnloadAudioGroup(_musicGroup);
-	AEAudioUnloadAudioGroup(_sfxGroup);
+
+	audioMap.clear();
 	PRINT("Audio System Freed\n");
 }
 
-//void Audio::Pause_Audio_Group() const {
-//	AEAudioPauseGroup(_group);
-//}
-//
-//void Audio::Resume_Audio_Group() const {
-//	AEAudioResumeGroup(_group);
-//}
-//
-//void Audio::Stop_Audio_Group() const {
-//	AEAudioStopGroup(_group);
-//}
-//
-//void Audio::Set_Audio_Volume(f32 volume) {
-//	_volume = volume;
-//	AEAudioSetGroupVolume(_group, volume);
-//}
-//
-//void Audio::Set_Audio_Pitch(f32 pitch) {
-//	_pitch = pitch;
-//	AEAudioSetGroupPitch(_group, pitch);
-//}
-//
-//void Audio::Free_Audio_Group() const{
-//	AEAudioUnloadAudioGroup(_group);
-//}
+void AudioManager::LoadManifest(const std::string& path)
+{
+	std::ifstream file(path);
+	std::string line;
+
+	if (!file.is_open())
+	{
+		PRINT("ERROR: where tf is ur manifest?? at %s\n", path.c_str());
+		return;
+
+	while (std::getline(file, line))
+	{
+		// skip empty or lines starting with #
+		if (line.empty() || line[0] == '#') continue;
+
+		std::stringstream ss(line);
+		std::string name, filePath;
+
+		// parses name and path ts just like Prasanna Ghali
+		if (std::getline(ss, name, ',') && std::getline(ss, filePath))
+		{
+			filePath.erase(0, filePath.find_first_not_of(" \t"));
+			LoadAudio(name, filePath);
+		}
+	}
+}

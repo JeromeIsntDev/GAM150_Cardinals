@@ -53,7 +53,7 @@ void VolSlider::Update(f32 dt) {
 		_knob.UpdatePosition(AEVec2{ newKnobX, GetPosition().y });
 		// update volume based on knob position
 		f32 volumePercent = (newKnobX - barStartX) / _width;
-		Audio::Instance().Set_Volume(_audioType, volumePercent);
+		AudioManager::Instance().SetVolume(_audioType, volumePercent);
 	}
 }
 
