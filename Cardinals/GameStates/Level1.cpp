@@ -17,6 +17,7 @@ namespace {
 
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
+	Texture verticalPlatformTex, horizontalPlatformTex;
 	Texture backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
 	GameObject platform;
@@ -46,6 +47,8 @@ void Level1_Load() {
 
 	playerTexture.Load_Image(Images::Player);
 	placeholderTexture.Load_Image(Images::Placeholder);
+	verticalPlatformTex.Load_Image(Images::Platform_VL);
+	horizontalPlatformTex.Load_Image(Images::Platform_HL);
 	backgrounds[0].Load_Image(Images::BG_BACKMOST);
 	backgrounds[1].Load_Image(Images::BG_CLOUDS);
 	backgrounds[2].Load_Image(Images::BG_MOUNTAIN);
@@ -54,6 +57,8 @@ void Level1_Load() {
 	if (!textures.empty()) textures.clear();
 	textures.push_back(&playerTexture);
 	textures.push_back(&placeholderTexture);
+	textures.push_back(&verticalPlatformTex);
+	textures.push_back(&horizontalPlatformTex);
 	for (Texture& t : backgrounds) {
 		textures.push_back(&t);
 	}
@@ -82,35 +87,35 @@ void Level1_Initialize()
 	mainPlayer._tag = GameObjectTag::Player;
 
 	platform.SetMesh(squareMesh);
-	platform.SetTexture(&placeholderTexture);
+	platform.SetTexture(&verticalPlatformTex);
 	platform.SetID(assigner.GetID());
-	platform.UpdateScale(AEVec2{ 500.f,900.f });
+	platform.UpdateScale(AEVec2{ 450.f,200.f });
 	platform.UpdateRotation(0.f);
-	platform.UpdatePosition(AEVec2{ AEGfxGetWinMinX() + 200.f, AEGfxGetWinMinY()});
+	platform.UpdatePosition(AEVec2{ AEGfxGetWinMinX() + 200.f, -100.f});
 
 	wall0.SetMesh(squareMesh);
-	wall0.SetTexture(&placeholderTexture);
+	wall0.SetTexture(&horizontalPlatformTex);
 	wall0.SetID(assigner.GetID());
-	wall0.UpdateScale(AEVec2{ 100.f,500.f });
+	wall0.UpdateScale(AEVec2{ 150.f,300.f });
 	wall0.UpdateRotation(0.f);
 	wall0.UpdatePosition(AEVec2{ 500.f, -200.f });
 
 	wall1.SetMesh(squareMesh);
-	wall1.SetTexture(&placeholderTexture);
+	wall1.SetTexture(&horizontalPlatformTex);
 	wall1.SetID(assigner.GetID());
-	wall1.UpdateScale(AEVec2{ 100.f,500.f });
+	wall1.UpdateScale(AEVec2{ 250.f,500.f });
 	wall1.UpdateRotation(0.f);
 	wall1.UpdatePosition(AEVec2{ 200.f, -200.f });
 
 	wall2.SetMesh(squareMesh);
-	wall2.SetTexture(&placeholderTexture);
+	wall2.SetTexture(&verticalPlatformTex);
 	wall2.SetID(assigner.GetID());
 	wall2.UpdateScale(AEVec2{ 500.f,100.f });
 	wall2.UpdateRotation(0.f);
 	wall2.UpdatePosition(AEVec2{ 0.f, -200.f });
 
 	wall3.SetMesh(squareMesh);
-	wall3.SetTexture(&placeholderTexture);
+	wall3.SetTexture(&verticalPlatformTex);
 	wall3.SetID(assigner.GetID());
 	wall3.UpdateScale(AEVec2{ 500.f,100.f });
 	wall3.UpdateRotation(0.f);

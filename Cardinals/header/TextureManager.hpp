@@ -48,7 +48,7 @@ namespace Images
 {
     //constexpr ImageFile Background{ "../../Assets/Background.png", 1600.f, 900.f };
     constexpr ImageFile DigipenLogo{ "../../Assets/DigiPen_WHITE.png", 1525.f, 445.f };
-    constexpr ImageFile Player{ "../../Assets/PlayerPlaceholder.png", 500.f,500.f };
+    constexpr ImageFile Player{ "../../Assets/playerIdle.PNG", 500.f,500.f };
 
     constexpr ImageFile StartBtn{ "../../Assets/Start_Button.png", 412.f, 120.f };
 	constexpr ImageFile PrevBtn{ "../../Assets/Previous_Button.png", 120.f, 120.f };
@@ -76,11 +76,11 @@ namespace Images
     constexpr ImageFile BG_CLOUDS{ "../../Assets/BG_CLOUDS.png", 1600.f, 900.f };
     constexpr ImageFile BG_FRONTMOUNTAIN{ "../../Assets/BG_FRONTMOUNTAIN.png", 1600.f, 900.f };
 
-    constexpr ImageFile Platform1{ "../../Assets/platform1.png" };
-    constexpr ImageFile Platform2{ "../../Assets/platform2.png" };
-    constexpr ImageFile Platform3{ "../../Assets/platform3.png" };
-    constexpr ImageFile Platform4{ "../../Assets/platform4.png" };
-    constexpr ImageFile Platform5{ "../../Assets/platform5.png" };
+    constexpr ImageFile Platform_VL{ "../../Assets/platform1.png" };
+    constexpr ImageFile Platform_VM{ "../../Assets/platform2.png" };
+    constexpr ImageFile Platform_VS{ "../../Assets/platform3.png" };
+    constexpr ImageFile Platform_HS{ "../../Assets/platform4.png" };
+    constexpr ImageFile Platform_HL{ "../../Assets/platform5.png" };
 }
 
 namespace Fonts
