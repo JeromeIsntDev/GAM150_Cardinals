@@ -34,7 +34,7 @@ private:
 	f32 p_rightMax{ 0.f };
 	AEVec2 p_GravityVector{ 0.f,0.f };
 	AEVec2 p_previousPos{ 0.f,0.f };
-	f32 maxCD{ 1.f };
+	f32 maxCD{ 0.5f };
 	f32 currCD{ 0.f };
 	f32 jumpForce = 500.f;
 public:
@@ -51,6 +51,7 @@ public:
 	bool canMoveRight{ true };
 	bool canMoveUp{ false };
 	bool canMoveDown{ false };
+	bool canSwapGrav = true;
 	//public Variable for Player (Check if error)
 	bool p_isGrounded{ false };
 	f32 maxJumpBuffer{ 0.12f };

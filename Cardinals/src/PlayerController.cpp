@@ -79,6 +79,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 			case GravityDirection::Down:
 				p_velocityVector.x = 1.f * p_moveSpeed * dt;
 				p_initialPos.x += p_velocityVector.x;
+				p_velocityVector.x = 0.f;
 				break;
 			case GravityDirection::Left:
 			case GravityDirection::Right:
@@ -89,16 +90,17 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 				break;
 			}
 		}
-		
 		isMoving = true;
 	}
 	if (input.isKeyPressed(AEVK_A)) {
+		p_velocityVector.x = 0.f;
 		if (canMoveLeft) {
 			switch (dir) {
 			case GravityDirection::Up:
 			case GravityDirection::Down:
 				p_velocityVector.x = -1.f * p_moveSpeed * dt;
 				p_initialPos.x += p_velocityVector.x;
+				p_velocityVector.x = 0.f;
 				break;
 			case GravityDirection::Left:
 			case GravityDirection::Right:
@@ -119,6 +121,21 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 		isSprint = false;
 	}
 
+	if (canSwapGrav) {
+		if (input.isKeyTriggered(AEVK_DOWN)) {
+			grav = Player::GravityDirection::Down;
+		}
+		if (input.isKeyTriggered(AEVK_UP)) {
+			grav = Player::GravityDirection::Up;
+		}
+		if (input.isKeyTriggered(AEVK_LEFT)) {
+			grav = Player::GravityDirection::Left;
+		}
+		if (input.isKeyTriggered(AEVK_RIGHT)) {
+			grav = Player::GravityDirection::Right;
+		}
+	}
+
 	//Sprint speed logic
 	if (isSprint) {
 		f32 maxSpeed = moveSpeed * 1.2f;
@@ -134,8 +151,8 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 			p_moveSpeed = moveSpeed;
 		}
 	}
-	std::cout << "left bool: " << canMoveLeft << std::endl;
-	std::cout << "right bool: " << canMoveRight << std::endl;
+	//std::cout << "left bool: " << canMoveLeft << std::endl;
+	//std::cout << "right bool: " << canMoveRight << std::endl;
 	if (input.isKeyPressed(AEVK_SPACE) && !p_isJumping) {
 		//adjust jump logic here
 		switch(dir){
@@ -172,7 +189,8 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	GravityDirection currDir = dir;
 
 	//CLAMP HERE
-
+	p_velocityVector.y = AEClamp(p_velocityVector.y, -400.f, 400.f);
+	p_velocityVector.x = AEClamp(p_velocityVector.x, -300.f, 300.f);
 	//down force velocity (always going downwards) depend on location
 	if (!p_isGrounded) {
 		switch (dir)
@@ -204,18 +222,24 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		/*p_velocityVector.y += gravity * dt;
 		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
-	std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
-	//resets velocity to avoid random snapping or teleporting
-	if (currDir != prevDir) {
-		currCD += dt;
+	//std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
+	//give a cool down to prevent being able to jump instantly
+	std::cout << "timer: " << currCD << std::endl;
+	currCD += dt;
+	if (currDir != prevDir)
+	{
 		p_isJumping = true;
-		if (currCD >= maxCD) {
+		canSwapGrav = false;
+		if (currCD >= maxCD)
+		{
+			std::cout << "this ran" << std::endl;
 			p_isJumping = false;
+			canSwapGrav = true;
 			currCD = 0.f;
+			prevDir = currDir;   // IMPORTANT: move this here
 		}
-		//p_velocityVector = { 0.f,0.f };
-		prevDir = currDir;
 	}
+
 	PlayerInputHandle(dt, dir);
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
 	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
@@ -239,7 +263,7 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		grav = Player::GravityDirection::Down;
 	}
 
-	PRINT("Momentum: %f,%f", p_velocityVector.x, p_velocityVector.y);
+	//PRINT("Momentum: %f,%f", p_velocityVector.x, p_velocityVector.y);
 
 	UpdatePosition(p_initialPos);
 }

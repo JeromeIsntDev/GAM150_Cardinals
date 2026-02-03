@@ -3,47 +3,47 @@
     {
       "id": 0,
       "posx": -600.0,
-      "posy": 50.0,
+      "posy": 25.0,
       "rot": 0.0,
-      "scalex": 100.0,
-      "scaley": 100.0
+      "scalex": 50.0,
+      "scaley": 50.0
     },
     {
       "id": 1,
       "posx": -600.0,
-      "posy": -450.0,
+      "posy": -100.0,
       "rot": 0.0,
-      "scalex": 500.0,
-      "scaley": 900.0
+      "scalex": 450.0,
+      "scaley": 200.0
     },
     {
       "id": 2,
-      "posx": 500.0,
-      "posy": -200.0,
+      "posx": 702.0,
+      "posy": -369.0,
       "rot": 0.0,
-      "scalex": 100.0,
-      "scaley": 500.0
+      "scalex": 150.0,
+      "scaley": 300.0
     },
     {
       "id": 3,
-      "posx": 200.0,
-      "posy": -200.0,
+      "posx": 368.0,
+      "posy": -355.0,
       "rot": 0.0,
-      "scalex": 100.0,
+      "scalex": 250.0,
       "scaley": 500.0
     },
     {
       "id": 4,
-      "posx": -48.0,
-      "posy": -97.0,
+      "posx": -107.0,
+      "posy": -314.0,
       "rot": 0.0,
       "scalex": 500.0,
       "scaley": 100.0
     },
     {
       "id": 5,
-      "posx": 500.0,
-      "posy": 200.0,
+      "posx": 166.0,
+      "posy": 218.0,
       "rot": 0.0,
       "scalex": 500.0,
       "scaley": 100.0
