@@ -121,7 +121,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 
 	//Sprint speed logic
 	if (isSprint) {
-		f32 maxSpeed = moveSpeed * 3.f;
+		f32 maxSpeed = moveSpeed * 1.2f;
 		if (p_moveSpeed <= maxSpeed) {
 			p_moveSpeed += moveSpeed * dt;
 		}
@@ -140,16 +140,16 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 		//adjust jump logic here
 		switch(dir){
 		case Player::GravityDirection::Up:
-			p_velocityVector.y = -850.f;
+			p_velocityVector.y = -jumpForce;
 			break;
 		case Player::GravityDirection::Down:
-			p_velocityVector.y = 850.f;
+			p_velocityVector.y = jumpForce;
 			break;
 		case Player::GravityDirection::Left:
-			p_velocityVector.x = 850.f;
+			p_velocityVector.x = jumpForce;
 			break;
 		case Player::GravityDirection::Right:
-			p_velocityVector.x = -850.f;
+			p_velocityVector.x = -jumpForce;
 			break;
 		default:
 			break;

@@ -28,7 +28,7 @@ private:
 	f32 p_moveSpeed{ 300.f };
 	f32 p_downForce{ 1.5f };
 	//set a jumpforce for psuedo gravity on jump
-	f32 gravity{ 2000.f };
+	f32 gravity{ 1500.f };
 	AEVec2 p_initialPos{ 0.f,0.f };
 	f32 p_leftMin{ 0.f };
 	f32 p_rightMax{ 0.f };
@@ -36,6 +36,7 @@ private:
 	AEVec2 p_previousPos{ 0.f,0.f };
 	f32 maxCD{ 1.f };
 	f32 currCD{ 0.f };
+	f32 jumpForce = 500.f;
 public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
