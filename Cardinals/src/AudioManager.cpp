@@ -125,6 +125,7 @@ void AudioManager::LoadManifest(const std::string& path)
 	{
 		PRINT("ERROR: where tf is ur manifest?? at %s\n", path.c_str());
 		return;
+	}
 
 	while (std::getline(file, line))
 	{
