@@ -54,7 +54,7 @@ public:
 	bool p_isGrounded{ false };
 	f32 maxJumpBuffer{ 0.12f };
 	f32 jumpBuffer{ 0.f };
-	f32 maxCoyoteBuffer{ 0.8f };
+	f32 maxCoyoteBuffer{ 0.1f };
 	f32 coyoteBuffer{ 0.f };
 	GravityDirection grav = Player::GravityDirection::Down;
 	bool hasCollided{ false };

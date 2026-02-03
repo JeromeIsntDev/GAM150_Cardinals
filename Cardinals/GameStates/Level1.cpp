@@ -47,8 +47,8 @@ void Level1_Load() {
 	playerTexture.Load_Image(Images::Player);
 	placeholderTexture.Load_Image(Images::Placeholder);
 	backgrounds[0].Load_Image(Images::BG_BACKMOST);
-	backgrounds[1].Load_Image(Images::BG_MOUNTAIN);
-	backgrounds[2].Load_Image(Images::BG_CLOUDS);
+	backgrounds[1].Load_Image(Images::BG_CLOUDS);
+	backgrounds[2].Load_Image(Images::BG_MOUNTAIN);
 	backgrounds[3].Load_Image(Images::BG_FRONTMOUNTAIN);
 
 	if (!textures.empty()) textures.clear();
@@ -120,7 +120,7 @@ void Level1_Initialize()
 		GameObject* obj = &backgroundObjs[i];
 		obj->SetMesh(squareMesh);
 		obj->SetTexture(&backgrounds[i]);
-		obj->UpdateScale(AEVec2{ 1600.f,900.f });
+		obj->UpdateScale(AEVec2{ 1700.f, 960.f });
 		obj->UpdateRotation(0.f);
 		obj->UpdatePosition(AEVec2{ 0.f, 0.f });
 	}
@@ -182,7 +182,17 @@ void Level1_Update() {
 		}
 	}
 
+
+
 	for (GameObject& obj : backgroundObjs) {
+		f32 offset = mainPlayer.GetPosition().x;
+		f32 offsetFirst = offset / 200.f;
+		f32 offsetSecond = offset / 75.f;
+		f32 offsetThird = offset / 25.f;
+
+		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
+		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
+		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
 		obj.Draw();
 	}
 
