@@ -1,4 +1,5 @@
-#include "../GameStates/Level1.hpp"
+#include "Level1.hpp"
+#include "GameEditor.hpp"
 
 extern std::vector<Texture*> textures;
 extern std::vector<AEGfxVertexList**> meshes;
@@ -16,24 +17,23 @@ namespace {
 
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
+	Texture backgrounds[4]{};
+	GameObject backgroundObjs[4]{};
 	GameObject platform;
 	GameObject wall0;
 	GameObject wall1;
 	GameObject wall2;
 	GameObject wall3;
 	GameObjectIDAssigner assigner;
-
-	InputHandler& input = InputHandler::GetInstance();
-	std::vector<GameObject*> objects;
+	std::vector<GameObject*> levelObjList;
 	std::vector<GameObject> objData;
 	//IMGUI
 	//ControlPanel controlPanel;
 
-	bool isReadFromFile = false;
-
 	f32 levelTime{};
 
 	//UIManager tempUI;
+	InputHandler& input = InputHandler::GetInstance();
 }
 
 void Level1_Load() {
@@ -46,10 +46,17 @@ void Level1_Load() {
 
 	playerTexture.Load_Image(Images::Player);
 	placeholderTexture.Load_Image(Images::Placeholder);
+	backgrounds[0].Load_Image(Images::BG_BACKMOST);
+	backgrounds[1].Load_Image(Images::BG_MOUNTAIN);
+	backgrounds[2].Load_Image(Images::BG_CLOUDS);
+	backgrounds[3].Load_Image(Images::BG_FRONTMOUNTAIN);
 
 	if (!textures.empty()) textures.clear();
 	textures.push_back(&playerTexture);
 	textures.push_back(&placeholderTexture);
+	for (Texture& t : backgrounds) {
+		textures.push_back(&t);
+	}
 
 	if (!meshes.empty()) meshes.clear();
 	meshes.push_back(&squareMesh);
@@ -109,25 +116,34 @@ void Level1_Initialize()
 	wall3.UpdateRotation(0.f);
 	wall3.UpdatePosition(AEVec2{ 500.f, 200.f });
 
-	objects.clear();
-	objects.push_back(&mainPlayer);
-	objects.push_back(&platform);
-	objects.push_back(&wall0);
-	objects.push_back(&wall1);
-	objects.push_back(&wall2);
-	objects.push_back(&wall3);
+	for (int i{}; i < 4; ++i) {
+		GameObject* obj = &backgroundObjs[i];
+		obj->SetMesh(squareMesh);
+		obj->SetTexture(&backgrounds[i]);
+		obj->UpdateScale(AEVec2{ 1600.f,900.f });
+		obj->UpdateRotation(0.f);
+		obj->UpdatePosition(AEVec2{ 0.f, 0.f });
+	}
+
+	levelObjList.clear();
+	levelObjList.push_back(&mainPlayer);
+	levelObjList.push_back(&platform);
+	levelObjList.push_back(&wall0);
+	levelObjList.push_back(&wall1);
+	levelObjList.push_back(&wall2);
+	levelObjList.push_back(&wall3);
 
 
 	levelTime = 0.f;
 
-	if (!isReadFromFile) return;
+	if (!IsEditorActive()) return;
 	//Read From JSON
 	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
 
 	for (int i{}; i < objData.size(); ++i) {
-		for (int j{}; j < objects.size(); ++j) {
-			if (objData[i].GetID() == objects[j]->GetID()) {
-				GameObject* curr = objects[j];
+		for (int j{}; j < levelObjList.size(); ++j) {
+			if (objData[i].GetID() == levelObjList[j]->GetID()) {
+				GameObject* curr = levelObjList[j];
 				curr->UpdatePosition(objData[i].GetPosition());
 				curr->UpdateRotation(objData[i].GetRotatation());
 				curr->UpdateScale(objData[i].GetScale());
@@ -148,53 +164,23 @@ void Level1_Update() {
 	//controlPanel.ControlPanel_Update();
 	levelTime += AEFrameRateControllerGetFrameTime();
 
-
 	if (input.isMouseBtnPressed(AEVK_LCTRL)) {
-		if (input.isMouseBtnTriggered(AEVK_S)) {
-			//Save to JSON
-			objData.clear();
-			for (GameObject* obj : objects) {
-				objData.push_back(*obj);
-			}
-			SaveObjectsToJson(objData, "../../Saves/Level1_GameObjects.json");
-		}
-		if (input.isMouseBtnTriggered(AEVK_M)) {
-			isReadFromFile = !isReadFromFile;
-		}
-		if (input.isMouseBtnTriggered(AEVK_R)) {
-			UpdateGameManagerState(Level1);
+		if (input.isMouseBtnTriggered(AEVK_E)) ToggleEditorMode();
+		if (IsEditorActive()) {
+
+			DragObject(levelObjList);
+
+			if (input.isMouseBtnTriggered(AEVK_R))
+				RestartLevel(UpdateGameManagerState, Level1);
+
+			if (input.isMouseBtnTriggered(AEVK_S))
+				SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", levelObjList);
 		}
 	}
 
-	if (input.isMouseBtnPressed(AEVK_LBUTTON)) {
-		AEVec2 mousePos{0.f,0.f};
-		input.getMousePos(mousePos.x, mousePos.y);
-		mousePos.x += AEGfxGetWinMaxX() - AEGfxGetWindowWidth();
-		mousePos.y += AEGfxGetWinMaxY() - AEGfxGetWindowHeight();
-		for (GameObject* obj : objects) {
-			AEVec2 currentScale = obj->GetScale();
-			AEVec2 currentPos = obj->GetPosition();
-
-			float halfW = currentScale.x / 2.0f, halfH = currentScale.y / 2.0f;
-
-			if (mousePos.x >= currentPos.x - halfW && mousePos.x <= currentPos.x + halfW &&
-				-mousePos.y >= currentPos.y - halfH && -mousePos.y <= currentPos.y + halfH) {
-				PRINT("Object touched: %f, %f", currentPos.x, currentPos.y);
-
-				int mx, my;
-				AEInputGetCursorPositionDelta(&mx, &my);
-				obj->UpdatePosition(AEVec2{ currentPos.x + mx, currentPos.y - my });
-
-				AEInputMouseWheelDelta(&mx);
-				if (input.isMouseBtnPressed(AEVK_LSHIFT)) {
-					mx*=10;
-				}
-				my = mx;
-				obj->UpdateScale(AEVec2{ currentScale.x + mx, currentScale.y + my });
-			}
-		}
+	for (GameObject& obj : backgroundObjs) {
+		obj.Draw();
 	}
-
 
 	/*PLAYER STUFF*/
 
@@ -220,7 +206,7 @@ void Level1_Update() {
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 
-	mainPlayer.PlayerCollision(objects, mainPlayer.grav);
+	mainPlayer.PlayerCollision(levelObjList, mainPlayer.grav);
 }
 
 void Level1_Draw() {
@@ -235,11 +221,10 @@ void Level1_Draw() {
 
 	mainPlayer.Draw();
 
-	if (isReadFromFile) {
-		digipenFont.Input_Text("Reading");
-		digipenFont.Draw_Text(AEVec2{ 650.f, 430.f }, .5f, 1.f);
+	if (IsEditorActive()) {
+		digipenFont.Input_Text("Editor Active");
+		digipenFont.Draw_Text(AEVec2{ -650.f, 430.f }, .5f, 1.f);
 	}
-
 
 	digipenFont.Input_Text("Time: ");
 	digipenFont.Draw_Text(675.f, 400.f);
@@ -252,8 +237,6 @@ void Level1_Draw() {
 
 void Level1_Free() {
 	PRINT("Free: %s", "Level 1\n");
-
-	//digipenFont.Free_Font();
 }
 
 void Level1_Unload() {

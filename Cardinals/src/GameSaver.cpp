@@ -50,23 +50,23 @@ std::vector<GameObject> ReadJsonToObjects(const char* filePath)
 }
 
 rapidjson::Value SerializeGameObject(
-    const GameObject& go,
+    const GameObject* obj,
     rapidjson::Document::AllocatorType& allocator
 ) {
     rapidjson::Value v(rapidjson::kObjectType);
 
-    v.AddMember("id", go.GetID(), allocator);
-    v.AddMember("posx", go.GetPosition().x, allocator);
-    v.AddMember("posy", go.GetPosition().y, allocator);
-    v.AddMember("rot", go.GetRotatation(), allocator);
-    v.AddMember("scalex", go.GetScale().x, allocator);
-    v.AddMember("scaley", go.GetScale().y, allocator);
+    v.AddMember("id",     obj->GetID(), allocator);
+    v.AddMember("posx",   obj->GetPosition().x, allocator);
+    v.AddMember("posy",   obj->GetPosition().y, allocator);
+    v.AddMember("rot",    obj->GetRotatation(), allocator);
+    v.AddMember("scalex", obj->GetScale().x, allocator);
+    v.AddMember("scaley", obj->GetScale().y, allocator);
 
     return v; // moved, not copied
 }
 
 
-void SaveObjectsToJson(std::vector<GameObject> gameObjects, std::string filepath)
+void SaveObjectsToJson(std::vector<GameObject*> gameObjects, std::string filepath)
 {
     rapidjson::Document doc;
     
