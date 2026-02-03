@@ -71,6 +71,12 @@ namespace Images
     constexpr ImageFile BG_MOUNTAIN{ "../../Assets/BG_BACKMOUNTAIN.png", 1600.f, 900.f };
     constexpr ImageFile BG_CLOUDS{ "../../Assets/BG_CLOUDS.png", 1600.f, 900.f };
     constexpr ImageFile BG_FRONTMOUNTAIN{ "../../Assets/BG_FRONTMOUNTAIN.png", 1600.f, 900.f };
+
+    constexpr ImageFile Platform1{ "../../Assets/platform1.png" };
+    constexpr ImageFile Platform2{ "../../Assets/platform2.png" };
+    constexpr ImageFile Platform3{ "../../Assets/platform3.png" };
+    constexpr ImageFile Platform4{ "../../Assets/platform4.png" };
+    constexpr ImageFile Platform5{ "../../Assets/platform5.png" };
 }
 
 namespace Fonts
