@@ -26,6 +26,7 @@ public:
 	void Update(f32 dt) override; // from UIElement
 	void Draw() const override; // from GameObject
 	void SetTextures(Texture* barTex, Texture* knobTex); // unique to VolSlider
+	AudioType GetAudioType() const { return _audioType; }
 
 private:
 	AudioType _audioType;
@@ -44,7 +45,7 @@ public:
 	void ShowMenu();
 	void HideMenu();
 	bool isVisible() const { return _isVisible; }
-	void SetTextures(Texture* bg, Texture* bar, Texture* knob, Texture* prevBtn);
+	void SetTextures(Texture* bg, Texture* bar, Texture* knobMaster, Texture* knobMusic,Texture* knobEFX, Texture* prevBtn);
 private:
 	bool _isVisible = false;
 	// to manage my pause menu UI

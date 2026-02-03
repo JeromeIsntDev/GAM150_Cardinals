@@ -22,7 +22,8 @@ VolSlider::VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 widt
 	: UIElement(mesh, pos, 0.f, AEVec2{ width, 20.f }), // bar mesh
 	_audioType(type),
 	_width(width),
-	_knob(mesh, AEVec2{ pos.x + (width / 2.f), pos.y }, 0.f, AEVec2{30.f, 30.f})
+	_knob(mesh, AEVec2{ pos.x + (width / 2.f), pos.y }, 0.f, AEVec2{50.f, 50.f})
+	
 {
 
 	SetActive(true);
@@ -63,9 +64,8 @@ void VolSlider::Draw() const
 	{
 		// set knob texture
 		// colour for now ... 
-		AEGfxSetColorToMultiply(1.0f, 0.f, 0.f, 1.f);
+		AEGfxSetColorToMultiply(1.0f, 1.f, 1.f, 1.f);
 		_knob.Draw(); // draw knob
-		AEGfxSetColorToMultiply(1.0f, 1.f, 1.f, 1.f); // reset
 	}
 }
 
@@ -94,15 +94,15 @@ PauseMenu::PauseMenu(bool isInGame)
 	_bg.UpdatePosition(AEVec2{ 0.f, 0.f });
 
 	// setup volume sliders
-	auto masterSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MASTER, AEVec2{ 0.f, 100.f }, 300.f);
+	auto masterSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MASTER, AEVec2{ 475.f, 100.f }, 500.f);
 	_pauseMenuUI.Add(masterSlider.get());
 	_elements.push_back(std::move(masterSlider));
 
-	auto musicSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 300.f);
+	auto musicSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MUSIC, AEVec2{ 475.f, 0.f }, 500.f);
 	_pauseMenuUI.Add(musicSlider.get());
 	_elements.push_back(std::move(musicSlider));
 
-	auto sfxSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::SFX, AEVec2{ 0.f, -100.f }, 300.f);
+	auto sfxSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::SFX, AEVec2{ 475.f, -100.f }, 500.f);
 	_pauseMenuUI.Add(sfxSlider.get());
 	_elements.push_back(std::move(sfxSlider));
 
@@ -172,9 +172,8 @@ void PauseMenu::Draw()
 	}
 }
 
-void PauseMenu::SetTextures(Texture* bg, Texture* bar, Texture* knob, Texture* prevBtn)
-{
-	// set background texture
+void PauseMenu::SetTextures(Texture* bg, Texture* bar, Texture* knobMaster, Texture* knobMusic, Texture* knobEFX, Texture* prevBtn)
+{// set background texture
 	if (bg) _bg.SetTexture(bg);
 
 	// set textures for volume sliders
@@ -182,7 +181,18 @@ void PauseMenu::SetTextures(Texture* bg, Texture* bar, Texture* knob, Texture* p
 		// check if element is a slider (bar+knob)
 		VolSlider* slider = dynamic_cast<VolSlider*>(element.get());
 		if (slider) {
-			slider->SetTextures(bar, knob);
+			switch (slider->GetAudioType())
+			{
+			case AudioType::MASTER:
+				slider->SetTextures(bar, knobMaster);
+				break;
+			case AudioType::MUSIC:
+				slider->SetTextures(bar, knobMusic);
+				break;
+			case AudioType::SFX:
+				slider->SetTextures(bar, knobEFX);
+				break;
+			}
 			continue; // skip to next element
 		}
 		// check if element is a button (prevBtn)
