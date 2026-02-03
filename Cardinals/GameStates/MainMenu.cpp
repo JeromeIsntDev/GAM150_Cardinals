@@ -116,20 +116,22 @@ void MainMenu_Initialize()
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	startBtn->SetTexture(&startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
 	startBtn->SetTooltipText("ur mom");
+	//initialScale = 
 
 	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	exitBtn->SetTexture(&exitTexture); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
 
 	creditsBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -150.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-	creditsBtn->SetTexture(&creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
+	creditsBtn->SetTexture(&creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true); 
 
-	// 
 
-	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -50.f }, 0.f, AEVec2{ 10.f, 10.f });
+	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -50.f }, 0.f, AEVec2{ 200.f, 100.f });
 	yesBtn->SetTexture(&yesTexture); yesBtn->SetActive(true); yesBtn->SetInteractable(true);
+	yesBtn->SetTooltipText("");
 
-	noBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -250.f }, 0.f, AEVec2{ 10.f, 10.f });
+	noBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -175.f }, 0.f, AEVec2{ 200.f, 100.f });
 	noBtn->SetTexture(&noTexture); noBtn->SetActive(true); noBtn->SetInteractable(true);
+	noBtn->SetTooltipText("");
 
 	// not in game yet
 	pauseMenu = std::make_unique<PauseMenu>(false);
@@ -142,9 +144,10 @@ void MainMenu_Initialize()
 		pauseMenu->ShowMenu();
 		menuUI.ForceResetToolTips();
 		});
-
+	
 	quitUI.Add(yesBtn.get());
 	quitUI.Add(noBtn.get());
+
 
 	// use them like this ik its weird asf but like. i'll make it better soon
 	startBtn->SetOnClick([]() {
@@ -198,7 +201,7 @@ void MainMenu_Update() {
 
 	AEGfxSetTransparency(logo_transparency);
 
-	float dt = AEFrameRateControllerGetFrameTime();
+	float dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
 
 	if (AEInputCheckTriggered(AEVK_SPACE)) {
 		logo_transparency = 1.f;
@@ -255,7 +258,15 @@ void MainMenu_Draw() {
 	AEGfxSetColorToMultiply(.2f, .2f, .2f, 1.0f);
 	menuBG.Draw();
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+	digipenFont.Input_Text("Are you sure?");
+	digipenFont.Draw_Text(AEVec2{ 0, 150.f }, 1.f, logo_transparency);
 	quitUI.Draw();
+	digipenFont.Change_Text_Color(Colors::Black);
+	digipenFont.Input_Text("Yeah!");
+	digipenFont.Draw_Text(AEVec2{ 0, -50.f }, 1.f, logo_transparency);
+	digipenFont.Input_Text("Nah...");
+	digipenFont.Draw_Text(AEVec2{ 0, -175.f }, 1.f, logo_transparency);
+	digipenFont.Change_Text_Color(Colors::White);
 }
 
 void MainMenu_Free() {

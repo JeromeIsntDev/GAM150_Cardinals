@@ -29,7 +29,6 @@ protected:
 
 	Color tint = Colors::White;
 	std::vector<UIElement*> children;
-	Texture* currentTexture{};
 
 	std::string tooltipToDraw = "";
 	AEVec2 tooltipPos = { 0,0 };
@@ -104,6 +103,7 @@ private:
 	std::function<void()> onClick;
 	std::string toolTipText = "u didn't gimme a name";
 	float hoverTimer = 0.0f;
+	AEVec2 initialScale = GetScale();
 
 public:
 	using UIElement::UIElement;

@@ -81,8 +81,7 @@ bool UIElement::ToggleActive(u8 key)
 
     void Button::Update(float dt)
     {
-        currentTexture = tex; // pointer to text in gameobj
-        if (!isActive || !isInteractable || currentTexture == nullptr)
+        if (!isActive || !isInteractable)
         {
             ResetTooltip();
             hoverTimer = 0.0f;
@@ -93,11 +92,11 @@ bool UIElement::ToggleActive(u8 key)
         AEVec2 mousePos = UIManager::GetNewMousePos();
 
         // hover code, combined tints + scales texture when mouse is within button pos
-        if (IsPointInside(mousePos.x, mousePos.y) && currentTexture)
+        if (IsPointInside(mousePos.x, mousePos.y))
         {
             //std::cout << "bruh " << mousePos.x << " " << mousePos.y << std::endl;
             tint = { Colors::PastelPurple };
-            GameObject::UpdateScale({ currentTexture->Get_Image_Width() * scaleMultiplier, currentTexture->Get_Image_Height() * scaleMultiplier });
+            GameObject::UpdateScale({ initialScale.x * scaleMultiplier, initialScale.y * scaleMultiplier });
 
             // small delay because having it shoved in ur face is ass
             hoverTimer += dt;
@@ -111,7 +110,7 @@ bool UIElement::ToggleActive(u8 key)
             tint = { 1.0f, 1.0f, 1.0f, 1.0f };
             scaleMultiplier = 1.0f;
 
-            GameObject::UpdateScale({ currentTexture->Get_Image_Width() * scaleMultiplier, currentTexture->Get_Image_Height() * scaleMultiplier });
+            GameObject::UpdateScale({ initialScale.x * scaleMultiplier, initialScale.y * scaleMultiplier });
 
             hoverTimer = 0.0f; // double check
             ResetTooltip();
