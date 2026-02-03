@@ -144,6 +144,7 @@ void MainMenu_Initialize()
 	settingsBtn->SetOnClick([]() {
 		PRINT("Settings Pressed");
 		pauseMenu->ShowMenu();
+		menuUI.ForceResetToolTips();
 		});
 
 	quitPopUp = std::make_unique<PopUp>(squareMesh, AEVec2{ 0,0 }, 0.f, AEVec2{ 600.f, 400.f });
