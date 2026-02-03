@@ -33,21 +33,22 @@ namespace {
 	f32 logo_transparency = 0.f;
 	s8 isLogoDrawn = 0;
 	s32 mouseX, mouseY;
+	bool quitMenuOpen = false;
 
 	// UI stuff
-	UIManager menuUI, popUpUI;
-	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn, yesBtn, noBtn, settingsBtn;
-	std::unique_ptr<PopUp> quitPopUp;
+	UIManager menuUI;
+	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn;
+	UIManager quitUI;
+	std::unique_ptr<Button> yesBtn, noBtn;
 	std::unique_ptr<PauseMenu> pauseMenu;
+	std::unique_ptr<Button> settingsBtn;
 
-	GameObjectIDAssigner assigner;
 	Audio& bgm = Audio::Instance();
 }
 
 
 void MainMenu_Load() {
 	PRINT("Load: %s", "Main Menu\n");
-	assigner.currIdCount = 0;
 
 	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
@@ -55,7 +56,8 @@ void MainMenu_Load() {
 	digipenFont.Load_Font(Fonts::Main, 30.f);
 	digipenFont.Input_Text("All content (C) 2025 Digipen Institute of Technology Singapore. All Rights Reserved");
 
-	menuUI.InitTooltipFont(Fonts::Main, 30.f); popUpUI.InitTooltipFont(Fonts::Main, 30.f);
+	menuUI.InitTooltipFont(Fonts::Main, 30.f);
+	quitUI.InitTooltipFont(Fonts::Main, 30.f);
 
 	menuBGTexture.Load_Image(Images::Background);
 	tex_digipenLogo.Load_Image(Images::DigipenLogo);
@@ -65,8 +67,9 @@ void MainMenu_Load() {
 	settingsTexture.Load_Image(Images::SettingsBtn);
 
 	// testing
-	yesTexture.Load_Image(Images::YesBtn); noTexture.Load_Image(Images::NoBtn);
-	popUpTexture.Load_Image(Images::PopUp);
+	yesTexture.Load_Image(Images::Button);
+	noTexture.Load_Image(Images::Button);
+	popUpTexture.Load_Image(Images::Button);
 
 	//Store Textures to Unload
 	if (!textures.empty()) textures.clear();
@@ -103,35 +106,28 @@ void MainMenu_Initialize()
 
 	squareMesh = RectMeshCenter();
 	go_digipenLogo.SetMesh(squareMesh);
-	go_digipenLogo.SetID(assigner.GetID());
 
 	menuBG.SetMesh(squareMesh); menuBG.SetTexture(&menuBGTexture);
 	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f }); menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() }); menuBG.UpdateRotation(0.f);
-	menuBG.SetID(assigner.GetID());
 
 	// creates button w relevant stuff stolen from gameobej
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	startBtn->SetTexture(&startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
 	startBtn->SetTooltipText("ur mom");
-	startBtn->SetID(assigner.GetID());
 
 	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	exitBtn->SetTexture(&exitTexture); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
-	exitBtn->SetID(assigner.GetID());
 
 	creditsBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -150.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
 	creditsBtn->SetTexture(&creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
-	creditsBtn->SetID(assigner.GetID());
 
 	// 
 
-	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ -100.f, -50.f }, 0.f, AEVec2{ yesTexture.Get_Image_Width(), yesTexture.Get_Image_Height() });
+	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -50.f }, 0.f, AEVec2{ 10.f, 10.f });
 	yesBtn->SetTexture(&yesTexture); yesBtn->SetActive(true); yesBtn->SetInteractable(true);
-	yesBtn->SetID(assigner.GetID());
 
-	noBtn = std::make_unique<Button>(squareMesh, AEVec2{ -100.f, -250.f }, 0.f, AEVec2{ noTexture.Get_Image_Width(), noTexture.Get_Image_Height() });
+	noBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -250.f }, 0.f, AEVec2{ 10.f, 10.f });
 	noBtn->SetTexture(&noTexture); noBtn->SetActive(true); noBtn->SetInteractable(true);
-	noBtn->SetID(assigner.GetID());
 
 	// not in game yet
 	pauseMenu = std::make_unique<PauseMenu>(false);
@@ -140,19 +136,14 @@ void MainMenu_Initialize()
 	
 	// placeholder for settings button
 	settingsBtn->SetTexture(&settingsTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
-	settingsBtn->SetID(assigner.GetID());
 	settingsBtn->SetOnClick([]() {
 		PRINT("Settings Pressed");
 		pauseMenu->ShowMenu();
 		menuUI.ForceResetToolTips();
 		});
 
-	quitPopUp = std::make_unique<PopUp>(squareMesh, AEVec2{ 0,0 }, 0.f, AEVec2{ 600.f, 400.f });
-	quitPopUp->SetTexture(&popUpTexture);
-	quitPopUp->SetID(assigner.GetID());
-
-	quitPopUp->AddChild(yesBtn.get());
-	quitPopUp->AddChild(noBtn.get());
+	quitUI.Add(yesBtn.get());
+	quitUI.Add(noBtn.get());
 
 	// use them like this ik its weird asf but like. i'll make it better soon
 	startBtn->SetOnClick([]() {
@@ -166,16 +157,15 @@ void MainMenu_Initialize()
 
 	exitBtn->SetOnClick([]() {
 		PRINT("Exit Pressed");
-		isGameRunning = 0;
-		PRINT("Game Running = %d", isGameRunning);
+		quitMenuOpen = true;
 		});
 
 	yesBtn->SetOnClick([]() {
-		PRINT("I WORK");
+		isGameRunning = 0;
 		});
 
 	noBtn->SetOnClick([]() {
-		PRINT("ME TOO!!!!");
+		quitMenuOpen = false;
 		});
 
 	// so we can control all buttons with a menuUI hehehehe
@@ -183,10 +173,6 @@ void MainMenu_Initialize()
 	menuUI.Add(exitBtn.get());
 	menuUI.Add(creditsBtn.get());
 	menuUI.Add(settingsBtn.get());
-
-	popUpUI.Add(quitPopUp.get());
-	popUpUI.Add(yesBtn.get());
-	popUpUI.Add(noBtn.get());
 
 	go_digipenLogo.SetTexture(&tex_digipenLogo);
 	go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
@@ -214,20 +200,11 @@ void MainMenu_Update() {
 
 	if (isLogoDrawn) {
 
-		if (quitPopUp->ToggleActive(AEVK_6))
-		{
-			// reset only once im not gonna call ts 60 frames a sec
-			bool active = quitPopUp->IsActive();
-			if (active) {
-				menuUI.ForceResetToolTips();
-			}
-		}
-
 		if (pauseMenu->isVisible()) {
 			pauseMenu->Update(dt);
 		}
-		else if (quitPopUp->IsActive()) {
-			popUpUI.Update(dt);
+		else if (quitMenuOpen) {
+			quitUI.Update(dt);
 		}
 		else {
 			menuUI.Update(dt); // freezes menuUI but i'll update this in the future to freeze the whole game
@@ -258,8 +235,6 @@ void MainMenu_Draw() {
 		return;
 	}
 
-	bool isOverlayActive = quitPopUp->IsActive() || pauseMenu->isVisible();
-	if (isOverlayActive) AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.0f);
 
 	menuBG.Draw();
 	cardinalsFont.Draw_Text(0, 200.f);
@@ -268,7 +243,12 @@ void MainMenu_Draw() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
 	pauseMenu->Draw();
-	popUpUI.Draw();
+
+	if (!quitMenuOpen) return;
+	AEGfxSetColorToMultiply(.2f, .2f, .2f, 1.0f);
+	menuBG.Draw();
+	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+	quitUI.Draw();
 }
 
 void MainMenu_Free() {
@@ -277,7 +257,7 @@ void MainMenu_Free() {
 	bgm.Stop_Audio();
 	bgm.Free_Audio_System();
 
-	popUpUI.Exit();
+	quitUI.Exit();
 	menuUI.Exit();
 }
 

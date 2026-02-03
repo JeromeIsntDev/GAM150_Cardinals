@@ -174,8 +174,7 @@ void Level1_Update() {
 				RestartLevel(UpdateGameManagerState, Level1);
 
 			if (input.isMouseBtnTriggered(AEVK_S))
-				SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json"
-					, levelObjList);
+				SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", levelObjList);
 
 			if (input.isMouseBtnTriggered(AEVK_Q))
 				ToggleSaveFileMode();
