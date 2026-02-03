@@ -44,7 +44,7 @@ public:
 	void ShowMenu();
 	void HideMenu();
 	bool isVisible() const { return _isVisible; }
-	void SetTextures(Texture* bg, Texture* bar, Texture* knob);
+	void SetTextures(Texture* bg, Texture* bar, Texture* knob, Texture* prevBtn);
 private:
 	bool _isVisible = false;
 	// to manage my pause menu UI

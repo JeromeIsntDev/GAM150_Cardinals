@@ -51,6 +51,7 @@ namespace Images
     constexpr ImageFile Player{ "../../Assets/PlayerPlaceholder.png", 500.f,500.f };
 
     constexpr ImageFile StartBtn{ "../../Assets/Start_Button.png", 412.f, 120.f };
+	constexpr ImageFile PrevBtn{ "../../Assets/Previous_Button.png", 120.f, 120.f };
     constexpr ImageFile ExitBtn{ "../../Assets/Exit_Button.png", 412.f, 120.f };
     constexpr ImageFile CreditsBtn{ "../../Assets/Credits_Button.png", 412.f, 120.f };
 

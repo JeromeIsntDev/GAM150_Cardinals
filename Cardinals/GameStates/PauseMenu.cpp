@@ -106,19 +106,19 @@ PauseMenu::PauseMenu(bool isInGame)
 	_pauseMenuUI.Add(sfxSlider.get());
 	_elements.push_back(std::move(sfxSlider));
 
-	// back btn
-	auto backBtn = std::make_unique<Button>(_commonMesh, AEVec2{0.f, -200.f}, 0.f, AEVec2{200.f, 50.f});
-	backBtn->SetOnClick([this, isInGame]() {
+	// prev btn
+	auto prevBtn = std::make_unique<Button>(_commonMesh, AEVec2{710.f, -360.f}, 0.f, AEVec2{120.f, 120.f});
+	prevBtn->SetOnClick([this, isInGame]() {
 		this->HideMenu();
 		// unpause game if in-game
 		if (isInGame) {
 			isGamePaused = 0;
 		}
 	});
-	backBtn->SetActive(true);
-	backBtn->SetInteractable(true);
-	_pauseMenuUI.Add(backBtn.get()); // add to pause menu UI
-	_elements.push_back(std::move(backBtn)); // store
+	prevBtn->SetActive(true);
+	prevBtn->SetInteractable(true);
+	_pauseMenuUI.Add(prevBtn.get()); // add to pause menu UI
+	_elements.push_back(std::move(prevBtn)); // store
 
 	// quit btn
 	if (isInGame) {
@@ -172,24 +172,24 @@ void PauseMenu::Draw()
 	}
 }
 
-void PauseMenu::SetTextures(Texture* bg, Texture* bar, Texture* knob)
+void PauseMenu::SetTextures(Texture* bg, Texture* bar, Texture* knob, Texture* prevBtn)
 {
 	// set background texture
 	if (bg) _bg.SetTexture(bg);
 
 	// set textures for volume sliders
 	for(auto& element : _elements) {
-		// check if element is VolSlider
+		// check if element is a slider (bar+knob)
 		VolSlider* slider = dynamic_cast<VolSlider*>(element.get());
 		if (slider) {
 			slider->SetTextures(bar, knob);
 			continue; // skip to next element
 		}
-		// for buttons, we can set a generic texture if needed
+		// check if element is a button (prevBtn)
 		Button* btn = dynamic_cast<Button*>(element.get());
 		if (btn) {
 			// set button texture if desired
-			btn->SetTexture(bar);
+			btn->SetTexture(prevBtn);
 		}
 	}
 }
