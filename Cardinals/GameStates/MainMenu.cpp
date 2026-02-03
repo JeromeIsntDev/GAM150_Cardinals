@@ -24,7 +24,7 @@ namespace {
 	AEGfxVertexList* squareMesh;
 	Text cardinalsFont, digipenFont, tooltipFont;
 
-	Texture startTexture{}, exitTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{}, settingsTexture{};
+	Texture startTexture{}, exitTexture{}, prevTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{}, settingsTexture{};
 	Texture menuBGTexture{};
 
 	//Digipen logo transition
@@ -63,6 +63,7 @@ void MainMenu_Load() {
 	exitTexture.Load_Image(Images::ExitBtn);
 	creditsTexture.Load_Image(Images::CreditsBtn);
 	settingsTexture.Load_Image(Images::SettingsBtn);
+	prevTexture.Load_Image(Images::PrevBtn);
 
 	// testing
 	yesTexture.Load_Image(Images::YesBtn); noTexture.Load_Image(Images::NoBtn);
@@ -79,6 +80,7 @@ void MainMenu_Load() {
 	textures.push_back(&noTexture);
 	textures.push_back(&popUpTexture);
 	textures.push_back(&settingsTexture);
+	textures.push_back(&prevTexture);
 
 	if (!meshes.empty()) meshes.clear();
 	meshes.push_back(&squareMesh);
@@ -135,17 +137,11 @@ void MainMenu_Initialize()
 
 	// not in game yet
 	pauseMenu = std::make_unique<PauseMenu>(false);
-	pauseMenu->SetTextures(&menuBGTexture, &startTexture, &exitTexture);
+	pauseMenu->SetTextures(&menuBGTexture, &startTexture, &exitTexture, &prevTexture);
 	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{710.f,360.f}, 0.f, AEVec2{settingsTexture.Get_Image_Width(), settingsTexture.Get_Image_Height()});
 	
-	// placeholder for settings button
 	settingsBtn->SetTexture(&settingsTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
 	settingsBtn->SetID(assigner.GetID());
-	settingsBtn->SetOnClick([]() {
-		PRINT("Settings Pressed");
-		pauseMenu->ShowMenu();
-		menuUI.ForceResetToolTips();
-		});
 
 	quitPopUp = std::make_unique<PopUp>(squareMesh, AEVec2{ 0,0 }, 0.f, AEVec2{ 600.f, 400.f });
 	quitPopUp->SetTexture(&popUpTexture);
@@ -168,6 +164,12 @@ void MainMenu_Initialize()
 		PRINT("Exit Pressed");
 		isGameRunning = 0;
 		PRINT("Game Running = %d", isGameRunning);
+		});
+
+	settingsBtn->SetOnClick([]() {
+		PRINT("Settings Pressed");
+		pauseMenu->ShowMenu();
+		menuUI.ForceResetToolTips();
 		});
 
 	yesBtn->SetOnClick([]() {
