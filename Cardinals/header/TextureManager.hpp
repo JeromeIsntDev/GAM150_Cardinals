@@ -47,47 +47,47 @@ namespace Colors
 namespace Images
 {
     //constexpr ImageFile Background{ "../../Assets/Background.png", 1600.f, 900.f };
-    constexpr ImageFile DigipenLogo{ "../../Assets/DigiPen_WHITE.png", 1525.f, 445.f };
-    constexpr ImageFile Player{ "../../Assets/playerIdle.PNG", 500.f,500.f };
+    constexpr ImageFile DigipenLogo{ "../../Assets/Textures/DigiPen_WHITE.png", 1525.f, 445.f };
+    constexpr ImageFile Player{ "../../Assets/Textures/playerIdle.PNG", 500.f,500.f };
 
-    constexpr ImageFile StartBtn{ "../../Assets/Start_Button.png", 412.f, 120.f };
-	constexpr ImageFile PrevBtn{ "../../Assets/Previous_Button.png", 120.f, 120.f };
-    constexpr ImageFile ExitBtn{ "../../Assets/Exit_Button.png", 412.f, 120.f };
-    constexpr ImageFile CreditsBtn{ "../../Assets/Credits_Button.png", 412.f, 120.f };
+    constexpr ImageFile StartBtn{ "../../Assets/Textures/Start_Button.png", 412.f, 120.f };
+	constexpr ImageFile PrevBtn{ "../../Assets/Textures/Previous_Button.png", 120.f, 120.f };
+    constexpr ImageFile ExitBtn{ "../../Assets/Textures/Exit_Button.png", 412.f, 120.f };
+    constexpr ImageFile CreditsBtn{ "../../Assets/Textures/Credits_Button.png", 412.f, 120.f };
 
-    constexpr ImageFile YesBtn{ "../../Assets/Yes_Button.png", 412.f, 120.f };
-    constexpr ImageFile NoBtn{ "../../Assets/No_Button.png", 412.f, 120.f };
-    constexpr ImageFile PopUp{ "../../Assets/PopUp.png", 412.f, 120.f };
+    constexpr ImageFile YesBtn{ "../../Assets/Textures/Yes_Button.png", 412.f, 120.f };
+    constexpr ImageFile NoBtn{ "../../Assets/Textures/No_Button.png", 412.f, 120.f };
+    constexpr ImageFile PopUp{ "../../Assets/Textures/PopUp.png", 412.f, 120.f };
 
 
-	constexpr ImageFile SettingsBtn{ "../../Assets/Settings_Button.png", 120.f, 120.f };
-	constexpr ImageFile Bar{ "../../Assets/Generic_Bar.png", 500.f, 40.f };
-	constexpr ImageFile KnobMaster{ "../../Assets/Master_Vol.png", 80.f, 80.f };
-	constexpr ImageFile KnobMusic{ "../../Assets/Music_Vol.png", 80.f, 80.f };
-	constexpr ImageFile KnobEFX{ "../../Assets/EFX_Vol.png", 80.f, 80.f };
+	constexpr ImageFile SettingsBtn{ "../../Assets/Textures/Settings_Button.png", 120.f, 120.f };
+	constexpr ImageFile Bar{ "../../Assets/Textures/Generic_Bar.png", 500.f, 40.f };
+	constexpr ImageFile KnobMaster{ "../../Assets/Textures/Master_Vol.png", 80.f, 80.f };
+	constexpr ImageFile KnobMusic{ "../../Assets/Textures/Music_Vol.png", 80.f, 80.f };
+	constexpr ImageFile KnobEFX{ "../../Assets/Textures/EFX_Vol.png", 80.f, 80.f };
 
-    constexpr ImageFile Background{ "../../Assets/MenuBG.png", 1600.f, 900.f };
-    constexpr ImageFile Placeholder{ "../../Assets/MissingTexture.png", 1600.f, 900.f };
-    constexpr ImageFile Button{ "../../Assets/Button.png", 200.f, 200.f };
-    constexpr ImageFile Lollipop{ "../../Assets/Lollipop.png", 100.f, 100.f };
+    constexpr ImageFile Background{ "../../Assets/Textures/MenuBG.png", 1600.f, 900.f };
+    constexpr ImageFile Placeholder{ "../../Assets/Textures/MissingTexture.png", 1600.f, 900.f };
+    constexpr ImageFile Button{ "../../Assets/Textures/Button.png", 200.f, 200.f };
+    constexpr ImageFile Lollipop{ "../../Assets/Textures/Lollipop.png", 100.f, 100.f };
 
-    constexpr ImageFile BG_BACKMOST{ "../../Assets/BG_BACKMOST.png", 1600.f, 900.f };
-    constexpr ImageFile BG_MOUNTAIN{ "../../Assets/BG_BACKMOUNTAIN.png", 1600.f, 900.f };
-    constexpr ImageFile BG_CLOUDS{ "../../Assets/BG_CLOUDS.png", 1600.f, 900.f };
-    constexpr ImageFile BG_FRONTMOUNTAIN{ "../../Assets/BG_FRONTMOUNTAIN.png", 1600.f, 900.f };
+    constexpr ImageFile BG_BACKMOST{ "../../Assets/Textures/BG_BACKMOST.png", 1600.f, 900.f };
+    constexpr ImageFile BG_MOUNTAIN{ "../../Assets/Textures/BG_BACKMOUNTAIN.png", 1600.f, 900.f };
+    constexpr ImageFile BG_CLOUDS{ "../../Assets/Textures/BG_CLOUDS.png", 1600.f, 900.f };
+    constexpr ImageFile BG_FRONTMOUNTAIN{ "../../Assets/Textures/BG_FRONTMOUNTAIN.png", 1600.f, 900.f };
 
-    constexpr ImageFile Platform_VL{ "../../Assets/platform1.png" };
-    constexpr ImageFile Platform_VM{ "../../Assets/platform2.png" };
-    constexpr ImageFile Platform_VS{ "../../Assets/platform3.png" };
-    constexpr ImageFile Platform_HS{ "../../Assets/platform4.png" };
-    constexpr ImageFile Platform_HL{ "../../Assets/platform5.png" };
+    constexpr ImageFile Platform_VL{ "../../Assets/Textures/platform1.png" };
+    constexpr ImageFile Platform_VM{ "../../Assets/Textures/platform2.png" };
+    constexpr ImageFile Platform_VS{ "../../Assets/Textures/platform3.png" };
+    constexpr ImageFile Platform_HS{ "../../Assets/Textures/platform4.png" };
+    constexpr ImageFile Platform_HL{ "../../Assets/Textures/platform5.png" };
 }
 
 namespace Fonts
 {
-    constexpr FontFile Main{ "../../Assets/DynaPuff-Regular.ttf" };
-    constexpr FontFile Alt{ "../../Assets/sourgummy-font.ttf" };
-    constexpr FontFile Readable{ "../../Assets/alansans-font.ttf" };
+    constexpr FontFile Main{ "../../Assets/Fonts/DynaPuff-Regular.ttf" };
+    constexpr FontFile Alt{ "../../Assets/Fonts/sourgummy-font.ttf" };
+    constexpr FontFile Readable{ "../../Assets/Fonts/alansans-font.ttf" };
 }
 
 class Texture

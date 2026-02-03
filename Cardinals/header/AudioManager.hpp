@@ -23,10 +23,10 @@ struct AudioFile {
 namespace Audios
 {
     //Music file
-    constexpr const AudioFile BGM{ "../../Assets/bouken.mp3" };
+    constexpr const AudioFile BGM{ "../../Assets/Music/bouken.mp3" };
 
     //Sound effect
-    constexpr const AudioFile SFX{ "../../Assets/ore.mp3" };
+    constexpr const AudioFile SFX{ "../../Assets/Music/ore.mp3" };
 }
 
 enum class AudioType {
