@@ -17,6 +17,8 @@ extern std::vector<AEGfxVertexList**> meshes;
 extern std::vector<Text*> texts;
 extern bool MassUnload();
 
+//auto& input = InputHandler::GetInstance();
+
 namespace {
 
 	AEGfxVertexList* squareMesh;
@@ -211,7 +213,14 @@ void MainMenu_Update() {
 
 	if (isLogoDrawn) {
 
-		quitPopUp->ToggleActive(AEVK_6);
+		if (quitPopUp->ToggleActive(AEVK_6))
+		{
+			// reset only once im not gonna call ts 60 frames a sec
+			bool active = quitPopUp->IsActive();
+			if (active) {
+				menuUI.ForceResetToolTips();
+			}
+		}
 
 		if (pauseMenu->isVisible()) {
 			pauseMenu->Update(dt);
@@ -248,32 +257,17 @@ void MainMenu_Draw() {
 		return;
 	}
 
-	if (quitPopUp->IsActive()) {
-		AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.0f); // 50%
-	}
-	else {
-		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f); // 100%
-	}
-
-	if(pauseMenu->isVisible())
-		pauseMenu->Draw();
+	bool isOverlayActive = quitPopUp->IsActive() || pauseMenu->isVisible();
+	if (isOverlayActive) AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.0f);
 
 	menuBG.Draw();
 	cardinalsFont.Draw_Text(0, 200.f);
-	// dim bg when popup or settings is active
-	if(quitPopUp->IsActive() || pauseMenu->isVisible())
-		AEGfxSetColorToMultiply(0.5f, 0.5f, 0.5f, 1.0f); // 50%
-	else {
-		AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f); // 100%
-	}
 	menuUI.Draw();
 
-	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f); // popup 100%
-	popUpUI.Draw();
+	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
-	if (pauseMenu->isVisible()) {
-		pauseMenu->Draw();
-	}
+	pauseMenu->Draw();
+	popUpUI.Draw();
 }
 
 void MainMenu_Free() {

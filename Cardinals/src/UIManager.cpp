@@ -82,7 +82,12 @@ bool UIElement::ToggleActive(u8 key)
     void Button::Update(float dt)
     {
         currentTexture = tex; // pointer to text in gameobj
-        if (!isActive || !isInteractable || currentTexture == nullptr) return;
+        if (!isActive || !isInteractable || currentTexture == nullptr)
+        {
+            ResetTooltip();
+            hoverTimer = 0.0f;
+            return;
+        }
 
         float scaleMultiplier = 1.1f;
         AEVec2 mousePos = UIManager::GetNewMousePos();
@@ -107,7 +112,9 @@ bool UIElement::ToggleActive(u8 key)
             scaleMultiplier = 1.0f;
 
             GameObject::UpdateScale({ currentTexture->Get_Image_Width() * scaleMultiplier, currentTexture->Get_Image_Height() * scaleMultiplier });
-            hoverTimer = 0.0f;
+
+            hoverTimer = 0.0f; // double check
+            ResetTooltip();
         }
     }
 
@@ -201,7 +208,7 @@ void UIManager::Draw() const
 
             // std::cout << "drawin tooltip: " << e->GetTooltipText() << " at " << e->GetTooltipPos().x << std::endl;
             tooltipRenderer.Input_Text(e->GetTooltipText().c_str());
-            tooltipRenderer.Draw_Text(pos.x + 20.f, GetNewMousePos().y + 20.f);
+            tooltipRenderer.Draw_Text(pos.x + 20.f, pos.y + 20.f);
         }
     }
 }
@@ -239,4 +246,12 @@ void UIManager::Exit()
 {
     uiElements.clear(); // get rid of them dangling pointers 
     isFontLoaded = false;
+}
+
+void UIManager::ForceResetToolTips() 
+{
+    for (auto* e : uiElements) 
+    {
+        e->ResetTooltip();
+    }
 }

@@ -91,6 +91,7 @@ public:
 	void Draw() const;
 	void HandleClick();
 	void Exit(); // for the VECTORS
+	void ForceResetToolTips();
 };
 
 ///
