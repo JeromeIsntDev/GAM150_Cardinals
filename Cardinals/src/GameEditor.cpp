@@ -44,8 +44,11 @@ void SaveGameObjectToFilepath(std::string filepathSave, std::vector<GameObject*>
 
 void ToggleEditorMode()
 {
-	//if (!input.isMouseBtnPressed(AEVK_LCTRL)) return;
-	/*if (input.isMouseBtnTriggered(AEVK_E)) */canEdit = !canEdit;
+	canEdit = !canEdit;
+}
+
+void ToggleSaveFileMode() {
+	useSaveFile = !useSaveFile;
 }
 
 void RestartLevel(void(*restart)(GameStateEnum), GameStateEnum state)
@@ -57,4 +60,8 @@ void RestartLevel(void(*restart)(GameStateEnum), GameStateEnum state)
 bool IsEditorActive()
 {
 	return canEdit;
+}
+
+bool IsUsingSaveFile() {
+	return useSaveFile;
 }
