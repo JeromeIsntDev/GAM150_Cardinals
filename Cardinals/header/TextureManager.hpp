@@ -61,6 +61,10 @@ namespace Images
 
 
 	constexpr ImageFile SettingsBtn{ "../../Assets/Settings_Button.png", 120.f, 120.f };
+	constexpr ImageFile Bar{ "../../Assets/Generic_Bar.png", 500.f, 40.f };
+	constexpr ImageFile KnobMaster{ "../../Assets/Master_Vol.png", 80.f, 80.f };
+	constexpr ImageFile KnobMusic{ "../../Assets/Music_Vol.png", 80.f, 80.f };
+	constexpr ImageFile KnobEFX{ "../../Assets/EFX_Vol.png", 80.f, 80.f };
 
     constexpr ImageFile Background{ "../../Assets/MenuBG.png", 1600.f, 900.f };
     constexpr ImageFile Placeholder{ "../../Assets/MissingTexture.png", 1600.f, 900.f };
