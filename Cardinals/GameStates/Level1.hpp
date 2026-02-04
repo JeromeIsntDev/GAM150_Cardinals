@@ -15,6 +15,7 @@
 #include "InputHandler.hpp"
 #include "GameSaver.hpp"
 #include "GStateManager.hpp"
+#include "ParticleEffect.hpp"
 
 void Level1_Load();
 void Level1_Initialize();

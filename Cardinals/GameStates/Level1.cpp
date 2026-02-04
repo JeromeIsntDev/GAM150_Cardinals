@@ -14,6 +14,9 @@ namespace {
 	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f };
 	Player mainPlayer;
 	Texture playerTexture{};
+	//Texture playerEffectTexture;
+	//GameObject playerEffectObject;
+	//ParticleEffect playerEffect;
 
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
@@ -44,7 +47,7 @@ void Level1_Load() {
 	digipenFont.Change_Text_Color(Colors::Black);
 
 	//tempUI.InitTooltipFont(Fonts::Main, 30.f);
-
+	//playerEffectTexture.Load_Image(Images::CandyBall);
 	playerTexture.Load_Image(Images::Player);
 	placeholderTexture.Load_Image(Images::Placeholder);
 	verticalPlatformTex.Load_Image(Images::Platform_VL);
@@ -55,6 +58,7 @@ void Level1_Load() {
 	backgrounds[3].Load_Image(Images::BG_FRONTMOUNTAIN);
 
 	if (!textures.empty()) textures.clear();
+	//textures.push_back(&playerEffectTexture);
 	textures.push_back(&playerTexture);
 	textures.push_back(&placeholderTexture);
 	textures.push_back(&verticalPlatformTex);
@@ -77,6 +81,12 @@ void Level1_Initialize()
 	//controlPanel.ControlPanel_Initialize();
 	squareMesh = RectMeshCenter();
 	assigner.currIdCount = 0;
+
+	//playerEffectObject.SetMesh(squareMesh);
+	//playerEffectObject.SetTexture(&playerEffectTexture);
+	//playerEffectObject.UpdateScale(AEVec2{ 50.f, 50.f });
+	//playerEffectObject.UpdateRotation(0.f);
+	//playerEffectObject.SetID(assigner.GetID());
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 75.f);
@@ -226,6 +236,11 @@ void Level1_Update() {
 	mainPlayer.canMoveRight = true;
 
 	mainPlayer.PlayerCollision(levelObjList, mainPlayer.grav);
+
+	//if (playerEffect.isObjectMoving(mainPlayer.GetPosition())) {
+	//	playerEffectObject.UpdatePosition(playerEffect.Update_Particle(mainPlayer.GetPosition()));
+	//}
+
 }
 
 void Level1_Draw() {
@@ -237,6 +252,11 @@ void Level1_Draw() {
 	wall1.Draw();
 	wall2.Draw();
 	wall3.Draw();
+
+	//if (playerEffect.Change_Position()) {
+	//	playerEffectObject.UpdatePosition(playerEffect.Update_Particle(mainPlayer.GetPosition()));
+	//	playerEffectObject.Draw();
+	//}
 
 	mainPlayer.Draw();
 

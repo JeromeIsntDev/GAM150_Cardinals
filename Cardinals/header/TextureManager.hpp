@@ -70,6 +70,7 @@ namespace Images
     constexpr ImageFile Placeholder{ "../../Assets/Textures/MissingTexture.png", 1600.f, 900.f };
     constexpr ImageFile Button{ "../../Assets/Textures/Button.png", 200.f, 200.f };
     constexpr ImageFile Lollipop{ "../../Assets/Textures/Lollipop.png", 100.f, 100.f };
+    constexpr ImageFile CandyBall{ "../../Assets/Textures/Candy_Ball.png", 50.f, 50.f };
 
     constexpr ImageFile BG_BACKMOST{ "../../Assets/Textures/BG_BACKMOST.png", 1600.f, 900.f };
     constexpr ImageFile BG_MOUNTAIN{ "../../Assets/Textures/BG_BACKMOUNTAIN.png", 1600.f, 900.f };
