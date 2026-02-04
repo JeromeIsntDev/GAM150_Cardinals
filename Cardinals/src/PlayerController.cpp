@@ -120,20 +120,35 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	if (input.isKeyReleased(AEVK_LSHIFT)) {
 		isSprint = false;
 	}
-
-	if (canSwapGrav) {
-		if (input.isKeyTriggered(AEVK_DOWN)) {
-			grav = Player::GravityDirection::Down;
+	GravityDirection currDir = dir;
+	changeCD += dt;
+	if (currDir != prevDir)
+	{
+		canSwapGrav = false;
+		if (changeCD >= maxCD)
+		{
+			//std::cout << "this ran" << std::endl;
+			canSwapGrav = true;
+			changeCD = 0.f;
+			prevDir = currDir;
 		}
-		if (input.isKeyTriggered(AEVK_UP)) {
-			grav = Player::GravityDirection::Up;
-		}
-		if (input.isKeyTriggered(AEVK_LEFT)) {
-			grav = Player::GravityDirection::Left;
-		}
-		if (input.isKeyTriggered(AEVK_RIGHT)) {
-			grav = Player::GravityDirection::Right;
-		}
+	}
+	//std::cout << "swapGrav: " << canSwapGrav << std::endl;
+	if (input.isKeyTriggered(AEVK_DOWN) && canSwapGrav) {
+		std::cout << "down pressed" << std::endl;
+		grav = Player::GravityDirection::Down;
+	}
+	if (input.isKeyTriggered(AEVK_UP) && canSwapGrav) {
+		std::cout << "up pressed" << std::endl;
+		grav = Player::GravityDirection::Up;
+	}
+	if (input.isKeyTriggered(AEVK_LEFT) && canSwapGrav) {
+		std::cout << "left pressed" << std::endl;
+		grav = Player::GravityDirection::Left;
+	}
+	if (input.isKeyTriggered(AEVK_RIGHT) && canSwapGrav) {
+		std::cout << "right pressed" << std::endl;
+		grav = Player::GravityDirection::Right;
 	}
 
 	//Sprint speed logic
@@ -153,7 +168,8 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	}
 	//std::cout << "left bool: " << canMoveLeft << std::endl;
 	//std::cout << "right bool: " << canMoveRight << std::endl;
-	if (input.isKeyPressed(AEVK_SPACE) && !p_isJumping) {
+
+	/*if (input.isKeyPressed(AEVK_SPACE) && !p_isJumping) {
 		//adjust jump logic here
 		switch(dir){
 		case Player::GravityDirection::Up:
@@ -177,7 +193,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 		if (jumpBuffer > 0.f && (p_isGrounded || coyoteBuffer > 0.f)) {
 			PlayerJump(dt,dir);
 		}
-	}
+	}*/
 }
 
 //Player Movement Logic
@@ -224,21 +240,19 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	}
 	//std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
 	//give a cool down to prevent being able to jump instantly
-	std::cout << "timer: " << currCD << std::endl;
-	currCD += dt;
-	if (currDir != prevDir)
-	{
-		p_isJumping = true;
-		canSwapGrav = false;
-		if (currCD >= maxCD)
-		{
-			std::cout << "this ran" << std::endl;
-			p_isJumping = false;
-			canSwapGrav = true;
-			currCD = 0.f;
-			prevDir = currDir;   // IMPORTANT: move this here
-		}
-	}
+	//std::cout << "timer: " << currCD << std::endl;
+	//currCD += dt;
+	//if (currDir != prevDir)
+	//{
+	//	p_isJumping = true;
+	//	if (currCD >= maxCD)
+	//	{
+	//		//std::cout << "this ran" << std::endl;
+	//		p_isJumping = false;
+	//		currCD = 0.f;
+	//		prevDir = currDir;
+	//	}
+	//}
 
 	PlayerInputHandle(dt, dir);
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
