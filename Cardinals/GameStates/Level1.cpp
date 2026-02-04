@@ -187,6 +187,7 @@ void Level1_Update() {
 	}
 
 
+	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
 
 	for (GameObject& obj : backgroundObjs) {
 		f32 offset = mainPlayer.GetPosition().x;
@@ -199,21 +200,21 @@ void Level1_Update() {
 		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
 		obj.Draw();
 	}
-
+	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	/*PLAYER STUFF*/
 
-	if (input.isMouseBtnTriggered(AEVK_DOWN)) {
-		mainPlayer.grav = Player::GravityDirection::Down;
-	}
-	if (input.isMouseBtnTriggered(AEVK_UP)) {
-		mainPlayer.grav = Player::GravityDirection::Up;
-	}
-	if (input.isMouseBtnTriggered(AEVK_LEFT)) {
-		mainPlayer.grav = Player::GravityDirection::Left;
-	}
-	if (input.isMouseBtnTriggered(AEVK_RIGHT)) {
-		mainPlayer.grav = Player::GravityDirection::Right;
-	}
+	//if (input.isMouseBtnTriggered(AEVK_DOWN)) {
+	//	mainPlayer.grav = Player::GravityDirection::Down;
+	//}
+	//if (input.isMouseBtnTriggered(AEVK_UP)) {
+	//	mainPlayer.grav = Player::GravityDirection::Up;
+	//}
+	//if (input.isMouseBtnTriggered(AEVK_LEFT)) {
+	//	mainPlayer.grav = Player::GravityDirection::Left;
+	//}
+	//if (input.isMouseBtnTriggered(AEVK_RIGHT)) {
+	//	mainPlayer.grav = Player::GravityDirection::Right;
+	//}
 
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
