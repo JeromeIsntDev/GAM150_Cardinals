@@ -62,7 +62,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Changing the window title
 	AESysSetWindowTitle("CARDINAL");
-	AESysSetWindowIcon("../../Assets/lollipop.ico", 100, 100);
+	AESysSetWindowIcon("../../Assets/Textures/lollipop.ico", 100, 100);
 	UpdateGameManagerState(GameStateEnum::MainMenu);
 
 	HWND hwnd = AESysGetWindowHandle();
