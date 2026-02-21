@@ -22,7 +22,12 @@ enum class GameObjectTag {
 	Static,
 	Dynamic,
 	Platform,
-	Player
+	Player,
+	Win,
+	GravUp,
+	GravDown,
+	GravLeft,
+	Gravright
 };
 
 struct GameObjectIDAssigner {
