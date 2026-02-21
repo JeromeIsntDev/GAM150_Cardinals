@@ -134,22 +134,18 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 		}
 	}
 	//std::cout << "swapGrav: " << canSwapGrav << std::endl;
-	if (input.isKeyTriggered(AEVK_DOWN) && canSwapGrav) {
-		std::cout << "down pressed" << std::endl;
-		grav = Player::GravityDirection::Down;
-	}
-	if (input.isKeyTriggered(AEVK_UP) && canSwapGrav) {
-		std::cout << "up pressed" << std::endl;
-		grav = Player::GravityDirection::Up;
-	}
-	if (input.isKeyTriggered(AEVK_LEFT) && canSwapGrav) {
-		std::cout << "left pressed" << std::endl;
-		grav = Player::GravityDirection::Left;
-	}
-	if (input.isKeyTriggered(AEVK_RIGHT) && canSwapGrav) {
-		std::cout << "right pressed" << std::endl;
-		grav = Player::GravityDirection::Right;
-	}
+	//if (input.isKeyTriggered(AEVK_DOWN) && canSwapGrav) {
+	//	grav = Player::GravityDirection::Down;
+	//}
+	//if (input.isKeyTriggered(AEVK_UP) && canSwapGrav) {
+	//	grav = Player::GravityDirection::Up;
+	//}
+	//if (input.isKeyTriggered(AEVK_LEFT) && canSwapGrav) {
+	//	grav = Player::GravityDirection::Left;
+	//}
+	//if (input.isKeyTriggered(AEVK_RIGHT) && canSwapGrav) {
+	//	grav = Player::GravityDirection::Right;
+	//}
 
 	//Sprint speed logic
 	if (isSprint) {
@@ -169,7 +165,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 	//std::cout << "left bool: " << canMoveLeft << std::endl;
 	//std::cout << "right bool: " << canMoveRight << std::endl;
 
-	/*if (input.isKeyPressed(AEVK_SPACE) && !p_isJumping) {
+	if (input.isKeyPressed(AEVK_SPACE) && !p_isJumping) {
 		//adjust jump logic here
 		switch(dir){
 		case Player::GravityDirection::Up:
@@ -193,7 +189,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 		if (jumpBuffer > 0.f && (p_isGrounded || coyoteBuffer > 0.f)) {
 			PlayerJump(dt,dir);
 		}
-	}*/
+	}
 }
 
 //Player Movement Logic
@@ -241,18 +237,18 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	//std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
 	//give a cool down to prevent being able to jump instantly
 	//std::cout << "timer: " << currCD << std::endl;
-	//currCD += dt;
-	//if (currDir != prevDir)
-	//{
-	//	p_isJumping = true;
-	//	if (currCD >= maxCD)
-	//	{
-	//		//std::cout << "this ran" << std::endl;
-	//		p_isJumping = false;
-	//		currCD = 0.f;
-	//		prevDir = currDir;
-	//	}
-	//}
+	currCD += dt;
+	if (currDir != prevDir)
+	{
+		p_isJumping = true;
+		if (currCD >= maxCD)
+		{
+			//std::cout << "this ran" << std::endl;
+			p_isJumping = false;
+			currCD = 0.f;
+			prevDir = currDir;
+		}
+	}
 
 	PlayerInputHandle(dt, dir);
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
@@ -292,22 +288,27 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 		AEVec2 currentPos = obj->GetPosition();
 
 		this->hasCollided = true;
+		if (obj->_tag == GameObjectTag::Win) {
+			//win gate hit
+			std::cout << "Win gate hit" << std::endl;
+			//do smth here
+		}
+		else {
+			f32 overlapX =
+				(std::min)(this->GetCollider().p_maxPoint.x, obj->GetCollider().p_maxPoint.x) -
+				(std::max)(this->GetCollider().p_minPoint.x, obj->GetCollider().p_minPoint.x);
 
-		f32 overlapX =
-			(std::min)(this->GetCollider().p_maxPoint.x, obj->GetCollider().p_maxPoint.x) -
-			(std::max)(this->GetCollider().p_minPoint.x, obj->GetCollider().p_minPoint.x);
+			f32 overlapY =
+				(std::min)(this->GetCollider().p_maxPoint.y, obj->GetCollider().p_maxPoint.y) -
+				(std::max)(this->GetCollider().p_minPoint.y, obj->GetCollider().p_minPoint.y);
 
-		f32 overlapY =
-			(std::min)(this->GetCollider().p_maxPoint.y, obj->GetCollider().p_maxPoint.y) -
-			(std::max)(this->GetCollider().p_minPoint.y, obj->GetCollider().p_minPoint.y);
+			if (overlapX <= 0.f || overlapY <= 0.f) continue;
 
-		if (overlapX <= 0.f || overlapY <= 0.f) continue;
-
-		// Resolve on smallest penetration axis (Y axis)
-		if (overlapY <= overlapX + 0.5f)
-		{
-			AEVec2 tmpPos = this->GetPosition();
-			switch (dir) {
+			// Resolve on smallest penetration axis (Y axis)
+			if (overlapY <= overlapX + 0.5f)
+			{
+				AEVec2 tmpPos = this->GetPosition();
+				switch (dir) {
 				case Player::GravityDirection::Up:
 					if (this->GetPosition().y < obj->GetPosition().y)
 					{
@@ -371,15 +372,15 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 					break;
 				default:
 					break;
+				}
 			}
-		}
-		else
-		{
-			//temp side collision
-			AEVec2 tmpPos = this->GetPosition();
+			else
+			{
+				//temp side collision
+				AEVec2 tmpPos = this->GetPosition();
 
-			switch (dir) {
-				//this two cases is for normal vertical check. when X offset is smaller than Y (push X)
+				switch (dir) {
+					//this two cases is for normal vertical check. when X offset is smaller than Y (push X)
 				case Player::GravityDirection::Up:
 				case Player::GravityDirection::Down:
 					if (this->GetCollider().p_maxPoint.x > obj->GetCollider().p_minPoint.x &&
@@ -441,6 +442,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 					break;
 				default:
 					break;
+				}
 			}
 		}
 	}
