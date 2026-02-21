@@ -28,6 +28,7 @@ namespace {
 	GameObject wall1;
 	GameObject wall2;
 	GameObject wall3;
+	GameObject winGate;
 	GameObjectIDAssigner assigner;
 	std::vector<GameObject*> levelObjList;
 	std::vector<GameObject> objData;
@@ -131,6 +132,14 @@ void Level1_Initialize()
 	wall3.UpdateRotation(0.f);
 	wall3.UpdatePosition(AEVec2{ 500.f, 200.f });
 
+	winGate.SetMesh(squareMesh);
+	winGate.SetTexture(&placeholderTexture);
+	winGate.SetID(assigner.GetID());
+	winGate.UpdateScale(AEVec2{ 300.f,600.f });
+	winGate.UpdateRotation(0.f);
+	winGate.UpdatePosition(AEVec2{ 300.f,300.f });
+	winGate._tag = GameObjectTag::Win;
+
 	for (int i{}; i < 4; ++i) {
 		GameObject* obj = &backgroundObjs[i];
 		obj->SetMesh(squareMesh);
@@ -147,6 +156,7 @@ void Level1_Initialize()
 	levelObjList.push_back(&wall1);
 	levelObjList.push_back(&wall2);
 	levelObjList.push_back(&wall3);
+	levelObjList.push_back(&winGate);
 
 
 	levelTime = 0.f;
@@ -198,7 +208,7 @@ void Level1_Update() {
 
 
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-
+	/*BACKGROUND PARALLAXING*/
 	for (GameObject& obj : backgroundObjs) {
 		f32 offset = mainPlayer.GetPosition().x;
 		f32 offsetFirst = offset / 200.f;
@@ -212,19 +222,6 @@ void Level1_Update() {
 	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	/*PLAYER STUFF*/
-
-	//if (input.isMouseBtnTriggered(AEVK_DOWN)) {
-	//	mainPlayer.grav = Player::GravityDirection::Down;
-	//}
-	//if (input.isMouseBtnTriggered(AEVK_UP)) {
-	//	mainPlayer.grav = Player::GravityDirection::Up;
-	//}
-	//if (input.isMouseBtnTriggered(AEVK_LEFT)) {
-	//	mainPlayer.grav = Player::GravityDirection::Left;
-	//}
-	//if (input.isMouseBtnTriggered(AEVK_RIGHT)) {
-	//	mainPlayer.grav = Player::GravityDirection::Right;
-	//}
 
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
@@ -252,6 +249,7 @@ void Level1_Draw() {
 	wall1.Draw();
 	wall2.Draw();
 	wall3.Draw();
+	winGate.Draw();
 
 	//if (playerEffect.Change_Position()) {
 	//	playerEffectObject.UpdatePosition(playerEffect.Update_Particle(mainPlayer.GetPosition()));
