@@ -65,6 +65,8 @@ namespace Images
 	constexpr ImageFile KnobMaster{ "../../Assets/Textures/Master_Vol.png", 80.f, 80.f };
 	constexpr ImageFile KnobMusic{ "../../Assets/Textures/Music_Vol.png", 80.f, 80.f };
 	constexpr ImageFile KnobEFX{ "../../Assets/Textures/EFX_Vol.png", 80.f, 80.f };
+    constexpr ImageFile CardBg{ "../../Assets/Textures/RoundedSq.png", 800.f, 600.f };
+
 
     constexpr ImageFile Background{ "../../Assets/Textures/MenuBG.png", 1600.f, 900.f };
     constexpr ImageFile Placeholder{ "../../Assets/Textures/MissingTexture.png", 1600.f, 900.f };

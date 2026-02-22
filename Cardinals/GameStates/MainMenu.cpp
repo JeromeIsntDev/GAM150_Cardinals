@@ -24,7 +24,7 @@ namespace {
 	AEGfxVertexList* squareMesh;
 	Text cardinalsFont, digipenFont, tooltipFont;
 
-	Texture startTexture{}, exitTexture{}, prevTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{}, settingsTexture{}, barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{};
+	Texture startTexture{}, exitTexture{}, prevTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{}, settingsTexture{}, barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{};
 	Texture menuBGTexture{};
 
 	//Digipen logo transition
@@ -70,6 +70,7 @@ void MainMenu_Load() {
 	knobMasterTexture.Load_Image(Images::KnobMaster);
 	knobMusicTexture.Load_Image(Images::KnobMusic);
 	knobEFXTexture.Load_Image(Images::KnobEFX);
+	cardBgTexture.Load_Image(Images::CardBg);
 
 	// testing
 	yesTexture.Load_Image(Images::Button);
@@ -92,6 +93,7 @@ void MainMenu_Load() {
 	textures.push_back(&knobMasterTexture);
 	textures.push_back(&knobMusicTexture);
 	textures.push_back(&knobEFXTexture);
+	textures.push_back(&cardBgTexture);
 
 	if (!meshes.empty()) meshes.clear();
 	meshes.push_back(&squareMesh);
@@ -135,7 +137,7 @@ void MainMenu_Initialize()
 
 	// not in game yet
 	pauseMenu = std::make_unique<PauseMenu>(false);
-	pauseMenu->SetTextures(&menuBGTexture, &barTexture, &knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture);
+	pauseMenu->SetTextures(&menuBGTexture, &barTexture, &knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &cardBgTexture);
 	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{710.f,360.f}, 0.f, AEVec2{settingsTexture.Get_Image_Width(), settingsTexture.Get_Image_Height()});
 	
 	settingsBtn->SetTexture(&settingsTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);

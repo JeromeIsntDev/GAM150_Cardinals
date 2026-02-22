@@ -59,12 +59,18 @@ void VolSlider::Update(f32 dt) {
 
 void VolSlider::Draw() const
 {
-	GameObject::Draw(); // draw bar
+	// set color for bar ... igmnore pink texture
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	// pure white with 0 alpha to show texture colour only
+	AEGfxSetColorToAdd(1.f, 1.f, 1.f, 0.f);
+
+	GameObject::Draw(); // draw bar for white
+
 	if (_knob.IsActive())
 	{
 		// set knob texture
 		// colour for now ... 
-		AEGfxSetColorToMultiply(1.0f, 1.f, 1.f, 1.f);
+		AEGfxSetColorToAdd(0.0f, 0.f, 0.f, 0.f);
 		_knob.Draw(); // draw knob
 	}
 }
@@ -93,16 +99,21 @@ PauseMenu::PauseMenu(bool isInGame)
 	_bg.UpdateScale(AEVec2{ 1600.f, 900.f });
 	_bg.UpdatePosition(AEVec2{ 0.f, 0.f });
 
+	// setup card bg
+	_cardBg.SetMesh(_commonMesh);
+	_cardBg.UpdateScale(AEVec2{ 800.f, 600.f });
+	_cardBg.UpdatePosition(AEVec2{ 0.f, 0.f });
+
 	// setup volume sliders
-	auto masterSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MASTER, AEVec2{ 475.f, 100.f }, 500.f);
+	auto masterSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
 	_pauseMenuUI.Add(masterSlider.get());
 	_elements.push_back(std::move(masterSlider));
 
-	auto musicSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MUSIC, AEVec2{ 475.f, 0.f }, 500.f);
+	auto musicSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 500.f);
 	_pauseMenuUI.Add(musicSlider.get());
 	_elements.push_back(std::move(musicSlider));
 
-	auto sfxSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::SFX, AEVec2{ 475.f, -100.f }, 500.f);
+	auto sfxSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::SFX, AEVec2{ 0.f, -100.f }, 500.f);
 	_pauseMenuUI.Add(sfxSlider.get());
 	_elements.push_back(std::move(sfxSlider));
 
@@ -164,17 +175,23 @@ void PauseMenu::Draw()
 		AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.5f); // 50% black
 		AEGfxSetTransparency(0.5f);
 		_bg.Draw();
-		// draw pause menu UI
-		AEGfxSetTransparency(1.f);
-		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f); // reset
+
+		// card bg
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f); // reset
+		AEGfxSetTransparency(0.75f);
+		_cardBg.Draw();
+
+		// draw UI elements
+		AEGfxSetTransparency(1.f);
 		_pauseMenuUI.Draw();
 	}
 }
 
-void PauseMenu::SetTextures(Texture* bg, Texture* bar, Texture* knobMaster, Texture* knobMusic, Texture* knobEFX, Texture* prevBtn)
+void PauseMenu::SetTextures(Texture* bg, Texture* bar, Texture* knobMaster, Texture* knobMusic, Texture* knobEFX, Texture* prevBtn, Texture* cardBg)
 {// set background texture
 	if (bg) _bg.SetTexture(bg);
+	if (cardBg) _cardBg.SetTexture(cardBg);
 
 	// set textures for volume sliders
 	for(auto& element : _elements) {

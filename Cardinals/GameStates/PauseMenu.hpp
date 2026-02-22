@@ -45,12 +45,13 @@ public:
 	void ShowMenu();
 	void HideMenu();
 	bool isVisible() const { return _isVisible; }
-	void SetTextures(Texture* bg, Texture* bar, Texture* knobMaster, Texture* knobMusic,Texture* knobEFX, Texture* prevBtn);
+	void SetTextures(Texture* bg, Texture* bar, Texture* knobMaster, Texture* knobMusic,Texture* knobEFX, Texture* prevBtn, Texture* cardBg);
 private:
 	bool _isVisible = false;
 	// to manage my pause menu UI
 	UIManager _pauseMenuUI;
 	GameObject _bg;
+	GameObject _cardBg;
 	// store sliders and buttons etc.
 	std::vector<std::unique_ptr<UIElement>>_elements;
 	AEGfxVertexList* _commonMesh = nullptr;
