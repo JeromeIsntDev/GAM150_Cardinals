@@ -288,10 +288,16 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 		AEVec2 currentPos = obj->GetPosition();
 
 		this->hasCollided = true;
+
+
 		if (obj->_tag == GameObjectTag::Win) {
 			//win gate hit
 			std::cout << "Win gate hit" << std::endl;
 			//do smth here
+		}
+		else if (obj->_tag == GameObjectTag::GravUp) {
+			std::cout << "grav up" << std::endl;
+			grav = Player::GravityDirection::Up;
 		}
 		else {
 			f32 overlapX =
@@ -387,7 +393,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 						this->GetCollider().p_minPoint.x < obj->GetCollider().p_minPoint.x)
 					{
 						// Player hit object's LEFT side
-						tmpPos.x -= overlapX;
+						tmpPos.x -= overlapX; 
 						this->canMoveRight = false;
 					}
 					else
