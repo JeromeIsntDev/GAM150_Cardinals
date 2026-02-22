@@ -107,7 +107,8 @@ void MainMenu_Initialize()
 {
 	bgm.Init();
 	bgm.LoadManifest("../../Assets/AudioManifest.txt");
-	bgm.PlayAudio("BGM", AudioType::MUSIC);
+	// play the bgm for the main menu, looped
+	bgm.PlayAudio("BGM", AudioType::MUSIC, 1.f, -1);
 
 	squareMesh = RectMeshCenter();
 	go_digipenLogo.SetMesh(squareMesh);
