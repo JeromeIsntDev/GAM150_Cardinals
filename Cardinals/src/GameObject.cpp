@@ -39,7 +39,7 @@ GameObject::GameObject()
 GameObject::GameObject(const GameObject& rhs)
 	:
 		globalPosition(rhs.GetPosition()),
-		globalRotation(rhs.GetRotatation()),
+		globalRotation(rhs.GetRotation()),
 		globalScale(rhs.GetScale()),
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
 		isChild(rhs.IsChild()), mesh(rhs.mesh), _tag(rhs._tag)
