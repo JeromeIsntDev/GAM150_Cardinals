@@ -154,6 +154,7 @@ bool GameObject::HoverMesh(s32 mouseX, s32 mouseY) const
 
 void GameObject::Draw() const
 {
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxTextureSet(tex->Get_Image(), 0.f, 0.f);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);

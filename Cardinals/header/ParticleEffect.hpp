@@ -1,11 +1,11 @@
 /*!***********************************************************************
-\file	TextureManager.hpp
+\file	ParticleEffect.hpp
 \author	Shirley Liau
-\date	14/01/2026
+\date	23/02/2026
 \par	Last Updated by: Shirley Liau
 \par	Project: Cardinals
 
-\brief	TextureManager is responsible for colors and images.
+\brief	ParticleEffect is responsible for player particle spawn.
 
 \par	Changes: None
 **************************************************************************/
@@ -18,21 +18,47 @@
 #include <TextureManager.hpp>
 #include <GameObject.hpp>
 #include <MeshGenerator.hpp>
+static const int MAX_PARTICLES = 30;
+
+static const Color palette[] = {
+    Colors::PastelPink,
+    Colors::PastelOrange,
+    Colors::PastelPurple,
+    Colors::PastelBlue,
+    Colors::PastelGreen,
+    Colors::PastelYellow
+};
+
+struct ParticleObjInst
+{
+    AEGfxVertexList*    pMesh;
+    bool        		flag;		
+    AEVec2				scale;		
+    AEVec2				pos;
+    float               lifetime;
+    float               lifeRemaining;
+    float               alpha;
+    float               speed;
+    float				dirCurr;
+    AEMtx33				transform;	
+    Color               color;
+};
 
 class ParticleEffect
 {
 private:
-    f32 _x;
-    f32 _y;
-    f32 _changeX;
-    f32 _changeY;
+    ParticleObjInst particles[MAX_PARTICLES];
+    AEGfxVertexList* circleMesh;
+    AEVec2 playerPrevPos;
 
 public:
     ParticleEffect();
 
-    bool isObjectMoving(AEVec2 pos);
-    AEVec2 Update_Particle(AEVec2 pos);
-    bool Change_Position();
+    void Init();
+    void Emit(AEVec2 position);
+    void Update(float dt, AEVec2 position);
+    void DrawParticle();
+    void Clear();
 };
 
 #endif // !_Particle_Effect_Header_
