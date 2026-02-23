@@ -1,9 +1,5 @@
 #include "LevelMenu.hpp"
 
-extern std::vector<Texture*> textures;
-extern std::vector<AEGfxVertexList**> meshes;
-extern std::vector<Text*> texts;
-extern bool MassUnload();
 
 namespace {
 	AEGfxVertexList* buttonMesh;
@@ -26,14 +22,14 @@ void LevelMenu_Load() {
 	buttonTexture.Load_Image(Images::Button);
 	exitTexture.Load_Image(Images::ExitBtn);
 
-	if (!textures.empty()) textures.clear();
-	textures.push_back(&buttonTexture);
-	textures.push_back(&exitTexture);
+	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
+	memoryManager.AddTexture(&buttonTexture);
+	memoryManager.AddTexture(&exitTexture);
 
-	if (!meshes.empty()) meshes.clear();
-	meshes.push_back(&buttonMesh);
+	if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
+	memoryManager.AddMesh(&buttonMesh);
 
-	if (!texts.empty()) texts.clear();
+	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 
 	// only uncomment if you want tooltips here bruh
 	//uiManager.InitTooltipFont(Fonts::Main, 30.f);
@@ -159,5 +155,5 @@ void LevelMenu_Free() {
 void LevelMenu_Unload() {
 	PRINT("Unload: %s", "Level Menu\n");
 
-	if (MassUnload()) PRINT("Unload Success!");
+	if (memoryManager.MassUnload()) PRINT("Unload Success!");
 }

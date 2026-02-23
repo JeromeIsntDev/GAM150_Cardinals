@@ -15,6 +15,7 @@
 #include "GameObject.hpp"
 #include "GameSaver.hpp"
 #include "PauseMenu.hpp"
+#include "MemoryManager.hpp"
 
 void MainMenu_Load();
 void MainMenu_Initialize();

@@ -1,9 +1,5 @@
 #include "Level2.hpp"
 
-extern std::vector<Texture*> textures;
-extern std::vector<AEGfxVertexList**> meshes;
-extern std::vector<Text*> texts;
-extern bool MassUnload();
 extern int isGamePaused;
 
 namespace {
@@ -72,15 +68,15 @@ void Level2_Initialize()
 	pauseUI.Add(conBtn.get());
 	pauseUI.Add(quitBtn.get());
 
-	if (!textures.empty()) textures.clear();
-	textures.push_back(&playerTexture);
-	textures.push_back(&placeholder);
+	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
+	memoryManager.AddTexture(&playerTexture);
+	memoryManager.AddTexture(&placeholder);
 
-	if (!meshes.empty()) meshes.clear();
-	meshes.push_back(&rectMesh);
+	if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
+	memoryManager.AddMesh(&rectMesh);
 
-	if (!texts.empty()) texts.clear();
-	texts.push_back(&digipenFont);
+	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
+	memoryManager.AddFont(&digipenFont);
 }
 
 void Level2_Update() {
@@ -131,5 +127,5 @@ void Level2_Unload() {
 
 	pauseUI.Exit();
 	if (isGamePaused) isGamePaused = 0;
-	if (MassUnload()) PRINT("Unload Success");
+	if (memoryManager.MassUnload()) PRINT("Unload Success");
 }

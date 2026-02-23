@@ -1,5 +1,16 @@
 #include "GameEditor.hpp"
 
+
+void InitializeEditor()
+{
+	lineObject.SetMesh(lineMesh = RectMeshCenter());
+}
+
+void ClearEditorMemory()
+{
+	AEGfxMeshFree(lineMesh);
+}
+
 void DragObject(std::vector<GameObject*> objs)
 {
 	if (!canEdit) return;
@@ -33,16 +44,16 @@ void DragObject(std::vector<GameObject*> objs)
 }
 
 void DrawTiles() {
-	AEGfxVertexList* line = RectMeshCenter();
 	for (int i{}; i < 18; ++i) {
-		GameObject lineobj(line, { 0.f, -450.f + 50.f * i }, 0.f, { 1600.f, 1.f});
-		lineobj.DebugDraw();
+		lineObject.UpdatePosition({0.f,-450.f + 50.f * i});
+		lineObject.UpdateScale({1600.f, 1.f});
+		lineObject.DebugDraw();
 	}
 	for (int i{}; i < 32; ++i) {
-		GameObject lineobj(line, { -800.f + 50.f * i, 0.f }, 0.f, { 1.f, 900.f });
-		lineobj.DebugDraw();
+		lineObject.UpdatePosition({ -800.f + 50.f * i,0.f });
+		lineObject.UpdateScale({ 1.f,900.f });
+		lineObject.DebugDraw();
 	}
-	AEGfxMeshFree(line);
 }
 
 void DrawDebugObjects(std::vector<GameObject*> objs) {

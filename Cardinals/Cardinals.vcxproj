@@ -119,6 +119,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="src\GameSaver.cpp" />
     <ClCompile Include="src\GStateManager.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />
+    <ClCompile Include="src\MemoryManager.cpp" />
     <ClCompile Include="src\ParticleEffect.cpp" />
     <ClCompile Include="src\PlayerController.cpp" />
     <ClCompile Include="src\Main.cpp" />
@@ -144,6 +145,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="header\ControlPanel.hpp" />
     <ClInclude Include="header\GStateManager.hpp" />
     <ClInclude Include="header\InputHandler.hpp" />
+    <ClInclude Include="header\MemoryManager.hpp" />
     <ClInclude Include="header\MeshGenerator.hpp" />
     <ClInclude Include="header\ParticleEffect.hpp" />
     <ClInclude Include="header\Physics.hpp" />

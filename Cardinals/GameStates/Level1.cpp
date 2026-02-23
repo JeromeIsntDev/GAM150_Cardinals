@@ -1,11 +1,6 @@
 #include "Level1.hpp"
 #include "GameEditor.hpp"
 
-extern std::vector<Texture*> textures;
-extern std::vector<AEGfxVertexList**> meshes;
-extern std::vector<Text*> texts;
-extern bool MassUnload();
-
 namespace {
 	AEGfxVertexList* squareMesh;
 	Text digipenFont;
@@ -60,21 +55,21 @@ void Level1_Load() {
 	backgrounds[2].Load_Image(Images::BG_MOUNTAIN);
 	backgrounds[3].Load_Image(Images::BG_FRONTMOUNTAIN);
 
-	if (!textures.empty()) textures.clear();
+	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	//textures.push_back(&playerEffectTexture);
-	textures.push_back(&playerTexture);
-	textures.push_back(&placeholderTexture);
-	textures.push_back(&verticalPlatformTex);
-	textures.push_back(&horizontalPlatformTex);
+	memoryManager.AddTexture(&playerTexture);
+	memoryManager.AddTexture(&placeholderTexture);
+	memoryManager.AddTexture(&verticalPlatformTex);
+	memoryManager.AddTexture(&horizontalPlatformTex);
 	for (Texture& t : backgrounds) {
-		textures.push_back(&t);
+		memoryManager.AddTexture(&t);
 	}
 
-	if (!meshes.empty()) meshes.clear();
-	meshes.push_back(&squareMesh);
+	if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
+	memoryManager.AddMesh(&squareMesh);
 
-	if (!texts.empty()) texts.clear();
-	texts.push_back(&digipenFont);
+	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
+	memoryManager.AddFont(&digipenFont);
 }
 
 void Level1_Initialize()
@@ -313,5 +308,5 @@ void Level1_Free() {
 void Level1_Unload() {
 	PRINT("Unload: %s", "Level 1\n");
 
-	if (MassUnload()) PRINT("Unload Success!");
+	if (memoryManager.MassUnload()) PRINT("Unload Success!");
 }
