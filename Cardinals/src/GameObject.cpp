@@ -90,7 +90,7 @@ AEVec2& GameObject::GetPosition() {
 	return globalPosition;
 }
 
-f32 GameObject::GetRotatation() const {
+f32 GameObject::GetRotation() const {
 	return globalRotation;
 }
 
@@ -143,14 +143,10 @@ void GameObject::SetTexture(Texture* const texture)
 
 bool GameObject::HoverMesh(s32 mouseX, s32 mouseY) const
 {
-	s32 mouX = mouseX - 800;
-	s32 mouY = 450 - mouseY;
-	f32 minX = globalPosition.x - (globalScale.x / 2.f);
-	f32 maxX = globalPosition.x + (globalScale.x / 2.f);
-	f32 minY = globalPosition.y - (globalScale.y / 2.f);
-	f32 maxY = globalPosition.y + (globalScale.y / 2.f);
+	s32 halfW = globalScale.x / 2.f;
+	s32 halfH = globalScale.y / 2.f;
 
-	return mouX > minX && mouX < maxX && mouY > minY && mouY < maxY;
+	return mouseX >= globalPosition.x - halfW && mouseX <= globalPosition.x + halfW && mouseY >= globalPosition.y - halfH && mouseY <= globalPosition.y + halfH;
 }
 
 void GameObject::Draw() const

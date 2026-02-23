@@ -58,7 +58,7 @@ rapidjson::Value SerializeGameObject(
     v.AddMember("id",     obj->GetID(), allocator);
     v.AddMember("posx",   obj->GetPosition().x, allocator);
     v.AddMember("posy",   obj->GetPosition().y, allocator);
-    v.AddMember("rot",    obj->GetRotatation(), allocator);
+    v.AddMember("rot",    obj->GetRotation(), allocator);
     v.AddMember("scalex", obj->GetScale().x, allocator);
     v.AddMember("scaley", obj->GetScale().y, allocator);
 

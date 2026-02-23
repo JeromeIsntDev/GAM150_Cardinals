@@ -256,21 +256,25 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
 		p_initialPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_initialPos.y >= 400.f) {
 		p_initialPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_initialPos.x >= 750.f) {
 		p_initialPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_initialPos.x <= -750.f) {
 		p_initialPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
 		grav = Player::GravityDirection::Down;
 	}
 

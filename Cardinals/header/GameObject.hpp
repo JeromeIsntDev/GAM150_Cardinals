@@ -71,7 +71,7 @@ public:
 	Collider GetCollider() const;
 
 	AEVec2 GetPosition() const;
-	f32 GetRotatation() const;
+	f32 GetRotation() const;
 	AEVec2 GetScale() const;
 
 	AEVec2& GetPosition();
