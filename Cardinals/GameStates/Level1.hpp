@@ -14,6 +14,7 @@
 #include "ControlPanel.hpp"
 #include "InputHandler.hpp"
 #include "GameSaver.hpp"
+#include "MemoryManager.hpp"
 #include "GStateManager.hpp"
 #include "ParticleEffect.hpp"
 

@@ -12,6 +12,7 @@
 #include "InputHandler.hpp"
 #include "UIManager.hpp"
 #include "GStateManager.hpp"
+#include "MemoryManager.hpp"
 
 void Level2_Load();
 void Level2_Initialize();

@@ -168,7 +168,7 @@ void GameObject::DebugDraw() const
 		AEGfxSetColorToMultiply(1.f, 0.f, 0.f, 0.5f);
 		break;
 	case GameObjectTag::Player:
-		AEGfxSetColorToMultiply(2.f, 5.f, 2.f, 0.5f);
+		AEGfxSetColorToAdd(0.f, 1.f, 1.f, 0.f);
 		break;
 	case GameObjectTag::Win:
 		AEGfxSetColorToMultiply(0.f, 3.f, 0.f, 0.5f);
@@ -193,6 +193,7 @@ void GameObject::DebugDraw() const
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
 }
 
 bool GameObject::IsChild() const {

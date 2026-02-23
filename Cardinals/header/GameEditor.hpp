@@ -22,8 +22,12 @@
 namespace {
 	bool canEdit = false;
 	bool useSaveFile = false;
+	GameObject lineObject;
+	AEGfxVertexList* lineMesh;
 }
 
+void InitializeEditor();
+void ClearEditorMemory();
 void DragObject(std::vector<GameObject*> objs);
 void DrawDebugObjects(std::vector<GameObject*> objs);
 void DrawTiles();

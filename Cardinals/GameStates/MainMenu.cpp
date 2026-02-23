@@ -12,11 +12,6 @@
 #include "MainMenu.hpp"
 
 extern int isGameRunning;
-extern std::vector<Texture*> textures;
-extern std::vector<AEGfxVertexList**> meshes;
-extern std::vector<Text*> texts;
-extern bool MassUnload();
-
 //auto& input = InputHandler::GetInstance();
 
 namespace {
@@ -78,29 +73,29 @@ void MainMenu_Load() {
 	popUpTexture.Load_Image(Images::Button);
 
 	//Store Textures to Unload
-	if (!textures.empty()) textures.clear();
-	textures.push_back(&tex_digipenLogo);
-	textures.push_back(&menuBGTexture);
-	textures.push_back(&startTexture);
-	textures.push_back(&exitTexture);
-	textures.push_back(&creditsTexture);
-	textures.push_back(&yesTexture);
-	textures.push_back(&noTexture);
-	textures.push_back(&popUpTexture);
-	textures.push_back(&settingsTexture);
-	textures.push_back(&prevTexture);
-	textures.push_back(&barTexture);
-	textures.push_back(&knobMasterTexture);
-	textures.push_back(&knobMusicTexture);
-	textures.push_back(&knobEFXTexture);
-	textures.push_back(&cardBgTexture);
+	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
+	memoryManager.AddTexture(&tex_digipenLogo);
+	memoryManager.AddTexture(&menuBGTexture);
+	memoryManager.AddTexture(&startTexture);
+	memoryManager.AddTexture(&exitTexture);
+	memoryManager.AddTexture(&creditsTexture);
+	memoryManager.AddTexture(&yesTexture);
+	memoryManager.AddTexture(&noTexture);
+	memoryManager.AddTexture(&popUpTexture);
+	memoryManager.AddTexture(&settingsTexture);
+	memoryManager.AddTexture(&prevTexture);
+	memoryManager.AddTexture(&barTexture);
+	memoryManager.AddTexture(&knobMasterTexture);
+	memoryManager.AddTexture(&knobMusicTexture);
+	memoryManager.AddTexture(&knobEFXTexture);
+	memoryManager.AddTexture(&cardBgTexture);
 
-	if (!meshes.empty()) meshes.clear();
-	meshes.push_back(&squareMesh);
+	if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
+	memoryManager.AddMesh(&squareMesh);
 
-	if (!texts.empty()) texts.clear();
-	texts.push_back(&cardinalsFont);
-	texts.push_back(&digipenFont);
+	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
+	memoryManager.AddFont(&cardinalsFont);
+	memoryManager.AddFont(&digipenFont);
 }
 
 void MainMenu_Initialize()
@@ -283,5 +278,5 @@ void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
 	pauseMenu.reset();
 
-	if (MassUnload()) PRINT("Unload Success");
+	if (memoryManager.MassUnload()) PRINT("Unload Success");
 }

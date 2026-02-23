@@ -11,6 +11,7 @@
 #include "PlayerController.hpp"
 #include "UIManager.hpp"
 #include "GStateManager.hpp"
+#include "MemoryManager.hpp"
 
 void LevelMenu_Load();
 void LevelMenu_Initialize();

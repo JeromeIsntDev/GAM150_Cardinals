@@ -6,7 +6,8 @@
 
 #include <AEEngine.h>
 
-#include "../header/TextureManager.hpp"
+#include "TextureManager.hpp"
+#include "MemoryManager.hpp"
 
 void Level3_Load();
 void Level3_Initialize();

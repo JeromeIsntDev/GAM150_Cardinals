@@ -31,6 +31,7 @@
     <ClCompile Include="GameStates\PauseMenu.cpp" />
     <ClCompile Include="src\GameEditor.cpp" />
     <ClCompile Include="src\ParticleEffect.cpp" />
+    <ClCompile Include="src\MemoryManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -101,6 +102,7 @@
     <ClInclude Include="GameStates\PauseMenu.hpp" />
     <ClInclude Include="header\GameEditor.hpp" />
     <ClInclude Include="header\ParticleEffect.hpp" />
+    <ClInclude Include="header\MemoryManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />

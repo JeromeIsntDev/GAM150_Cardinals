@@ -20,6 +20,7 @@
 #include "GStateManager.hpp"
 #include "PlayerController.hpp"
 #include "UIManager.hpp"
+#include "GameEditor.hpp"
 /*************************************************************************/
 
 //IMGUI
@@ -43,7 +44,10 @@ static LRESULT CALLBACK ImGuiHookWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPA
 	return CallWindowProc(g_OrigWndProc, hWnd, msg, wParam, lParam);
 }
 
+
 static char buffer[128] = "";
+MemoryManager memoryManager;
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -82,6 +86,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	bool panelOpen = false;
 	bool focusKB = false;
+
+	InitializeEditor();
 
 	while (isGameRunning)
 	{
@@ -143,6 +149,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	Free_State();
 	Unload_State();
+
+	ClearEditorMemory();
 
 	// free the system
 	AESysExit();
