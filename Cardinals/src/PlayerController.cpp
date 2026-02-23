@@ -202,10 +202,6 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
 	GravityDirection currDir = dir;
 
-	//CLAMP HERE
-	p_velocityVector.y = AEClamp(p_velocityVector.y, -500.f, 500.f);
-	p_velocityVector.x = AEClamp(p_velocityVector.x, -300.f, 300.f);
-
 	//down force velocity (always going downwards) depend on location
 	if (!p_isGrounded) {
 		switch (dir)
@@ -233,6 +229,9 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		default:
 			break;
 		}
+		//CLAMP HERE
+		p_velocityVector.y = AEClamp(p_velocityVector.y, -500.f, 500.f);
+		p_velocityVector.x = AEClamp(p_velocityVector.x, -300.f, 300.f);
 		/*p_velocityVector.y += gravity * dt;
 		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
@@ -300,9 +299,11 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 		else if (obj->_tag == GameObjectTag::GravUp) {
 			std::cout << "grav up" << std::endl;
 			grav = Player::GravityDirection::Up;
+			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravDown) {
 			grav = Player::GravityDirection::Down;
+			p_Scale.y = 50.f;
 		}
 		else {
 			f32 overlapX =
@@ -326,7 +327,8 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 						tmpPos.y -= overlapY;
 						this->UpdatePosition(tmpPos);
 
-						this->p_velocityVector.y = 0.f;
+						if (this->p_velocityVector.y > 0.f)
+							this->p_velocityVector.y = 0.f;
 						this->p_isGrounded = true;
 						this->p_isJumping = false;
 					}
@@ -336,7 +338,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 						tmpPos.y += overlapY;
 						this->UpdatePosition(tmpPos);
 
-						if (this->p_velocityVector.y > 0.f)
+						if (this->p_velocityVector.y < 0.f)
 							this->p_velocityVector.y = 0.f;
 					}
 					break;
@@ -347,7 +349,8 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 						tmpPos.y += overlapY;
 						this->UpdatePosition(tmpPos);
 
-						this->p_velocityVector.y = 0.f;
+						if (this->p_velocityVector.y < 0.f)
+							this->p_velocityVector.y = 0.f;
 						this->p_isGrounded = true;
 						this->p_isJumping = false;
 					}
@@ -379,7 +382,8 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 						this->canMoveRight = false;
 					}
 					this->UpdatePosition(tmpPos);
-					this->p_velocityVector.y = 0.f;
+					if (this->p_velocityVector.y > 0.f)
+						this->p_velocityVector.y = 0.f;
 					break;
 				default:
 					break;
