@@ -1,8 +1,10 @@
 #include "Level1.hpp"
 #include "GameEditor.hpp"
 
+
 namespace {
 	AEGfxVertexList* squareMesh;
+	AEGfxVertexList* tileMesh;
 	Text digipenFont;
 
 	//PLAYER VARIABLES
@@ -36,6 +38,9 @@ namespace {
 
 	//UIManager tempUI;
 	InputHandler& input = InputHandler::GetInstance();
+
+
+	Grid grid;
 }
 
 void Level1_Load() {
@@ -44,6 +49,7 @@ void Level1_Load() {
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Change_Text_Color(Colors::Black);
 
+	tileMesh = RectMeshCenterSliced(1,3);
 	//tempUI.InitTooltipFont(Fonts::Main, 30.f);
 	//playerEffectTexture.Load_Image(Images::CandyBall);
 	playerTexture.Load_Image(Images::Player);
@@ -67,6 +73,7 @@ void Level1_Load() {
 
 	if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
 	memoryManager.AddMesh(&squareMesh);
+	memoryManager.AddMesh(&tileMesh);
 
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&digipenFont);
@@ -290,6 +297,27 @@ void Level1_Draw() {
 		}
 		DrawTiles();
 		DrawDebugObjects(levelObjList);
+
+		if (input.isMouseBtnTriggered(AEVK_LBUTTON)) {
+			AEVec2 mousePos{ 0.f,0.f };
+			input.getMousePos(mousePos.x, mousePos.y);
+			if (mousePos.x < 0.f || mousePos.x > 1600.f || mousePos.y < 0.f || mousePos.y > 900.f) return;
+
+			PRINT("%f | %f\n", mousePos.x, mousePos.y);
+
+			GameObject* obj = new GameObject{};
+			obj->SetMesh(squareMesh);
+			obj->SetTexture(&placeholderTexture);
+			obj->UpdateScale({ 50.f,50.f });
+
+			/*f32 posX = static_cast<int>(mousePos.x / 50.f) * 50.f;
+			f32 posY = static_cast<int>(mousePos.y / 50.f) * 50.f;*/
+			//obj->UpdatePosition({ posX - 775.f, 425.f - posY });
+
+			GridCell cell = grid.GetCell(mousePos.y, mousePos.x);
+			obj->UpdatePosition({cell.position.x - 800.f , 450.f - cell.position.y});
+			cell.cellObj = obj;
+		}
 	}
 
 	digipenFont.Input_Text("Time: ");

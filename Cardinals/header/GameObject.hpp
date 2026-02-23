@@ -93,6 +93,7 @@ public:
 		UNREFERENCED_PARAMETER(dt);
 	}
 	virtual void Draw() const;
+	virtual void DrawSprite(f32, f32) const;
 	virtual void DebugDraw() const;
 
 	bool IsChild() const;

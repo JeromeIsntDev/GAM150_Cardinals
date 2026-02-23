@@ -17,8 +17,8 @@
 #include <AEEngine.h>
 
 AEGfxVertexList* RectMeshCenter();
+AEGfxVertexList* RectMeshCenterSliced(u32 rows, u32 columns);
 AEGfxVertexList* RectMeshCorner();
 AEGfxVertexList* CircleMesh(u32 segments);
-AEGfxVertexList* LineMesh();
 
 #endif // !_Mesh_Gen_Header_

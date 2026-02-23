@@ -146,12 +146,22 @@ bool GameObject::HoverMesh(s32 mouseX, s32 mouseY) const
 	s32 halfW = globalScale.x / 2.f;
 	s32 halfH = globalScale.y / 2.f;
 
-	return mouseX >= globalPosition.x - halfW && mouseX <= globalPosition.x + halfW && mouseY >= globalPosition.y - halfH && mouseY <= globalPosition.y + halfH;
+	return mouseX >= globalPosition.x - halfW 
+		&& mouseX <= globalPosition.x + halfW 
+		&& mouseY >= globalPosition.y - halfH 
+		&& mouseY <= globalPosition.y + halfH;
 }
 
 void GameObject::Draw() const
 {
 	AEGfxTextureSet(tex->Get_Image(), 0.f, 0.f);
+	AEGfxSetTransform(GetTransform().m);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
+
+void GameObject::DrawSprite(f32 offX, f32 offY) const
+{
+	AEGfxTextureSet(tex->Get_Image(), offX, offY);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }

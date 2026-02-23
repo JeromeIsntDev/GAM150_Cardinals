@@ -45,7 +45,7 @@ void DragObject(std::vector<GameObject*> objs)
 
 void DrawTiles() {
 	for (int i{}; i < 18; ++i) {
-		lineObject.UpdatePosition({0.f,-450.f + 50.f * i});
+		lineObject.UpdatePosition({0.f,450.f - 50.f * i});
 		lineObject.UpdateScale({1600.f, 1.f});
 		lineObject.DebugDraw();
 	}

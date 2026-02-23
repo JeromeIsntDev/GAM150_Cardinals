@@ -28,6 +28,25 @@ AEGfxVertexList* RectMeshCenter() {
 	return AEGfxMeshEnd();
 }
 
+AEGfxVertexList* RectMeshCenterSliced(u32 rows, u32 columns) {
+	AEGfxMeshStart();
+
+	f32 spriteWidth = 1.f / columns;
+	f32 spriteHeight = 1.f / rows;
+
+	AEGfxTriAdd(
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, spriteHeight,
+		0.5f, -0.5f, 0xFFFFFFFF, spriteWidth, spriteHeight,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+	AEGfxTriAdd(
+		0.5f, -0.5f, 0xFFFFFFFF, spriteWidth, spriteHeight,
+		0.5f, 0.5f, 0xFFFFFFFF, spriteWidth, 0.0f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+	return AEGfxMeshEnd();
+}
+
 AEGfxVertexList* RectMeshCorner() {
 	AEGfxMeshStart();
 

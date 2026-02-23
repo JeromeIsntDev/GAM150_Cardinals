@@ -18,6 +18,7 @@
 #include "GStateManager.hpp"
 #include "GameSaver.hpp"
 #include "MeshGenerator.hpp"
+#include "GridManager.hpp"
 
 namespace {
 	bool canEdit = false;
