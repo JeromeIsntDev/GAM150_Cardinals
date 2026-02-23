@@ -191,7 +191,7 @@ void Level1_Initialize()
 			if (objData[i].GetID() == levelObjList[j]->GetID()) {
 				GameObject* curr = levelObjList[j];
 				curr->UpdatePosition(objData[i].GetPosition());
-				curr->UpdateRotation(objData[i].GetRotatation());
+				curr->UpdateRotation(objData[i].GetRotation());
 				curr->UpdateScale(objData[i].GetScale());
 			}
 		}

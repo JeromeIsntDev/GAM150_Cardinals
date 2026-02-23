@@ -14,10 +14,15 @@
 #ifndef _Pause_Menu_Header_
 #define _Pause_Menu_Header_
 
-#include "../header/UIManager.hpp"
-#include "../header/AudioManager.hpp"
 #include <vector>
 #include <memory>
+
+#include "../header/MeshGenerator.hpp"
+#include "../header/UIManager.hpp"
+#include "../header/GStateManager.hpp"
+#include "../header/InputHandler.hpp"
+
+extern int isGamePaused;
 
 class VolSlider : public UIElement
 {

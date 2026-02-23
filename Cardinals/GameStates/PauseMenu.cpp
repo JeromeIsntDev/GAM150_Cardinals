@@ -11,19 +11,12 @@
 **************************************************************************/
 
 #include "PauseMenu.hpp"
-#include "../header/MeshGenerator.hpp"
-#include "../header/UIManager.hpp"
-#include "../header/GStateManager.hpp"
-#include "../header/InputHandler.hpp"
-
-extern int isGamePaused;
 
 VolSlider::VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 width)
 	: UIElement(mesh, pos, 0.f, AEVec2{ width, 20.f }), // bar mesh
 	_audioType(type),
 	_width(width),
 	_knob(mesh, AEVec2{ pos.x + (width / 2.f), pos.y }, 0.f, AEVec2{50.f, 50.f})
-	
 {
 
 	SetActive(true);

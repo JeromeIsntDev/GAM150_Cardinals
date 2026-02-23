@@ -70,13 +70,13 @@ public:
 	Collider GetCollider() const;
 
 	AEVec2 GetPosition() const;
-	f32 GetRotatation() const;
+	f32 GetRotation() const;
 	AEVec2 GetScale() const;
 
 	AEVec2& GetPosition();
 
 	AEVec2 GetLocalPosition() const;
-	f32 GetLocalRotatation() const;
+	f32 GetLocalRotation() const;
 	AEVec2 GetLocalScale() const;
 
 	virtual void SetID(u64 id);

@@ -43,9 +43,9 @@ public:
 
 	virtual void SetActive(bool active);
 	void SetInteractable(bool interactable);
-	void AddChild(UIElement* child);
-
 	void SetTooltip(std::string text, AEVec2 pos);
+
+	void AddChild(UIElement* child);
 
 	// regular getters
 	bool IsActive() const { return isActive; }
