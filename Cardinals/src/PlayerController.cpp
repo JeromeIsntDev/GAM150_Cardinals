@@ -309,6 +309,12 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			grav = Player::GravityDirection::Down;
 			p_Scale.y = 50.f;
 		}
+		else if (obj->_tag == GameObjectTag::GravLeft) {
+			grav = Player::GravityDirection::Left;
+		}
+		else if (obj->_tag == GameObjectTag::Gravright) {
+			grav = Player::GravityDirection::Right;
+		}
 		else {
 			f32 overlapX =
 				(std::min)(this->GetCollider().p_maxPoint.x, obj->GetCollider().p_maxPoint.x) -
