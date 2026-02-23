@@ -42,6 +42,7 @@ void DrawTiles() {
 		GameObject lineobj(line, { -800.f + 50.f * i, 0.f }, 0.f, { 1.f, 900.f });
 		lineobj.DebugDraw();
 	}
+	AEGfxMeshFree(line);
 }
 
 void DrawDebugObjects(std::vector<GameObject*> objs) {
