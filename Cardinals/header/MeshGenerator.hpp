@@ -19,5 +19,6 @@
 AEGfxVertexList* RectMeshCenter();
 AEGfxVertexList* RectMeshCorner();
 AEGfxVertexList* CircleMesh(u32 segments);
+AEGfxVertexList* LineMesh();
 
 #endif // !_Mesh_Gen_Header_

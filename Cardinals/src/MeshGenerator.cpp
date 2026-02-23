@@ -69,3 +69,10 @@ AEGfxVertexList* CircleMesh(u32 segments) {
 
 	return AEGfxMeshEnd();
 }
+
+AEGfxVertexList* LineMesh() {
+	AEGfxMeshStart();
+	AEGfxVertexAdd(1.f, 0.f, 0xFF000000, 1.0f, 1.0f);
+	AEGfxVertexAdd(0.f, 0.f, 0xFF000000, 1.0f, 1.0f);
+	return AEGfxMeshEnd();
+}

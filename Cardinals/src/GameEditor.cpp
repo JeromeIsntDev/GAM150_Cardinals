@@ -15,7 +15,7 @@ void DragObject(std::vector<GameObject*> objs)
 
 		if (mousePos.x >= currentPos.x - halfW && mousePos.x <= currentPos.x + halfW &&
 			-mousePos.y >= currentPos.y - halfH && -mousePos.y <= currentPos.y + halfH) {
-			PRINT("Object touched: %f, %f", currentPos.x, currentPos.y);
+			//PRINT("Object touched: %f, %f", currentPos.x, currentPos.y);
 
 			int mx, my;
 			AEInputGetCursorPositionDelta(&mx, &my);
@@ -27,7 +27,26 @@ void DragObject(std::vector<GameObject*> objs)
 			}
 			my = mx;
 			obj->UpdateScale(AEVec2{ currentScale.x + mx, currentScale.y + my });
+			break;
 		}
+	}
+}
+
+void DrawTiles() {
+	AEGfxVertexList* line = RectMeshCenter();
+	for (int i{}; i < 18; ++i) {
+		GameObject lineobj(line, { 0.f, -450.f + 50.f * i }, 0.f, { 1600.f, 1.f});
+		lineobj.DebugDraw();
+	}
+	for (int i{}; i < 32; ++i) {
+		GameObject lineobj(line, { -800.f + 50.f * i, 0.f }, 0.f, { 1.f, 900.f });
+		lineobj.DebugDraw();
+	}
+}
+
+void DrawDebugObjects(std::vector<GameObject*> objs) {
+	for (GameObject* obj : objs) {
+		obj->DebugDraw();
 	}
 }
 

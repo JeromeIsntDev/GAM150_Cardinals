@@ -158,7 +158,45 @@ void GameObject::Draw() const
 	AEGfxTextureSet(tex->Get_Image(), 0.f, 0.f);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
+}
 
+void GameObject::DebugDraw() const
+{
+	switch (_tag)
+	{
+	case GameObjectTag::Static:
+		break;
+	case GameObjectTag::Dynamic:
+		break;
+	case GameObjectTag::Platform:
+		AEGfxSetColorToMultiply(1.f, 0.f, 0.f, 0.5f);
+		break;
+	case GameObjectTag::Player:
+		AEGfxSetColorToMultiply(2.f, 5.f, 2.f, 0.5f);
+		break;
+	case GameObjectTag::Win:
+		AEGfxSetColorToMultiply(0.f, 3.f, 0.f, 0.5f);
+		break;
+	case GameObjectTag::GravUp:
+		AEGfxSetColorToMultiply(0.f, 0.f, 1.f, 0.5f);
+		break;
+	case GameObjectTag::GravDown:
+		AEGfxSetColorToMultiply(0.f, 0.f, 1.f, 0.5f);
+		break;
+	case GameObjectTag::GravLeft:
+		AEGfxSetColorToMultiply(0.f, 0.f, 1.f, 0.5f);
+		break;
+	case GameObjectTag::Gravright:
+		AEGfxSetColorToMultiply(0.f, 0.f, 1.f, 0.5f);
+		break;
+	default:
+		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.5f);
+		break;
+	}
+
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetTransform(GetTransform().m);
+	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 
 bool GameObject::IsChild() const {

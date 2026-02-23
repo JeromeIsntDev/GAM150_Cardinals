@@ -17,6 +17,7 @@
 #include "GameObject.hpp"
 #include "GStateManager.hpp"
 #include "GameSaver.hpp"
+#include "MeshGenerator.hpp"
 
 namespace {
 	bool canEdit = false;
@@ -24,6 +25,8 @@ namespace {
 }
 
 void DragObject(std::vector<GameObject*> objs);
+void DrawDebugObjects(std::vector<GameObject*> objs);
+void DrawTiles();
 void SaveGameObjectToFilepath(std::string filepathSave, std::vector<GameObject*> objs);
 void ToggleEditorMode();
 void ToggleSaveFileMode();

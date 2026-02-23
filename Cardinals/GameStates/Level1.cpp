@@ -105,6 +105,7 @@ void Level1_Initialize()
 	platform.UpdateScale(AEVec2{ 450.f,200.f });
 	platform.UpdateRotation(0.f);
 	platform.UpdatePosition(AEVec2{ AEGfxGetWinMinX() + 200.f, -100.f});
+	platform._tag = GameObjectTag::Platform;
 
 	wall0.SetMesh(squareMesh);
 	wall0.SetTexture(&horizontalPlatformTex);
@@ -112,7 +113,7 @@ void Level1_Initialize()
 	wall0.UpdateScale(AEVec2{ 150.f,300.f });
 	wall0.UpdateRotation(0.f);
 	wall0.UpdatePosition(AEVec2{ 500.f, -200.f });
-
+	
 	wall1.SetMesh(squareMesh);
 	wall1.SetTexture(&horizontalPlatformTex);
 	wall1.SetID(assigner.GetID());
@@ -133,6 +134,11 @@ void Level1_Initialize()
 	wall3.UpdateScale(AEVec2{ 500.f,100.f });
 	wall3.UpdateRotation(0.f);
 	wall3.UpdatePosition(AEVec2{ 500.f, 200.f });
+
+	wall0._tag = GameObjectTag::Platform;
+	wall1._tag = GameObjectTag::Platform;
+	wall2._tag = GameObjectTag::Platform;
+	wall3._tag = GameObjectTag::Platform;
 
 	winGate.SetMesh(squareMesh);
 	winGate.SetTexture(&placeholderTexture);
@@ -287,6 +293,8 @@ void Level1_Draw() {
 			digipenFont.Input_Text("Using Save File");
 			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
 		}
+		DrawTiles();
+		DrawDebugObjects(levelObjList);
 	}
 
 	digipenFont.Input_Text("Time: ");
