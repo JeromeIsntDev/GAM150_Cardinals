@@ -24,27 +24,33 @@ VolSlider::VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 widt
 	_knob.SetActive(true);
 }
 
-void VolSlider::Update(f32 dt) {
+void VolSlider::OnClick()
+{
+	// start drag on click
+	if (!isActive || !isInteractable) return;
+	_isDragging = true;
+}
+
+void VolSlider::Update(f32 dt) 
+{
 	if (!IsActive() || !IsInteractable()) return;
-	// check for dragging
-	AEVec2 mousePos = UIManager::GetNewMousePos();
-	bool hitKnob = _knob.IsPointInside(mousePos.x, mousePos.y);
-	if (AEInputCheckTriggered(AEVK_LBUTTON) && hitKnob) {
-		_isDragging = true;
-	}
-	if (AEInputCheckReleased(AEVK_LBUTTON)) {
+
+	if (AEInputCheckReleased(AEVK_LBUTTON))
+	{
 		_isDragging = false;
 	}
-	if (_isDragging) {
+
+	if (_isDragging) 
+	{
+		AEVec2 mousePos = UIManager::GetNewMousePos();
+
 		f32 barStartX = GetPosition().x - (_width / 2.f);
 		f32 barEndX = GetPosition().x + (_width / 2.f);
+
 		// clamp knob position within bar
-		f32 newKnobX = mousePos.x;
-		if (newKnobX < barStartX) newKnobX = barStartX;
-		if (newKnobX > barEndX) newKnobX = barEndX;
-		// move knob
+		f32 newKnobX = AEClamp(mousePos.x, barStartX, barEndX);
 		_knob.UpdatePosition(AEVec2{ newKnobX, GetPosition().y });
-		// update volume based on knob position
+
 		f32 volumePercent = (newKnobX - barStartX) / _width;
 		AudioManager::Instance().SetVolume(_audioType, volumePercent);
 	}
@@ -74,14 +80,9 @@ void VolSlider::SetTextures(Texture* barTex, Texture* knobTex)
 	if (knobTex) _knob.SetTexture(knobTex);
 }
 
-PauseMenu::~PauseMenu()
-{
-	_pauseMenuUI.Exit();
-	if (_commonMesh) {
-		AEGfxMeshFree(_commonMesh);
-		_commonMesh = nullptr;
-	}
-}
+///
+/// PAUSE MENU
+///
 
 PauseMenu::PauseMenu(bool isInGame)
 {
@@ -98,27 +99,28 @@ PauseMenu::PauseMenu(bool isInGame)
 	_cardBg.UpdatePosition(AEVec2{ 0.f, 0.f });
 
 	// setup volume sliders
-	auto masterSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
+	auto masterSlider = std::make_unique<VolSlider>(_commonMesh, AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
 	_pauseMenuUI.Add(masterSlider.get());
 	_elements.push_back(std::move(masterSlider));
 
-	auto musicSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 500.f);
+	auto musicSlider = std::make_unique<VolSlider>(_commonMesh, AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 500.f);
 	_pauseMenuUI.Add(musicSlider.get());
 	_elements.push_back(std::move(musicSlider));
 
-	auto sfxSlider = std::make_unique<VolSlider>(_commonMesh,AudioType::SFX, AEVec2{ 0.f, -100.f }, 500.f);
+	auto sfxSlider = std::make_unique<VolSlider>(_commonMesh, AudioType::SFX, AEVec2{ 0.f, -100.f }, 500.f);
 	_pauseMenuUI.Add(sfxSlider.get());
 	_elements.push_back(std::move(sfxSlider));
 
 	// prev btn
-	auto prevBtn = std::make_unique<Button>(_commonMesh, AEVec2{710.f, -360.f}, 0.f, AEVec2{120.f, 120.f});
+	auto prevBtn = std::make_unique<Button>(_commonMesh, AEVec2{ 710.f, -360.f }, 0.f, AEVec2{ 120.f, 120.f });
 	prevBtn->SetOnClick([this, isInGame]() {
 		this->HideMenu();
 		// unpause game if in-game
 		if (isInGame) {
 			isGamePaused = 0;
 		}
-	});
+		});
+
 	prevBtn->SetActive(true);
 	prevBtn->SetInteractable(true);
 	_pauseMenuUI.Add(prevBtn.get()); // add to pause menu UI
@@ -126,17 +128,20 @@ PauseMenu::PauseMenu(bool isInGame)
 
 	// quit btn
 	if (isInGame) {
-		auto quitBtn = std::make_unique<Button>(_commonMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ 200.f, 50.f });
-		quitBtn->SetOnClick([]() {
-			isGamePaused = 0;
-			UpdateGameManagerState(GameStateEnum::MainMenu);
-			});
-		quitBtn->SetActive(true);
-		quitBtn->SetInteractable(true);
-		_pauseMenuUI.Add(quitBtn.get()); // add to pause menu UI
-		_elements.push_back(std::move(quitBtn)); // store
-	}
+		{
+			auto quitBtn = std::make_unique<Button>(_commonMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ 200.f, 50.f });
+			quitBtn->SetOnClick([]()
+				{
+					isGamePaused = 0;
+					UpdateGameManagerState(GameStateEnum::MainMenu);
+				});
 
+			quitBtn->SetActive(true);
+			quitBtn->SetInteractable(true);
+			_pauseMenuUI.Add(quitBtn.get()); // add to pause menu UI
+			_elements.push_back(std::move(quitBtn)); // store
+		}
+	}
 }
 
 void PauseMenu::ShowMenu() { _isVisible = true; }
@@ -211,5 +216,15 @@ void PauseMenu::SetTextures(Texture* bg, Texture* bar, Texture* knobMaster, Text
 			// set button texture if desired
 			btn->SetTexture(prevBtn);
 		}
+	}
+}
+
+PauseMenu::~PauseMenu()
+{
+	_elements.clear();
+	if (_commonMesh)
+	{
+		AEGfxMeshFree(_commonMesh);
+		_commonMesh = nullptr;
 	}
 }

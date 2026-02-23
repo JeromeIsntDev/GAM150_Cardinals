@@ -66,7 +66,8 @@ public:
 
 // this guy just handles all the diff elements
 // kinda stores everything and thats it
-class UIManager {
+class UIManager 
+{
 
 private:
 	// dynamic array to store different elements

@@ -33,10 +33,14 @@ public:
 	void SetTextures(Texture* barTex, Texture* knobTex); // unique to VolSlider
 	AudioType GetAudioType() const { return _audioType; }
 
+	InputHandler& input = InputHandler::GetInstance();
+
+	virtual void OnClick() override;
+
 private:
 	AudioType _audioType;
 	f32 _width;
-	bool _isDragging = false;
+	bool _isDragging{ false };
 	UIElement _knob;
 };
 

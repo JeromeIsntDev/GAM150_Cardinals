@@ -41,15 +41,7 @@ void UIElement::ResetTooltip() { isToolTipShown = false; } // reset every frame 
 
 bool UIElement::IsPointInside(float x, float y) const 
 {
-    // calling from the parent class woawow
-    AEVec2 currentScale = GetScale();
-    AEVec2 currentPos = GetPosition();
-
-    float halfW = currentScale.x / 2.0f, halfH = currentScale.y / 2.0f;
-
-    // wowww calculations zzzzz
-    return (x >= currentPos.x - halfW && x <= currentPos.x + halfW &&
-        y >= currentPos.y - halfH && y <= currentPos.y + halfH);
+    return HoverMesh(x, y);
 }
 
 bool UIElement::ToggleActive(u8 key)
