@@ -49,7 +49,7 @@ protected:
 	AEMtx33 mtx_transform;
 	bool isChild;
 	AEGfxVertexList* mesh;
-	Texture* tex;
+	Texture* tex = nullptr;
 	Collider collider;
 
 //Functions
@@ -86,6 +86,8 @@ public:
 	virtual void SetTexture(Texture* const texture);
 
 	bool HoverMesh(s32 mouseX, s32 mouseY) const;
+
+	Texture* GetTexture() const { return tex; }
 
 	// for UI, updates behavior
 	virtual void Update(float dt) 

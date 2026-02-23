@@ -52,7 +52,8 @@ bool UIElement::ToggleActive(u8 key)
         this->SetActive(newState);
 
         // sets the kids too
-        for (auto child : children) {
+        for (auto child : children) 
+        {
             child->SetActive(newState);
             child->SetInteractable(newState);
         }

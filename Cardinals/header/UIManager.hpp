@@ -38,7 +38,6 @@ public:
 
 	// inheriting gameobject constructors
 	using GameObject::GameObject;
-	virtual ~UIElement() = default; // destructor
 	UIElement(AEGfxVertexList* mesh, AEVec2 pos, float rot, AEVec2 scale) : GameObject(mesh, pos, rot, scale) {}
 
 	virtual void SetActive(bool active);
@@ -62,6 +61,15 @@ public:
 
 	virtual void Update(float dt) {}
 	virtual void OnClick() {}
+
+	virtual ~UIElement() 
+	{
+		for (auto* child : children)
+		{
+			delete child;
+			children.clear();
+		}
+	}
 };
 
 // this guy just handles all the diff elements

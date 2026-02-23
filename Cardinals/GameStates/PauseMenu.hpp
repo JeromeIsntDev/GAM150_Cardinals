@@ -14,56 +14,68 @@
 #ifndef _Pause_Menu_Header_
 #define _Pause_Menu_Header_
 
-#include <vector>
-#include <memory>
-
-#include "../header/MeshGenerator.hpp"
+#include <functional>
 #include "../header/UIManager.hpp"
+#include "../header/MeshGenerator.hpp"
 #include "../header/GStateManager.hpp"
-#include "../header/InputHandler.hpp"
 
 extern int isGamePaused;
 
-class VolSlider : public UIElement
+struct PauseMenuTextures
 {
-public:
-	VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 width);
-	void Update(f32 dt) override; // from UIElement
-	void Draw() const override; // from GameObject
-	void SetTextures(Texture* barTex, Texture* knobTex); // unique to VolSlider
-	AudioType GetAudioType() const { return _audioType; }
-
-	InputHandler& input = InputHandler::GetInstance();
-
-	virtual void OnClick() override;
-
-private:
-	AudioType _audioType;
-	f32 _width;
-	bool _isDragging{ false };
-	UIElement _knob;
+	Texture* bg = nullptr;
+	Texture* cardBg = nullptr;
+	Texture* bar = nullptr;
+	Texture* knobMaster = nullptr;
+	Texture* knobMusic = nullptr;
+	Texture* knobSFX = nullptr;
+	Texture* prevBtn = nullptr;
 };
 
-class PauseMenu
+class VolSlider : public UIElement
 {
-public:
-	PauseMenu(bool isInGame);
-	~PauseMenu();
-	void Update(f32 dt);
-	void Draw();
-	void ShowMenu();
-	void HideMenu();
-	bool isVisible() const { return _isVisible; }
-	void SetTextures(Texture* bg, Texture* bar, Texture* knobMaster, Texture* knobMusic,Texture* knobEFX, Texture* prevBtn, Texture* cardBg);
 private:
-	bool _isVisible = false;
-	// to manage my pause menu UI
-	UIManager _pauseMenuUI;
-	GameObject _bg;
-	GameObject _cardBg;
-	// store sliders and buttons etc.
-	std::vector<std::unique_ptr<UIElement>>_elements;
-	AEGfxVertexList* _commonMesh = nullptr;
+
+	UIElement knob;
+	AudioType audioType;
+	f32 width;
+	bool isDragging{ false };
+
+public:
+	
+	VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 width);
+	
+	void Update(f32 dt) override; // from UIElement
+	void Draw() const override; // from GameObject
+	void OnClick() override;
+
+	void SetTextures(Texture* barTex, Texture* knobTex); // unique to VolSlider
+	AudioType GetAudioType() const { return audioType; }
+};
+
+class PauseMenu : public UIElement
+{
+private:
+
+	GameObject bg, cardBG;
+
+	AEGfxVertexList* commonMesh = nullptr;
+	VolSlider* _masterSlider = nullptr;
+	VolSlider* _musicSlider = nullptr;
+	VolSlider* _sfxSlider = nullptr;
+	Button* _prevBtn = nullptr;
+	Button* _quitBtn = nullptr;
+
+public:
+
+	PauseMenu(AEGfxVertexList* mesh, bool isInGame, std::function<void()> onResume = nullptr, std::function<void()> onQuit = nullptr);
+
+	void Update(f32 dt) override;
+	void Draw() const override;
+	void OnClick() override;
+
+	void SetActive(bool active) override;
+	void SetTextures(const PauseMenuTextures& tex);
 };
 
 #endif
