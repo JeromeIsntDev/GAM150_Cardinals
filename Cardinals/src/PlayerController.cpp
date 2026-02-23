@@ -201,32 +201,32 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	GravityDirection currDir = dir;
 
 	//CLAMP HERE
-	p_velocityVector.y = AEClamp(p_velocityVector.y, -400.f, 400.f);
+	p_velocityVector.y = AEClamp(p_velocityVector.y, -500.f, 500.f);
 	p_velocityVector.x = AEClamp(p_velocityVector.x, -300.f, 300.f);
+
 	//down force velocity (always going downwards) depend on location
 	if (!p_isGrounded) {
 		switch (dir)
 		{
 		case Player::GravityDirection::Up:
-			p_velocityVector.y += gravity * dt;
-			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
-			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
+			p_velocityVector.y += (gravity * p_downForce) * dt;
+			p_initialPos.y += (p_velocityVector.y) * dt;
+			p_initialPos.x += (p_velocityVector.x) * dt;
 			break;
 		case Player::GravityDirection::Down:
-			p_velocityVector.y += -gravity * dt;
-			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
-			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
-
+			p_velocityVector.y += (-gravity * p_downForce) * dt;
+			p_initialPos.y += (p_velocityVector.y) * dt;
+			p_initialPos.x += (p_velocityVector.x) * dt;
 			break;
 		case Player::GravityDirection::Left:
-			p_velocityVector.x += -gravity * dt;
-			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
-			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+			p_velocityVector.x += (-gravity * p_downForce) * dt;
+			p_initialPos.x += (p_velocityVector.x) * dt;
+			p_initialPos.y += (p_velocityVector.y) * dt;
 			break;
 		case Player::GravityDirection::Right:
-			p_velocityVector.x += gravity * dt;
-			p_initialPos.x += (p_velocityVector.x * p_downForce) * dt;
-			p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;
+			p_velocityVector.x += (gravity * p_downForce) * dt;
+			p_initialPos.x += (p_velocityVector.x) * dt;
+			p_initialPos.y += (p_velocityVector.y) * dt;
 			break;
 		default:
 			break;
@@ -234,7 +234,7 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		/*p_velocityVector.y += gravity * dt;
 		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
-	//std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
+	std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
 	//give a cool down to prevent being able to jump instantly
 	//std::cout << "timer: " << currCD << std::endl;
 	currCD += dt;
