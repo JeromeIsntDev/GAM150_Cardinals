@@ -174,7 +174,8 @@ void MainMenu_Initialize()
 		});
 
 	// control all buttons with the manager
-	menuUI.Add(startBtn.get()); menuUI.Add(exitBtn.get()); menuUI.Add(creditsBtn.get()); menuUI.Add(settingsBtn.get()); menuUI.Add(pauseMenu.get());
+	menuUI.Add(pauseMenu.get());
+	menuUI.Add(startBtn.get()); menuUI.Add(exitBtn.get()); menuUI.Add(creditsBtn.get()); menuUI.Add(settingsBtn.get());
 
 	go_digipenLogo.SetTexture(&tex_digipenLogo);
 	go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
@@ -199,6 +200,11 @@ void MainMenu_Update() {
 		logo_transparency = 1.f;
 		isLogoDrawn = 1;
 	}
+
+	if (pauseMenu->IsActive())
+		pauseMenu->Update(dt);
+	else
+		menuUI.Update(dt);
 
 	if (isLogoDrawn) 
 	{
@@ -233,6 +239,7 @@ void MainMenu_Draw() {
 	menuBG.Draw();
 	cardinalsFont.Draw_Text(0, 200.f);
 	menuUI.Draw();
+	pauseMenu->Draw();
 
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
