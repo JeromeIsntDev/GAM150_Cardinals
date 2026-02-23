@@ -40,9 +40,9 @@ struct GameObjectIDAssigner {
 class GameObject {
 //Variables
 protected:
-	AEVec2 globalPosition, localPosition;
-	f32 globalRotation, localRotation;
-	AEVec2 globalScale, localScale;
+	AEVec2 globalPosition;
+	f32 globalRotation;
+	AEVec2 globalScale;
 	AEMtx33 mtx_translation;
 	AEMtx33 mtx_rotation;
 	AEMtx33 mtx_scale;
@@ -64,6 +64,7 @@ public:
 	virtual ~GameObject() = default; // destructor for polymorphism 
 
 	GameObject();
+	GameObject(const GameObject&);
 	GameObject(AEGfxVertexList* mesh);
 	GameObject(AEGfxVertexList* mesh, AEVec2 translate, f32 rotate, AEVec2 scale);
 
@@ -74,10 +75,6 @@ public:
 	AEVec2 GetScale() const;
 
 	AEVec2& GetPosition();
-
-	AEVec2 GetLocalPosition() const;
-	f32 GetLocalRotatation() const;
-	AEVec2 GetLocalScale() const;
 
 	virtual void SetID(u64 id);
 	virtual u64 GetID() const;

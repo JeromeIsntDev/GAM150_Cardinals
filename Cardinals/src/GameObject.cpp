@@ -24,9 +24,9 @@ AEMtx33 GameObject::GetTransform() const
 
 GameObject::GameObject()
 	:	
-		globalPosition(AEVec2{ 0.f,0.f }),	localPosition(AEVec2{ 0.f,0.f }),
-		globalRotation(0.f),				localRotation(0.f),
-		globalScale(AEVec2{ 0.f,0.f }),		localScale(AEVec2{ 0.f,0.f }),
+		globalPosition(AEVec2{ 0.f,0.f }),	
+		globalRotation(0.f),				
+		globalScale(AEVec2{ 0.f,0.f }),		
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
 		isChild(false), mesh(nullptr), _tag(GameObjectTag::Static)
 {
@@ -36,11 +36,25 @@ GameObject::GameObject()
 	ConcatTransform();
 }
 
+GameObject::GameObject(const GameObject& rhs)
+	:
+		globalPosition(rhs.GetPosition()),
+		globalRotation(rhs.GetRotatation()),
+		globalScale(rhs.GetScale()),
+		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
+		isChild(rhs.IsChild()), mesh(rhs.mesh), _tag(rhs._tag)
+{
+	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
+	AEMtx33Rot(&mtx_rotation, globalRotation);
+	AEMtx33Scale(&mtx_scale, globalScale.x, globalScale.y);
+	ConcatTransform();
+}
+
 GameObject::GameObject(AEGfxVertexList* mesh)
 	: 
-	globalPosition(AEVec2{ 0.f,0.f }), localPosition(AEVec2{ 0.f,0.f }),
-	globalRotation(0.f), localRotation(0.f),
-	globalScale(AEVec2{ 0.f,0.f }), localScale(AEVec2{ 0.f,0.f }),
+	globalPosition(AEVec2{ 0.f,0.f }),
+	globalRotation(0.f), 
+	globalScale(AEVec2{ 0.f,0.f }), 
 	mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
 	isChild(false), mesh(mesh), _tag(GameObjectTag::Static)
 {
@@ -52,9 +66,9 @@ GameObject::GameObject(AEGfxVertexList* mesh)
 
 GameObject::GameObject(AEGfxVertexList* mesh, AEVec2 translate, f32 rotate, AEVec2 scale)
 	:	
-		globalPosition(translate),	localPosition(translate),
-		globalRotation(rotate),		localRotation(rotate),
-		globalScale(scale),			localScale(scale),
+		globalPosition(translate),	
+		globalRotation(rotate),		
+		globalScale(scale),			
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
 		isChild(false), mesh(mesh), _tag(GameObjectTag::Static)
 {
@@ -84,18 +98,6 @@ AEVec2 GameObject::GetScale() const {
 	return globalScale;
 }
 
-AEVec2 GameObject::GetLocalPosition() const {
-	return localPosition;
-}
-
-f32 GameObject::GetLocalRotatation() const {
-	return localRotation;
-}
-
-AEVec2 GameObject::GetLocalScale() const {
-	return localScale;
-}
-
 void GameObject::SetID(u64 id)
 {
 	_id = id;
@@ -110,7 +112,6 @@ void GameObject::UpdatePosition(AEVec2 pos)
 {
 	globalPosition = pos;
 	AEMtx33Trans(&mtx_translation, pos.x, pos.y);
-	localPosition = isChild ? /*replace this with the local*/ pos : pos;
 	ConcatTransform();
 	collider.UpdateCollider(globalPosition,GetScale().x,GetScale().y);
 }
@@ -119,7 +120,6 @@ void GameObject::UpdateRotation(f32 rot)
 {
 	globalRotation = rot;
 	AEMtx33Rot(&mtx_rotation, rot);
-	localRotation = isChild ? /*replace this with the local*/ rot : rot;
 	ConcatTransform();
 }
 
@@ -127,7 +127,6 @@ void GameObject::UpdateScale(AEVec2 scale)
 {
 	globalScale = scale;
 	AEMtx33Scale(&mtx_scale, scale.x, scale.y);
-	localScale = isChild ? /*replace this with the local*/ scale : scale;
 	ConcatTransform();
 	collider.UpdateCollider(globalPosition, globalScale.x, globalScale.y);
 }
