@@ -30,6 +30,7 @@ namespace {
 	GameObject wall3;
 	GameObject winGate;
 	GameObject gravUpObj;
+	GameObject gravDownObj;
 	GameObjectIDAssigner assigner;
 	std::vector<GameObject*> levelObjList;
 	std::vector<GameObject> objData;
@@ -136,7 +137,7 @@ void Level1_Initialize()
 	winGate.SetMesh(squareMesh);
 	winGate.SetTexture(&placeholderTexture);
 	winGate.SetID(assigner.GetID());
-	winGate.UpdateScale(AEVec2{ 150.f,600.f });
+	winGate.UpdateScale(AEVec2{ 100.f,200.f });
 	winGate.UpdateRotation(0.f);
 	winGate.UpdatePosition(AEVec2{ 300.f,300.f });
 	winGate._tag = GameObjectTag::Win;
@@ -148,6 +149,14 @@ void Level1_Initialize()
 	gravUpObj.UpdateRotation(0.f);
 	gravUpObj.UpdatePosition(AEVec2{ 50.f,50.f });
 	gravUpObj._tag = GameObjectTag::GravUp;
+
+	gravDownObj.SetMesh(squareMesh);
+	gravDownObj.SetTexture(&placeholderTexture);
+	gravDownObj.SetID(assigner.GetID());
+	gravDownObj.UpdateScale(AEVec2{ 150.f,50.f });
+	gravDownObj.UpdateRotation(0.f);
+	gravDownObj.UpdatePosition(AEVec2{ 200.f,50.f });
+	gravDownObj._tag = GameObjectTag::GravDown;
 
 
 	for (int i{}; i < 4; ++i) {
@@ -168,6 +177,7 @@ void Level1_Initialize()
 	levelObjList.push_back(&wall3);
 	levelObjList.push_back(&winGate);
 	levelObjList.push_back(&gravUpObj);
+	levelObjList.push_back(&gravDownObj);
 
 
 	levelTime = 0.f;
@@ -262,6 +272,7 @@ void Level1_Draw() {
 	wall3.Draw();
 	winGate.Draw();
 	gravUpObj.Draw();
+	gravDownObj.Draw();
 	//if (playerEffect.Change_Position()) {
 	//	playerEffectObject.UpdatePosition(playerEffect.Update_Particle(mainPlayer.GetPosition()));
 	//	playerEffectObject.Draw();
