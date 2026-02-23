@@ -39,6 +39,7 @@ namespace {
 	std::unique_ptr<Button> settingsBtn;
 
 	AudioManager& bgm = AudioManager::Instance();
+	InputHandler& input = InputHandler::GetInstance();
 }
 
 
@@ -111,6 +112,11 @@ void MainMenu_Initialize()
 	menuBG.SetMesh(squareMesh); menuBG.SetTexture(&menuBGTexture);
 	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f }); menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() }); menuBG.UpdateRotation(0.f);
 
+	pauseMenu = std::make_unique<PauseMenu>(squareMesh, false, [](){}, nullptr);
+
+	pauseMenu->SetTextures(PauseMenuTextures{ &menuBGTexture, &cardBgTexture, &barTexture, 
+		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture });
+
 	// BUTTONS
 
 	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
@@ -131,16 +137,13 @@ void MainMenu_Initialize()
 	noBtn->SetTexture(&noTexture); noBtn->SetActive(true); noBtn->SetInteractable(true);
 	noBtn->SetTooltipText("");
 
-	// not in game yet
-	pauseMenu = std::make_unique<PauseMenu>(false);
-	pauseMenu->SetTextures(&menuBGTexture, &barTexture, &knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &cardBgTexture);
 	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{710.f,360.f}, 0.f, AEVec2{settingsTexture.Get_Image_Width(), settingsTexture.Get_Image_Height()});
 	
 	settingsBtn->SetTexture(&settingsTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
-	settingsBtn->SetOnClick([]() {
-		PRINT("Settings Pressed");
-		pauseMenu->ShowMenu();
-		menuUI.ForceResetToolTips();
+	settingsBtn->SetOnClick([]() 
+		{
+			pauseMenu->SetActive(true);
+			//menuUI.ForceResetToolTips();
 		});
 	
 	quitUI.Add(yesBtn.get());
@@ -162,12 +165,6 @@ void MainMenu_Initialize()
 		quitMenuOpen = true;
 		});
 
-	settingsBtn->SetOnClick([]() {
-		PRINT("Settings Pressed");
-		pauseMenu->ShowMenu();
-		menuUI.ForceResetToolTips();
-		});
-
 	yesBtn->SetOnClick([]() {
 		isGameRunning = 0;
 		});
@@ -177,7 +174,7 @@ void MainMenu_Initialize()
 		});
 
 	// control all buttons with the manager
-	menuUI.Add(startBtn.get()); menuUI.Add(exitBtn.get()); menuUI.Add(creditsBtn.get()); menuUI.Add(settingsBtn.get());
+	menuUI.Add(startBtn.get()); menuUI.Add(exitBtn.get()); menuUI.Add(creditsBtn.get()); menuUI.Add(settingsBtn.get()); menuUI.Add(pauseMenu.get());
 
 	go_digipenLogo.SetTexture(&tex_digipenLogo);
 	go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
@@ -198,26 +195,19 @@ void MainMenu_Update() {
 
 	float dt = static_cast<float>(AEFrameRateControllerGetFrameTime());
 
-	if (AEInputCheckTriggered(AEVK_SPACE)) {
+	if (input.isKeyTriggered(AEVK_SPACE)) {
 		logo_transparency = 1.f;
 		isLogoDrawn = 1;
 	}
 
-	if (isLogoDrawn) {
-
-		if (pauseMenu->isVisible()) {
-			pauseMenu->Update(dt);
-		}
-		else if (quitMenuOpen) {
-			quitUI.Update(dt);
-		}
-		else {
-			menuUI.Update(dt); // freezes menuUI but i'll update this in the future to freeze the whole game
-		}
-
+	if (isLogoDrawn) 
+	{
+		if (quitMenuOpen) { quitUI.Update(dt); }
+		else { menuUI.Update(dt); }
 		AEInputGetCursorPosition(&mouseX, &mouseY);
 	}
-	else {
+	else 
+	{
 		if (AEFrameRateControllerGetFrameCount() < 100) {
 			logo_transparency += 0.02f;
 		}
@@ -240,14 +230,11 @@ void MainMenu_Draw() {
 		return;
 	}
 
-
 	menuBG.Draw();
 	cardinalsFont.Draw_Text(0, 200.f);
 	menuUI.Draw();
 
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-
-	pauseMenu->Draw();
 
 	if (!quitMenuOpen) return;
 	AEGfxSetColorToMultiply(.2f, .2f, .2f, 1.0f);

@@ -143,8 +143,8 @@ void GameObject::SetTexture(Texture* const texture)
 
 bool GameObject::HoverMesh(s32 mouseX, s32 mouseY) const
 {
-	s32 halfW = globalScale.x / 2.f;
-	s32 halfH = globalScale.y / 2.f;
+	f32 halfW = globalScale.x / 2.f;
+	f32 halfH = globalScale.y / 2.f;
 
 	return mouseX >= globalPosition.x - halfW 
 		&& mouseX <= globalPosition.x + halfW 

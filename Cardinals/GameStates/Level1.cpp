@@ -28,6 +28,8 @@ namespace {
 	GameObject winGate;
 	GameObject gravUpObj;
 	GameObject gravDownObj;
+	GameObject gravLeftObj;
+	GameObject gravRightObj;
 	GameObjectIDAssigner assigner;
 	std::vector<GameObject*> levelObjList;
 	std::vector<GameObject> objData;
@@ -166,6 +168,22 @@ void Level1_Initialize()
 	gravDownObj.UpdatePosition(AEVec2{ 200.f,50.f });
 	gravDownObj._tag = GameObjectTag::GravDown;
 
+	gravLeftObj.SetMesh(squareMesh);
+	gravLeftObj.SetTexture(&placeholderTexture);
+	gravLeftObj.SetID(assigner.GetID());
+	gravLeftObj.UpdateScale(AEVec2{ 50.f,150.f });
+	gravLeftObj.UpdateRotation(0.f);
+	gravLeftObj.UpdatePosition(AEVec2{ 0,50.f });
+	gravLeftObj._tag = GameObjectTag::GravLeft;
+
+	gravRightObj.SetMesh(squareMesh);
+	gravRightObj.SetTexture(&placeholderTexture);
+	gravRightObj.SetID(assigner.GetID());
+	gravRightObj.UpdateScale(AEVec2{ 50.f,150.f });
+	gravRightObj.UpdateRotation(0.f);
+	gravRightObj.UpdatePosition(AEVec2{ -200.f,50.f });
+	gravRightObj._tag = GameObjectTag::Gravright;
+
 
 	for (int i{}; i < 4; ++i) {
 		GameObject* obj = &backgroundObjs[i];
@@ -186,6 +204,8 @@ void Level1_Initialize()
 	levelObjList.push_back(&winGate);
 	levelObjList.push_back(&gravUpObj);
 	levelObjList.push_back(&gravDownObj);
+	levelObjList.push_back(&gravLeftObj);
+	levelObjList.push_back(&gravRightObj);
 
 
 	levelTime = 0.f;
@@ -216,7 +236,7 @@ void Level1_Update() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
 	//controlPanel.ControlPanel_Update();
-	levelTime += AEFrameRateControllerGetFrameTime();
+	levelTime +=static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
 	if (input.isMouseBtnPressed(AEVK_LCTRL)) {
 		if (input.isMouseBtnTriggered(AEVK_E)) ToggleEditorMode();
@@ -281,6 +301,8 @@ void Level1_Draw() {
 	winGate.Draw();
 	gravUpObj.Draw();
 	gravDownObj.Draw();
+	gravLeftObj.Draw();
+	gravRightObj.Draw();
 	//if (playerEffect.Change_Position()) {
 	//	playerEffectObject.UpdatePosition(playerEffect.Update_Particle(mainPlayer.GetPosition()));
 	//	playerEffectObject.Draw();
