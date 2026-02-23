@@ -90,6 +90,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 				break;
 			}
 		}
+		p_Scale.x = 50.f;
 		isMoving = true;
 	}
 	if (input.isKeyPressed(AEVK_A)) {
@@ -111,7 +112,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 				break;
 			}
 		}
-		
+		p_Scale.x = -50.f;
 		isMoving = true;
 	}
 	if (input.isKeyPressed(AEVK_LSHIFT) && isMoving) {
@@ -190,6 +191,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 			PlayerJump(dt,dir);
 		}
 	}
+	UpdateScale(p_Scale);
 }
 
 //Player Movement Logic
@@ -234,7 +236,7 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		/*p_velocityVector.y += gravity * dt;
 		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
-	std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
+	//std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
 	//give a cool down to prevent being able to jump instantly
 	//std::cout << "timer: " << currCD << std::endl;
 	currCD += dt;

@@ -94,7 +94,7 @@ void Level1_Initialize()
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 75.f);
 	mainPlayer.SetTexture(&playerTexture);
-	mainPlayer.UpdateScale(AEVec2{ 50.f, 50.f });
+	mainPlayer.UpdateScale(mainPlayer.p_Scale);
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer.SetID(assigner.GetID());
 	mainPlayer._tag = GameObjectTag::Player;

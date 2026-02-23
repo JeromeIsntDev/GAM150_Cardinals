@@ -40,6 +40,7 @@ private:
 	f32 jumpForce = 500.f;
 public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
+	AEVec2 p_Scale{ 50.f,50.f };
 
 	enum class GravityDirection {
 		Up, Down, Left, Right,
