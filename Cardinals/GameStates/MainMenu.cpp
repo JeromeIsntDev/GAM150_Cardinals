@@ -174,7 +174,7 @@ void MainMenu_Initialize()
 		});
 
 	// control all buttons with the manager
-	menuUI.Add(pauseMenu.get());
+	// menuUI.Add(pauseMenu.get());
 	menuUI.Add(startBtn.get()); menuUI.Add(exitBtn.get()); menuUI.Add(creditsBtn.get()); menuUI.Add(settingsBtn.get());
 
 	go_digipenLogo.SetTexture(&tex_digipenLogo);
@@ -201,14 +201,21 @@ void MainMenu_Update() {
 		isLogoDrawn = 1;
 	}
 
-	if (pauseMenu->IsActive())
-		pauseMenu->Update(dt);
-	else
-		menuUI.Update(dt);
+	//if (pauseMenu->IsActive())
+	//	pauseMenu->Update(dt);
+	//else
+	//	menuUI.Update(dt);
 
 	if (isLogoDrawn) 
 	{
 		if (quitMenuOpen) { quitUI.Update(dt); }
+		else if (pauseMenu->IsActive()) {
+			pauseMenu->Update(dt);
+			// if pause menu is open, only update the pause menu and check for its clicks
+			if (input.isMouseBtnTriggered(AEVK_LBUTTON)) {
+				pauseMenu->OnClick();
+			}
+		}
 		else { menuUI.Update(dt); }
 		AEInputGetCursorPosition(&mouseX, &mouseY);
 	}
@@ -239,7 +246,9 @@ void MainMenu_Draw() {
 	menuBG.Draw();
 	cardinalsFont.Draw_Text(0, 200.f);
 	menuUI.Draw();
-	pauseMenu->Draw();
+	if (pauseMenu->IsActive()) {
+		pauseMenu->Draw();
+	}
 
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 

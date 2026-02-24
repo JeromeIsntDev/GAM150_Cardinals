@@ -69,6 +69,7 @@ void VolSlider::Draw() const
 		AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
 		knob.Draw();
 	}
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f); // reset to default
 }
 
 void VolSlider::SetTextures(Texture* barTex, Texture* knobTex)
@@ -168,7 +169,7 @@ void PauseMenu::OnClick()
 
 void PauseMenu::Update(f32 dt)
 {
-	if (AEInputCheckTriggered(AEVK_P)) { SetActive(!IsActive()); }
+	if (AEInputCheckTriggered(AEVK_P)) { SetActive(!IsActive()); isGamePaused = IsActive() ? 1 : 0; }
 	if (!IsActive()) return;
 
 	for (auto* child : children)
@@ -193,10 +194,13 @@ void PauseMenu::Draw() const
 	AEGfxMeshDraw(commonMesh, AE_GFX_MDM_TRIANGLES);
 
 	// card bg
-	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
-	AEGfxSetTransparency(0.75f);
-	cardBG.Draw();
+	if (cardBG.GetTexture() != nullptr) { // guard
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
+		AEGfxSetTransparency(0.75f);
+		cardBG.Draw();
+	}
+
 
 	// children
 	AEGfxSetTransparency(1.f);
@@ -209,7 +213,9 @@ void PauseMenu::Draw() const
 		}
 	}
 
+	// reset to default
 	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
+	AEGfxSetTransparency(1.f);
 }
 
 void PauseMenu::SetTextures(const PauseMenuTextures& tex)
@@ -221,4 +227,6 @@ void PauseMenu::SetTextures(const PauseMenuTextures& tex)
 	if (_musicSlider)  _musicSlider->SetTextures(tex.bar, tex.knobMusic);
 	if (_sfxSlider)    _sfxSlider->SetTextures(tex.bar, tex.knobSFX);
 	if (_prevBtn)      _prevBtn->SetTexture(tex.prevBtn);
+	// placeholder for quit btn texture if needed
+	if (_quitBtn)      _quitBtn->SetTexture(tex.prevBtn);
 }
