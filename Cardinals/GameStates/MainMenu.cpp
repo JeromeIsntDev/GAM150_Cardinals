@@ -115,7 +115,7 @@ void MainMenu_Initialize()
 	pauseMenu = std::make_unique<PauseMenu>(squareMesh, false, [](){}, nullptr);
 
 	pauseMenu->SetTextures(PauseMenuTextures{ &menuBGTexture, &cardBgTexture, &barTexture, 
-		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture });
+		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture,nullptr,nullptr, nullptr, &digipenFont });
 
 	// BUTTONS
 

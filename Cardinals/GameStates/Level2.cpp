@@ -17,7 +17,7 @@ namespace {
 	//std::unique_ptr<Button> conBtn, quitBtn;
 
 	std::unique_ptr<PauseMenu> pauseMenu;	
-	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{};
+	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{};
 }
 
 void Level2_Load() {
@@ -36,6 +36,9 @@ void Level2_Load() {
 	knobMusicTexture.Load_Image(Images::KnobMusic);
 	knobEFXTexture.Load_Image(Images::KnobEFX);
 	cardBgTexture.Load_Image(Images::CardBg);
+	restartTexture.Load_Image(Images::RestartBtn);
+	resumeTexture.Load_Image(Images::ResumeBtn);
+	homeTexture.Load_Image(Images::HomeBtn);
 }
 
 void Level2_Initialize()
@@ -55,10 +58,10 @@ void Level2_Initialize()
 	playerObj.UpdateRotation(0.f);
 
 
-	pauseMenu = std::make_unique<PauseMenu>(rectMesh, true, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); });	
+	pauseMenu = std::make_unique<PauseMenu>(rectMesh, true, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level2); });
 
 	pauseMenu->SetTextures(PauseMenuTextures{ &placeholder, &cardBgTexture, &barTexture,
-		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture });
+		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture,& restartTexture, &homeTexture, &digipenFont});
 
 	//conBtn = std::make_unique<Button>(rectMesh,
 	//	AEVec2{ 0.f, 50.f }, 
@@ -92,6 +95,9 @@ void Level2_Initialize()
 	memoryManager.AddTexture(&knobMusicTexture);
 	memoryManager.AddTexture(&knobEFXTexture);
 	memoryManager.AddTexture(&cardBgTexture);
+	memoryManager.AddTexture(&restartTexture);
+	memoryManager.AddTexture(&resumeTexture);
+	memoryManager.AddTexture(&homeTexture);
 
 	if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
 	memoryManager.AddMesh(&rectMesh);
@@ -142,11 +148,11 @@ void Level2_Draw() {
 
 	if (pauseMenu) pauseMenu->Draw();
 
-	if (isGamePaused) {
-		digipenFont.Input_Text("Game Paused");
-		digipenFont.Draw_Text(AEVec2{ 0.f, 250.f }, .5f, 1.f);
-		digipenFont.Change_Text_Color(Colors::White);
-	}
+	//if (isGamePaused) {
+	//	digipenFont.Input_Text("Game Paused");
+	//	digipenFont.Draw_Text(AEVec2{ 0.f, 250.f }, .5f, 1.f);
+	//	digipenFont.Change_Text_Color(Colors::White);
+	//}
 
 	AEGfxSetTransparency(1.f);
 	//pauseUI.Draw();

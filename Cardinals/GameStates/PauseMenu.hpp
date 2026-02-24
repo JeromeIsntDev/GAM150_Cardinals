@@ -30,6 +30,10 @@ struct PauseMenuTextures
 	Texture* knobMusic = nullptr;
 	Texture* knobSFX = nullptr;
 	Texture* prevBtn = nullptr;
+	Texture* resumeBtn = nullptr;
+	Texture* restartBtn = nullptr;
+	Texture* homeBtn = nullptr;
+	Text* titleFont = nullptr;
 };
 
 class VolSlider : public UIElement
@@ -65,11 +69,17 @@ private:
 	VolSlider* _sfxSlider = nullptr;
 	Button* _prevBtn = nullptr;
 	Button* _quitBtn = nullptr;
+	Button* _restartBtn = nullptr;
+	Button* _resumeBtn = nullptr;
+	Button* _homeBtn = nullptr;
+	Text* _titleFont = nullptr;
+	const char* _titleText = "";
+	f32 _titleScale = 0.75f;
 
 public:
 
-	PauseMenu(AEGfxVertexList* mesh, bool isInGame, std::function<void()> onResume = nullptr, std::function<void()> onQuit = nullptr);
-
+	PauseMenu(AEGfxVertexList* mesh, bool isInGame, std::function<void()> onResume = nullptr, std::function<void()> onQuit = nullptr, std::function<void()> onRestart = nullptr);
+	 
 	void Update(f32 dt) override;
 	void Draw() const override;
 	void OnClick() override;
