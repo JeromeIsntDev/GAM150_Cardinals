@@ -122,12 +122,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			ImGui::SetNextWindowSize(ImVec2(400.f, 300.f), ImGuiCond_FirstUseEver);
 			ImGui::SetNextWindowPos(ImVec2(850.f, 50.f));
 			ImGui::Begin("Panel");
-			if (ImGui::Button("Test Command")) {
-				std::cout << "boat goes binted" << std::endl;
+			if (ImGui::Button("Main Menu")) {
+				std::cout << "Loading Mainmenu\n";
+				UpdateGameManagerState(GameStateEnum::MainMenu);
+				std::cout << "Mainmenu loaded";
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("Test Command 2")) {
-				std::cout << "your mom" << std::endl;
+			if (ImGui::Button("Load L1")) {
+				std::cout << "loading L1\n";
+				UpdateGameManagerState(GameStateEnum::Level1);
+				std::cout << "loaded L1\n";
 			}
 			ImGui::End();
 		}

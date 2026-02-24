@@ -28,6 +28,7 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score,
 	p_playerHealth = health;
 	p_moveSpeed = moveSpeed;
 	p_isJumping = isJump;
+	playerScore = score;
 	p_initialPos.x = xPos;
 	p_initialPos.y = yPos;
 	UpdatePosition(p_initialPos);
@@ -44,10 +45,10 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score,
 //}
 
 //Takes in the initial value of points for the code to reference during jump state
-void Player::StartJump(AEVec2 velocityVec) {
-	if (p_isJumping) return;
-
-}
+//void Player::StartJump(AEVec2 velocityVec) {
+//	if (p_isJumping) return;
+//
+//}
 //Math logic behind jump for parabola jump
 void Player::PlayerJump(f32& dt, GravityDirection& dir) {
 	if (!p_isJumping) return;

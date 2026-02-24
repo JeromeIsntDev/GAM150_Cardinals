@@ -45,6 +45,7 @@ public:
 	};
 	GravityDirection prevDir = GravityDirection::Down;
 	AEVec2 p_velocityVector{ 0.f,0.f };
+	f32 playerScore{ 0 };
 	bool p_isJumping{ true };
 	bool canMoveLeft{ true };
 	bool canMoveRight{ true };
@@ -78,7 +79,7 @@ public:
 	void PlayerCollision(std::vector<GameObject*> objs,GravityDirection&);
 	//Function for Player Jump Logic
 	//Basically the initialize values for PreJumps
-	void StartJump(AEVec2);
+	//void StartJump(AEVec2);
 	//The math and update for during the jump
 	void PlayerJump(f32&, GravityDirection&);
 };
