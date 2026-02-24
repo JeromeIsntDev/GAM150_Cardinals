@@ -4,6 +4,7 @@ extern int isGamePaused;
 
 namespace {
 	Text digipenFont;
+	Text pauseTitleFont;
 
 	Texture placeholder;
 	Texture playerTexture;
@@ -26,6 +27,8 @@ void Level2_Load() {
 	digipenFont.Load_Font(Fonts::Alt, 72.f);
 	digipenFont.Input_Text("Level 2");
 	digipenFont.Change_Text_Color(Colors::Black);
+
+	pauseTitleFont.Load_Font(Fonts::Alt, 72.f);
 
 	placeholder.Load_Image(Images::Placeholder);
 	playerTexture.Load_Image(Images::Player);
@@ -61,7 +64,7 @@ void Level2_Initialize()
 	pauseMenu = std::make_unique<PauseMenu>(rectMesh, true, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level2); });
 
 	pauseMenu->SetTextures(PauseMenuTextures{ &placeholder, &cardBgTexture, &barTexture,
-		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture,& restartTexture, &homeTexture, &digipenFont});
+		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture,& restartTexture, &homeTexture, &pauseTitleFont});
 
 	//conBtn = std::make_unique<Button>(rectMesh,
 	//	AEVec2{ 0.f, 50.f }, 
@@ -104,6 +107,7 @@ void Level2_Initialize()
 
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&digipenFont);
+	memoryManager.AddFont(&pauseTitleFont);
 }
 
 void Level2_Update() {

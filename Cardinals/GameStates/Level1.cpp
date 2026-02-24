@@ -5,7 +5,7 @@
 namespace {
 	AEGfxVertexList* squareMesh;
 	AEGfxVertexList* tileMesh;
-	Text digipenFont;
+	Text digipenFont, pauseTitleFont;
 
 	//PLAYER VARIABLES
 	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f };
@@ -31,6 +31,11 @@ namespace {
 	GameObjectIDAssigner assigner;
 	std::vector<GameObject*> levelObjList;
 	std::vector<GameObject> objData;
+
+	// PAUSE MENU
+	std::unique_ptr<PauseMenu> pauseMenu;
+	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{};
+
 	//IMGUI
 	//ControlPanel controlPanel;
 
@@ -60,12 +65,34 @@ void Level1_Load() {
 	backgrounds[2].Load_Image(Images::BG_MOUNTAIN);
 	backgrounds[3].Load_Image(Images::BG_FRONTMOUNTAIN);
 
+	// PAUSE MENU
+	pauseTitleFont.Load_Font(Fonts::Alt, 72.f);
+	prevTexture.Load_Image(Images::PrevBtn);
+	barTexture.Load_Image(Images::Bar);
+	knobMasterTexture.Load_Image(Images::KnobMaster);
+	knobMusicTexture.Load_Image(Images::KnobMusic);
+	knobEFXTexture.Load_Image(Images::KnobEFX);
+	cardBgTexture.Load_Image(Images::CardBg);
+	restartTexture.Load_Image(Images::RestartBtn);
+	resumeTexture.Load_Image(Images::ResumeBtn);
+	homeTexture.Load_Image(Images::HomeBtn);
+
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	//textures.push_back(&playerEffectTexture);
 	memoryManager.AddTexture(&playerTexture);
 	memoryManager.AddTexture(&placeholderTexture);
 	memoryManager.AddTexture(&verticalPlatformTex);
 	memoryManager.AddTexture(&horizontalPlatformTex);
+	memoryManager.AddTexture(&prevTexture);
+	memoryManager.AddTexture(&barTexture);
+	memoryManager.AddTexture(&knobMasterTexture);
+	memoryManager.AddTexture(&knobMusicTexture);
+	memoryManager.AddTexture(&knobEFXTexture);
+	memoryManager.AddTexture(&cardBgTexture);
+	memoryManager.AddTexture(&restartTexture);
+	memoryManager.AddTexture(&resumeTexture);
+	memoryManager.AddTexture(&homeTexture);
+
 	for (Texture& t : backgrounds) {
 		memoryManager.AddTexture(&t);
 	}
@@ -76,6 +103,7 @@ void Level1_Load() {
 
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&digipenFont);
+	memoryManager.AddFont(&pauseTitleFont);
 }
 
 void Level1_Initialize()
@@ -203,6 +231,12 @@ void Level1_Initialize()
 
 	levelTime = 0.f;
 
+	pauseMenu = std::make_unique<PauseMenu>(squareMesh, true, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level1); });
+
+	pauseMenu->SetTextures(PauseMenuTextures{ &placeholderTexture, &cardBgTexture, &barTexture,
+		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture,&restartTexture, &homeTexture, &pauseTitleFont });
+	isGamePaused = 0;
+
 	if (!IsUsingSaveFile()) return;
 	//Read From JSON
 	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
@@ -220,6 +254,15 @@ void Level1_Initialize()
 }
 
 void Level1_Update() {
+	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
+	if (pauseMenu) {
+		pauseMenu->Update(dt);
+		if (pauseMenu->IsActive() && input.isMouseBtnTriggered(AEVK_LBUTTON)) {
+			pauseMenu->OnClick();
+		}
+	}
+
+
 	//declare mainPlayer variable
 	//PRINT("Update: %s", "Main Menu\n");
 
@@ -228,8 +271,12 @@ void Level1_Update() {
 	AEGfxSetBackgroundColor(0.95f, 0.65f, 0.77f);
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
+
 	//controlPanel.ControlPanel_Update();
-	levelTime +=static_cast<f32>(AEFrameRateControllerGetFrameTime());
+	if (!isGamePaused) {
+		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
+	}
+	//levelTime +=static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
 	if (input.isMouseBtnPressed(AEVK_LCTRL)) {
 		if (input.isMouseBtnTriggered(AEVK_E)) ToggleEditorMode();
@@ -260,12 +307,14 @@ void Level1_Update() {
 		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-		obj.Draw();
+		//obj.Draw();
 	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+
+	if (isGamePaused) return;
 	/*PLAYER STUFF*/
 
-	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
+	//f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
 
@@ -282,6 +331,12 @@ void Level1_Update() {
 
 void Level1_Draw() {
 	//PRINT("Draw: %s", "Level 1\n");
+	
+	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
+	for (GameObject& obj : backgroundObjs) {
+		obj.Draw();
+	}
+	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
 	platform.Draw();
 
@@ -341,6 +396,8 @@ void Level1_Draw() {
 
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
+
+	if (pauseMenu) pauseMenu->Draw();
 }
 
 void Level1_Free() {
@@ -350,6 +407,7 @@ void Level1_Free() {
 
 void Level1_Unload() {
 	PRINT("Unload: %s", "Level 1\n");
-
+	pauseMenu.reset();
+	if (isGamePaused) isGamePaused = 0;
 	if (memoryManager.MassUnload()) PRINT("Unload Success!");
 }

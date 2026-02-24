@@ -74,7 +74,6 @@ private:
 	Button* _homeBtn = nullptr;
 	Text* _titleFont = nullptr;
 	const char* _titleText = "";
-	f32 _titleScale = 0.75f;
 
 public:
 

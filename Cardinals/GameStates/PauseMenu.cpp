@@ -112,7 +112,6 @@ PauseMenu::PauseMenu(AEGfxVertexList* mesh,
 
 		// level pause menu
 		_titleText = "GAME PAUSED";
-		_titleScale = 0.75f;
 
 		// restart btn
 		auto* restartBtn = new Button(commonMesh, AEVec2{ -240.f,-220.f }, 0.f, AEVec2{200.f,60.f});
@@ -154,7 +153,6 @@ PauseMenu::PauseMenu(AEGfxVertexList* mesh,
 
 		// main menu pause menu (settings)
 		_titleText = "SETTINGS";
-		_titleScale = 1.5f ;
 
 		// prev btn
 		auto* prevBtn = new Button(commonMesh, AEVec2{ 710.f, -360.f }, 0.f, AEVec2{ 120.f, 120.f });
@@ -249,7 +247,7 @@ void PauseMenu::Draw() const
 	if (_titleFont) {
 		_titleFont->Input_Text(_titleText);
 		_titleFont->Change_Text_Color(Colors::White);
-		_titleFont->Draw_Text(AEVec2{ 0.f, 220.f },_titleScale, 1.f);
+		_titleFont->Draw_Text(AEVec2{ 0.f, 220.f },.75f, 1.f);
 		//_titleFont->Change_Text_Color(Colors::White);
 	}
 

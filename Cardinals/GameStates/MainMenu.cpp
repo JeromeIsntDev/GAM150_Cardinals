@@ -17,7 +17,7 @@ extern int isGameRunning;
 namespace {
 
 	AEGfxVertexList* squareMesh;
-	Text cardinalsFont, digipenFont, tooltipFont;
+	Text cardinalsFont, digipenFont, tooltipFont, settingsFont;
 
 	Texture startTexture{}, exitTexture{}, prevTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{}, settingsTexture{}, barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{};
 	Texture menuBGTexture{};
@@ -61,6 +61,8 @@ void MainMenu_Load() {
 	exitTexture.Load_Image(Images::ExitBtn);
 	creditsTexture.Load_Image(Images::CreditsBtn);
 	settingsTexture.Load_Image(Images::SettingsBtn);
+
+	settingsFont.Load_Font(Fonts::Alt, 72.f);
 	prevTexture.Load_Image(Images::PrevBtn);
 	barTexture.Load_Image(Images::Bar);
 	knobMasterTexture.Load_Image(Images::KnobMaster);
@@ -97,6 +99,7 @@ void MainMenu_Load() {
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&cardinalsFont);
 	memoryManager.AddFont(&digipenFont);
+	memoryManager.AddFont(&settingsFont);
 }
 
 void MainMenu_Initialize()
@@ -115,7 +118,7 @@ void MainMenu_Initialize()
 	pauseMenu = std::make_unique<PauseMenu>(squareMesh, false, [](){}, nullptr);
 
 	pauseMenu->SetTextures(PauseMenuTextures{ &menuBGTexture, &cardBgTexture, &barTexture, 
-		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture,nullptr,nullptr, nullptr, &digipenFont });
+		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture,nullptr,nullptr, nullptr, &settingsFont });
 
 	// BUTTONS
 
