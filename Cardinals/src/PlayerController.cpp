@@ -24,7 +24,7 @@ the player movement etc
 
 auto& input = InputHandler::GetInstance();
 
-void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) {
+void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* newMesh, f32 xPos, f32 yPos) {
 	p_playerHealth = health;
 	p_moveSpeed = moveSpeed;
 	p_isJumping = isJump;
@@ -33,7 +33,7 @@ void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score,
 	p_initialPos.y = yPos;
 	UpdatePosition(p_initialPos);
 	p_velocityVector.y = zeroVal;
-	Player::mesh = mesh;
+	Player::mesh = newMesh;
 	p_previousPos = p_initialPos;
 }
 
