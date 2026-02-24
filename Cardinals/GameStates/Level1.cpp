@@ -11,9 +11,7 @@ namespace {
 	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f };
 	Player mainPlayer;
 	Texture playerTexture{};
-	//Texture playerEffectTexture;
-	//GameObject playerEffectObject;
-	//ParticleEffect playerEffect;
+	ParticleEffect playerEffect;
 
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
@@ -88,11 +86,7 @@ void Level1_Initialize()
 	squareMesh = RectMeshCenter();
 	assigner.currIdCount = 0;
 
-	//playerEffectObject.SetMesh(squareMesh);
-	//playerEffectObject.SetTexture(&playerEffectTexture);
-	//playerEffectObject.UpdateScale(AEVec2{ 50.f, 50.f });
-	//playerEffectObject.UpdateRotation(0.f);
-	//playerEffectObject.SetID(assigner.GetID());
+	playerEffect.Init();
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 75.f);
@@ -282,9 +276,7 @@ void Level1_Update() {
 
 	mainPlayer.PlayerCollision(levelObjList, mainPlayer.grav);
 
-	//if (playerEffect.isObjectMoving(mainPlayer.GetPosition())) {
-	//	playerEffectObject.UpdatePosition(playerEffect.Update_Particle(mainPlayer.GetPosition()));
-	//}
+	playerEffect.Update(dt, mainPlayer.GetPosition());
 
 }
 
@@ -302,10 +294,8 @@ void Level1_Draw() {
 	gravDownObj.Draw();
 	gravLeftObj.Draw();
 	gravRightObj.Draw();
-	//if (playerEffect.Change_Position()) {
-	//	playerEffectObject.UpdatePosition(playerEffect.Update_Particle(mainPlayer.GetPosition()));
-	//	playerEffectObject.Draw();
-	//}
+	
+	playerEffect.DrawParticle();
 
 	mainPlayer.Draw();
 	grid.Draw();
@@ -355,6 +345,7 @@ void Level1_Draw() {
 
 void Level1_Free() {
 	PRINT("Free: %s", "Level 1\n");
+	playerEffect.Clear();
 }
 
 void Level1_Unload() {

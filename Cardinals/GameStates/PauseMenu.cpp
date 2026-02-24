@@ -189,7 +189,8 @@ void PauseMenu::Draw() const
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.5f);
 	AEGfxSetTransparency(0.5f);
-	bg.Draw();
+	AEGfxSetTransform(GetTransform().m);
+	AEGfxMeshDraw(commonMesh, AE_GFX_MDM_TRIANGLES);
 
 	// card bg
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);

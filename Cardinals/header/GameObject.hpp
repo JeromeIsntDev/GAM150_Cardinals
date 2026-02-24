@@ -57,7 +57,6 @@ protected:
 private:
 	u64 _id;
 	void ConcatTransform();
-	AEMtx33 GetTransform() const;
 
 public:
 	GameObjectTag _tag;
@@ -89,6 +88,7 @@ public:
 	bool HoverMesh(s32 mouseX, s32 mouseY) const;
 
 	Texture* GetTexture() const { return tex; }
+	AEMtx33 GetTransform() const;
 
 	// for UI, updates behavior
 	virtual void Update(float dt) 
