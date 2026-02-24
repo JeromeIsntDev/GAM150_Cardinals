@@ -41,7 +41,6 @@ namespace {
 	//UIManager tempUI;
 	InputHandler& input = InputHandler::GetInstance();
 
-
 	Grid grid;
 }
 
@@ -309,6 +308,7 @@ void Level1_Draw() {
 	//}
 
 	mainPlayer.Draw();
+	grid.Draw();
 
 	if (IsEditorActive()) {
 		digipenFont.Input_Text("Editor Active");
@@ -317,28 +317,30 @@ void Level1_Draw() {
 			digipenFont.Input_Text("Using Save File");
 			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
 		}
-		DrawTiles();
+		DrawTileOutline();
 		DrawDebugObjects(levelObjList);
-
-		if (input.isMouseBtnTriggered(AEVK_LBUTTON)) {
+		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
+		{
 			AEVec2 mousePos{ 0.f,0.f };
-			input.getMousePos(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f || mousePos.y < 0.f || mousePos.y > 900.f) return;
+			InputHandler::GetInstance().getMousePos(mousePos.x, mousePos.y);
+			if (mousePos.x < 0.f || mousePos.x > 1600.f || 
+				mousePos.y < 0.f || mousePos.y > 900.f) return;
+			
+			GridCell* cell = grid.GetCell(mousePos.y, mousePos.x);
 
-			PRINT("%f | %f\n", mousePos.x, mousePos.y);
+			if (cell->obj != nullptr) {
+				std::cout << "Cell Filled Already!" << std::endl;
+				return;
+			}
 
 			GameObject* obj = new GameObject{};
 			obj->SetMesh(squareMesh);
 			obj->SetTexture(&placeholderTexture);
 			obj->UpdateScale({ 50.f,50.f });
+			obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
+			cell->obj = obj;
 
-			/*f32 posX = static_cast<int>(mousePos.x / 50.f) * 50.f;
-			f32 posY = static_cast<int>(mousePos.y / 50.f) * 50.f;*/
-			//obj->UpdatePosition({ posX - 775.f, 425.f - posY });
-
-			GridCell cell = grid.GetCell(mousePos.y, mousePos.x);
-			obj->UpdatePosition({cell.position.x - 800.f , 450.f - cell.position.y});
-			cell.cellObj = obj;
+			std::cout << grid.cells[cell->row][cell->column] << std::endl;
 		}
 	}
 

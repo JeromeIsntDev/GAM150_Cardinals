@@ -6,21 +6,27 @@
 #ifndef _GRID_MANAGER
 
 struct GridCell {
+	u32 column, row;
 	AEVec2 position;
-	GameObject* cellObj;
+	GameObject* obj;
+
+	GridCell();
+	~GridCell();
+
+	friend std::ostream& operator<<(std::ostream& os, const GridCell& cell);
 };
 
 struct Grid {
 	const u32 rows{ 18 };
 	const u32 columns{ 32 };
 
-	GridCell** grid;
+	GridCell** cells;
 
 	Grid();
 	~Grid();
-	void Draw();
+	void Draw() const;
 
-	GridCell GetCell(f32 x, f32 y);
+	GridCell* GetCell(f32 x, f32 y);
 };
 
 #endif // !_GRID_MANAGER

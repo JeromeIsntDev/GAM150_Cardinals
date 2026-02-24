@@ -15,8 +15,9 @@
 
 #include <AEEngine.h>
 #include <iostream>
-#include "../header/TextureManager.hpp"
-#include "../header/Physics.hpp"
+#include "MeshGenerator.hpp"
+#include "TextureManager.hpp"
+#include "Physics.hpp"
 
 enum class GameObjectTag {
 	Static,

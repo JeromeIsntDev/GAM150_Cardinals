@@ -133,6 +133,7 @@ void GameObject::UpdateScale(AEVec2 scale)
 
 void GameObject::SetMesh(AEGfxVertexList* const objectmesh)
 {
+	if(mesh) delete mesh;
 	mesh = objectmesh;
 }
 
