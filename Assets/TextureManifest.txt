@@ -1,2 +1,37 @@
 # Name, Path, Width, Height
-StartBtn, ../../Assets/Textures/Start_Button.png, 412, 120
+# AHHHHHHHHHHHHHHHHHHHH
+DigipenLogo, ../../Assets/Textures/DigiPen_WHITE.png, 1525, 445
+Player, ../../Assets/Textures/playerIdle.png, 500, 500
+# btn and knobs
+PrevBtn, ../../Assets/Textures/Previous_Button.png, 120, 120
+ExitBtn, ../../Assets/Textures/Exit_Button.png, 412, 120
+CreditsBtn, ../../Assets/Textures/Credits_Button.png, 412, 120
+YesBtn, ../../Assets/Textures/Yes_Button.png, 412, 120
+NoBtn, ../../Assets/Textures/No_Button.png, 412, 120
+PopUp, ../../Assets/Textures/PopUp.png, 412, 120
+SettingsBtn, ../../Assets/Textures/Settings_Button.png, 120, 120
+Bar, ../../Assets/Textures/Generic_Bar.png, 500, 40
+KnobMaster, ../../Assets/Textures/Master_Vol.png, 80, 80
+KnobMusic, ../../Assets/Textures/Music_Vol.png, 80, 80
+KnobEFX, ../../Assets/Textures/EFX_Vol.png, 80, 80
+CardBg, ../../Assets/Textures/RoundedSq.png, 800, 600
+ResumeBtn, ../../Assets/Textures/Resume_Button.png, 412, 120
+HomeBtn, ../../Assets/Textures/Home_Button.png, 412, 120
+RestartBtn, ../../Assets/Textures/Restart_Button.png, 412, 120
+# bg and stuff
+Background, ../../Assets/Textures/MenuBG.png, 1600, 900
+Placeholder, ../../Assets/Textures/MissingTexture.png, 1600, 900
+Button, ../../Assets/Textures/Button.png, 200, 200
+Lollipop, ../../Assets/Textures/Lollipop.png, 100, 100
+CandyBall, ../../Assets/Textures/Candy_Ball.png, 50, 50
+# game bg
+BG_BACKMOST, ../../Assets/Textures/BG_BACKMOST.png, 1600, 900
+BG_MOUNTAIN, ../../Assets/Textures/BG_BACKMOUNTAIN.png, 1600, 900
+BG_CLOUDS, ../../Assets/Textures/BG_CLOUDS.png, 1600, 900
+BG_FRONTMOUNTAIN, ../../Assets/Textures/BG_FRONTMOUNTAIN.png, 1600, 900
+# platforms
+Platform_VL, ../../Assets/Textures/platform1.png
+Platform_VM, ../../Assets/Textures/platform2.png
+Platform_VS, ../../Assets/Textures/platform3.png
+Platform_HS, ../../Assets/Textures/platform4.png
+Platform_HL, ../../Assets/Textures/platform5.png
