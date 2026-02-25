@@ -16,8 +16,11 @@
 
 #include <AEEngine.h>
 #include <vector>
-#include <string>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <map>
 
 struct Color {
     f32 r, g, b, a;
@@ -46,11 +49,13 @@ namespace Colors
 
 namespace Images
 {
+    constexpr ImageFile Test{ "../../Assets/Textures/test.png", 500.f,500.f };
+
     //constexpr ImageFile Background{ "../../Assets/Background.png", 1600.f, 900.f };
     constexpr ImageFile DigipenLogo{ "../../Assets/Textures/DigiPen_WHITE.png", 1525.f, 445.f };
-    constexpr ImageFile Player{ "../../Assets/Textures/playerIdle.PNG", 500.f,500.f };
+    constexpr ImageFile Player{ "../../Assets/Textures/playerIdle.png", 500.f,500.f };
 
-    constexpr ImageFile StartBtn{ "../../Assets/Textures/Start_Button.png", 412.f, 120.f };
+    //constexpr ImageFile StartBtn{ "../../Assets/Textures/Start_Button.png", 412.f, 120.f };
 	constexpr ImageFile PrevBtn{ "../../Assets/Textures/Previous_Button.png", 120.f, 120.f };
     constexpr ImageFile ExitBtn{ "../../Assets/Textures/Exit_Button.png", 412.f, 120.f };
     constexpr ImageFile CreditsBtn{ "../../Assets/Textures/Credits_Button.png", 412.f, 120.f };
@@ -58,7 +63,6 @@ namespace Images
     constexpr ImageFile YesBtn{ "../../Assets/Textures/Yes_Button.png", 412.f, 120.f };
     constexpr ImageFile NoBtn{ "../../Assets/Textures/No_Button.png", 412.f, 120.f };
     constexpr ImageFile PopUp{ "../../Assets/Textures/PopUp.png", 412.f, 120.f };
-
 
 	constexpr ImageFile SettingsBtn{ "../../Assets/Textures/Settings_Button.png", 120.f, 120.f };
 	constexpr ImageFile Bar{ "../../Assets/Textures/Generic_Bar.png", 500.f, 40.f };
@@ -96,22 +100,56 @@ namespace Fonts
     constexpr FontFile Readable{ "../../Assets/Fonts/alansans-font.ttf" };
 }
 
+///
+/// TEXTURE
+///
+
 class Texture
 {
 private:
+
     AEGfxTexture* _image;
     f32 _width;
     f32 _height;
-
 public:
 	void Fill_Color(const Color color);
 	void Load_Image(const ImageFile& imageFilePath);
+    void Load_Image(const std::string& path); // overload for manifest
+
     void Set_Image(f32 x, f32 y);
     void Unload_Image();
     f32 Get_Image_Width() const;
     f32 Get_Image_Height() const;
     AEGfxTexture* Get_Image() const;
 };
+
+///
+/// TEXTUREMANAGER
+///
+
+class TextureManager
+{
+private:
+    std::map<std::string, Texture> textureMap;
+
+    TextureManager() = default; // singleton
+
+public:
+
+    static TextureManager& Instance() 
+    {
+        static TextureManager instance;
+        return instance;
+    }
+
+    virtual void LoadManifest(const std::string& path);
+    Texture* Get(const std::string& name);
+    void UnloadAll();
+};
+
+///
+/// TEXTMANAGER
+///
 
 class Text {
 private:

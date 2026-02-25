@@ -42,6 +42,7 @@ f32 Texture::Get_Image_Height() const
 
 void Texture::Unload_Image()
 {
+	if (!_image) return; // already unloaded or never loaded DIE DIE DIE DIE
 	PRINT("Unload Image\n");
 	AEGfxTextureUnload(_image);
 	_image = nullptr;
@@ -52,9 +53,68 @@ AEGfxTexture* Texture::Get_Image() const
 	return _image;
 }
 
+// overloaded
+void Texture::Load_Image(const std::string& path)
+{
+	_image = AEGfxTextureLoad(path.c_str());
+	PRINT("result: %s\n", _image ? "good job bro" : "kill yourself it FAILED");
+}
+
+void TextureManager::LoadManifest(const std::string& path)
+{
+	std::ifstream file(path);
+	std::string line;
+
+	if (!file.is_open())
+	{
+		PRINT("ERROR: where tf is ur manifest?? at %s\n", path.c_str());
+		return;
+	}
+
+	while (std::getline(file, line))
+	{
+		// skip empty or lines starting with #
+		if (line.empty() || line[0] == '#') continue;
+
+		std::stringstream ss(line);
+		std::string name, filePath, width, height;
+
+		if (std::getline(ss, name, ',') &&
+			std::getline(ss, filePath, ',') &&
+			std::getline(ss, width, ',') &&
+			std::getline(ss, height))
+		{
+			name.erase(0, name.find_first_not_of(" \t"));
+			name.erase(name.find_last_not_of(" \t") + 1);
+			filePath.erase(0, filePath.find_first_not_of(" \t"));
+			filePath.erase(filePath.find_last_not_of(" \t\r\n") + 1);
+
+			textureMap[name].Load_Image(filePath);
+		}
+	}
+}
+
+Texture* TextureManager::Get(const std::string& name)
+{
+	auto it = textureMap.find(name);
+
+	if (it == textureMap.end()) 
+	{
+		PRINT("Texture not found: %s\n", name.c_str());
+		return nullptr;
+	}
+	return &it->second;
+}
+
+void TextureManager::UnloadAll()
+{
+	for (auto& pair : textureMap)
+		pair.second.Unload_Image();
+	textureMap.clear();
+}
 
 //Font
-Text::Text() 
+Text::Text()
 	:_font{ 0 }, _fontSize{}, _scale {1.f},
 	_color{ Colors::White }, _textArr{ "" } {
 

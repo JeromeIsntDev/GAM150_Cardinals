@@ -220,8 +220,8 @@ void PauseMenu::Draw() const
 
 	// dimmer
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.5f);
-	AEGfxSetTransparency(0.5f);
+	AEGfxSetColorToMultiply(0.f, 0.f, 0.f, 0.7f);
+	//AEGfxSetTransparency(0.95f);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(commonMesh, AE_GFX_MDM_TRIANGLES);
 
@@ -229,7 +229,7 @@ void PauseMenu::Draw() const
 	if (cardBG.GetTexture() != nullptr) { // guard
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
-		AEGfxSetTransparency(0.75f);
+		AEGfxSetTransparency(0.9f);
 		cardBG.Draw();
 	}
 

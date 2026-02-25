@@ -38,6 +38,35 @@ void AudioManager::Update()
 	
 }
 
+void AudioManager::LoadManifest(const std::string& path)
+{
+	std::ifstream file(path);
+	std::string line;
+
+	if (!file.is_open())
+	{
+		PRINT("ERROR: where tf is ur manifest?? at %s\n", path.c_str());
+		return;
+	}
+
+	while (std::getline(file, line))
+	{
+		// skip empty or lines starting with #
+		if (line.empty() || line[0] == '#') continue;
+
+		std::stringstream ss(line);
+		std::string name, filePath;
+
+		// parses name and path ts just like Prasanna Ghali
+		if (std::getline(ss, name, ',') && std::getline(ss, filePath))
+		{
+			filePath.erase(0, filePath.find_first_not_of(" \t"));
+			LoadAudio(name, filePath);
+		}
+	}
+}
+
+// yes. good keep this here
 void AudioManager::LoadAudio(const std::string& name, const std::string& path)
 {
 	if (audioMap.find(name) != audioMap.end()) return;
@@ -114,32 +143,4 @@ void AudioManager::Free()
 
 	audioMap.clear();
 	PRINT("Audio System Freed\n");
-}
-
-void AudioManager::LoadManifest(const std::string& path)
-{
-	std::ifstream file(path);
-	std::string line;
-
-	if (!file.is_open())
-	{
-		PRINT("ERROR: where tf is ur manifest?? at %s\n", path.c_str());
-		return;
-	}
-
-	while (std::getline(file, line))
-	{
-		// skip empty or lines starting with #
-		if (line.empty() || line[0] == '#') continue;
-
-		std::stringstream ss(line);
-		std::string name, filePath;
-
-		// parses name and path ts just like Prasanna Ghali
-		if (std::getline(ss, name, ',') && std::getline(ss, filePath))
-		{
-			filePath.erase(0, filePath.find_first_not_of(" \t"));
-			LoadAudio(name, filePath);
-		}
-	}
 }
