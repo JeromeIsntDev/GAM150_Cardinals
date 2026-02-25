@@ -19,16 +19,6 @@ namespace {
 	Texture horizontalPlatformTex;
 	Texture backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
-	/*GameObject platform;
-	GameObject wall0;
-	GameObject wall1;
-	GameObject wall2;
-	GameObject wall3;
-	GameObject winGate;
-	GameObject gravUpObj;
-	GameObject gravDownObj;
-	GameObject gravLeftObj;
-	GameObject gravRightObj;*/
 	std::vector<GameObject*> levelObjList;
 	std::vector<GameObject> objData;
 
@@ -116,18 +106,12 @@ void Level1_Load() {
 	levelObjList.clear();
 
 	for (int i{}; i < objData.size(); ++i) {
-		/*GameObject* obj = new GameObject;
-		obj->SetMesh(squareMesh);
-		obj->SetTexture(&placeholderTexture);
-		obj->UpdateScale(objData[i].GetScale());
-		obj->UpdateRotation(objData[i].GetRotation());
-		obj->UpdatePosition(objData[i].GetPosition());
-		obj->_tag = objData[i]._tag;*/
 		objData[i].SetMesh(squareMesh);
 		objData[i].SetTexture(&placeholderTexture);
 		objData[i].UpdatePosition(objData[i].GetPosition());
 
-		std::cout << objData[i];
+		PRINT("[DEBUG] Loaded => ");
+		std::cout << objData[i] << '\n';
 
 		levelObjList.push_back(&objData[i]);
 	}
