@@ -12,6 +12,7 @@ namespace {
 	Player mainPlayer;
 	Texture playerTexture{};
 	ParticleEffect playerEffect;
+	ParticleEffect gravityEffect;
 
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
@@ -124,6 +125,7 @@ void Level1_Initialize()
 	//controlPanel.ControlPanel_Initialize();
 
 	playerEffect.Init();
+	gravityEffect.Init();
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
@@ -262,6 +264,7 @@ void Level1_Update() {
 	mainPlayer.PlayerCollision(levelObjList, mainPlayer.grav);
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
+	gravityEffect.Update(dt);
 
 }
 
@@ -309,12 +312,15 @@ void Level1_Draw() {
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
 
+	gravityEffect.DrawParticle();
+
 	if (pauseMenu) pauseMenu->Draw();
 }
 
 void Level1_Free() {
 	PRINT("Free: %s", "Level 1\n");
 	playerEffect.Clear();
+	gravityEffect.Clear();
 }
 
 void Level1_Unload() {
