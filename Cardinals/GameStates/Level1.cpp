@@ -326,6 +326,7 @@ void Level1_Draw() {
 		}
 		DrawTileOutline();
 		DrawDebugObjects(levelObjList);
+		mainPlayer.DebugDraw();
 
 		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
 		{

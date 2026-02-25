@@ -161,30 +161,28 @@ void GameObject::DebugDraw() const
 {
 	switch (_tag)
 	{
-	case GameObjectTag::Static:
-		break;
-	case GameObjectTag::Dynamic:
-		break;
-	case GameObjectTag::Platform:
+	case GameObjectTag::Platform: 
 		AEGfxSetColorToMultiply(1.f, 0.f, 0.f, 0.5f);
 		break;
 	case GameObjectTag::Player:
-		AEGfxSetColorToAdd(0.f, 1.f, 1.f, 0.f);
+		AEGfxSetColorToAdd(0.f, .25f, .25f, 0.f);
 		break;
 	case GameObjectTag::Win:
 		AEGfxSetColorToMultiply(0.f, 3.f, 0.f, 0.5f);
 		break;
 	case GameObjectTag::GravUp:
-		AEGfxSetColorToMultiply(0.f, 0.f, 1.f, 0.5f);
+		AEGfxSetColorToAdd(0.f, .65f, 0.f, 0.f);
+		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
 		break;
 	case GameObjectTag::GravDown:
-		AEGfxSetColorToMultiply(0.f, 0.f, 1.f, 0.5f);
+		AEGfxSetColorToAdd(.65f, 0.f, 0.f, 0.f);
+		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
 		break;
 	case GameObjectTag::GravLeft:
-		AEGfxSetColorToMultiply(0.f, 0.f, 1.f, 0.5f);
+		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
 		break;
 	case GameObjectTag::Gravright:
-		AEGfxSetColorToMultiply(0.f, 0.f, 1.f, 0.5f);
+		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
 		break;
 	default:
 		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.5f);

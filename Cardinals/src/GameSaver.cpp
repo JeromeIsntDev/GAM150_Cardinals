@@ -13,6 +13,7 @@ GameObject DeserializeGameObject(const rapidjson::Value& v) {
         obj.UpdatePosition(AEVec2{ v["posx"].GetFloat(), v["posy"].GetFloat() });
         obj.UpdateRotation(v["rot"].GetFloat());
         obj.UpdateScale(AEVec2{ v["scalex"].GetFloat(), v["scaley"].GetFloat() });
+        obj._tag = static_cast<GameObjectTag>(v["typetag"].GetInt());
     }
     else {
         PRINT("[ERROR]: Not deserializing correctly!");
