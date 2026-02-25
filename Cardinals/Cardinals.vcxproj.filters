@@ -33,6 +33,7 @@
     <ClCompile Include="src\ParticleEffect.cpp" />
     <ClCompile Include="src\MemoryManager.cpp" />
     <ClCompile Include="src\GridManager.cpp" />
+    <ClCompile Include="src\SpritesheetHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -105,6 +106,7 @@
     <ClInclude Include="header\ParticleEffect.hpp" />
     <ClInclude Include="header\MemoryManager.hpp" />
     <ClInclude Include="header\GridManager.hpp" />
+    <ClInclude Include="header\SpritesheetHandler.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />

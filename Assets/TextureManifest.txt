@@ -1,0 +1,2 @@
+# Name, Path, Width, Height
+StartBtn, ../../Assets/Textures/Start_Button.png, 412, 120

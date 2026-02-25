@@ -39,6 +39,7 @@ namespace {
 	std::unique_ptr<Button> settingsBtn;
 
 	AudioManager& bgm = AudioManager::Instance();
+	TextureManager& tex = TextureManager::Instance();
 	InputHandler& input = InputHandler::GetInstance();
 }
 
@@ -57,7 +58,7 @@ void MainMenu_Load() {
 
 	menuBGTexture.Load_Image(Images::Background);
 	tex_digipenLogo.Load_Image(Images::DigipenLogo);
-	startTexture.Load_Image(Images::StartBtn);
+	//startTexture.Load_Image(Images::StartBtn);
 	exitTexture.Load_Image(Images::ExitBtn);
 	creditsTexture.Load_Image(Images::CreditsBtn);
 	settingsTexture.Load_Image(Images::SettingsBtn);
@@ -106,6 +107,8 @@ void MainMenu_Initialize()
 {
 	bgm.Init();
 	bgm.LoadManifest("../../Assets/AudioManifest.txt");
+	tex.LoadManifest("../../Assets/TextureManifest.txt");
+
 	// play the bgm for the main menu, looped
 	bgm.PlayAudio("BGM", AudioType::MUSIC, 1.f, -1);
 
@@ -122,8 +125,9 @@ void MainMenu_Initialize()
 
 	// BUTTONS
 
-	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-	startBtn->SetTexture(&startTexture); startBtn->SetActive(true); startBtn->SetInteractable(true);
+	// follow startbtn
+	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ 412.f, 120.f });
+	startBtn->SetTexture(tex.Get("StartBtn")); startBtn->SetActive(true); startBtn->SetInteractable(true);
 	startBtn->SetTooltipText("ur mom");
 
 	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
@@ -283,6 +287,7 @@ void MainMenu_Free() {
 void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
 	pauseMenu.reset();
+	tex.UnloadAll(); // uhdhrgjdfg memleak jumpscare i'll integrate this another time
 
 	if (memoryManager.MassUnload()) PRINT("Unload Success");
 }
