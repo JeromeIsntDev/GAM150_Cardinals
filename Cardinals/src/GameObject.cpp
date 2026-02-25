@@ -152,6 +152,7 @@ void GameObject::Draw() const
 
 void GameObject::DrawSprite(f32 offX, f32 offY) const
 {
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxTextureSet(tex->Get_Image(), offX, offY);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);

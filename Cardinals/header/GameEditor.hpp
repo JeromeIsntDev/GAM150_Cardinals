@@ -19,12 +19,15 @@
 #include "GameSaver.hpp"
 #include "MeshGenerator.hpp"
 #include "GridManager.hpp"
+#include "TextureManager.hpp"
 
 namespace {
 	bool canEdit = false;
 	bool useSaveFile = false;
 	GameObject lineObject;
 	AEGfxVertexList* lineMesh;
+	int tileTag;
+	Texture editorText;
 }
 
 void InitializeEditor();
@@ -32,6 +35,7 @@ void ClearEditorMemory();
 
 void DragObject(std::vector<GameObject*> objs);
 void DrawDebugObjects(std::vector<GameObject*> objs);
+void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs);
 void DrawTileOutline();
 
 void ToggleEditorMode();

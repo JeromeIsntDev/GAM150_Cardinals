@@ -28,7 +28,9 @@ enum class GameObjectTag {
 	GravUp,
 	GravDown,
 	GravLeft,
-	Gravright
+	Gravright,
+
+	GameObjectTagNumber
 };
 
 class GameObject {

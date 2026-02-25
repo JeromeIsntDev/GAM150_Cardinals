@@ -1,6 +1,5 @@
 #include "GameEditor.hpp"
 
-
 void InitializeEditor()
 {
 	lineObject.SetMesh(lineMesh = RectMeshCenter());
@@ -9,6 +8,7 @@ void InitializeEditor()
 void ClearEditorMemory()
 {
 	AEGfxMeshFree(lineMesh);
+	editorText.Unload_Image();
 }
 
 void DragObject(std::vector<GameObject*> objs)
@@ -67,6 +67,55 @@ void DrawDebugObjects(std::vector<GameObject*> objs) {
 	for (GameObject* obj : objs) {
 		obj->DebugDraw();
 	}
+}
+
+void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs)
+{
+	AEVec2 mousePos{ 0.f,0.f };
+	InputHandler::GetInstance().getMousePos(mousePos.x, mousePos.y);
+	if (mousePos.x < 0.f || mousePos.x > 1600.f ||
+		mousePos.y < 0.f || mousePos.y > 900.f) return;
+
+	GridCell* cell = grid->GetCell(mousePos.y, mousePos.x);
+
+	if (cell->obj != nullptr) {
+		std::cout << "Cell Filled Already!" << std::endl;
+		return;
+	}
+
+	editorText.Unload_Image();
+
+	PRINT("%d", static_cast<GameObjectTag>(tileTag));
+	switch (static_cast<GameObjectTag>(tileTag))
+	{
+	case GameObjectTag::GravUp:
+		PRINT("GRAVUP TILE");
+		editorText.Load_Image(Images::Lollipop);
+		break;
+	case GameObjectTag::GravDown:
+		editorText.Load_Image(Images::Lollipop);
+		break;
+	case GameObjectTag::GravLeft:
+		editorText.Load_Image(Images::Lollipop);
+		break;
+	case GameObjectTag::Gravright:
+		editorText.Load_Image(Images::Lollipop);
+		break;
+	default:
+		editorText.Load_Image(Images::Placeholder);
+		break;
+	}
+
+	GameObject* obj = new GameObject{};
+	obj->SetMesh(lineMesh);
+	obj->SetTexture(&editorText);
+	obj->UpdateScale({ 50.f,50.f });
+	obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
+	obj->_tag = static_cast<GameObjectTag>(tileTag);
+	cell->obj = obj;
+	objs.push_back(obj);
+
+	std::cout << *grid->cells[cell->row][cell->column].obj << std::endl;
 }
 
 void SaveGameObjectToFilepath(std::string filepathSave, std::vector<GameObject*> objs)

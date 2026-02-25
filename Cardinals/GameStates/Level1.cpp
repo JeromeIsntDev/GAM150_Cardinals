@@ -134,78 +134,6 @@ void Level1_Initialize()
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer._tag = GameObjectTag::Player;
 
-	/*platform.SetMesh(squareMesh);
-	platform.SetTexture(&verticalPlatformTex);
-	platform.UpdateScale(AEVec2{ 450.f,200.f });
-	platform.UpdateRotation(0.f);
-	platform.UpdatePosition(AEVec2{ AEGfxGetWinMinX() + 200.f, -100.f});
-	platform._tag = GameObjectTag::Platform;
-
-	wall0.SetMesh(squareMesh);
-	wall0.SetTexture(&horizontalPlatformTex);
-	wall0.UpdateScale(AEVec2{ 150.f,300.f });
-	wall0.UpdateRotation(0.f);
-	wall0.UpdatePosition(AEVec2{ 500.f, -200.f });
-	
-	wall1.SetMesh(squareMesh);
-	wall1.SetTexture(&horizontalPlatformTex);
-	wall1.UpdateScale(AEVec2{ 250.f,500.f });
-	wall1.UpdateRotation(0.f);
-	wall1.UpdatePosition(AEVec2{ 200.f, -200.f });
-
-	wall2.SetMesh(squareMesh);
-	wall2.SetTexture(&verticalPlatformTex);
-	wall2.UpdateScale(AEVec2{ 500.f,100.f });
-	wall2.UpdateRotation(0.f);
-	wall2.UpdatePosition(AEVec2{ 0.f, -200.f });
-
-	wall3.SetMesh(squareMesh);
-	wall3.SetTexture(&verticalPlatformTex);
-	wall3.UpdateScale(AEVec2{ 500.f,100.f });
-	wall3.UpdateRotation(0.f);
-	wall3.UpdatePosition(AEVec2{ 500.f, 200.f });
-
-	wall0._tag = GameObjectTag::Platform;
-	wall1._tag = GameObjectTag::Platform;
-	wall2._tag = GameObjectTag::Platform;
-	wall3._tag = GameObjectTag::Platform;
-
-	winGate.SetMesh(squareMesh);
-	winGate.SetTexture(&placeholderTexture);
-	winGate.UpdateScale(AEVec2{ 100.f,200.f });
-	winGate.UpdateRotation(0.f);
-	winGate.UpdatePosition(AEVec2{ 300.f,300.f });
-	winGate._tag = GameObjectTag::Win;
-
-	gravUpObj.SetMesh(squareMesh);
-	gravUpObj.SetTexture(&placeholderTexture);
-	gravUpObj.UpdateScale(AEVec2{ 150.f,50.f });
-	gravUpObj.UpdateRotation(0.f);
-	gravUpObj.UpdatePosition(AEVec2{ 50.f,50.f });
-	gravUpObj._tag = GameObjectTag::GravUp;
-
-	gravDownObj.SetMesh(squareMesh);
-	gravDownObj.SetTexture(&placeholderTexture);
-	gravDownObj.UpdateScale(AEVec2{ 150.f,50.f });
-	gravDownObj.UpdateRotation(0.f);
-	gravDownObj.UpdatePosition(AEVec2{ 200.f,50.f });
-	gravDownObj._tag = GameObjectTag::GravDown;
-
-	gravLeftObj.SetMesh(squareMesh);
-	gravLeftObj.SetTexture(&placeholderTexture);
-	gravLeftObj.UpdateScale(AEVec2{ 50.f,150.f });
-	gravLeftObj.UpdateRotation(0.f);
-	gravLeftObj.UpdatePosition(AEVec2{ 0,50.f });
-	gravLeftObj._tag = GameObjectTag::GravLeft;
-
-	gravRightObj.SetMesh(squareMesh);
-	gravRightObj.SetTexture(&placeholderTexture);
-	gravRightObj.UpdateScale(AEVec2{ 50.f,150.f });
-	gravRightObj.UpdateRotation(0.f);
-	gravRightObj.UpdatePosition(AEVec2{ -200.f,50.f });
-	gravRightObj._tag = GameObjectTag::Gravright;*/
-
-
 	for (int i{}; i < 4; ++i) {
 		GameObject* obj = &backgroundObjs[i];
 		obj->SetMesh(squareMesh);
@@ -251,21 +179,57 @@ void Level1_Update() {
 	}
 	//levelTime +=static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
-	if (input.isMouseBtnPressed(AEVK_LCTRL)) {
+	if(!IsEditorActive())
 		if (input.isMouseBtnTriggered(AEVK_E)) ToggleEditorMode();
-		if (IsEditorActive()) {
 
-			//DragObject(levelObjList);
+	if (IsEditorActive()) {
+		
+		//DragObject(levelObjList);
 
-			if (input.isMouseBtnTriggered(AEVK_R))
-				RestartLevel(UpdateGameManagerState, Level1);
+		if (input.isKeyTriggered(AEVK_LEFT)) {
 
-			if (input.isMouseBtnTriggered(AEVK_S))
-				SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", levelObjList);
-
-			if (input.isMouseBtnTriggered(AEVK_Q))
-				ToggleSaveFileMode();
+			--tileTag;
 		}
+		else if (input.isKeyTriggered(AEVK_RIGHT)) {
+			++tileTag;
+		}
+
+		if (input.isMouseBtnTriggered(AEVK_R))
+			RestartLevel(UpdateGameManagerState, Level1);
+
+		if (input.isMouseBtnTriggered(AEVK_S))
+			SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", levelObjList);
+
+		if (input.isMouseBtnTriggered(AEVK_Q))
+			ToggleSaveFileMode();
+
+		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
+			SpawnNewTile(&grid, levelObjList);
+
+		/*if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
+		{
+			AEVec2 mousePos{ 0.f,0.f };
+			InputHandler::GetInstance().getMousePos(mousePos.x, mousePos.y);
+			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
+				mousePos.y < 0.f || mousePos.y > 900.f) return;
+
+			GridCell* cell = grid.GetCell(mousePos.y, mousePos.x);
+
+			if (cell->obj != nullptr) {
+				std::cout << "Cell Filled Already!" << std::endl;
+				return;
+			}
+
+			GameObject* obj = new GameObject{};
+			obj->SetMesh(squareMesh);
+			obj->SetTexture(&placeholderTexture);
+			obj->UpdateScale({ 50.f,50.f });
+			obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
+			cell->obj = obj;
+			levelObjList.push_back(obj);
+
+			std::cout << grid.cells[cell->row][cell->column] << std::endl;
+		}*/
 	}
 
 
@@ -319,7 +283,15 @@ void Level1_Draw() {
 
 	if (IsEditorActive()) {
 		digipenFont.Input_Text("Editor Active");
-		digipenFont.Draw_Text(AEVec2{ -650.f, 430.f }, .5f, 1.f);
+		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
+
+		
+		digipenFont.Input_Text("Tile Active: ");
+		digipenFont.Draw_Text(AEVec2{ -100.f, -415.f }, .5f, 1.f);
+		digipenFont.Input_Float(static_cast<int>(tileTag));
+		digipenFont.Draw_Text(AEVec2{ 10.f, -415.f }, .5f, 1.f);
+
+
 		if (IsUsingSaveFile()) {
 			digipenFont.Input_Text("Using Save File");
 			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
@@ -327,30 +299,6 @@ void Level1_Draw() {
 		DrawTileOutline();
 		DrawDebugObjects(levelObjList);
 		mainPlayer.DebugDraw();
-
-		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
-		{
-			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().getMousePos(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f || 
-				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			
-			GridCell* cell = grid.GetCell(mousePos.y, mousePos.x);
-
-			if (cell->obj != nullptr) {
-				std::cout << "Cell Filled Already!" << std::endl;
-				return;
-			}
-
-			GameObject* obj = new GameObject{};
-			obj->SetMesh(squareMesh);
-			obj->SetTexture(&placeholderTexture);
-			obj->UpdateScale({ 50.f,50.f });
-			obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
-			cell->obj = obj;
-			levelObjList.push_back(obj);
-			std::cout << grid.cells[cell->row][cell->column] << std::endl;
-		}
 	}
 
 	digipenFont.Input_Text("Time: ");
