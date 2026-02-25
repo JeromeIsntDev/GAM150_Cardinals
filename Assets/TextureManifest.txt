@@ -3,6 +3,7 @@
 DigipenLogo, ../../Assets/Textures/DigiPen_WHITE.png, 1525, 445
 Player, ../../Assets/Textures/playerIdle.png, 500, 500
 # btn and knobs
+StartBtn, ../../Assets/Textures/Start_Button.png, 412, 120
 PrevBtn, ../../Assets/Textures/Previous_Button.png, 120, 120
 ExitBtn, ../../Assets/Textures/Exit_Button.png, 412, 120
 CreditsBtn, ../../Assets/Textures/Credits_Button.png, 412, 120
