@@ -56,7 +56,9 @@ public:
 
     void Init();
     void Emit(AEVec2 position);
+    void Emit();
     void Update(float dt, AEVec2 position);
+    void Update(float dt);
     void DrawParticle();
     void Clear();
 };

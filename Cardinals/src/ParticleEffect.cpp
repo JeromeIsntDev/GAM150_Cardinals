@@ -63,6 +63,26 @@ void ParticleEffect::Emit(AEVec2 position)
     }
 }
 
+void ParticleEffect::Emit()
+{
+    for (int i = 0; i < MAX_PARTICLES; i++)
+    {
+        if (particles[i].flag) continue; // skip active ones
+        float posX = - 800.f + ((float)rand() / RAND_MAX) * 1600.f;
+        ParticleObjInst* p = &particles[i];
+        p->flag = true;
+        p->pos = { posX, -451.f };
+        p->scale.x = 5.f + ((float)rand() / RAND_MAX) * 5.f;
+        p->scale.y = p->scale.x;
+        p->lifetime = 1.f + ((float)rand() / RAND_MAX) * 3.f;
+        p->lifeRemaining = p->lifetime;
+        p->alpha = 1.0f;
+        p->speed = 40.f + ((float)rand() / RAND_MAX) * 70.f;
+        p->color = palette[rand() % 6];
+        break; // spawn one per frame to stagger them
+    }
+}
+
 void ParticleEffect::Update(float dt, AEVec2 playerPos)
 {
     // only emit if player is actually moving
@@ -86,6 +106,25 @@ void ParticleEffect::Update(float dt, AEVec2 playerPos)
         Emit(playerPos);
 
     playerPrevPos = playerPos;
+}
+
+void ParticleEffect::Update(float dt)
+{
+
+    for (int i = 0; i < MAX_PARTICLES; i++)
+    {
+        ParticleObjInst* p = &particles[i];
+        if (!p->flag) continue;
+
+        p->lifeRemaining -= dt;
+        p->alpha = p->lifeRemaining / p->lifetime;
+        p->pos.y += p->speed * dt;
+
+        if (p->lifeRemaining <= 0.f)
+            p->flag = false;
+    }
+
+    Emit();
 }
 
 void ParticleEffect::DrawParticle()
