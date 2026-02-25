@@ -15,10 +15,11 @@ namespace {
 
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
-	Texture verticalPlatformTex, horizontalPlatformTex;
+	Texture verticalPlatformTex;
+	Texture horizontalPlatformTex;
 	Texture backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
-	GameObject platform;
+	/*GameObject platform;
 	GameObject wall0;
 	GameObject wall1;
 	GameObject wall2;
@@ -27,8 +28,7 @@ namespace {
 	GameObject gravUpObj;
 	GameObject gravDownObj;
 	GameObject gravLeftObj;
-	GameObject gravRightObj;
-	GameObjectIDAssigner assigner;
+	GameObject gravRightObj;*/
 	std::vector<GameObject*> levelObjList;
 	std::vector<GameObject> objData;
 
@@ -49,6 +49,7 @@ namespace {
 
 void Level1_Load() {
 	PRINT("Load: %s", "Level 1\n");
+
 	digipenFont.Load_Font(Fonts::Alt, 72.f);
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Change_Text_Color(Colors::Black);
@@ -63,7 +64,7 @@ void Level1_Load() {
 	backgrounds[0].Load_Image(Images::BG_BACKMOST);
 	backgrounds[1].Load_Image(Images::BG_CLOUDS);
 	backgrounds[2].Load_Image(Images::BG_MOUNTAIN);
-	backgrounds[3].Load_Image(Images::BG_FRONTMOUNTAIN);
+	backgrounds[3].Load_Image(Images::BG_FRONTMOUNTAIN); 
 
 	// PAUSE MENU
 	pauseTitleFont.Load_Font(Fonts::Alt, 72.f);
@@ -79,19 +80,22 @@ void Level1_Load() {
 
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	//textures.push_back(&playerEffectTexture);
-	memoryManager.AddTexture(&playerTexture);
-	memoryManager.AddTexture(&placeholderTexture);
-	memoryManager.AddTexture(&verticalPlatformTex);
-	memoryManager.AddTexture(&horizontalPlatformTex);
-	memoryManager.AddTexture(&prevTexture);
-	memoryManager.AddTexture(&barTexture);
-	memoryManager.AddTexture(&knobMasterTexture);
-	memoryManager.AddTexture(&knobMusicTexture);
-	memoryManager.AddTexture(&knobEFXTexture);
-	memoryManager.AddTexture(&cardBgTexture);
-	memoryManager.AddTexture(&restartTexture);
-	memoryManager.AddTexture(&resumeTexture);
-	memoryManager.AddTexture(&homeTexture);
+	
+	memoryManager.AddTextures({
+			&playerTexture,
+			& placeholderTexture,
+			&verticalPlatformTex,
+			&horizontalPlatformTex,
+			&prevTexture,
+			&barTexture,
+			&knobMasterTexture,
+			&knobMusicTexture,
+			&knobEFXTexture,
+			&cardBgTexture,
+			&restartTexture,
+			&resumeTexture,
+			&homeTexture,
+		});
 
 	for (Texture& t : backgrounds) {
 		memoryManager.AddTexture(&t);
@@ -104,6 +108,29 @@ void Level1_Load() {
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&digipenFont);
 	memoryManager.AddFont(&pauseTitleFont);
+
+	squareMesh = RectMeshCenter();
+
+	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
+
+	levelObjList.clear();
+
+	for (int i{}; i < objData.size(); ++i) {
+		/*GameObject* obj = new GameObject;
+		obj->SetMesh(squareMesh);
+		obj->SetTexture(&placeholderTexture);
+		obj->UpdateScale(objData[i].GetScale());
+		obj->UpdateRotation(objData[i].GetRotation());
+		obj->UpdatePosition(objData[i].GetPosition());
+		obj->_tag = objData[i]._tag;*/
+		objData[i].SetMesh(squareMesh);
+		objData[i].SetTexture(&placeholderTexture);
+		objData[i].UpdatePosition(objData[i].GetPosition());
+
+		std::cout << objData[i];
+
+		levelObjList.push_back(&objData[i]);
+	}
 }
 
 void Level1_Initialize()
@@ -111,22 +138,20 @@ void Level1_Initialize()
 	PRINT("Initialize: %s", "Level 1\n");
 
 	//controlPanel.ControlPanel_Initialize();
-	squareMesh = RectMeshCenter();
-	assigner.currIdCount = 0;
 
 	playerEffect.Init();
 
 	//Player Init
-	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 75.f);
+	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 75.f);
+	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture);
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
 	mainPlayer.UpdateRotation(0.f);
-	mainPlayer.SetID(assigner.GetID());
 	mainPlayer._tag = GameObjectTag::Player;
 
-	platform.SetMesh(squareMesh);
+	/*platform.SetMesh(squareMesh);
 	platform.SetTexture(&verticalPlatformTex);
-	platform.SetID(assigner.GetID());
 	platform.UpdateScale(AEVec2{ 450.f,200.f });
 	platform.UpdateRotation(0.f);
 	platform.UpdatePosition(AEVec2{ AEGfxGetWinMinX() + 200.f, -100.f});
@@ -134,28 +159,24 @@ void Level1_Initialize()
 
 	wall0.SetMesh(squareMesh);
 	wall0.SetTexture(&horizontalPlatformTex);
-	wall0.SetID(assigner.GetID());
 	wall0.UpdateScale(AEVec2{ 150.f,300.f });
 	wall0.UpdateRotation(0.f);
 	wall0.UpdatePosition(AEVec2{ 500.f, -200.f });
 	
 	wall1.SetMesh(squareMesh);
 	wall1.SetTexture(&horizontalPlatformTex);
-	wall1.SetID(assigner.GetID());
 	wall1.UpdateScale(AEVec2{ 250.f,500.f });
 	wall1.UpdateRotation(0.f);
 	wall1.UpdatePosition(AEVec2{ 200.f, -200.f });
 
 	wall2.SetMesh(squareMesh);
 	wall2.SetTexture(&verticalPlatformTex);
-	wall2.SetID(assigner.GetID());
 	wall2.UpdateScale(AEVec2{ 500.f,100.f });
 	wall2.UpdateRotation(0.f);
 	wall2.UpdatePosition(AEVec2{ 0.f, -200.f });
 
 	wall3.SetMesh(squareMesh);
 	wall3.SetTexture(&verticalPlatformTex);
-	wall3.SetID(assigner.GetID());
 	wall3.UpdateScale(AEVec2{ 500.f,100.f });
 	wall3.UpdateRotation(0.f);
 	wall3.UpdatePosition(AEVec2{ 500.f, 200.f });
@@ -167,7 +188,6 @@ void Level1_Initialize()
 
 	winGate.SetMesh(squareMesh);
 	winGate.SetTexture(&placeholderTexture);
-	winGate.SetID(assigner.GetID());
 	winGate.UpdateScale(AEVec2{ 100.f,200.f });
 	winGate.UpdateRotation(0.f);
 	winGate.UpdatePosition(AEVec2{ 300.f,300.f });
@@ -175,7 +195,6 @@ void Level1_Initialize()
 
 	gravUpObj.SetMesh(squareMesh);
 	gravUpObj.SetTexture(&placeholderTexture);
-	gravUpObj.SetID(assigner.GetID());
 	gravUpObj.UpdateScale(AEVec2{ 150.f,50.f });
 	gravUpObj.UpdateRotation(0.f);
 	gravUpObj.UpdatePosition(AEVec2{ 50.f,50.f });
@@ -183,7 +202,6 @@ void Level1_Initialize()
 
 	gravDownObj.SetMesh(squareMesh);
 	gravDownObj.SetTexture(&placeholderTexture);
-	gravDownObj.SetID(assigner.GetID());
 	gravDownObj.UpdateScale(AEVec2{ 150.f,50.f });
 	gravDownObj.UpdateRotation(0.f);
 	gravDownObj.UpdatePosition(AEVec2{ 200.f,50.f });
@@ -191,7 +209,6 @@ void Level1_Initialize()
 
 	gravLeftObj.SetMesh(squareMesh);
 	gravLeftObj.SetTexture(&placeholderTexture);
-	gravLeftObj.SetID(assigner.GetID());
 	gravLeftObj.UpdateScale(AEVec2{ 50.f,150.f });
 	gravLeftObj.UpdateRotation(0.f);
 	gravLeftObj.UpdatePosition(AEVec2{ 0,50.f });
@@ -199,11 +216,10 @@ void Level1_Initialize()
 
 	gravRightObj.SetMesh(squareMesh);
 	gravRightObj.SetTexture(&placeholderTexture);
-	gravRightObj.SetID(assigner.GetID());
 	gravRightObj.UpdateScale(AEVec2{ 50.f,150.f });
 	gravRightObj.UpdateRotation(0.f);
 	gravRightObj.UpdatePosition(AEVec2{ -200.f,50.f });
-	gravRightObj._tag = GameObjectTag::Gravright;
+	gravRightObj._tag = GameObjectTag::Gravright;*/
 
 
 	for (int i{}; i < 4; ++i) {
@@ -215,19 +231,6 @@ void Level1_Initialize()
 		obj->UpdatePosition(AEVec2{ 0.f, 0.f });
 	}
 
-	levelObjList.clear();
-	levelObjList.push_back(&mainPlayer);
-	levelObjList.push_back(&platform);
-	levelObjList.push_back(&wall0);
-	levelObjList.push_back(&wall1);
-	levelObjList.push_back(&wall2);
-	levelObjList.push_back(&wall3);
-	levelObjList.push_back(&winGate);
-	levelObjList.push_back(&gravUpObj);
-	levelObjList.push_back(&gravDownObj);
-	levelObjList.push_back(&gravLeftObj);
-	levelObjList.push_back(&gravRightObj);
-
 
 	levelTime = 0.f;
 
@@ -236,21 +239,7 @@ void Level1_Initialize()
 	pauseMenu->SetTextures(PauseMenuTextures{ &placeholderTexture, &cardBgTexture, &barTexture,
 		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture,&restartTexture, &homeTexture, &pauseTitleFont });
 	isGamePaused = 0;
-
-	if (!IsUsingSaveFile()) return;
 	//Read From JSON
-	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
-
-	for (int i{}; i < objData.size(); ++i) {
-		for (int j{}; j < levelObjList.size(); ++j) {
-			if (objData[i].GetID() == levelObjList[j]->GetID()) {
-				GameObject* curr = levelObjList[j];
-				curr->UpdatePosition(objData[i].GetPosition());
-				curr->UpdateRotation(objData[i].GetRotation());
-				curr->UpdateScale(objData[i].GetScale());
-			}
-		}
-	}
 }
 
 void Level1_Update() {
@@ -282,7 +271,7 @@ void Level1_Update() {
 		if (input.isMouseBtnTriggered(AEVK_E)) ToggleEditorMode();
 		if (IsEditorActive()) {
 
-			DragObject(levelObjList);
+			//DragObject(levelObjList);
 
 			if (input.isMouseBtnTriggered(AEVK_R))
 				RestartLevel(UpdateGameManagerState, Level1);
@@ -307,7 +296,6 @@ void Level1_Update() {
 		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-		//obj.Draw();
 	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -337,23 +325,13 @@ void Level1_Draw() {
 		obj.Draw();
 	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-
-	platform.Draw();
-
-	wall0.Draw();
-	wall1.Draw();
-	wall2.Draw();
-	wall3.Draw();
-	winGate.Draw();
-	gravUpObj.Draw();
-	gravDownObj.Draw();
-	gravLeftObj.Draw();
-	gravRightObj.Draw();
-	
-	playerEffect.DrawParticle();
+	for (GameObject* obj : levelObjList) {
+		obj->Draw();
+	}
+	levelObjList[0]->Draw();
 
 	mainPlayer.Draw();
-	grid.Draw();
+	playerEffect.DrawParticle();
 
 	if (IsEditorActive()) {
 		digipenFont.Input_Text("Editor Active");
@@ -364,6 +342,7 @@ void Level1_Draw() {
 		}
 		DrawTileOutline();
 		DrawDebugObjects(levelObjList);
+
 		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
 		{
 			AEVec2 mousePos{ 0.f,0.f };
@@ -384,7 +363,7 @@ void Level1_Draw() {
 			obj->UpdateScale({ 50.f,50.f });
 			obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
 			cell->obj = obj;
-
+			levelObjList.push_back(obj);
 			std::cout << grid.cells[cell->row][cell->column] << std::endl;
 		}
 	}

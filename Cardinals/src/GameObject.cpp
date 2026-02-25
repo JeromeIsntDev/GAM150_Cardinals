@@ -98,16 +98,6 @@ AEVec2 GameObject::GetScale() const {
 	return globalScale;
 }
 
-void GameObject::SetID(u64 id)
-{
-	_id = id;
-}
-
-u64 GameObject::GetID() const
-{
-	return _id;
-}
-
 void GameObject::UpdatePosition(AEVec2 pos)
 {
 	globalPosition = pos;
@@ -212,9 +202,9 @@ bool GameObject::IsChild() const {
 }
 
 std::ostream& operator<<(std::ostream& os, const GameObject& go) {
-	os	<< "GameObject[" << go._id << "]: "
-		<< "Position: " << go.globalPosition.x << "," << go.globalPosition.y << "|"
-		<< "Rotation: " << go.globalRotation << "|"
-		<< "Scale: " << go.globalScale.x << "," << go.globalScale.y;
+	os	
+	<< "Position: " << go.globalPosition.x << "," << go.globalPosition.y << "|"
+	<< "Rotation: " << go.globalRotation << "|"
+	<< "Scale: " << go.globalScale.x << "," << go.globalScale.y;
 	return os;
 }

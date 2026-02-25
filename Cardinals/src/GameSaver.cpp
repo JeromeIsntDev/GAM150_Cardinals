@@ -4,16 +4,18 @@
 GameObject DeserializeGameObject(const rapidjson::Value& v) {
     GameObject obj;
 
-    if (   v.HasMember("id")
-        && v.HasMember("posx") && v.HasMember("posy") 
+    if (   v.HasMember("posx") && v.HasMember("posy") 
         && v.HasMember("rot")
         && v.HasMember("scalex") && v.HasMember("scaley")
+        && v.HasMember("typetag")
         )
     {
-        obj.SetID(v["id"].GetUint64());
         obj.UpdatePosition(AEVec2{ v["posx"].GetFloat(), v["posy"].GetFloat() });
         obj.UpdateRotation(v["rot"].GetFloat());
         obj.UpdateScale(AEVec2{ v["scalex"].GetFloat(), v["scaley"].GetFloat() });
+    }
+    else {
+        PRINT("[ERROR]: Not deserializing correctly!");
     }
 
     return obj;
@@ -55,12 +57,12 @@ rapidjson::Value SerializeGameObject(
 ) {
     rapidjson::Value v(rapidjson::kObjectType);
 
-    v.AddMember("id",     obj->GetID(), allocator);
     v.AddMember("posx",   obj->GetPosition().x, allocator);
     v.AddMember("posy",   obj->GetPosition().y, allocator);
     v.AddMember("rot",    obj->GetRotation(), allocator);
     v.AddMember("scalex", obj->GetScale().x, allocator);
     v.AddMember("scaley", obj->GetScale().y, allocator);
+    v.AddMember("typetag", static_cast<int>(obj->_tag), allocator);
 
     return v; // moved, not copied
 }

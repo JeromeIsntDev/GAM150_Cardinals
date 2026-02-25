@@ -1,76 +1,44 @@
 {
   "gameObjects": [
     {
-      "id": 0,
-      "posx": -600.0,
-      "posy": 25.0,
+      "posx": -575.0,
+      "posy": -75.0,
       "rot": 0.0,
       "scalex": 50.0,
-      "scaley": 50.0
+      "scaley": 50.0,
+      "typetag": 0
     },
     {
-      "id": 1,
-      "posx": -600.0,
-      "posy": -100.0,
+      "posx": -525.0,
+      "posy": -75.0,
       "rot": 0.0,
-      "scalex": 450.0,
-      "scaley": 200.0
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0
     },
     {
-      "id": 2,
-      "posx": 702.0,
-      "posy": -369.0,
+      "posx": -475.0,
+      "posy": -75.0,
       "rot": 0.0,
-      "scalex": 150.0,
-      "scaley": 300.0
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0
     },
     {
-      "id": 3,
-      "posx": 368.0,
-      "posy": -355.0,
+      "posx": -425.0,
+      "posy": -75.0,
       "rot": 0.0,
-      "scalex": 250.0,
-      "scaley": 500.0
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0
     },
     {
-      "id": 4,
-      "posx": -107.0,
-      "posy": -311.0,
+      "posx": -375.0,
+      "posy": -75.0,
       "rot": 0.0,
-      "scalex": 500.0,
-      "scaley": 100.0
-    },
-    {
-      "id": 5,
-      "posx": 166.0,
-      "posy": 218.0,
-      "rot": 0.0,
-      "scalex": 500.0,
-      "scaley": 100.0
-    },
-    {
-      "id": 6,
-      "posx": 700.0,
-      "posy": -138.0,
-      "rot": 0.0,
-      "scalex": 100.0,
-      "scaley": 200.0
-    },
-    {
-      "id": 7,
-      "posx": 64.0,
-      "posy": -245.0,
-      "rot": 0.0,
-      "scalex": 150.0,
-      "scaley": 50.0
-    },
-    {
-      "id": 8,
-      "posx": 322.0,
-      "posy": 149.0,
-      "rot": 0.0,
-      "scalex": 150.0,
-      "scaley": 50.0
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0
     }
   ]
 }

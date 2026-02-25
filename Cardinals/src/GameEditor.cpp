@@ -44,6 +44,12 @@ void DragObject(std::vector<GameObject*> objs)
 }
 
 void DrawTileOutline() {
+	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	AEGfxSetTransparency(1.f);
+	AEGfxTextureSet(nullptr, 0.f,0.f);
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
+
 	for (int i{}; i < 18; ++i) {
 		lineObject.UpdatePosition({0.f,450.f - 50.f * i});
 		lineObject.UpdateScale({1600.f, 1.f});
@@ -54,6 +60,7 @@ void DrawTileOutline() {
 		lineObject.UpdateScale({ 1.f,900.f });
 		lineObject.DebugDraw();
 	}
+	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
 }
 
 void DrawDebugObjects(std::vector<GameObject*> objs) {

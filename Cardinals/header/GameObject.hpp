@@ -31,31 +31,25 @@ enum class GameObjectTag {
 	Gravright
 };
 
-struct GameObjectIDAssigner {
-	u64 currIdCount{};
-	u64 GetID() {
-		return currIdCount++;
-	}
-};
-
 class GameObject {
-//Variables
-protected:
-	AEVec2 globalPosition;
-	f32 globalRotation;
-	AEVec2 globalScale;
+private:
 	AEMtx33 mtx_translation;
 	AEMtx33 mtx_rotation;
 	AEMtx33 mtx_scale;
 	AEMtx33 mtx_transform;
-	bool isChild;
+
+//Variables
+protected:
 	AEGfxVertexList* mesh;
-	Texture* tex = nullptr;
+	AEVec2 globalPosition;
+	f32 globalRotation;
+	AEVec2 globalScale;
+	bool isChild;
+	Texture* tex;
 	Collider collider;
 
 //Functions
 private:
-	u64 _id;
 	void ConcatTransform();
 
 public:
@@ -75,9 +69,6 @@ public:
 	AEVec2 GetScale() const;
 
 	AEVec2& GetPosition();
-
-	virtual void SetID(u64 id);
-	virtual u64 GetID() const;
 
 	virtual void UpdatePosition(AEVec2 pos);
 	virtual void UpdateRotation(f32 rot);
