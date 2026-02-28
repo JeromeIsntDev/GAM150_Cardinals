@@ -228,8 +228,9 @@ void Level1_Update() {
 	if (IsEditorActive()) {
 		
 		//DragObject(levelObjList);
+		tileTag = (tileTag < 0) ? 0 : tileTag;
 
-		if (input.isKeyTriggered(AEVK_LEFT)) {
+		if (input.isKeyTriggered(AEVK_LEFT) && tileTag > 0) {
 
 			--tileTag;
 		}
