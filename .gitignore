@@ -31,3 +31,4 @@ bin/
 *.exe
 *.out
 *.app
+/enc_temp_folder

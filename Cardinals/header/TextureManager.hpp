@@ -72,7 +72,8 @@ namespace Images
     constexpr ImageFile CardBg{ "../../Assets/Textures/RoundedSq.png", 800.f, 600.f };
     constexpr ImageFile ResumeBtn{ "../../Assets/Textures/Resume_Button.png", 412.f, 120.f };
 	constexpr ImageFile HomeBtn{ "../../Assets/Textures/Home_Button.png", 412.f, 120.f };
-	constexpr ImageFile RestartBtn{ "../../Assets/Textures/Restart_Button.png", 412.f, 120.f };
+    constexpr ImageFile RestartBtn{ "../../Assets/Textures/Restart_Button.png", 412.f, 120.f };
+    constexpr ImageFile NextBtn{ "../../Assets/Textures/Next_Button.png", 412.f, 120.f };
 
 
     constexpr ImageFile Background{ "../../Assets/Textures/MenuBG.png", 1600.f, 900.f };
