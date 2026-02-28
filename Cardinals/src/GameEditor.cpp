@@ -69,7 +69,7 @@ void DrawDebugObjects(std::vector<GameObject*> objs) {
 	}
 }
 
-void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs)
+void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs, int tag)
 {
 	AEVec2 mousePos{ 0.f,0.f };
 	InputHandler::GetInstance().getMousePos(mousePos.x, mousePos.y);
@@ -85,11 +85,11 @@ void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs)
 
 	editorText.Unload_Image();
 	//qstd::cout << "Spawning: " << tileTag << std::endl;
-	PRINT("Printing: %d\n", static_cast<GameObjectTag>(tileTag));
-	switch (static_cast<GameObjectTag>(tileTag))
+	PRINT("Printing: %d\n", static_cast<GameObjectTag>(tag));
+	switch (static_cast<GameObjectTag>(tag))
 	{
 	case GameObjectTag::GravUp:
-		PRINT("GRAVUP TILE");
+		PRINT("GRAVUP TILE\n");
 		editorText.Load_Image(Images::Lollipop);
 		break;
 	case GameObjectTag::GravDown:
@@ -101,6 +101,10 @@ void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs)
 	case GameObjectTag::Gravright:
 		editorText.Load_Image(Images::Lollipop);
 		break;
+	case GameObjectTag::Win:
+		PRINT("WIN TILE\n");
+		editorText.Load_Image(Images::Placeholder);
+		break;
 	default:
 		editorText.Load_Image(Images::Placeholder);
 		break;
@@ -111,7 +115,7 @@ void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs)
 	obj->SetTexture(&editorText);
 	obj->UpdateScale({ 50.f,50.f });
 	obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
-	obj->_tag = static_cast<GameObjectTag>(tileTag);
+	obj->_tag = static_cast<GameObjectTag>(tag);
 	cell->obj = obj;
 	objs.push_back(obj);
 

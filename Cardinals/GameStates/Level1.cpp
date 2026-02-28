@@ -248,7 +248,7 @@ void Level1_Update() {
 			ToggleSaveFileMode();
 
 		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
-			SpawnNewTile(&grid, levelObjList);
+			SpawnNewTile(&grid, levelObjList, tileTag);
 
 		/*if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
 		{
