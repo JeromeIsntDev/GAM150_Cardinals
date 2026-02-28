@@ -19,16 +19,16 @@
 #include "TextureManager.hpp"
 #include "Physics.hpp"
 
-enum class GameObjectTag {
-	Static,
-	Dynamic,
-	Platform,
-	Player,
-	Win,
-	GravUp,
-	GravDown,
-	GravLeft,
-	Gravright,
+enum class GameObjectTag : int {
+	Static = 0,
+	Dynamic =1,
+	Platform = 2,
+	Player = 3,
+	Win = 4,
+	GravUp = 5,
+	GravDown = 6,
+	GravLeft = 7,
+	Gravright = 8,
 
 	GameObjectTagNumber
 };

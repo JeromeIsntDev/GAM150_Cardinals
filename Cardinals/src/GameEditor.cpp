@@ -84,8 +84,8 @@ void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs)
 	}
 
 	editorText.Unload_Image();
-
-	PRINT("%d", static_cast<GameObjectTag>(tileTag));
+	//qstd::cout << "Spawning: " << tileTag << std::endl;
+	PRINT("Printing: %d\n", static_cast<GameObjectTag>(tileTag));
 	switch (static_cast<GameObjectTag>(tileTag))
 	{
 	case GameObjectTag::GravUp:
