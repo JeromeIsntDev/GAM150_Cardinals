@@ -35,7 +35,7 @@ void ClearEditorMemory();
 
 void DragObject(std::vector<GameObject*> objs);
 void DrawDebugObjects(std::vector<GameObject*> objs);
-void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs, int tag);
+void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs, int const& tag);
 void DrawTileOutline();
 
 void ToggleEditorMode();

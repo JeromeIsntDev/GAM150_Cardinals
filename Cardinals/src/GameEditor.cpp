@@ -69,7 +69,7 @@ void DrawDebugObjects(std::vector<GameObject*> objs) {
 	}
 }
 
-void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs, int tag)
+void SpawnNewTile(Grid* grid, std::vector<GameObject*> &objs, int const& tag)
 {
 	AEVec2 mousePos{ 0.f,0.f };
 	InputHandler::GetInstance().getMousePos(mousePos.x, mousePos.y);
