@@ -1,6 +1,7 @@
 #include "Level2.hpp"
 
-extern int isGamePaused;
+extern bool isGamePaused;
+extern bool isGameOver;
 
 namespace {
 	Text digipenFont;
@@ -18,7 +19,7 @@ namespace {
 	//std::unique_ptr<Button> conBtn, quitBtn;
 
 	std::unique_ptr<PauseMenu> pauseMenu;	
-	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{};
+	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{}, nextTexture{};
 }
 
 void Level2_Load() {
@@ -42,6 +43,8 @@ void Level2_Load() {
 	restartTexture.Load_Image(Images::RestartBtn);
 	resumeTexture.Load_Image(Images::ResumeBtn);
 	homeTexture.Load_Image(Images::HomeBtn);
+	nextTexture.Load_Image(Images::NextBtn);
+
 }
 
 void Level2_Initialize()
@@ -61,7 +64,7 @@ void Level2_Initialize()
 	playerObj.UpdateRotation(0.f);
 
 
-	pauseMenu = std::make_unique<PauseMenu>(rectMesh, true, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level2); });
+	pauseMenu = std::make_unique<PauseMenu>(rectMesh, PAUSE, -1, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level2); });
 
 	pauseMenu->SetTextures(PauseMenuTextures{ &placeholder, &cardBgTexture, &barTexture,
 		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture,& restartTexture, &homeTexture, &pauseTitleFont});
@@ -101,6 +104,7 @@ void Level2_Initialize()
 	memoryManager.AddTexture(&restartTexture);
 	memoryManager.AddTexture(&resumeTexture);
 	memoryManager.AddTexture(&homeTexture);
+	memoryManager.AddTexture(&nextTexture);
 
 	if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
 	memoryManager.AddMesh(&rectMesh);
@@ -128,7 +132,7 @@ void Level2_Update() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
 
-	if (isGamePaused) return;
+	if (isGamePaused || isGameOver) return;
 
 	//if (input.isMouseBtnTriggered(AEVK_P)) {
 	//	isGamePaused = ~isGamePaused;
@@ -172,5 +176,6 @@ void Level2_Unload() {
 	pauseMenu.reset();
 	//pauseUI.Exit();
 	if (isGamePaused) isGamePaused = 0;
+	if (isGameOver) isGameOver = 0;
 	if (memoryManager.MassUnload()) PRINT("Unload Success");
 }

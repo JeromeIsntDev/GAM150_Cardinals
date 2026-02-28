@@ -118,10 +118,10 @@ void MainMenu_Initialize()
 	menuBG.SetMesh(squareMesh); menuBG.SetTexture(&menuBGTexture);
 	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f }); menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() }); menuBG.UpdateRotation(0.f);
 
-	pauseMenu = std::make_unique<PauseMenu>(squareMesh, false, [](){}, nullptr);
+	pauseMenu = std::make_unique<PauseMenu>(squareMesh, SETTINGS, -1, [](){}, nullptr);
 
 	pauseMenu->SetTextures(PauseMenuTextures{ &menuBGTexture, &cardBgTexture, &barTexture, 
-		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture,nullptr,nullptr, nullptr, &settingsFont });
+		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, nullptr, nullptr, nullptr, &settingsFont });
 
 	// BUTTONS
 

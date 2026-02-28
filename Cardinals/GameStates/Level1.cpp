@@ -25,7 +25,8 @@ namespace {
 
 	// PAUSE MENU
 	std::unique_ptr<PauseMenu> pauseMenu;
-	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{};
+	std::unique_ptr<PauseMenu> gameOverMenu;
+	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{}, nextTexture{}, candyTexture{}, greyCandyTexture;
 
 	//IMGUI
 	//ControlPanel controlPanel;
@@ -68,6 +69,9 @@ void Level1_Load() {
 	restartTexture.Load_Image(Images::RestartBtn);
 	resumeTexture.Load_Image(Images::ResumeBtn);
 	homeTexture.Load_Image(Images::HomeBtn);
+	nextTexture.Load_Image(Images::NextBtn);
+	candyTexture.Load_Image(Images::Candy);
+	greyCandyTexture.Load_Image(Images::CandyGrey);
 
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	//textures.push_back(&playerEffectTexture);
@@ -86,6 +90,7 @@ void Level1_Load() {
 			&restartTexture,
 			&resumeTexture,
 			&homeTexture,
+			&nextTexture,
 		});
 
 	for (Texture& t : backgrounds) {
@@ -148,21 +153,57 @@ void Level1_Initialize()
 
 	levelTime = 0.f;
 
-	pauseMenu = std::make_unique<PauseMenu>(squareMesh, true, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level1); });
+	pauseMenu = std::make_unique<PauseMenu>(squareMesh, PAUSE, -1, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level1); });
 
 	pauseMenu->SetTextures(PauseMenuTextures{ &placeholderTexture, &cardBgTexture, &barTexture,
-		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture,&restartTexture, &homeTexture, &pauseTitleFont });
+		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture, &restartTexture, &homeTexture, &pauseTitleFont });
 	isGamePaused = 0;
+
+	gameOverMenu = std::make_unique<PauseMenu>(squareMesh, LEVEL, 1, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level2); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level1); });
+
+	gameOverMenu->SetTextures(GameOverTextures{ &placeholderTexture, &cardBgTexture, &candyTexture,
+		&greyCandyTexture, &restartTexture, &homeTexture, &nextTexture, &pauseTitleFont });
+	isGameOver = 0;
+
 	//Read From JSON
 }
 
 void Level1_Update() {
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
-	if (pauseMenu) {
+
+	if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
+	{
+		isGamePaused = !isGamePaused;
+		if (pauseMenu)
+			pauseMenu->SetActive(isGamePaused);
+	}
+
+	if (AEInputCheckTriggered(AEVK_O))
+	{
+		isGameOver = true;
+		isGamePaused = false;
+
+		if (pauseMenu)
+			pauseMenu->SetActive(false);
+
+		if (gameOverMenu)
+			gameOverMenu->SetActive(true);
+	}
+
+	if (pauseMenu)
+	{
 		pauseMenu->Update(dt);
-		if (pauseMenu->IsActive() && input.isMouseBtnTriggered(AEVK_LBUTTON)) {
+
+		if (pauseMenu->IsActive() && input.isMouseBtnTriggered(AEVK_LBUTTON))
 			pauseMenu->OnClick();
-		}
+	}
+
+	if (gameOverMenu)
+	{
+		gameOverMenu->Update(dt);
+
+		if (gameOverMenu->IsActive() && input.isMouseBtnTriggered(AEVK_LBUTTON))
+			gameOverMenu->OnClick();
 	}
 
 
@@ -176,7 +217,7 @@ void Level1_Update() {
 	AEGfxSetTransparency(1.f);
 
 	//controlPanel.ControlPanel_Update();
-	if (!isGamePaused) {
+	if (!isGamePaused && !isGameOver) {
 		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	}
 	//levelTime +=static_cast<f32>(AEFrameRateControllerGetFrameTime());
@@ -249,7 +290,7 @@ void Level1_Update() {
 	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
-	if (isGamePaused) return;
+	if (isGamePaused || isGameOver) return;
 	/*PLAYER STUFF*/
 
 	//f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
@@ -315,6 +356,7 @@ void Level1_Draw() {
 	gravityEffect.DrawParticle();
 
 	if (pauseMenu) pauseMenu->Draw();
+	if (gameOverMenu) gameOverMenu->Draw();
 }
 
 void Level1_Free() {
@@ -326,6 +368,8 @@ void Level1_Free() {
 void Level1_Unload() {
 	PRINT("Unload: %s", "Level 1\n");
 	pauseMenu.reset();
+	gameOverMenu.reset();
 	if (isGamePaused) isGamePaused = 0;
+	if (isGameOver) isGameOver = 0;
 	if (memoryManager.MassUnload()) PRINT("Unload Success!");
 }

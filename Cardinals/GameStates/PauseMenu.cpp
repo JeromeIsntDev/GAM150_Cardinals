@@ -82,9 +82,10 @@ void VolSlider::SetTextures(Texture* barTex, Texture* knobTex)
 /// PAUSE MENU
 ///
 
-PauseMenu::PauseMenu(AEGfxVertexList* mesh,
-	bool isInGame, std::function<void()> onResume, std::function<void()> onQuit, std::function<void()> onRestart) :
-	UIElement(mesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ 1600, 900.f }), commonMesh(mesh)
+PauseMenu::PauseMenu(AEGfxVertexList* mesh, GAMEMODE mode, int levelIndex,
+	std::function<void()> onResume, std::function<void()> onQuit, std::function<void()> onRestart) 
+	: UIElement(mesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ 1600, 900.f }), commonMesh(mesh), _mode(mode), _gameLevel(levelIndex), 
+	_onResume(onResume), _onQuit(onQuit), _onRestart(onRestart)
 {
 	bg.SetMesh(commonMesh);
 	bg.UpdateScale(AEVec2{ 1600.f, 900.f });
@@ -94,78 +95,18 @@ PauseMenu::PauseMenu(AEGfxVertexList* mesh,
 	cardBG.UpdateScale(AEVec2{ 800.f, 600.f });
 	cardBG.UpdatePosition(AEVec2{ 0.f, 0.f });
 
-	// sliiiders
-	auto* masterSlider = new VolSlider(commonMesh, AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
-	_masterSlider = masterSlider;
-	AddChild(masterSlider);
+	switch (mode) {
+		case PAUSE:
+			SetupPauseMenu();
+			break;
 
-	auto* musicSlider = new VolSlider(commonMesh, AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 500.f);
-	_musicSlider = musicSlider;
-	AddChild(musicSlider);
+		case SETTINGS:
+			SetupSettingsMenu();
+			break;
 
-	auto* sfxSlider = new VolSlider(commonMesh, AudioType::SFX, AEVec2{ 0.f, -100.f }, 500.f);
-	_sfxSlider = sfxSlider;
-	AddChild(sfxSlider);
-
-
-	if (isInGame) {
-
-		// level pause menu
-		_titleText = "GAME PAUSED";
-
-		// restart btn
-		auto* restartBtn = new Button(commonMesh, AEVec2{ -240.f,-220.f }, 0.f, AEVec2{200.f,60.f});
-		restartBtn->SetOnClick([this, onRestart]() 
-			{
-				SetActive(false);
-				if (onRestart) onRestart();
-			});
-		restartBtn->SetActive(true);
-		restartBtn->SetInteractable(true);
-		_restartBtn = restartBtn;
-		AddChild(restartBtn);
-
-		// resume btn
-		auto* resumeBtn = new Button(commonMesh, AEVec2{ 0.f, -220.f},0.f, AEVec2{200.f,60.f});
-		resumeBtn->SetOnClick([this, onResume]() 
-			{
-				SetActive(false);
-				if (onResume) onResume();
-			});
-		resumeBtn->SetActive(true);
-		resumeBtn->SetInteractable(true);
-		_resumeBtn = resumeBtn;
-		AddChild(resumeBtn);
-
-		// home btn
-		auto* homeBtn = new Button(commonMesh, AEVec2{ 240.f, -220.f }, 0.f, AEVec2{ 200.f, 60.f });
-		homeBtn->SetOnClick([this, onQuit]()
-			{
-				SetActive(false);
-				if (onQuit) onQuit();
-			});
-		homeBtn->SetActive(true);
-		homeBtn->SetInteractable(true);
-		_homeBtn = homeBtn;
-		AddChild(homeBtn);
-	}
-	else {
-
-		// main menu pause menu (settings)
-		_titleText = "SETTINGS";
-
-		// prev btn
-		auto* prevBtn = new Button(commonMesh, AEVec2{ 710.f, -360.f }, 0.f, AEVec2{ 120.f, 120.f });
-		prevBtn->SetOnClick([this, onResume]()
-			{
-				SetActive(false);
-				if (onResume) onResume();
-			});
-
-		prevBtn->SetActive(true);
-		prevBtn->SetInteractable(true);
-		_prevBtn = prevBtn;
-		AddChild(prevBtn);
+		case LEVEL:
+			SetupLevelMenu(_gameLevel);
+			break;
 	}
 
 	SetActive(false);
@@ -201,7 +142,9 @@ void PauseMenu::OnClick()
 
 void PauseMenu::Update(f32 dt)
 {
-	if (AEInputCheckTriggered(AEVK_P)) { SetActive(!IsActive()); isGamePaused = IsActive() ? 1 : 0; }
+	candy1.SetTexture(candy);
+	candy2.SetTexture(candy);
+
 	if (!IsActive()) return;
 
 	for (auto* child : children)
@@ -232,6 +175,14 @@ void PauseMenu::Draw() const
 		AEGfxSetTransparency(0.9f);
 		cardBG.Draw();
 	}
+
+	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
+	AEGfxSetTransparency(1.f);
+
+	if (candy1.GetTexture()) candy1.Draw();
+	if (candy2.GetTexture()) candy2.Draw();
+	if (candy3.GetTexture()) candy3.Draw();
 
 	// children
 	AEGfxSetTransparency(1.f);
@@ -270,4 +221,168 @@ void PauseMenu::SetTextures(const PauseMenuTextures& tex)
 	if (_homeBtn)      _homeBtn->SetTexture(tex.homeBtn);
 
 	if (tex.titleFont) _titleFont = tex.titleFont;
+}
+
+void PauseMenu::SetTextures(const GameOverTextures& tex)
+{
+	if (tex.bg) bg.SetTexture(tex.bg);
+	if (tex.cardBg) cardBG.SetTexture(tex.cardBg);
+	if (tex.greyCandy) {
+		candy1.SetTexture(tex.greyCandy);
+		candy2.SetTexture(tex.greyCandy);
+		candy3.SetTexture(tex.greyCandy);
+	}
+	if (tex.candy) candy = tex.candy;
+
+	if (_restartBtn)   _restartBtn->SetTexture(tex.restartBtn);
+	if (_homeBtn)      _homeBtn->SetTexture(tex.homeBtn);
+	if (_nextBtn)      _nextBtn->SetTexture(tex.nextBtn);
+
+	if (tex.titleFont) _titleFont = tex.titleFont;
+}
+
+void PauseMenu::SetupPauseMenu()
+{
+	// sliiiders
+	auto* masterSlider = new VolSlider(commonMesh, AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
+	_masterSlider = masterSlider;
+	AddChild(masterSlider);
+
+	auto* musicSlider = new VolSlider(commonMesh, AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 500.f);
+	_musicSlider = musicSlider;
+	AddChild(musicSlider);
+
+	auto* sfxSlider = new VolSlider(commonMesh, AudioType::SFX, AEVec2{ 0.f, -100.f }, 500.f);
+	_sfxSlider = sfxSlider;
+	AddChild(sfxSlider);
+
+	// level pause menu
+	_titleText = "GAME PAUSED";
+
+	// restart btn
+	auto* restartBtn = new Button(commonMesh, AEVec2{ 240.f,-220.f }, 0.f, AEVec2{ 200.f,60.f });
+	restartBtn->SetOnClick([this]()
+		{
+			SetActive(false);
+			if (_onRestart) _onRestart();
+		});
+	restartBtn->SetActive(true);
+	restartBtn->SetInteractable(true);
+	_restartBtn = restartBtn;
+	AddChild(restartBtn);
+
+	// resume btn
+	auto* resumeBtn = new Button(commonMesh, AEVec2{ 0.f, -220.f }, 0.f, AEVec2{ 200.f,60.f });
+	resumeBtn->SetOnClick([this]()
+		{
+			SetActive(false);
+			if (_onResume) _onResume();
+		});
+	resumeBtn->SetActive(true);
+	resumeBtn->SetInteractable(true);
+	_resumeBtn = resumeBtn;
+	AddChild(resumeBtn);
+
+	// home btn
+	auto* homeBtn = new Button(commonMesh, AEVec2{ -240.f, -220.f }, 0.f, AEVec2{ 200.f, 60.f });
+	homeBtn->SetOnClick([this]()
+		{
+			SetActive(false);
+			if (_onQuit) _onQuit();
+		});
+	homeBtn->SetActive(true);
+	homeBtn->SetInteractable(true);
+	_homeBtn = homeBtn;
+	AddChild(homeBtn);
+
+}
+
+void PauseMenu::SetupSettingsMenu()
+{
+	// sliiiders
+	auto* masterSlider = new VolSlider(commonMesh, AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
+	_masterSlider = masterSlider;
+	AddChild(masterSlider);
+
+	auto* musicSlider = new VolSlider(commonMesh, AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 500.f);
+	_musicSlider = musicSlider;
+	AddChild(musicSlider);
+
+	auto* sfxSlider = new VolSlider(commonMesh, AudioType::SFX, AEVec2{ 0.f, -100.f }, 500.f);
+	_sfxSlider = sfxSlider;
+	AddChild(sfxSlider);
+
+	// main menu pause menu (settings)
+	_titleText = "SETTINGS";
+
+	// prev btn
+	auto* prevBtn = new Button(commonMesh, AEVec2{ 710.f, -360.f }, 0.f, AEVec2{ 120.f, 120.f });
+	prevBtn->SetOnClick([this]()
+		{
+			SetActive(false);
+			if (_onResume) _onResume();
+		});
+
+	prevBtn->SetActive(true);
+	prevBtn->SetInteractable(true);
+	_prevBtn = prevBtn;
+	AddChild(prevBtn);
+}
+
+void PauseMenu::SetupLevelMenu(int level)
+{
+	// level pause menu
+	_titleText = "GAME OVER";
+
+	// First candy
+	candy1.SetMesh(commonMesh);
+	candy1.UpdateScale(AEVec2{ 100.f, 100.f });
+	candy1.UpdatePosition(AEVec2{ -100.f, 100.f });
+
+	// Second candy
+	candy2.SetMesh(commonMesh);
+	candy2.UpdateScale(AEVec2{ 100.f, 100.f });
+	candy2.UpdatePosition(AEVec2{ 0.f, 100.f });
+
+	// Second candy
+	candy3.SetMesh(commonMesh);
+	candy3.UpdateScale(AEVec2{ 100.f, 100.f });
+	candy3.UpdatePosition(AEVec2{ 100.f, 100.f });
+
+
+	// restart btn
+	auto* restartBtn = new Button(commonMesh, AEVec2{ 0.f,-220.f }, 0.f, AEVec2{ 200.f,60.f });
+	restartBtn->SetOnClick([this]()
+		{
+			SetActive(false);
+			if (_onRestart) _onRestart();
+		});
+	restartBtn->SetActive(true);
+	restartBtn->SetInteractable(true);
+	_restartBtn = restartBtn;
+	AddChild(restartBtn);
+
+	// resume btn
+	auto* nextBtn = new Button(commonMesh, AEVec2{ 240.f, -220.f }, 0.f, AEVec2{ 200.f,60.f });
+	nextBtn->SetOnClick([this]()
+		{
+			SetActive(false);
+			if (_onResume) _onResume();
+		});
+	nextBtn->SetActive(true);
+	nextBtn->SetInteractable(true);
+	_nextBtn = nextBtn;
+	AddChild(nextBtn);
+
+	// home btn
+	auto* homeBtn = new Button(commonMesh, AEVec2{ -240.f, -220.f }, 0.f, AEVec2{ 200.f, 60.f });
+	homeBtn->SetOnClick([this]()
+		{
+			SetActive(false);
+			if (_onQuit) _onQuit();
+		});
+	homeBtn->SetActive(true);
+	homeBtn->SetInteractable(true);
+	_homeBtn = homeBtn;
+	AddChild(homeBtn);
 }

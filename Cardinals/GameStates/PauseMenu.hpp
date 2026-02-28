@@ -19,7 +19,14 @@
 #include "../header/MeshGenerator.hpp"
 #include "../header/GStateManager.hpp"
 
-extern int isGamePaused;
+extern bool isGamePaused;
+extern bool isGameOver;
+
+enum GAMEMODE {
+	PAUSE,
+	SETTINGS,
+	LEVEL
+};
 
 struct PauseMenuTextures
 {
@@ -33,6 +40,18 @@ struct PauseMenuTextures
 	Texture* resumeBtn = nullptr;
 	Texture* restartBtn = nullptr;
 	Texture* homeBtn = nullptr;
+	Text* titleFont = nullptr;
+};
+
+struct GameOverTextures
+{
+	Texture* bg = nullptr;
+	Texture* cardBg = nullptr;
+	Texture* candy = nullptr;
+	Texture* greyCandy = nullptr;
+	Texture* restartBtn = nullptr;
+	Texture* homeBtn = nullptr;
+	Texture* nextBtn = nullptr;
 	Text* titleFont = nullptr;
 };
 
@@ -60,8 +79,10 @@ public:
 class PauseMenu : public UIElement
 {
 private:
+	GAMEMODE _mode;
+	GameObject bg, cardBG, candy1, candy2, candy3;
 
-	GameObject bg, cardBG;
+	Texture* candy = nullptr;
 
 	AEGfxVertexList* commonMesh = nullptr;
 	VolSlider* _masterSlider = nullptr;
@@ -72,12 +93,18 @@ private:
 	Button* _restartBtn = nullptr;
 	Button* _resumeBtn = nullptr;
 	Button* _homeBtn = nullptr;
+	Button* _nextBtn = nullptr;
 	Text* _titleFont = nullptr;
 	const char* _titleText = "";
+	int _gameLevel = -1;
+
+	std::function<void()> _onResume;
+	std::function<void()> _onRestart;
+	std::function<void()> _onQuit;
 
 public:
 
-	PauseMenu(AEGfxVertexList* mesh, bool isInGame, std::function<void()> onResume = nullptr, std::function<void()> onQuit = nullptr, std::function<void()> onRestart = nullptr);
+	PauseMenu(AEGfxVertexList* mesh, GAMEMODE mode, int levelIndex = -1, std::function<void()> onResume = nullptr, std::function<void()> onQuit = nullptr, std::function<void()> onRestart = nullptr);
 	 
 	void Update(f32 dt) override;
 	void Draw() const override;
@@ -85,6 +112,11 @@ public:
 
 	void SetActive(bool active) override;
 	void SetTextures(const PauseMenuTextures& tex);
+	void SetTextures(const GameOverTextures& tex);
+
+	void SetupPauseMenu();
+	void SetupSettingsMenu();
+	void SetupLevelMenu(int level);
 };
 
 #endif

@@ -4,7 +4,8 @@
 
 #include "TextureManager.hpp"
 
-int isGamePaused = 0;
+bool isGamePaused = 0;
+bool isGameOver = 0;
 int isGameRunning = 1;
 
 
