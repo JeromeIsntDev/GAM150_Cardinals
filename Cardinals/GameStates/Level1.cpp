@@ -91,6 +91,8 @@ void Level1_Load() {
 			&resumeTexture,
 			&homeTexture,
 			&nextTexture,
+			&candyTexture,
+			&greyCandyTexture
 		});
 
 	for (Texture& t : backgrounds) {
