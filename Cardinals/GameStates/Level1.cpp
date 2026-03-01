@@ -26,7 +26,7 @@ namespace {
 	// PAUSE MENU
 	std::unique_ptr <Overlay> pauseMenu;
 	std::unique_ptr<Overlay> gameOverMenu;
-	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{}, nextTexture{}, candyTexture{}, greyCandyTexture;
+	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{}, nextTexture{}, retryTexture{}, candyTexture{}, greyCandyTexture;
 
 	//IMGUI
 	//ControlPanel controlPanel;
@@ -70,6 +70,7 @@ void Level1_Load() {
 	resumeTexture.Load_Image(Images::ResumeBtn);
 	homeTexture.Load_Image(Images::HomeBtn);
 	nextTexture.Load_Image(Images::NextBtn);
+	retryTexture.Load_Image(Images::RetryBtn);
 	candyTexture.Load_Image(Images::Candy);
 	greyCandyTexture.Load_Image(Images::CandyGrey);
 
@@ -91,6 +92,7 @@ void Level1_Load() {
 			&resumeTexture,
 			&homeTexture,
 			&nextTexture,
+			&retryTexture,
 			&candyTexture,
 			&greyCandyTexture
 		});
@@ -164,7 +166,7 @@ void Level1_Initialize()
 	gameOverMenu = std::make_unique<Overlay>(squareMesh, LEVEL, 1, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level2); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level1); });
 
 	gameOverMenu->SetTextures(GameOverTextures{ &placeholderTexture, &cardBgTexture, &candyTexture,
-		&greyCandyTexture, &restartTexture, &homeTexture, &nextTexture, &pauseTitleFont, &digipenFont });
+		&greyCandyTexture, &retryTexture, &homeTexture, &nextTexture, &pauseTitleFont, &digipenFont });
 	isGameOver = 0;
 
 	//Read From JSON
@@ -180,7 +182,8 @@ void Level1_Update() {
 			pauseMenu->SetActive(isGamePaused);
 	}
 
-	if (mainPlayer.IsGameOver() && !isGameOver)
+	if (AEInputCheckTriggered(AEVK_O) && !isGameOver)
+	//if (mainPlayer.IsGameOver() && !isGameOver)
 	{
 		isGameOver = true;
 		isGamePaused = false;
