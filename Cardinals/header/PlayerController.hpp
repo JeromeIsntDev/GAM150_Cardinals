@@ -35,6 +35,7 @@ private:
 	f32 currCD{ 0.f };
 	f32 changeCD{ 0.f };
 	f32 jumpForce = 500.f;
+	bool gameOver = false;
 public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 	AEVec2 p_Scale{ 50.f,50.f };
@@ -70,6 +71,7 @@ public:
 	f32 GetPlayerJumpForce() const;
 	bool GetPlayerJump() const;
 	bool GetPlayerCollide() const;
+	bool IsGameOver() const;
 	AEVec2 GetPrevPos() const;
 	//set the player health
 	void SetPlayerCollide(bool);

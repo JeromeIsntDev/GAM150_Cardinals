@@ -180,7 +180,7 @@ void Level1_Update() {
 			pauseMenu->SetActive(isGamePaused);
 	}
 
-	if (AEInputCheckTriggered(AEVK_O))
+	if (mainPlayer.IsGameOver() && !isGameOver)
 	{
 		isGameOver = true;
 		isGamePaused = false;

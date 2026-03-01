@@ -299,7 +299,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 		if (obj->_tag == GameObjectTag::Win) {
 			//win gate hit
 			std::cout << "Win gate hit" << std::endl;
-			//do smth here
+			gameOver = true;
 		}
 		else if (obj->_tag == GameObjectTag::GravUp) {
 			std::cout << "grav up" << std::endl;
@@ -481,6 +481,11 @@ void Player::SetPlayerHealth(f32 healthDamage) {
 
 bool Player::GetPlayerCollide() const{
 	return hasCollided;
+}
+
+bool Player::IsGameOver() const
+{
+	return gameOver;
 }
 
 void Player::SetPlayerCollide(bool collide) {
