@@ -164,7 +164,7 @@ void Level1_Initialize()
 	gameOverMenu = std::make_unique<PauseMenu>(squareMesh, LEVEL, 1, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level2); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level1); });
 
 	gameOverMenu->SetTextures(GameOverTextures{ &placeholderTexture, &cardBgTexture, &candyTexture,
-		&greyCandyTexture, &restartTexture, &homeTexture, &nextTexture, &pauseTitleFont });
+		&greyCandyTexture, &restartTexture, &homeTexture, &nextTexture, &pauseTitleFont, &digipenFont });
 	isGameOver = 0;
 
 	//Read From JSON
@@ -184,6 +184,7 @@ void Level1_Update() {
 	{
 		isGameOver = true;
 		isGamePaused = false;
+		gameOverMenu->UpdateGameOverMenu(levelTime);
 
 		if (pauseMenu)
 			pauseMenu->SetActive(false);

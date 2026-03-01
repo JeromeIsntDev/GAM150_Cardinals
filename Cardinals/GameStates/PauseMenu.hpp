@@ -28,6 +28,13 @@ enum GAMEMODE {
 	LEVEL
 };
 
+enum STARRATING {
+	NONE,
+	ONE_STAR,
+	TWO_STARS,
+	THREE_STARS
+};
+
 struct PauseMenuTextures
 {
 	Texture* bg = nullptr;
@@ -53,6 +60,7 @@ struct GameOverTextures
 	Texture* homeBtn = nullptr;
 	Texture* nextBtn = nullptr;
 	Text* titleFont = nullptr;
+	Text* bodyFont = nullptr;
 };
 
 class VolSlider : public UIElement
@@ -83,6 +91,7 @@ private:
 	GameObject bg, cardBG, candy1, candy2, candy3;
 
 	Texture* candy = nullptr;
+	Texture* greyCandy = nullptr;
 
 	AEGfxVertexList* commonMesh = nullptr;
 	VolSlider* _masterSlider = nullptr;
@@ -95,9 +104,12 @@ private:
 	Button* _homeBtn = nullptr;
 	Button* _nextBtn = nullptr;
 	Text* _titleFont = nullptr;
+	Text* _bodyFont = nullptr;
 	const char* _titleText = "";
+	char buffer[128] = "";
 	int _gameLevel = -1;
-
+	f32 _timeTaken = 0.f;
+	STARRATING performance = NONE;
 	std::function<void()> _onResume;
 	std::function<void()> _onRestart;
 	std::function<void()> _onQuit;
@@ -117,6 +129,7 @@ public:
 	void SetupPauseMenu();
 	void SetupSettingsMenu();
 	void SetupLevelMenu(int level);
+	void UpdateGameOverMenu(f32 time);
 };
 
 #endif

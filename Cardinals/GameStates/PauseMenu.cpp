@@ -142,9 +142,6 @@ void PauseMenu::OnClick()
 
 void PauseMenu::Update(f32 dt)
 {
-	candy1.SetTexture(candy);
-	candy2.SetTexture(candy);
-
 	if (!IsActive()) return;
 
 	for (auto* child : children)
@@ -199,7 +196,13 @@ void PauseMenu::Draw() const
 		_titleFont->Input_Text(_titleText);
 		_titleFont->Change_Text_Color(Colors::White);
 		_titleFont->Draw_Text(AEVec2{ 0.f, 220.f },.75f, 1.f);
-		//_titleFont->Change_Text_Color(Colors::White);
+	}
+
+	if (_mode == LEVEL && _bodyFont) {
+		_bodyFont->Input_Text(buffer);
+		_bodyFont->Change_Text_Color(Colors::White);
+		_bodyFont->Draw_Text(0.f, 0.f);
+		_bodyFont->Change_Text_Color(Colors::Black);
 	}
 
 	// reset to default
@@ -232,6 +235,7 @@ void PauseMenu::SetTextures(const GameOverTextures& tex)
 		candy2.SetTexture(tex.greyCandy);
 		candy3.SetTexture(tex.greyCandy);
 	}
+	if (tex.greyCandy) greyCandy = tex.greyCandy;
 	if (tex.candy) candy = tex.candy;
 
 	if (_restartBtn)   _restartBtn->SetTexture(tex.restartBtn);
@@ -239,6 +243,7 @@ void PauseMenu::SetTextures(const GameOverTextures& tex)
 	if (_nextBtn)      _nextBtn->SetTexture(tex.nextBtn);
 
 	if (tex.titleFont) _titleFont = tex.titleFont;
+	if (tex.bodyFont) _bodyFont = tex.bodyFont;
 }
 
 void PauseMenu::SetupPauseMenu()
@@ -385,4 +390,42 @@ void PauseMenu::SetupLevelMenu(int level)
 	homeBtn->SetInteractable(true);
 	_homeBtn = homeBtn;
 	AddChild(homeBtn);
+}
+
+void PauseMenu::UpdateGameOverMenu(f32 time)
+{
+	_timeTaken = time;
+	//performance = time < 30 ? THREE_STARS : time < 60 ? TWO_STARS : time < 90 ? ONE_STAR : NONE;
+	performance = time < 3 ? THREE_STARS : time < 6 ? TWO_STARS : time < 9 ? ONE_STAR : NONE;
+	memset(buffer, 0, sizeof(buffer));
+	switch (performance) {
+	case THREE_STARS:
+		sprintf_s(buffer, "Time: %.2fs \n Incredible!\nYou’re a speed demon!", _timeTaken);
+		candy1.SetTexture(candy);
+		candy2.SetTexture(candy);
+		candy3.SetTexture(candy);
+		break;
+
+	case TWO_STARS:
+		sprintf_s(buffer, "Time: %.2fs \n Great Job!\nCan you go faster?", _timeTaken);
+		candy1.SetTexture(candy);
+		candy2.SetTexture(candy);
+		candy3.SetTexture(greyCandy);
+		break;
+
+	case ONE_STAR:
+		sprintf_s(buffer, "Time: %.2fs \n Finished!\nA bit slow, but you made it.", _timeTaken);
+		candy1.SetTexture(candy);
+		candy2.SetTexture(greyCandy);
+		candy3.SetTexture(greyCandy);
+		break;
+
+	case NONE:
+		sprintf_s(buffer, "Time: %.2fs \n Too Slow!\nPlease try again.", _timeTaken);
+		candy1.SetTexture(greyCandy);
+		candy2.SetTexture(greyCandy);
+		candy3.SetTexture(greyCandy);
+
+		break;
+	}
 }
