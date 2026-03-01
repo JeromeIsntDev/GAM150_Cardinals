@@ -225,9 +225,11 @@ void Level1_Update() {
 	}
 	//levelTime +=static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
-	if(!IsEditorActive())
-		if (input.isMouseBtnTriggered(AEVK_E)) ToggleEditorMode();
+	if (!IsEditorActive() || IsEditorActive())
+		if (input.isMouseBtnTriggered(AEVK_E))
+			ToggleEditorMode();
 
+	//std::cout << canEdit << std::endl;
 	if (IsEditorActive()) {
 		
 		//DragObject(levelObjList);
