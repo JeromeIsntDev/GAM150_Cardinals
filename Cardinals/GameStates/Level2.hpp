@@ -13,7 +13,7 @@
 #include "UIManager.hpp"
 #include "GStateManager.hpp"
 #include "MemoryManager.hpp"
-#include "PauseMenu.hpp"
+#include "GameOverlayUI.hpp"
 
 void Level2_Load();
 void Level2_Initialize();

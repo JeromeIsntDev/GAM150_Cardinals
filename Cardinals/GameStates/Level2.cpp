@@ -18,7 +18,7 @@ namespace {
 	//UIManager pauseUI;
 	//std::unique_ptr<Button> conBtn, quitBtn;
 
-	std::unique_ptr<PauseMenu> pauseMenu;	
+	std::unique_ptr<Overlay> pauseMenu;	
 	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{}, nextTexture{};
 }
 
@@ -64,7 +64,7 @@ void Level2_Initialize()
 	playerObj.UpdateRotation(0.f);
 
 
-	pauseMenu = std::make_unique<PauseMenu>(rectMesh, PAUSE, -1, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level2); });
+	pauseMenu = std::make_unique<Overlay>(rectMesh, PAUSE, -1, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level2); });
 
 	pauseMenu->SetTextures(PauseMenuTextures{ &placeholder, &cardBgTexture, &barTexture,
 		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture,& restartTexture, &homeTexture, &pauseTitleFont});

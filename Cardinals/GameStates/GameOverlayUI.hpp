@@ -1,18 +1,18 @@
 /*!***********************************************************************
-\file	PauseMenu.cpp
+\file	GameOverlayUI.cpp
 \author	Zoey Tan
 \date	31/01/2026
 \par	Last Updated by: Zoey Tan
 \par	Project: Cardinals
 
-\brief	PauseMenu is responsible for displaying the pause menu.
+\brief	GameOverlayUI is responsible for displaying the overlay menu.
 
 \par	Changes: None
 **************************************************************************/
 
 #pragma once
-#ifndef _Pause_Menu_Header_
-#define _Pause_Menu_Header_
+#ifndef _Game_Overlay_UI_Header_
+#define _Game_Overlay_UI_Header_
 
 #include <functional>
 #include "../header/UIManager.hpp"
@@ -84,7 +84,7 @@ public:
 	AudioType GetAudioType() const { return audioType; }
 };
 
-class PauseMenu : public UIElement
+class Overlay : public UIElement
 {
 private:
 	GAMEMODE _mode;
@@ -116,7 +116,7 @@ private:
 
 public:
 
-	PauseMenu(AEGfxVertexList* mesh, GAMEMODE mode, int levelIndex = -1, std::function<void()> onResume = nullptr, std::function<void()> onQuit = nullptr, std::function<void()> onRestart = nullptr);
+	Overlay(AEGfxVertexList* mesh, GAMEMODE mode, int levelIndex = -1, std::function<void()> onResume = nullptr, std::function<void()> onQuit = nullptr, std::function<void()> onRestart = nullptr);
 	 
 	void Update(f32 dt) override;
 	void Draw() const override;

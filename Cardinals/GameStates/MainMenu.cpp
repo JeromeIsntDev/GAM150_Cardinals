@@ -35,7 +35,7 @@ namespace {
 	std::unique_ptr<Button> startBtn, exitBtn, creditsBtn;
 	UIManager quitUI;
 	std::unique_ptr<Button> yesBtn, noBtn;
-	std::unique_ptr<PauseMenu> pauseMenu;
+	std::unique_ptr<Overlay> settingsMenu;
 	std::unique_ptr<Button> settingsBtn;
 
 	AudioManager& bgm = AudioManager::Instance();
@@ -118,9 +118,9 @@ void MainMenu_Initialize()
 	menuBG.SetMesh(squareMesh); menuBG.SetTexture(&menuBGTexture);
 	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f }); menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() }); menuBG.UpdateRotation(0.f);
 
-	pauseMenu = std::make_unique<PauseMenu>(squareMesh, SETTINGS, -1, [](){}, nullptr);
+	settingsMenu = std::make_unique<Overlay>(squareMesh, SETTINGS, -1, [](){}, nullptr);
 
-	pauseMenu->SetTextures(PauseMenuTextures{ &menuBGTexture, &cardBgTexture, &barTexture, 
+	settingsMenu->SetTextures(PauseMenuTextures{ &menuBGTexture, &cardBgTexture, &barTexture, 
 		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, nullptr, nullptr, nullptr, &settingsFont });
 
 	// BUTTONS
@@ -149,7 +149,7 @@ void MainMenu_Initialize()
 	settingsBtn->SetTexture(&settingsTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
 	settingsBtn->SetOnClick([]() 
 		{
-			pauseMenu->SetActive(true);
+			settingsMenu->SetActive(true);
 			//menuUI.ForceResetToolTips();
 		});
 	
@@ -216,11 +216,11 @@ void MainMenu_Update() {
 	if (isLogoDrawn) 
 	{
 		if (quitMenuOpen) { quitUI.Update(dt); }
-		else if (pauseMenu->IsActive()) {
-			pauseMenu->Update(dt);
+		else if (settingsMenu->IsActive()) {
+			settingsMenu->Update(dt);
 			// if pause menu is open, only update the pause menu and check for its clicks
 			if (input.isMouseBtnTriggered(AEVK_LBUTTON)) {
-				pauseMenu->OnClick();
+				settingsMenu->OnClick();
 			}
 		}
 		else { menuUI.Update(dt); }
@@ -253,8 +253,8 @@ void MainMenu_Draw() {
 	menuBG.Draw();
 	cardinalsFont.Draw_Text(0, 200.f);
 	menuUI.Draw();
-	if (pauseMenu->IsActive()) {
-		pauseMenu->Draw();
+	if (settingsMenu->IsActive()) {
+		settingsMenu->Draw();
 	}
 
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
@@ -286,7 +286,7 @@ void MainMenu_Free() {
 
 void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
-	pauseMenu.reset();
+	settingsMenu.reset();
 	tex.UnloadAll(); // uhdhrgjdfg memleak jumpscare i'll integrate this another time
 
 	if (memoryManager.MassUnload()) PRINT("Unload Success");

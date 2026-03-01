@@ -24,8 +24,8 @@ namespace {
 	std::vector<GameObject> objData;
 
 	// PAUSE MENU
-	std::unique_ptr<PauseMenu> pauseMenu;
-	std::unique_ptr<PauseMenu> gameOverMenu;
+	std::unique_ptr <Overlay> pauseMenu;
+	std::unique_ptr<Overlay> gameOverMenu;
 	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{}, nextTexture{}, candyTexture{}, greyCandyTexture;
 
 	//IMGUI
@@ -155,13 +155,13 @@ void Level1_Initialize()
 
 	levelTime = 0.f;
 
-	pauseMenu = std::make_unique<PauseMenu>(squareMesh, PAUSE, -1, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level1); });
+	pauseMenu = std::make_unique<Overlay>(squareMesh, PAUSE, -1, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level1); });
 
 	pauseMenu->SetTextures(PauseMenuTextures{ &placeholderTexture, &cardBgTexture, &barTexture,
 		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture, &restartTexture, &homeTexture, &pauseTitleFont });
 	isGamePaused = 0;
 
-	gameOverMenu = std::make_unique<PauseMenu>(squareMesh, LEVEL, 1, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level2); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level1); });
+	gameOverMenu = std::make_unique<Overlay>(squareMesh, LEVEL, 1, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level2); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level1); });
 
 	gameOverMenu->SetTextures(GameOverTextures{ &placeholderTexture, &cardBgTexture, &candyTexture,
 		&greyCandyTexture, &restartTexture, &homeTexture, &nextTexture, &pauseTitleFont, &digipenFont });

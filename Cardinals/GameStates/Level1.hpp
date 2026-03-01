@@ -17,7 +17,7 @@
 #include "MemoryManager.hpp"
 #include "GStateManager.hpp"
 #include "ParticleEffect.hpp"
-#include "PauseMenu.hpp"
+#include "GameOverlayUI.hpp"
 
 void Level1_Load();
 void Level1_Initialize();

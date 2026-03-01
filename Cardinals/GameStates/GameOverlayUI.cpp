@@ -1,16 +1,16 @@
 /*!***********************************************************************
-\file	PauseMenu.cpp
+\file	GameOverlayUI.cpp
 \author	Zoey Tan
 \date	31/01/2026
 \par	Last Updated by: Zoey Tan
 \par	Project: Cardinals
 
-\brief	PauseMenu is responsible for displaying the pause menu.
+\brief	GameOverlayUI is responsible for displaying the overlay menu.
 
 \par	Changes: None
 **************************************************************************/
 
-#include "PauseMenu.hpp"
+#include "GameOverlayUI.hpp"
 
 VolSlider::VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 width)
 	: UIElement(mesh, pos, 0.f, AEVec2{ width, 20.f }), // bar mesh
@@ -82,7 +82,7 @@ void VolSlider::SetTextures(Texture* barTex, Texture* knobTex)
 /// PAUSE MENU
 ///
 
-PauseMenu::PauseMenu(AEGfxVertexList* mesh, GAMEMODE mode, int levelIndex,
+Overlay::Overlay(AEGfxVertexList* mesh, GAMEMODE mode, int levelIndex,
 	std::function<void()> onResume, std::function<void()> onQuit, std::function<void()> onRestart) 
 	: UIElement(mesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ 1600, 900.f }), commonMesh(mesh), _mode(mode), _gameLevel(levelIndex), 
 	_onResume(onResume), _onQuit(onQuit), _onRestart(onRestart)
@@ -113,7 +113,7 @@ PauseMenu::PauseMenu(AEGfxVertexList* mesh, GAMEMODE mode, int levelIndex,
 	SetInteractable(false);
 }
 
-void PauseMenu::SetActive(bool active)
+void Overlay::SetActive(bool active)
 {
 	UIElement::SetActive(active);
 	isInteractable = active;
@@ -125,7 +125,7 @@ void PauseMenu::SetActive(bool active)
 	}
 }
 
-void PauseMenu::OnClick()
+void Overlay::OnClick()
 {
 	if (!IsActive() || !IsInteractable()) return;
 
@@ -140,7 +140,7 @@ void PauseMenu::OnClick()
 	}
 }
 
-void PauseMenu::Update(f32 dt)
+void Overlay::Update(f32 dt)
 {
 	if (!IsActive()) return;
 
@@ -154,7 +154,7 @@ void PauseMenu::Update(f32 dt)
 	}
 }
 
-void PauseMenu::Draw() const
+void Overlay::Draw() const
 {
 	if (!IsActive()) return;
 
@@ -210,7 +210,7 @@ void PauseMenu::Draw() const
 	AEGfxSetTransparency(1.f);
 }
 
-void PauseMenu::SetTextures(const PauseMenuTextures& tex)
+void Overlay::SetTextures(const PauseMenuTextures& tex)
 {
 	if (tex.bg) bg.SetTexture(tex.bg);
 	if (tex.cardBg) cardBG.SetTexture(tex.cardBg);
@@ -226,7 +226,7 @@ void PauseMenu::SetTextures(const PauseMenuTextures& tex)
 	if (tex.titleFont) _titleFont = tex.titleFont;
 }
 
-void PauseMenu::SetTextures(const GameOverTextures& tex)
+void Overlay::SetTextures(const GameOverTextures& tex)
 {
 	if (tex.bg) bg.SetTexture(tex.bg);
 	if (tex.cardBg) cardBG.SetTexture(tex.cardBg);
@@ -246,7 +246,7 @@ void PauseMenu::SetTextures(const GameOverTextures& tex)
 	if (tex.bodyFont) _bodyFont = tex.bodyFont;
 }
 
-void PauseMenu::SetupPauseMenu()
+void Overlay::SetupPauseMenu()
 {
 	// sliiiders
 	auto* masterSlider = new VolSlider(commonMesh, AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
@@ -302,7 +302,7 @@ void PauseMenu::SetupPauseMenu()
 
 }
 
-void PauseMenu::SetupSettingsMenu()
+void Overlay::SetupSettingsMenu()
 {
 	// sliiiders
 	auto* masterSlider = new VolSlider(commonMesh, AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
@@ -334,7 +334,7 @@ void PauseMenu::SetupSettingsMenu()
 	AddChild(prevBtn);
 }
 
-void PauseMenu::SetupLevelMenu(int level)
+void Overlay::SetupLevelMenu(int level)
 {
 	// level pause menu
 	_titleText = "GAME OVER";
@@ -392,7 +392,7 @@ void PauseMenu::SetupLevelMenu(int level)
 	AddChild(homeBtn);
 }
 
-void PauseMenu::UpdateGameOverMenu(f32 time)
+void Overlay::UpdateGameOverMenu(f32 time)
 {
 	_timeTaken = time;
 	//performance = time < 30 ? THREE_STARS : time < 60 ? TWO_STARS : time < 90 ? ONE_STAR : NONE;
