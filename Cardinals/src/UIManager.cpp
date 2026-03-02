@@ -143,7 +143,7 @@ AEVec2 UIManager::GetNewMousePos()
 
     auto& input = InputHandler::GetInstance();
     float rawX, rawY;
-    input.getMousePos(rawX, rawY);
+    input.GetMouseScreenPosition(rawX, rawY);
 
     float windowWidth = (float)AEGfxGetWindowWidth(), windowHeight = (float)AEGfxGetWindowHeight();
 

@@ -12,8 +12,6 @@
 
 #include "../header/InputHandler.hpp"
 
-// errrr yeah
-
 bool InputHandler::isKeyPressed(u8 key) 
 {
 	return AEInputCheckCurr(key);
@@ -39,10 +37,18 @@ bool InputHandler::isKeyReleased(u8 key)
 	return AEInputCheckReleased(key);
 }
 
-void InputHandler::getMousePos(float& x, float& y)
+void InputHandler::GetMouseScreenPosition(float& x, float& y)
 {
 	s32 mouseX, mouseY;
 	AEInputGetCursorPosition(&mouseX, &mouseY);
 	x = static_cast<float>(mouseX);
 	y = static_cast<float>(mouseY);
+}
+
+void InputHandler::GetMouseWorldPosition(float& x, float& y)
+{
+	s32 mouseX, mouseY;
+	AEInputGetCursorPosition(&mouseX, &mouseY);
+	x = static_cast<float>(mouseX - 800.f);
+	y = static_cast<float>(450.f - mouseY);
 }

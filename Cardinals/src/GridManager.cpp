@@ -11,7 +11,7 @@ std::ostream& operator<<(std::ostream& os, const GridCell& cell) {
 	return os;
 }
 
-Grid::Grid()
+void Grid::Initialize()
 {
 	cells = new GridCell* [rows];
 	for (u32 i{}; i < rows; ++i) {
@@ -27,8 +27,16 @@ Grid::Grid()
 	}
 }
 
-Grid::~Grid()
+void Grid::Load() {
+	tileMesh = RectMeshCenter();
+	tileTexture.Load_Image(Images::Placeholder);
+}
+
+void Grid::Clear()
 {
+	if(tileMesh) AEGfxMeshFree(tileMesh);
+	tileTexture.Unload_Image();
+	objs.clear();
 	for (u32 i = 0; i < rows; ++i) {
 		delete[] cells[i];
 	}
@@ -39,10 +47,72 @@ void Grid::Draw() const {
 	for (u32 i{}; i < rows; ++i) {
 		for (u32 j{}; j < columns; ++j) {
 			if (cells[i][j].obj == nullptr) continue;
-			std::cout << "Drawing" << "\n";
 			cells[i][j].obj->Draw();
 		}
 	}
+}
+
+void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
+{
+	GridCell* cell = GetCell(y, x);
+
+	if (cell->obj != nullptr) {
+		std::cout << "Cell Filled Already!" << std::endl;
+		return;
+	}
+
+	//editorText.Unload_Image();
+	////qstd::cout << "Spawning: " << tileTag << std::endl;
+	//switch (static_cast<GameObjectTag>(tag))
+	//{
+	//case GameObjectTag::GravUp:
+	//	PRINT("GRAVUP TILE\n");
+	//	editorText.Load_Image(Images::Lollipop);
+	//	break;
+	//case GameObjectTag::GravDown:
+	//	editorText.Load_Image(Images::Lollipop);
+	//	break;
+	//case GameObjectTag::GravLeft:
+	//	editorText.Load_Image(Images::Lollipop);
+	//	break;
+	//case GameObjectTag::Gravright:
+	//	editorText.Load_Image(Images::Lollipop);
+	//	break;
+	//case GameObjectTag::Win:
+	//	PRINT("WIN TILE\n");
+	//	editorText.Load_Image(Images::Placeholder);
+	//	break;
+	//default:
+	//	editorText.Load_Image(Images::Placeholder);
+	//	break;
+	//}
+
+	GameObject* obj = new GameObject{};
+	obj->SetMesh(tileMesh);
+	obj->SetTexture(&tileTexture);
+	obj->UpdateScale({ 50.f,50.f });
+	obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
+	obj->_tag = static_cast<GameObjectTag>(tag);
+	cell->obj = obj;
+	objs.push_back(obj);
+
+	PRINT("[DEBUG] => Created New Tile at (%f, %f).\n", obj->GetPosition().x, obj->GetPosition().y);
+}
+
+void Grid::DeleteTile(f32 x, f32 y)
+{
+	GridCell* cell = GetCell(y, x);
+
+	if (cell->obj == nullptr) {
+		std::cout << "Cell Empty!" << std::endl;
+		return;
+	}
+
+	GameObject* toRemove = cell->obj;
+	objs.erase(std::remove(objs.begin(), objs.end(), toRemove), objs.end());
+
+	delete cell->obj;
+	cell->obj = nullptr;
 }
 
 GridCell* Grid::GetCell(f32 x, f32 y)
@@ -52,6 +122,20 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 
 	return &cells[column][row];
 }
+
+//std::vector<GameObject*> Grid::GetCellGameObject() const
+//{
+//	std::vector<GameObject*> objs;
+//	for (u32 i{}; i < rows; ++i) {
+//		for (u32 j{}; j < columns; ++j) {
+//			if (cells[i][j].obj == nullptr) continue;
+//			objs.push_back(cells[i][j].obj);
+//		}
+//	}
+//	return objs;
+//}
+
+
 
 GridCell::GridCell()
 	: column{ 0 }, row{ 0 }, position {0.f, 0.f}, obj{nullptr}

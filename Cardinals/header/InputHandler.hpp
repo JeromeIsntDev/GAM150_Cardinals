@@ -46,7 +46,8 @@ public:
 
 	bool isKeyReleased(u8 key);
 
-	void getMousePos(float& x, float& y);
+	void GetMouseScreenPosition(float& x, float& y);
+	void GetMouseWorldPosition(float& x, float& y);
 };
 
 #endif

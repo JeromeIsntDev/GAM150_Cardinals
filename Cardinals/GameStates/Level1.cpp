@@ -21,7 +21,6 @@ namespace {
 	Texture horizontalPlatformTex;
 	Texture backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
-	std::vector<GameObject*> levelObjList;
 	std::vector<GameObject> objData;
 
 	// PAUSE MENU
@@ -114,17 +113,23 @@ void Level1_Load() {
 
 	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
 
-	levelObjList.clear();
+	grid.Initialize();
+	grid.Load();
 
 	for (int i{}; i < objData.size(); ++i) {
-		objData[i].SetMesh(squareMesh);
-		objData[i].SetTexture(&placeholderTexture);
-		objData[i].UpdatePosition(objData[i].GetPosition());
+		objData[i].SetMesh(grid.tileMesh);
+		objData[i].SetTexture(&grid.tileTexture);
 
-		PRINT("[DEBUG] Loaded => ");
-		std::cout << objData[i] << '\n';
+		AEVec2& pos = objData[i].GetPosition();
+		objData[i].UpdatePosition(pos);
+		//levelObjList.push_back(&objData[i]);
+		//grid.GetCell(pos.x + 800.f, 450.f - pos.y)->obj = &objData[i];
+		u32 tag = static_cast<u32>(objData[i]._tag);
+		grid.SpawnNewTile(tag, pos.x + 800.f, 450.f - pos.y);
+	}
 
-		levelObjList.push_back(&objData[i]);
+	for (GameObject* obj : grid.objs) {
+		PRINT("OBJECT\n");
 	}
 }
 
@@ -165,13 +170,16 @@ void Level1_Initialize()
 		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture, &restartTexture, &homeTexture, &pauseTitleFont });
 	isGamePaused = 0;
 
-	gameOverMenu = std::make_unique<Overlay>(squareMesh, LEVEL, 1, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level2); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level1); });
+	gameOverMenu = std::make_unique<Overlay>(
+		squareMesh, 
+		LEVEL, 1, 
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level2); },
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level1); });
 
 	gameOverMenu->SetTextures(GameOverTextures{ &placeholderTexture, &cardBgTexture, &candyTexture,
 		&greyCandyTexture, &retryTexture, &homeTexture, &nextTexture, &pauseTitleFont, &digipenFont });
 	isGameOver = 0;
-
-	//Read From JSON
 }
 
 void Level1_Update() {
@@ -243,7 +251,6 @@ void Level1_Update() {
 		if (input.isMouseBtnTriggered(AEVK_E))
 			ToggleEditorMode();
 
-	//std::cout << canEdit << std::endl;
 	if (IsEditorActive()) {
 		
 		//DragObject(levelObjList);
@@ -261,38 +268,28 @@ void Level1_Update() {
 			RestartLevel(UpdateGameManagerState, Level1);
 
 		if (input.isMouseBtnTriggered(AEVK_S))
-			SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", levelObjList);
+			SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", grid.objs);
 
 		if (input.isMouseBtnTriggered(AEVK_Q))
 			ToggleSaveFileMode();
 
-		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
-			SpawnNewTile(&grid, levelObjList, tileTag);
-
-		/*if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON))
+		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON)) 
 		{
 			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().getMousePos(mousePos.x, mousePos.y);
+			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
 			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
 				mousePos.y < 0.f || mousePos.y > 900.f) return;
+			grid.SpawnNewTile(tileTag, mousePos.x, mousePos.y);
+		}
 
-			GridCell* cell = grid.GetCell(mousePos.y, mousePos.x);
-
-			if (cell->obj != nullptr) {
-				std::cout << "Cell Filled Already!" << std::endl;
-				return;
-			}
-
-			GameObject* obj = new GameObject{};
-			obj->SetMesh(squareMesh);
-			obj->SetTexture(&placeholderTexture);
-			obj->UpdateScale({ 50.f,50.f });
-			obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
-			cell->obj = obj;
-			levelObjList.push_back(obj);
-
-			std::cout << grid.cells[cell->row][cell->column] << std::endl;
-		}*/
+		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_RBUTTON))
+		{
+			AEVec2 mousePos{ 0.f,0.f };
+			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
+			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
+				mousePos.y < 0.f || mousePos.y > 900.f) return;
+			grid.DeleteTile(mousePos.x, mousePos.y);
+		}
 	}
 
 
@@ -312,7 +309,7 @@ void Level1_Update() {
 	}
 
 	
-	for (GameObject* obj : levelObjList) {
+	for (GameObject* obj : grid.objs) {
 		if (obj->_tag == GameObjectTag::GravUp ||
 			obj->_tag == GameObjectTag::GravDown ||
 			obj->_tag == GameObjectTag::GravLeft ||
@@ -334,7 +331,7 @@ void Level1_Update() {
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 
-	mainPlayer.PlayerCollision(levelObjList, mainPlayer.grav);
+	mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 
@@ -348,15 +345,15 @@ void Level1_Draw() {
 		obj.Draw();
 	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
-	for (GameObject* obj : levelObjList) {
-		obj->Draw();
+	for (GameObject* obj : grid.objs) {
+		//obj->Draw();
 		if (obj->_tag == GameObjectTag::GravUp ||
 			obj->_tag == GameObjectTag::GravDown ||
 			obj->_tag == GameObjectTag::GravLeft ||
 			obj->_tag == GameObjectTag::Gravright)
 		gravityEffect.DrawParticle();
 	}
-	levelObjList[0]->Draw();
+	grid.Draw();
 
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
@@ -377,7 +374,7 @@ void Level1_Draw() {
 			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
 		}
 		DrawTileOutline();
-		DrawDebugObjects(levelObjList);
+		DrawDebugObjects(grid.objs);
 		mainPlayer.DebugDraw();
 	}
 
@@ -397,6 +394,7 @@ void Level1_Free() {
 	PRINT("Free: %s", "Level 1\n");
 	playerEffect.Clear();
 	gravityEffect.Clear();
+	grid.Clear();
 }
 
 void Level1_Unload() {
