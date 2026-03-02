@@ -392,40 +392,42 @@ void Overlay::SetupLevelMenu(int level)
 	AddChild(homeBtn);
 }
 
-void Overlay::UpdateGameOverMenu(f32 time)
+void Overlay::UpdateGameOverMenu(f32 time, int health)
 {
 	_timeTaken = time;
-	//performance = time < 30 ? THREE_STARS : time < 60 ? TWO_STARS : time < 90 ? ONE_STAR : NONE;
-	performance = time < 3 ? THREE_STARS : time < 6 ? TWO_STARS : time < 9 ? ONE_STAR : NONE;
+	//performance = gameLose ? LOSE : time < 30 ? THREE_STARS : time < 60 ? TWO_STARS : ONE_STAR;
+	performance = health <= 0 ? LOSE : health == 3 ? THREE_STARS : health == 2 ? TWO_STARS : ONE_STAR;
 	memset(buffer, 0, sizeof(buffer));
 	switch (performance) {
 	case THREE_STARS:
-		sprintf_s(buffer, "Time: %.2fs \n Incredible!\nYou’re a speed demon!", _timeTaken);
+		sprintf_s(buffer, "Time: %.2fs \nFlawless Victory!\nAmazing survival skills!", _timeTaken);
 		candy1.SetTexture(candy);
 		candy2.SetTexture(candy);
 		candy3.SetTexture(candy);
 		break;
 
 	case TWO_STARS:
-		sprintf_s(buffer, "Time: %.2fs \n Great Job!\nCan you go faster?", _timeTaken);
+		sprintf_s(buffer, "Time: %.2fs \nStrong Finish!\nYou handled the damage well!", _timeTaken);
 		candy1.SetTexture(candy);
 		candy2.SetTexture(candy);
 		candy3.SetTexture(greyCandy);
 		break;
 
 	case ONE_STAR:
-		sprintf_s(buffer, "Time: %.2fs \n Finished!\nA bit slow, but you made it.", _timeTaken);
+		sprintf_s(buffer, "Time: %.2fs \nYou Survived!\nThat was a close call!", _timeTaken);
 		candy1.SetTexture(candy);
 		candy2.SetTexture(greyCandy);
 		candy3.SetTexture(greyCandy);
 		break;
 
-	case NONE:
-		sprintf_s(buffer, "Time: %.2fs \n Too Slow!\nPlease try again.", _timeTaken);
+	case LOSE:
+		sprintf_s(buffer, "Oops, You Lost!\nDon't give up!\nTry again.");		
 		candy1.SetTexture(greyCandy);
 		candy2.SetTexture(greyCandy);
 		candy3.SetTexture(greyCandy);
-
+		_homeBtn->UpdatePosition({ -150.f, -220.f });
+		_restartBtn->UpdatePosition({ 150.f, -220.f });
+		_nextBtn->UpdatePosition({ 900.f, -500.f }); // hide outside screen
 		break;
 	}
 }

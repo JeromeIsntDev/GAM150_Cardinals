@@ -29,10 +29,10 @@ enum GAMEMODE {
 };
 
 enum STARRATING {
-	NONE,
 	ONE_STAR,
 	TWO_STARS,
-	THREE_STARS
+	THREE_STARS,
+	LOSE
 };
 
 struct PauseMenuTextures
@@ -109,7 +109,7 @@ private:
 	char buffer[128] = "";
 	int _gameLevel = -1;
 	f32 _timeTaken = 0.f;
-	STARRATING performance = NONE;
+	STARRATING performance = THREE_STARS;
 	std::function<void()> _onResume;
 	std::function<void()> _onRestart;
 	std::function<void()> _onQuit;
@@ -129,7 +129,7 @@ public:
 	void SetupPauseMenu();
 	void SetupSettingsMenu();
 	void SetupLevelMenu(int level);
-	void UpdateGameOverMenu(f32 time);
+	void UpdateGameOverMenu(f32 time, int health);
 };
 
 #endif

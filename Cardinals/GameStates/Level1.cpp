@@ -189,7 +189,7 @@ void Level1_Update() {
 	{
 		isGameOver = true;
 		isGamePaused = false;
-		gameOverMenu->UpdateGameOverMenu(levelTime);
+		gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
 
 		if (pauseMenu)
 			pauseMenu->SetActive(false);
@@ -200,7 +200,7 @@ void Level1_Update() {
 
 	if (mainPlayer.getGameOver()) {
 		isGameOver = true;
-		gameOverMenu->UpdateGameOverMenu(levelTime);
+		gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
 		if (gameOverMenu)
 			gameOverMenu->SetActive(true);
 		mainPlayer.SetGameOver(false);
