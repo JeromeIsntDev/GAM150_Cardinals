@@ -307,7 +307,19 @@ void Level1_Update() {
 		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
+		gravityEffect.Update(dt,obj.GetPosition(),obj._tag);
+
 	}
+
+	
+	for (GameObject* obj : levelObjList) {
+		if (obj->_tag == GameObjectTag::GravUp ||
+			obj->_tag == GameObjectTag::GravDown ||
+			obj->_tag == GameObjectTag::GravLeft ||
+			obj->_tag == GameObjectTag::Gravright)
+		gravityEffect.Update(dt, obj->GetPosition(), obj->_tag);
+	}
+
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
 	if (isGamePaused || isGameOver) return;
@@ -325,7 +337,6 @@ void Level1_Update() {
 	mainPlayer.PlayerCollision(levelObjList, mainPlayer.grav);
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
-	gravityEffect.Update(dt);
 
 }
 
@@ -339,6 +350,11 @@ void Level1_Draw() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	for (GameObject* obj : levelObjList) {
 		obj->Draw();
+		if (obj->_tag == GameObjectTag::GravUp ||
+			obj->_tag == GameObjectTag::GravDown ||
+			obj->_tag == GameObjectTag::GravLeft ||
+			obj->_tag == GameObjectTag::Gravright)
+		gravityEffect.DrawParticle();
 	}
 	levelObjList[0]->Draw();
 
@@ -372,8 +388,6 @@ void Level1_Draw() {
 
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
-
-	gravityEffect.DrawParticle();
 
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();

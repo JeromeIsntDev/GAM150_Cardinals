@@ -18,7 +18,7 @@
 #include <TextureManager.hpp>
 #include <GameObject.hpp>
 #include <MeshGenerator.hpp>
-static const int MAX_PARTICLES = 30;
+static const int MAX_PARTICLES = 15;
 
 static const Color palette[] = {
     Colors::PastelPink,
@@ -56,9 +56,8 @@ public:
 
     void Init();
     void Emit(AEVec2 position);
-    void Emit();
-    void Update(float dt, AEVec2 position);
-    void Update(float dt);
+    void Emit(AEVec2 position, GameObjectTag grav);
+    void Update(float dt, AEVec2 position, GameObjectTag grav = GameObjectTag::Static);
     void DrawParticle();
     void Clear();
 };
