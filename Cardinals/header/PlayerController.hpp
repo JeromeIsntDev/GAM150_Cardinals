@@ -73,8 +73,10 @@ public:
 	bool GetPlayerCollide() const;
 	bool IsGameOver() const;
 	AEVec2 GetPrevPos() const;
+	bool getGameState() const;
 	//set the player health
 	void SetPlayerCollide(bool);
+	void SetGameState(bool);
 	void SetPlayerHealth(f32);
 	void PlayerInputHandle(f32&, GravityDirection&);
 	void PlayerMovement(f32&, GravityDirection& dir);

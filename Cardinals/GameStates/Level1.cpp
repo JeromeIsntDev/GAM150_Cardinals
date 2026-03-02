@@ -196,6 +196,14 @@ void Level1_Update() {
 			gameOverMenu->SetActive(true);
 	}
 
+	if (mainPlayer.getGameState()) {
+		isGameOver = true;
+		gameOverMenu->UpdateGameOverMenu(levelTime);
+		if (gameOverMenu)
+			gameOverMenu->SetActive(true);
+		mainPlayer.SetGameState(false);
+	}
+
 	if (pauseMenu)
 	{
 		pauseMenu->Update(dt);
@@ -203,6 +211,7 @@ void Level1_Update() {
 		if (pauseMenu->IsActive() && input.isMouseBtnTriggered(AEVK_LBUTTON))
 			pauseMenu->OnClick();
 	}
+
 
 	if (gameOverMenu)
 	{

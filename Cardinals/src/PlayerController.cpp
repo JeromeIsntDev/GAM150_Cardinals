@@ -488,8 +488,16 @@ bool Player::IsGameOver() const
 	return gameOver;
 }
 
+bool Player::getGameState() const {
+	return gameOver;
+}
+
 void Player::SetPlayerCollide(bool collide) {
 	hasCollided = collide;
+}
+
+void Player::SetGameState(bool state) {
+	gameOver = state;
 }
 
 AEVec2 Player::GetPrevPos() const {
