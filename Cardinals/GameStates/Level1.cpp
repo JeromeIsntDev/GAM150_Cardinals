@@ -352,7 +352,7 @@ void Level1_Draw() {
 		
 		digipenFont.Input_Text("Tile Active: ");
 		digipenFont.Draw_Text(AEVec2{ -100.f, -415.f }, .5f, 1.f);
-		digipenFont.Input_Float(static_cast<int>(tileTag));
+		digipenFont.Input_Float(static_cast<float>(tileTag));
 		digipenFont.Draw_Text(AEVec2{ 10.f, -415.f }, .5f, 1.f);
 
 
