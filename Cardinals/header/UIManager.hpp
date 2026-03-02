@@ -59,7 +59,6 @@ public:
 	AEVec2 GetTooltipPos() const { return tooltipPos; }
 	void ResetTooltip();
 
-	virtual void Update(float dt) {}
 	virtual void OnClick() {}
 
 	virtual ~UIElement() 
