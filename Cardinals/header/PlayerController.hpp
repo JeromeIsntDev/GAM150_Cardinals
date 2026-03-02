@@ -24,7 +24,7 @@ class Player : public GameObject {
 
 	//Player() = delete;
 private:
-	f32 p_playerHealth{ 100.f };
+	int p_playerHealth{ 3 };
 	f32 p_moveSpeed{ 300.f };
 	f32 p_downForce{ 1.5f };
 	//set a jumpforce for psuedo gravity on jump
@@ -46,6 +46,7 @@ public:
 	};
 	GravityDirection prevDir = GravityDirection::Down;
 	AEVec2 p_velocityVector{ 0.f,0.f };
+	AEVec2 init_Pos{ 0.f,0.f };
 	f32 playerScore{ 0 };
 	bool p_isJumping{ true };
 	bool canMoveLeft{ true };
@@ -73,10 +74,11 @@ public:
 	bool GetPlayerCollide() const;
 	bool IsGameOver() const;
 	AEVec2 GetPrevPos() const;
-	bool getGameState() const;
+	bool getGameOver() const;
 	//set the player health
 	void SetPlayerCollide(bool);
-	void SetGameState(bool);
+	void SetGameOver(bool);
+	void SetHealth(int);
 	void SetPlayerHealth(f32);
 	void PlayerInputHandle(f32&, GravityDirection&);
 	void PlayerMovement(f32&, GravityDirection& dir);

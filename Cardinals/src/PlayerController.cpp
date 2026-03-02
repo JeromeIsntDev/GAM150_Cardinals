@@ -13,6 +13,7 @@ the player movement etc
 
 #include "../header/PlayerController.hpp"
 #include "../header/InputHandler.hpp"
+#include "../header/GStateManager.hpp"
 #include <iostream>
 
 //Player::Player(f32 health ,f32 moveSpeed,f32 jumpForce ,bool isJump ,f32 score , f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) 
@@ -316,6 +317,18 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 		else if (obj->_tag == GameObjectTag::Gravright) {
 			grav = Player::GravityDirection::Right;
 		}
+		else if (obj->_tag == GameObjectTag::Obstacle) {
+			std::cout << "obstacle hit" << std::endl;
+			p_playerHealth--;
+			if (p_playerHealth <= 0) {
+				//update the state to restart
+				UpdateGameManagerState(Level1);
+			}
+			else {
+				p_initialPos.x = init_Pos.x;
+				p_initialPos.y = init_Pos.y;
+			}
+		}
 		else {
 			f32 overlapX =
 				(std::min)(this->GetCollider().p_maxPoint.x, obj->GetCollider().p_maxPoint.x) -
@@ -483,12 +496,7 @@ bool Player::GetPlayerCollide() const{
 	return hasCollided;
 }
 
-bool Player::IsGameOver() const
-{
-	return gameOver;
-}
-
-bool Player::getGameState() const {
+bool Player::getGameOver() const {
 	return gameOver;
 }
 
@@ -496,8 +504,12 @@ void Player::SetPlayerCollide(bool collide) {
 	hasCollided = collide;
 }
 
-void Player::SetGameState(bool state) {
+void Player::SetGameOver(bool state) {
 	gameOver = state;
+}
+
+void Player::SetHealth(int hp) {
+	p_playerHealth = hp;
 }
 
 AEVec2 Player::GetPrevPos() const {
