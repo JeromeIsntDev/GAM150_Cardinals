@@ -25,7 +25,7 @@ the player movement etc
 
 auto& input = InputHandler::GetInstance();
 
-void Player::InitializePlayer(f32 health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* newMesh, f32 xPos, f32 yPos) {
+void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* newMesh, f32 xPos, f32 yPos) {
 	p_playerHealth = health;
 	p_moveSpeed = moveSpeed;
 	p_isJumping = isJump;
@@ -322,11 +322,13 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			p_playerHealth--;
 			if (p_playerHealth <= 0) {
 				//update the state to restart
-				UpdateGameManagerState(Level1);
+				//update this logic later
+				gameOver = true;
 			}
 			else {
-				p_initialPos.x = init_Pos.x;
-				p_initialPos.y = init_Pos.y;
+				/*p_initialPos.x = init_Pos.x;
+				p_initialPos.y = init_Pos.y;*/
+				p_initialPos = p_previousPos;
 			}
 		}
 		else {
@@ -488,9 +490,9 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 }
 
 //sets the player health to smth new depending on parameter
-void Player::SetPlayerHealth(f32 healthDamage) {
-	p_playerHealth -= healthDamage;
-}
+//void Player::SetPlayerHealth(f32 healthDamage) {
+//	p_playerHealth -= healthDamage;
+//}
 
 bool Player::GetPlayerCollide() const{
 	return hasCollided;
@@ -516,7 +518,7 @@ AEVec2 Player::GetPrevPos() const {
 	return p_previousPos;
 }
 
-f32 Player::GetPlayerHealth() const{
+int Player::GetPlayerHealth() const{
 	return p_playerHealth;
 }
 f32 Player::GetPlayerSpeed() const{
