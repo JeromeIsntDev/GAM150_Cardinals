@@ -530,4 +530,3 @@ f32 Player::GetPlayerJumpForce() const{
 bool Player::GetPlayerJump() const {
 	return p_isJumping;
 }
-

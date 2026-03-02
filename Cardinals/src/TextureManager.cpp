@@ -50,6 +50,9 @@ void Texture::Unload_Image()
 
 AEGfxTexture* Texture::Get_Image() const
 {
+	// if it crashes it likely means your manifest filepath is wrronggg or you fucked up the
+	// definition of the texture which shouldn't be the case since all you should be touching
+	// is the manifest
 	return _image;
 }
 
@@ -57,7 +60,7 @@ AEGfxTexture* Texture::Get_Image() const
 void Texture::Load_Image(const std::string& path)
 {
 	_image = AEGfxTextureLoad(path.c_str());
-	PRINT("result: %s\n", _image ? "good job bro" : "kill yourself it FAILED");
+	PRINT("at %s, result: %s", path.c_str(), _image ? "good job bro\n" : "kill yourself it FAILED\n");
 }
 
 void TextureManager::LoadManifest(const std::string& path)
