@@ -46,7 +46,6 @@ public:
 	};
 	GravityDirection prevDir = GravityDirection::Down;
 	AEVec2 p_velocityVector{ 0.f,0.f };
-	AEVec2 init_Pos{ 0.f,0.f };
 	f32 playerScore{ 0 };
 	bool p_isJumping{ true };
 	bool canMoveLeft{ true };
@@ -65,21 +64,20 @@ public:
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
 
-	void InitializePlayer(f32 health, f32 moveSpeed, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
+	void InitializePlayer(int health, f32 moveSpeed, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
-	f32 GetPlayerHealth() const;
+	int GetPlayerHealth() const;
 	f32 GetPlayerSpeed() const;
 	f32 GetPlayerJumpForce() const;
 	bool GetPlayerJump() const;
 	bool GetPlayerCollide() const;
-	bool IsGameOver() const;
 	AEVec2 GetPrevPos() const;
 	bool getGameOver() const;
 	//set the player health
 	void SetPlayerCollide(bool);
 	void SetGameOver(bool);
 	void SetHealth(int);
-	void SetPlayerHealth(f32);
+	//void SetPlayerHealth(f32);
 	void PlayerInputHandle(f32&, GravityDirection&);
 	void PlayerMovement(f32&, GravityDirection& dir);
 	void PlayerCollision(std::vector<GameObject*> objs,GravityDirection&);

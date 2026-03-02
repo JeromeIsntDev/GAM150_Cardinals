@@ -8,7 +8,8 @@ namespace {
 	Text digipenFont, pauseTitleFont;
 
 	//PLAYER VARIABLES
-	f32 playerHealth{ 150.f }, playerMovespeed{ 300.f };
+	f32 playerMovespeed{ 300.f };
+	int  playerHealth{ 3 };
 	Player mainPlayer;
 	Texture playerTexture{};
 	ParticleEffect playerEffect;
@@ -145,7 +146,6 @@ void Level1_Initialize()
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer._tag = GameObjectTag::Player;
 	mainPlayer.SetHealth(3);
-	mainPlayer.init_Pos = { mainPlayer.GetPosition().x, mainPlayer.GetPosition().y};
 
 	for (int i{}; i < 4; ++i) {
 		GameObject* obj = &backgroundObjs[i];
