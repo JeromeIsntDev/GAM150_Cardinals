@@ -144,6 +144,8 @@ void Level1_Initialize()
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer._tag = GameObjectTag::Player;
+	mainPlayer.SetHealth(3);
+	mainPlayer.init_Pos = { mainPlayer.GetPosition().x, mainPlayer.GetPosition().y};
 
 	for (int i{}; i < 4; ++i) {
 		GameObject* obj = &backgroundObjs[i];
@@ -196,12 +198,12 @@ void Level1_Update() {
 			gameOverMenu->SetActive(true);
 	}
 
-	if (mainPlayer.getGameState()) {
+	if (mainPlayer.getGameOver()) {
 		isGameOver = true;
 		gameOverMenu->UpdateGameOverMenu(levelTime);
 		if (gameOverMenu)
 			gameOverMenu->SetActive(true);
-		mainPlayer.SetGameState(false);
+		mainPlayer.SetGameOver(false);
 	}
 
 	if (pauseMenu)

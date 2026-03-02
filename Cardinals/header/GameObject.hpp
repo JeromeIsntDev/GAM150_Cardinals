@@ -21,7 +21,7 @@
 
 enum class GameObjectTag : int {
 	Static = 0,
-	Dynamic =1,
+	Dynamic = 1,
 	Platform = 2,
 	Player = 3,
 	Win = 4,
@@ -29,6 +29,7 @@ enum class GameObjectTag : int {
 	GravDown = 6,
 	GravLeft = 7,
 	Gravright = 8,
+	Obstacle = 9,
 
 	GameObjectTagNumber
 };
