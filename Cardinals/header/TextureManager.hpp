@@ -55,16 +55,9 @@ namespace Images
     constexpr ImageFile DigipenLogo{ "../../Assets/Textures/DigiPen_WHITE.png", 1525.f, 445.f };
     constexpr ImageFile Player{ "../../Assets/Textures/playerIdle.png", 500.f,500.f };
 
-    //constexpr ImageFile StartBtn{ "../../Assets/Textures/Start_Button.png", 412.f, 120.f };
 	constexpr ImageFile PrevBtn{ "../../Assets/Textures/Previous_Button.png", 120.f, 120.f };
     constexpr ImageFile ExitBtn{ "../../Assets/Textures/Exit_Button.png", 412.f, 120.f };
-    constexpr ImageFile CreditsBtn{ "../../Assets/Textures/Credits_Button.png", 412.f, 120.f };
 
-    constexpr ImageFile YesBtn{ "../../Assets/Textures/Yes_Button.png", 412.f, 120.f };
-    constexpr ImageFile NoBtn{ "../../Assets/Textures/No_Button.png", 412.f, 120.f };
-    constexpr ImageFile PopUp{ "../../Assets/Textures/PopUp.png", 412.f, 120.f };
-
-	constexpr ImageFile SettingsBtn{ "../../Assets/Textures/Settings_Button.png", 120.f, 120.f };
 	constexpr ImageFile Bar{ "../../Assets/Textures/Generic_Bar.png", 500.f, 40.f };
 	constexpr ImageFile KnobMaster{ "../../Assets/Textures/Master_Vol.png", 80.f, 80.f };
 	constexpr ImageFile KnobMusic{ "../../Assets/Textures/Music_Vol.png", 80.f, 80.f };
@@ -75,7 +68,6 @@ namespace Images
     constexpr ImageFile RestartBtn{ "../../Assets/Textures/Restart_Button.png", 412.f, 120.f };
     constexpr ImageFile NextBtn{ "../../Assets/Textures/Next_Button.png", 412.f, 120.f };
     constexpr ImageFile RetryBtn{ "../../Assets/Textures/Retry_Button.png", 412.f, 120.f };
-
 
     constexpr ImageFile Background{ "../../Assets/Textures/MenuBG.png", 1600.f, 900.f };
     constexpr ImageFile Placeholder{ "../../Assets/Textures/MissingTexture.png", 1600.f, 900.f };
@@ -119,7 +111,7 @@ private:
 public:
 	void Fill_Color(const Color color);
 	void Load_Image(const ImageFile& imageFilePath);
-    void Load_Image(const std::string& path); // overload for manifest
+    void Load_Image(const std::string& path, float w, float h); // for manifest
 
     void Set_Image(f32 x, f32 y);
     void Unload_Image();
@@ -137,7 +129,7 @@ class TextureManager
 private:
     std::map<std::string, Texture> textureMap;
 
-    TextureManager() = default; // singleton
+    TextureManager() = default;
 
 public:
 

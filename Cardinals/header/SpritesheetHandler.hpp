@@ -14,7 +14,29 @@ Handles all the spritesheet reading and tilemap textures.
 #define _UI_Manager_Header_
 
 #include <AEEngine.h>
+#include "TextureManager.hpp"
 
+//struct Dimensions 
+//{
+//    int sheetWidth, sheetHeight, tileWidth, tileHeight;
+//    int rows, cols;
+//    float uvW, uvH;
+//};
 
+class SpriteSheet 
+{
+protected:
+    int sheetW, sheetH;
+    int tileW, tileH;
+    int rows, cols;
+
+    float uvW, uvH;
+
+public:
+    Texture tex;
+
+    void Load(const std::string& path, float w, float h);
+
+};
 
 #endif

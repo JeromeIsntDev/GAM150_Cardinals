@@ -19,8 +19,10 @@ namespace {
 	AEGfxVertexList* squareMesh;
 	Text cardinalsFont, digipenFont, tooltipFont, settingsFont;
 
-	Texture startTexture{}, exitTexture{}, prevTexture{}, creditsTexture{}, yesTexture{}, noTexture{}, popUpTexture{}, settingsTexture{}, barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{};
+	// note frm jelly texUnload kinda unloads everything without needing memorymanager after i integrate everytthing saur
+	Texture prevTexture{}, barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{};
 	Texture menuBGTexture{};
+	Texture yesTexture{}, noTexture{};
 
 	//Digipen logo transition
 	Texture tex_digipenLogo{};
@@ -47,6 +49,9 @@ namespace {
 void MainMenu_Load() {
 	PRINT("Load: %s", "Main Menu\n");
 
+	bgm.LoadManifest("../../Assets/AudioManifest.txt");
+	tex.LoadManifest("../../Assets/TextureManifest.txt");
+
 	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
 
@@ -56,14 +61,11 @@ void MainMenu_Load() {
 	menuUI.InitTooltipFont(Fonts::Main, 30.f);
 	quitUI.InitTooltipFont(Fonts::Main, 30.f);
 
+	settingsFont.Load_Font(Fonts::Alt, 72.f);
+
 	menuBGTexture.Load_Image(Images::Background);
 	tex_digipenLogo.Load_Image(Images::DigipenLogo);
-	//startTexture.Load_Image(Images::StartBtn);
-	exitTexture.Load_Image(Images::ExitBtn);
-	creditsTexture.Load_Image(Images::CreditsBtn);
-	settingsTexture.Load_Image(Images::SettingsBtn);
 
-	settingsFont.Load_Font(Fonts::Alt, 72.f);
 	prevTexture.Load_Image(Images::PrevBtn);
 	barTexture.Load_Image(Images::Bar);
 	knobMasterTexture.Load_Image(Images::KnobMaster);
@@ -71,22 +73,17 @@ void MainMenu_Load() {
 	knobEFXTexture.Load_Image(Images::KnobEFX);
 	cardBgTexture.Load_Image(Images::CardBg);
 
-	// testing
 	yesTexture.Load_Image(Images::Button);
 	noTexture.Load_Image(Images::Button);
-	popUpTexture.Load_Image(Images::Button);
 
 	//Store Textures to Unload
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	memoryManager.AddTexture(&tex_digipenLogo);
 	memoryManager.AddTexture(&menuBGTexture);
-	memoryManager.AddTexture(&startTexture);
-	memoryManager.AddTexture(&exitTexture);
-	memoryManager.AddTexture(&creditsTexture);
+	
 	memoryManager.AddTexture(&yesTexture);
 	memoryManager.AddTexture(&noTexture);
-	memoryManager.AddTexture(&popUpTexture);
-	memoryManager.AddTexture(&settingsTexture);
+
 	memoryManager.AddTexture(&prevTexture);
 	memoryManager.AddTexture(&barTexture);
 	memoryManager.AddTexture(&knobMasterTexture);
@@ -106,8 +103,6 @@ void MainMenu_Load() {
 void MainMenu_Initialize()
 {
 	bgm.Init();
-	bgm.LoadManifest("../../Assets/AudioManifest.txt");
-	tex.LoadManifest("../../Assets/TextureManifest.txt");
 
 	// play the bgm for the main menu, looped
 	bgm.PlayAudio("BGM", AudioType::MUSIC, 1.f, -1);
@@ -125,34 +120,44 @@ void MainMenu_Initialize()
 
 	// BUTTONS
 
-	// follow startbtn
-	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ 412.f, 120.f });
-	startBtn->SetTexture(tex.Get("StartBtn")); startBtn->SetActive(true); startBtn->SetInteractable(true);
-	startBtn->SetTooltipText("ur mom");
+	// follow new format hahaha... ptrs.. ahhahahah
+	// im crine bro
+	Texture* startTex = tex.Get("StartBtn");
+	Texture* exitTex = tex.Get("ExitBtn");
+	Texture* creditsTex = tex.Get("CreditsBtn");
+	Texture* settingsTex = tex.Get("SettingsBtn");
 
-	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-	exitBtn->SetTexture(&exitTexture); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
+	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTex->Get_Image_Width(), startTex->Get_Image_Height() });
+	startBtn->SetTexture(startTex); startBtn->SetActive(true); startBtn->SetInteractable(true);
+	startBtn->SetTooltipText("Into Level Select!");
 
-	creditsBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -150.f }, 0.f, AEVec2{ startTexture.Get_Image_Width(), startTexture.Get_Image_Height() });
-	creditsBtn->SetTexture(&creditsTexture); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true); 
+	creditsBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ creditsTex->Get_Image_Width(), creditsTex->Get_Image_Height() });
+	creditsBtn->SetTexture(creditsTex); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
+	creditsBtn->SetTooltipText("Credits & Thanks!");
 
+	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -150.f }, 0.f, AEVec2{ exitTex->Get_Image_Width(), exitTex->Get_Image_Height() });
+	exitBtn->SetTexture(exitTex); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
+	exitBtn->SetTooltipText("Quit Menu!");
+
+	// HAVENT CHANGED
 	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -50.f }, 0.f, AEVec2{ 200.f, 100.f });
 	yesBtn->SetTexture(&yesTexture); yesBtn->SetActive(true); yesBtn->SetInteractable(true);
 	yesBtn->SetTooltipText("");
 
+	// HAVENT CHANGED
 	noBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -175.f }, 0.f, AEVec2{ 200.f, 100.f });
 	noBtn->SetTexture(&noTexture); noBtn->SetActive(true); noBtn->SetInteractable(true);
 	noBtn->SetTooltipText("");
 
-	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{710.f,360.f}, 0.f, AEVec2{settingsTexture.Get_Image_Width(), settingsTexture.Get_Image_Height()});
-	
-	settingsBtn->SetTexture(&settingsTexture); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
+	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{710.f,360.f}, 0.f, AEVec2{ settingsTex->Get_Image_Width(), settingsTex->Get_Image_Height()});
+	settingsBtn->SetTexture(settingsTex); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
+	noBtn->SetTooltipText("Adjust Sliders!");
 	settingsBtn->SetOnClick([]() 
 		{
 			settingsMenu->SetActive(true);
 			//menuUI.ForceResetToolTips();
 		});
-	
+
 	quitUI.Add(yesBtn.get());
 	quitUI.Add(noBtn.get());
 
@@ -181,7 +186,6 @@ void MainMenu_Initialize()
 		});
 
 	// control all buttons with the manager
-	// menuUI.Add(pauseMenu.get());
 	menuUI.Add(startBtn.get()); menuUI.Add(exitBtn.get()); menuUI.Add(creditsBtn.get()); menuUI.Add(settingsBtn.get());
 
 	go_digipenLogo.SetTexture(&tex_digipenLogo);
@@ -208,17 +212,12 @@ void MainMenu_Update() {
 		isLogoDrawn = 1;
 	}
 
-	//if (pauseMenu->IsActive())
-	//	pauseMenu->Update(dt);
-	//else
-	//	menuUI.Update(dt);
-
 	if (isLogoDrawn) 
 	{
 		if (quitMenuOpen) { quitUI.Update(dt); }
 		else if (settingsMenu->IsActive()) {
 			settingsMenu->Update(dt);
-			// if pause menu is open, only update the pause menu and check for its clicks
+
 			if (input.isMouseBtnTriggered(AEVK_LBUTTON)) {
 				settingsMenu->OnClick();
 			}
@@ -242,7 +241,6 @@ void MainMenu_Update() {
 }
 
 void MainMenu_Draw() {
-	//PRINT("Draw: %s", "Main Menu\n");
 
 	if (!isLogoDrawn) {
 		go_digipenLogo.Draw();
@@ -287,7 +285,7 @@ void MainMenu_Free() {
 void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
 	settingsMenu.reset();
-	tex.UnloadAll(); // uhdhrgjdfg memleak jumpscare i'll integrate this another time
+	tex.UnloadAll(); // this will unload all tex so duneed memmanager here i'll change it eventually so we have one system to unloadall
 
 	if (memoryManager.MassUnload()) PRINT("Unload Success");
 }

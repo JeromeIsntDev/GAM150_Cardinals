@@ -7,9 +7,6 @@ StartBtn, ../../Assets/Textures/Start_Button.png, 412, 120
 PrevBtn, ../../Assets/Textures/Previous_Button.png, 120, 120
 ExitBtn, ../../Assets/Textures/Exit_Button.png, 412, 120
 CreditsBtn, ../../Assets/Textures/Credits_Button.png, 412, 120
-YesBtn, ../../Assets/Textures/Yes_Button.png, 412, 120
-NoBtn, ../../Assets/Textures/No_Button.png, 412, 120
-PopUp, ../../Assets/Textures/PopUp.png, 412, 120
 SettingsBtn, ../../Assets/Textures/Settings_Button.png, 120, 120
 Bar, ../../Assets/Textures/Generic_Bar.png, 500, 40
 KnobMaster, ../../Assets/Textures/Master_Vol.png, 80, 80

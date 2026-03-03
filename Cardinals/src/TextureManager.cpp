@@ -53,14 +53,24 @@ AEGfxTexture* Texture::Get_Image() const
 	// if it crashes it likely means your manifest filepath is wrronggg or you fucked up the
 	// definition of the texture which shouldn't be the case since all you should be touching
 	// is the manifest
+
 	return _image;
 }
 
 // overloaded
-void Texture::Load_Image(const std::string& path)
+void Texture::Load_Image(const std::string& path, float w, float h)
 {
+	if (_image)
+	{
+		AEGfxTextureUnload(_image);
+		_image = nullptr;
+	}
+
 	_image = AEGfxTextureLoad(path.c_str());
-	PRINT("at %s, result: %s", path.c_str(), _image ? "good job bro\n" : "kill yourself it FAILED\n");
+	_width = w;
+	_height = h;
+
+	PRINT("at %s, result: %s | dimensions: %.0fx%.0f\n", path.c_str(), _image ? "loaded bro" : "failed bro", _width, _height);
 }
 
 void TextureManager::LoadManifest(const std::string& path)
@@ -92,7 +102,9 @@ void TextureManager::LoadManifest(const std::string& path)
 			filePath.erase(0, filePath.find_first_not_of(" \t"));
 			filePath.erase(filePath.find_last_not_of(" \t\r\n") + 1);
 
-			textureMap[name].Load_Image(filePath);
+			float w = std::stof(width), h = std::stof(height);
+
+			textureMap[name].Load_Image(filePath, w, h);
 		}
 	}
 }
