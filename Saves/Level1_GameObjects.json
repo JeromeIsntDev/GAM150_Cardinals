@@ -47,6 +47,30 @@
       "scalex": 50.0,
       "scaley": 50.0,
       "typetag": 6
+    },
+    {
+      "posx": -275.0,
+      "posy": 75.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0
+    },
+    {
+      "posx": -325.0,
+      "posy": 125.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0
+    },
+    {
+      "posx": -375.0,
+      "posy": 225.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0
     }
   ]
 }

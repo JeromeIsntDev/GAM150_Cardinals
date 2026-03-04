@@ -356,11 +356,22 @@ void Level1_Draw() {
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
 
+	digipenFont.Input_Text("Time: ");
+	digipenFont.Draw_Text(675.f, 400.f);
+	digipenFont.Input_Float(levelTime);
+	digipenFont.Draw_Text_Corner(725.f, 387.f);
+
+	digipenFont.Input_Text("Level 1");
+	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
+
+	if (pauseMenu) pauseMenu->Draw();
+	if (gameOverMenu) gameOverMenu->Draw();
+
 	if (IsEditorActive()) {
 		digipenFont.Input_Text("Editor Active");
 		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
 
-		
+
 		digipenFont.Input_Text("Tile Active: ");
 		digipenFont.Draw_Text(AEVec2{ -100.f, -415.f }, .5f, 1.f);
 		digipenFont.Input_Float(static_cast<float>(tileTag));
@@ -372,20 +383,9 @@ void Level1_Draw() {
 			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
 		}
 		DrawTileOutline();
-		DrawDebugObjects(grid.objs);
 		mainPlayer.DebugDraw();
+		DrawDebugObjects(grid.objs);
 	}
-
-	digipenFont.Input_Text("Time: ");
-	digipenFont.Draw_Text(675.f, 400.f);
-	digipenFont.Input_Float(levelTime);
-	digipenFont.Draw_Text_Corner(725.f, 387.f);
-
-	digipenFont.Input_Text("Level 1");
-	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
-
-	if (pauseMenu) pauseMenu->Draw();
-	if (gameOverMenu) gameOverMenu->Draw();
 }
 
 void Level1_Free() {
