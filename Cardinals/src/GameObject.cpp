@@ -190,8 +190,23 @@ void GameObject::DebugDraw() const
 		break;
 	}
 
+	AEVec2 maxCollider = GetCollider().p_maxPoint;
+	AEVec2 minCollider = GetCollider().p_minPoint;
+
+	AEVec2 scale;
+	AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
+
+	AEMtx33 transform, trans, rot, scl;
+
+	AEMtx33Trans(&trans, globalPosition.x, globalPosition.y);
+	AEMtx33Rot(&rot, globalRotation);
+	AEMtx33Scale(&scl, scale.x, scale.y);
+
+	AEMtx33Concat(&transform, &rot, &scl);
+	AEMtx33Concat(&transform, &trans, &transform);
+
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	AEGfxSetTransform(GetTransform().m);
+	AEGfxSetTransform(transform.m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.0f);
 }
