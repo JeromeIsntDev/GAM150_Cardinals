@@ -304,8 +304,6 @@ void Level1_Update() {
 		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-		gravityEffect.Update(dt,obj.GetPosition(),obj._tag);
-
 	}
 
 	
