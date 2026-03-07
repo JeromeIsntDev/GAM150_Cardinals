@@ -56,7 +56,7 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 {
 	GridCell* cell = GetCell(y, x);
 
-	if (cell->obj != nullptr) {
+	if (cell->obj) {
 		std::cout << "Cell Filled Already!" << std::endl;
 		return;
 	}

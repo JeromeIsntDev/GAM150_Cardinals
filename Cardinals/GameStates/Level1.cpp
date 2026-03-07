@@ -352,7 +352,6 @@ void Level1_Draw() {
 		gravityEffect.DrawParticle();
 	}
 	grid.Draw();
-
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
 
@@ -367,6 +366,8 @@ void Level1_Draw() {
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
 
+
+	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
 	if (IsEditorActive()) {
 		digipenFont.Input_Text("Editor Active");
 		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
