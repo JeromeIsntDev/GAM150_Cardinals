@@ -10,33 +10,41 @@ Handles all the spritesheet reading and tilemap textures.
 **************************************************************************/
 
 #pragma once
-#ifndef _UI_Manager_Header_
-#define _UI_Manager_Header_
+#ifndef _SpriteSheet_Manager_Header_
+#define _SpriteSheet_Manager_Header_
 
 #include <AEEngine.h>
 #include "TextureManager.hpp"
+#include <unordered_map>
+#include <vector>
 
-//struct Dimensions 
-//{
-//    int sheetWidth, sheetHeight, tileWidth, tileHeight;
-//    int rows, cols;
-//    float uvW, uvH;
-//};
+struct TileUV 
+{ 
+    f32 u, v, uWidth, vHeight;
+};
 
 class SpriteSheet 
 {
-protected:
-    int sheetW, sheetH;
-    int tileW, tileH;
-    int rows, cols;
-
-    float uvW, uvH;
-
 public:
+    int sheetW, sheetH, tileW, tileH;
+    int rows, cols;
+    float uvW, uvH;
     Texture tex;
 
-    void Load(const std::string& path, float w, float h);
+    std::vector<TileUV> slices; // all the sliced up uv rects
+    std::unordered_map<int, int> idToSlice; // tileID > slices[] index
 
+public:
+
+    void Load(const std::string& path, float w, float h);
+    void Slice(Texture tex);
+
+    void RegisterAllTiles(); // flat index > ID
+    // uhh in case we gotta map diff tags to diff tiles
+    //void RegisterSpecificTile(int tileID, int tileIndex);
+
+    bool GetUV(int tileID, TileUV& outUV) const; // no way in hell u wanna get it changed i think
+    Texture& GetTexture() { return tex; }
 };
 
 #endif

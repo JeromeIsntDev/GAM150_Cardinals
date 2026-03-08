@@ -285,6 +285,8 @@ void MainMenu_Free() {
 void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
 	settingsMenu.reset();
+
+	// jelly to do: dont unload music, dont unload impt buttons, dont unload bg. unload only when player exits entirely
 	tex.UnloadAll(); // this will unload all tex so duneed memmanager here i'll change it eventually so we have one system to unloadall
 
 	if (memoryManager.MassUnload()) PRINT("Unload Success");

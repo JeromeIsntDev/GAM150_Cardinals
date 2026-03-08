@@ -23,7 +23,7 @@ Button, ../../Assets/Textures/Button.png, 200, 200
 Lollipop, ../../Assets/Textures/Lollipop.png, 100, 100
 CandyBall, ../../Assets/Textures/Candy_Ball.png, 50, 50
 # game bg
-TileSheet, ../../Assets/Textures/TileSheet.png, 971, 1038
+TileSheet, ../../Assets/Textures/TileSheet.png, 900, 900
 BG_BACKMOST, ../../Assets/Textures/BG_BACKMOST.png, 1600, 900
 BG_MOUNTAIN, ../../Assets/Textures/BG_BACKMOUNTAIN.png, 1600, 900
 BG_CLOUDS, ../../Assets/Textures/BG_CLOUDS.png, 1600, 900

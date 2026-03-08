@@ -33,8 +33,8 @@ namespace {
 
 	f32 levelTime{};
 
-	//UIManager tempUI;
 	InputHandler& input = InputHandler::GetInstance();
+	TextureManager& tex = TextureManager::Instance();
 
 	Grid grid;
 }
@@ -42,11 +42,15 @@ namespace {
 void Level1_Load() {
 	PRINT("Load: %s", "Level 1\n");
 
+	// i'll change later
+	tex.LoadManifest("../../Assets/TextureManifest.txt");
+
 	digipenFont.Load_Font(Fonts::Alt, 72.f);
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Change_Text_Color(Colors::Black);
 
-	tileMesh = RectMeshCenterSliced(1,3);
+	// bro i'll deak w this later too zzz
+	tileMesh = RectMeshCenterSliced(3,3);
 	//tempUI.InitTooltipFont(Fonts::Main, 30.f);
 	//playerEffectTexture.Load_Image(Images::CandyBall);
 	playerTexture.Load_Image(Images::Player);
@@ -113,8 +117,9 @@ void Level1_Load() {
 
 	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
 
+
+	grid.Load(tex.Get("TileSheet"), 900, 900, 300, 300);
 	grid.Initialize();
-	grid.Load();
 
 	for (int i{}; i < objData.size(); ++i) {
 		objData[i].SetMesh(grid.tileMesh);
@@ -402,5 +407,7 @@ void Level1_Unload() {
 	gameOverMenu.reset();
 	if (isGamePaused) isGamePaused = 0;
 	if (isGameOver) isGameOver = 0;
+
+	tex.UnloadAll();
 	if (memoryManager.MassUnload()) PRINT("Unload Success!");
 }

@@ -96,6 +96,9 @@ public:
 	bool IsChild() const;
 
 	friend std::ostream& operator<<(std::ostream& os, const GameObject& go);
+
+	f32 uvX{ 0.f }, uvY{ 0.f };
+	virtual void SetUVOffset(f32 u, f32 v) { uvX = u; uvY = v; }
 };
 
 #endif // !_Game_Object_Header_

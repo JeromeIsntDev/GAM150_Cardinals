@@ -27,15 +27,24 @@ void Grid::Initialize()
 	}
 }
 
-void Grid::Load() {
-	tileMesh = RectMeshCenter();
-	tileTexture.Load_Image(Images::Placeholder);
+void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH) 
+{
+	}
+
+	spriteSheet.sheetW = sheetW; spriteSheet.sheetH = sheetH;
+	spriteSheet.tileW = tileW; spriteSheet.tileH = tileH;
+	spriteSheet.cols = sheetW / tileW; spriteSheet.rows = sheetH / tileH;
+	spriteSheet.uvW = (f32)tileW / sheetW; spriteSheet.uvH = (f32)tileH / sheetH;
+	
+	spriteSheet.Slice(tileTexture);
+	spriteSheet.RegisterAllTiles();
+
 }
 
 void Grid::Clear()
 {
 	if(tileMesh) AEGfxMeshFree(tileMesh);
-	tileTexture.Unload_Image();
+	//tileTexture.Unload_Image();
 	objs.clear();
 	for (u32 i = 0; i < rows; ++i) {
 		delete[] cells[i];
@@ -47,7 +56,10 @@ void Grid::Draw() const {
 	for (u32 i{}; i < rows; ++i) {
 		for (u32 j{}; j < columns; ++j) {
 			if (cells[i][j].obj == nullptr) continue;
-			cells[i][j].obj->Draw();
+			cells[i][j].obj->DrawSprite(
+				cells[i][j].obj->uvX,
+				cells[i][j].obj->uvY
+			);
 		}
 	}
 }
@@ -93,6 +105,15 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	obj->UpdateScale({ 50.f,50.f });
 	obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
 	obj->_tag = static_cast<GameObjectTag>(tag);
+
+	// leaving the tagging alone cuz im eepy
+	TileUV uv{};
+	if (spriteSheet.GetUV(tag, uv))
+	{
+		obj->uvX = uv.u;
+		obj->uvY = uv.v;
+	}
+
 	cell->obj = obj;
 	objs.push_back(obj);
 
@@ -134,8 +155,6 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 //	}
 //	return objs;
 //}
-
-
 
 GridCell::GridCell()
 	: column{ 0 }, row{ 0 }, position {0.f, 0.f}, obj{nullptr}

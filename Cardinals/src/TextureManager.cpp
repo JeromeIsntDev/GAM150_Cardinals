@@ -12,6 +12,10 @@
 
 #include "../header/TextureManager.hpp"
 
+///
+/// TEXTURE
+///
+
 void Texture::Fill_Color(const Color color) 
 {
 	AEGfxSetColorToAdd(color.r, color.g, color.b, color.a);
@@ -73,6 +77,10 @@ void Texture::Load_Image(const std::string& path, float w, float h)
 	PRINT("at %s, result: %s | dimensions: %.0fx%.0f\n", path.c_str(), _image ? "loaded bro" : "failed bro", _width, _height);
 }
 
+///
+/// TEXTUREMANAGER
+///
+
 void TextureManager::LoadManifest(const std::string& path)
 {
 	std::ifstream file(path);
@@ -128,7 +136,10 @@ void TextureManager::UnloadAll()
 	textureMap.clear();
 }
 
-//Font
+///
+/// TEXT
+///
+
 Text::Text()
 	:_font{ 0 }, _fontSize{}, _scale {1.f},
 	_color{ Colors::White }, _textArr{ "" } {
