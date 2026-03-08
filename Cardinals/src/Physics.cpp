@@ -17,15 +17,13 @@ from GameObject class from GameObject
 #include <iostream>
 
 
-void Collider::UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLength, f32 offsetScale = 1.f)
+void Collider::UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLength)
 {
-	f32 halfWidth =	abs(xLength * 0.5f);
+	f32 halfWidth = abs(xLength * 0.5f);
 	f32 halfHeight = abs(yLength * 0.5f);
 
-	//std::cout << halfWidth << " " << halfHeight << "\n";
-
-	p_minPoint = { (centrePoint.x - halfWidth) * offsetScale,  (centrePoint.y - halfHeight) * offsetScale };
-	p_maxPoint = { (centrePoint.x + halfWidth) * offsetScale,  (centrePoint.y + halfHeight) * offsetScale };
+	p_minPoint = { centrePoint.x - halfWidth,  centrePoint.y - halfHeight };
+	p_maxPoint = { centrePoint.x + halfWidth,  centrePoint.y + halfHeight };
 }
 
 //collider logic
