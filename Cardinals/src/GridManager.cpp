@@ -29,6 +29,13 @@ void Grid::Initialize()
 
 void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH) 
 {
+	tileMesh = RectMeshCenterSliced(3, 3);
+
+	if (sheet) {
+		tileTexture = *sheet;
+	}
+	else {
+		tileTexture.Load_Image(Images::Placeholder);
 	}
 
 	spriteSheet.sheetW = sheetW; spriteSheet.sheetH = sheetH;
