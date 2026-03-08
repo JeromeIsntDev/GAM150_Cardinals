@@ -321,13 +321,9 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			std::cout << "obstacle hit" << std::endl;
 			p_playerHealth--;
 			if (p_playerHealth <= 0) {
-				//update the state to restart
-				//update this logic later
 				gameOver = true;
 			}
 			else {
-				/*p_initialPos.x = init_Pos.x;
-				p_initialPos.y = init_Pos.y;*/
 				p_initialPos = p_previousPos;
 			}
 		}
@@ -343,7 +339,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			if (overlapX <= 0.f || overlapY <= 0.f) continue;
 
 			// Resolve on smallest penetration axis (Y axis)
-			if (overlapY <= overlapX + 0.5f)
+			if (overlapY <= overlapX + 5.f)
 			{
 				AEVec2 tmpPos = this->GetPosition();
 				switch (dir) {
@@ -379,7 +375,6 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 							this->p_velocityVector.y = 0.f;
 						tmpPos.y += overlapY;
 						this->UpdatePosition(tmpPos);
-						this->GetCollider().UpdateCollider(this->p_initialPos, this->p_Scale.x, this->p_Scale.y, 1.1f);
 						this->p_isGrounded = true;
 						this->p_isJumping = false;
 					}
