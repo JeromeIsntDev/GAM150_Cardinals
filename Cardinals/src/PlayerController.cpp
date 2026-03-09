@@ -295,12 +295,20 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 	switch (dir) {
 	case GravityDirection::Down:
 		if (gridCollisionFlag & COLLISION_BOTTOM) {
-			//std::cout << "snapping" << std::endl;
 			p_isGrounded = true;
 			p_isJumping = false;
 			p_velocityVector.y = 0.f;
 			grid->SnapToCell(&p_initialPos.y);
 		}
+		if (gridCollisionFlag & COLLISION_TOP) {
+			p_velocityVector.y = 0.f;
+			grid->SnapToCell(&p_initialPos.y);
+		}
+		//if (gridCollisionFlag & COLLISION_LEFT) {
+		//	canMoveLeft = false;
+		//	p_velocityVector.x = 0.f;
+		//	grid->SnapToCell(&p_initialPos.x);
+		//}
 		break;
 
 	}

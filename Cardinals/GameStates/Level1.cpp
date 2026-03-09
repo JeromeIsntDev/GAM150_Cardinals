@@ -33,7 +33,7 @@ namespace {
 	f32 levelTime{};
 
 	InputHandler& input = InputHandler::GetInstance();
-	TextureManager& tex = TextureManager::Instance();
+	TextureManager& tex = TextureManager::GetInstance();
 
 	Grid grid;
 	Player mainPlayer;
@@ -52,8 +52,6 @@ void Level1_Load() {
 	//playerEffectTexture.Load_Image(Images::CandyBall);
 	playerTexture.Load_Image(Images::Player);
 	placeholderTexture.Load_Image(Images::Placeholder);
-	verticalPlatformTex.Load_Image(Images::Platform_VL);
-	horizontalPlatformTex.Load_Image(Images::Platform_HL);
 	backgrounds[0].Load_Image(Images::BG_BACKMOST);
 	backgrounds[1].Load_Image(Images::BG_CLOUDS);
 	backgrounds[2].Load_Image(Images::BG_MOUNTAIN);
@@ -331,7 +329,7 @@ void Level1_Update() {
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid,mainPlayer.grav);
-	mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
+	//mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 
@@ -405,7 +403,6 @@ void Level1_Unload() {
 	if (isGamePaused) isGamePaused = 0;
 	if (isGameOver) isGameOver = 0;
 
-	tex.UnloadPersistent();
 	//tex.UnloadAll();
 	if (memoryManager.MassUnload()) PRINT("Unload Success!");
 }
