@@ -127,6 +127,13 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	PRINT("[DEBUG] => Created New Tile at (%f, %f).\n", obj->GetPosition().x, obj->GetPosition().y);
 }
 
+void Grid::SnapToCell(f32* val)
+{
+	f32 newVal = *val / 50.f;
+	s32 integral = static_cast<s32>(newVal);
+	*val = (static_cast<f32>(integral) + .5f) * 50.f;
+}
+
 void Grid::DeleteTile(f32 x, f32 y)
 {
 	GridCell* cell = GetCell(y, x);

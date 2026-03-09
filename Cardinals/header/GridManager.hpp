@@ -39,6 +39,7 @@ struct Grid {
 	void Draw() const;
 	void SpawnNewTile(int const&, f32, f32);
 	void DeleteTile(f32, f32);
+	void SnapToCell(f32*);
 
 	GridCell* GetCell(f32 x, f32 y);
 	//std::vector<GameObject*> GetCellGameObject() const;
