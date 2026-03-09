@@ -140,7 +140,7 @@ void Level1_Initialize()
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 80.f);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture);
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
@@ -161,10 +161,18 @@ void Level1_Initialize()
 
 	levelTime = 0.f;
 
-	pauseMenu = std::make_unique<Overlay>(squareMesh, PAUSE, -1, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level1); });
+	pauseMenu = std::make_unique<Overlay>(squareMesh, PAUSE, -1, 
+		[]() {isGamePaused = 0; }, 
+		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, 
+		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level1); });
 
-	pauseMenu->SetTextures(PauseMenuTextures{ &placeholderTexture, &cardBgTexture, &barTexture,
-		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, &resumeTexture, &restartTexture, &homeTexture, &pauseTitleFont });
+	pauseMenu->SetTextures(
+		PauseMenuTextures{ 
+			&placeholderTexture, &cardBgTexture, &barTexture,
+			&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, 
+			&prevTexture, &resumeTexture, &restartTexture, 
+			&homeTexture, &pauseTitleFont 
+		});
 	isGamePaused = 0;
 
 	gameOverMenu = std::make_unique<Overlay>(
@@ -174,8 +182,12 @@ void Level1_Initialize()
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level1); });
 
-	gameOverMenu->SetTextures(GameOverTextures{ &placeholderTexture, &cardBgTexture, &candyTexture,
-		&greyCandyTexture, &retryTexture, &homeTexture, &nextTexture, &pauseTitleFont, &digipenFont });
+	gameOverMenu->SetTextures(
+		GameOverTextures{ 
+			&placeholderTexture, &cardBgTexture, &candyTexture,
+			&greyCandyTexture, &retryTexture, &homeTexture, 
+			&nextTexture, &pauseTitleFont, &digipenFont 
+		});
 	isGameOver = 0;
 }
 
@@ -319,7 +331,7 @@ void Level1_Update() {
 
 	//f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	//std::cout << mainPlayer.GetPosition().y << std::endl;
-	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
+	//mainPlayer.PlayerMovement(dt, mainPlayer.grav);
 
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;

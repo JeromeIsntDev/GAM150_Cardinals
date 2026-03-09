@@ -79,6 +79,7 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	if (cell->obj) {
 		PRINT("[DEBUG] => Cell Filled Already!\n");
 		PRINT("[DEBUG] => Cell Tag: %d\n", cell->tag);
+		PRINT("[DEBUG] => Cell Position: %f, %f\n", cell->position.x, cell->position.y);
 		return;
 	}
 
@@ -118,7 +119,9 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	obj->SetMesh(tileMesh);
 	obj->SetTexture(&tileTexture);
 	obj->UpdateScale({ 50.f,50.f });
-	obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
+	f32 ax{ cell->position.x }, ay{ cell->position.y };
+	GridToWorld(&ax,&ay);
+	obj->UpdatePosition({ ax , ay });
 	obj->_tag = static_cast<GameObjectTag>(tag);
 
 	cell->tag = obj->_tag;
@@ -134,7 +137,7 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	cell->obj = obj;
 	objs.push_back(obj);
 
-	PRINT("[DEBUG] => Created New Tile at (%f, %f).\n", obj->GetPosition().x, obj->GetPosition().y);
+	PRINT("[DEBUG] => Created New Tile at (%f, %f). With tag: %d\n", obj->GetPosition().x, obj->GetPosition().y, cell->tag);
 }
 
 void Grid::SnapToCell(f32* val)
@@ -170,9 +173,9 @@ void Grid::DeleteTile(f32 x, f32 y)
 {
 	GridCell* cell = GetCell(y, x);
 
-	//f32 ax{ cell->position.x }, ay{ cell->position.y };
-	//GridToWorld(&ax, &ay);
-	//PRINT("GRID/MOUSE TO WORLD: %f, %f\n", ax, ay);
+	f32 ax{ cell->position.x }, ay{ cell->position.y };
+	GridToWorld(&ax, &ay);
+	PRINT("[DEBUG] => GRID/MOUSE TO WORLD: %f, %f\n", ax, ay);
 
 	if (cell->obj == nullptr) {
 		//std::cout << "Cell Empty!" << std::endl;

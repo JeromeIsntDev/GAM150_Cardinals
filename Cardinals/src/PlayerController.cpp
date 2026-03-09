@@ -291,12 +291,12 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 
 	gridCollisionFlag = collideVal;
 
-	f32 halfScaleY = p_Scale.y * 0.5f;
+	/*f32 halfScaleY = p_Scale.y * 0.5f;
 	f32 halfScaleX = p_Scale.x * 0.5f;
 	f32 bottom = p_currPos.y - halfScaleY;
 	f32 top = p_currPos.y + halfScaleY;
 	f32 left = p_currPos.x - halfScaleX;
-	f32 right = p_currPos.x + halfScaleX;
+	f32 right = p_currPos.x + halfScaleX;*/
 
 	//std::cout << p_currPos.y << " " << bottom << std::endl;
 
@@ -304,12 +304,11 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 	case GravityDirection::Down:
 		if (gridCollisionFlag & COLLISION_BOTTOM) {
 			p_velocityVector.y = 0.f;
-			grid->SnapToCell(&bottom);
-			p_currPos.y = bottom + halfScaleY;
+			//grid->SnapToCell(&bottom);
+			p_currPos.y = 0.f;
 			p_isGrounded = true;
 			p_isJumping = false;
 			//std::cout << "after: " << p_currPos.y << std::endl;
-			std::cout << std::endl;
 			//this->UpdatePosition(p_currPos);
 			//PRINT("Collision Bottom\n");
 		}
@@ -339,10 +338,11 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	//right side
 	f32 x1, y1, x2, y2;
 
-	f32 halfScaleX = scaleX * .5f;
-	f32 halfScaleY = scaleY * .5f;
-	f32 quarterScaleX = scaleX * .25f;
-	f32 quarterScaleY = scaleY * .25f;
+	f32 halfScaleX = fabsf(scaleX * .5f);
+	f32 halfScaleY = fabsf(scaleY * .5f);
+	f32 quarterScaleX = fabsf(scaleX * .25f);
+	f32 quarterScaleY = fabsf(scaleY * .25f);
+	PRINT("[DEBUG] => %d\n", halfScaleX);   //THIS LINE; WHAT HAPPEN TO THE SCALE???????
 
 	x1 = PosX + halfScaleX;
 	//grid->SnapToCell(&r_x1);
@@ -358,7 +358,6 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_RIGHT;
-		PRINT("Collision Right\n");
 	}
 
 	x1 = PosX - halfScaleX;
@@ -375,7 +374,6 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_LEFT;
-		PRINT("Collision Left\n");
 	}
 
 	x1 = PosX + quarterScaleX;
@@ -392,7 +390,6 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_TOP;
-		PRINT("Collision Top\n");
 	}
 
 	x1 = PosX + quarterScaleX;
@@ -405,12 +402,27 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	grid->WorldToGrid(&x1, &y1);
 	grid->WorldToGrid(&x2, &y2);
 
-	//PRINT("%f, %f\n", grid->GetCellWorld(x1,y1)->position.y, grid->GetCellWorld(x1, y1)->position.x);
-
 	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_BOTTOM;
-		PRINT("Collision Bottom\n");
+		PRINT("TRU-BOT");
+	}
+
+
+	f32 playerX{ PosX }, playerY{ PosY };
+	grid->WorldToGrid(&playerX, &playerY);
+
+	
+
+	static int i{ 1 };
+	if (i) {
+		PRINT("[DEBUG] => Player Grid Position: %f,%f\n", playerX, playerY);
+		PRINT("[DEBUG] => World To Grid Bottom Hotspot 1: %f, %f\n", x1, y1);
+		PRINT("[DEBUG] => World To Grid Bottom Hotspot 2: %f, %f\n\n", x2, y2);
+
+		PRINT("[DEBUG] => CELL POSITION 1: %f, %f with Tag: %d\n", grid->GetCell(y1, x1)->position.x, grid->GetCell(y1, x1)->position.y, grid->GetCell(y1, x1)->tag);
+		PRINT("[DEBUG] => CELL POSITION 2: %f, %f with Tag: %d\n", grid->GetCell(y2, x2)->position.x, grid->GetCell(y2, x2)->position.y, grid->GetCell(y2, x2)->tag);
+		i = 0;
 	}
 
 	return Flag;
