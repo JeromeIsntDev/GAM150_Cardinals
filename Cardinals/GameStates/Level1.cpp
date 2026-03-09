@@ -331,7 +331,7 @@ void Level1_Update() {
 
 	//f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	//std::cout << mainPlayer.GetPosition().y << std::endl;
-	//mainPlayer.PlayerMovement(dt, mainPlayer.grav);
+	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
 
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;

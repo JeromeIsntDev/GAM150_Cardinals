@@ -77,9 +77,13 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	GridCell* cell = GetCell(y, x);
 
 	if (cell->obj) {
-		PRINT("[DEBUG] => Cell Filled Already!\n");
-		PRINT("[DEBUG] => Cell Tag: %d\n", cell->tag);
-		PRINT("[DEBUG] => Cell Position: %f, %f\n", cell->position.x, cell->position.y);
+		//PRINT("[DEBUG] => Cell Filled Already!\n");
+		//PRINT("[DEBUG] => Cell Tag: %d\n", cell->tag);
+		f32 ax{ cell->position.x }, ay{ cell->position.y };
+		PRINT("[DEBUG] => Cell Grid Position: %f, %f\n", ax, ay);
+		PRINT("TO\n");
+		GridToWorld(&ax, &ay);
+		PRINT("[DEBUG] => Cell World Position: %f, %f\n\n", ax, ay);
 		return;
 	}
 
@@ -137,7 +141,7 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	cell->obj = obj;
 	objs.push_back(obj);
 
-	PRINT("[DEBUG] => Created New Tile at (%f, %f). With tag: %d\n", obj->GetPosition().x, obj->GetPosition().y, cell->tag);
+	//PRINT("[DEBUG] => Created New Tile at (%f, %f). With tag: %d\n", obj->GetPosition().x, obj->GetPosition().y, cell->tag);
 }
 
 void Grid::SnapToCell(f32* val)
@@ -166,20 +170,22 @@ void Grid::WorldToGrid(f32* x, f32* y)
 {
 	f32 prevX{ *x }, prevY{ *y };
 	*x = prevX + 800.f;
-	*y = prevY + 450.f;
+	*y = 450.f - prevY;
 }
 
 void Grid::DeleteTile(f32 x, f32 y)
 {
 	GridCell* cell = GetCell(y, x);
-
-	f32 ax{ cell->position.x }, ay{ cell->position.y };
-	GridToWorld(&ax, &ay);
-	PRINT("[DEBUG] => GRID/MOUSE TO WORLD: %f, %f\n", ax, ay);
+	cell->tag = GameObjectTag::GameObjectTagNumber;
 
 	if (cell->obj == nullptr) {
 		//std::cout << "Cell Empty!" << std::endl;
-		PRINT("[DEBUG] => Cell Tag: %d\n", cell->tag);
+		//PRINT("[DEBUG] => Cell Tag: %d\n", cell->tag);
+		f32 ax{ cell->position.x }, ay{ cell->position.y };
+		PRINT("[DEBUG] => Cell | Grid Position: %f, %f\n", ax, ay);
+		PRINT("TO\n");
+		GridToWorld(&ax, &ay);
+		PRINT("[DEBUG] => Cell | World Position: %f, %f\n\n", ax, ay);
 		return;
 	}
 
@@ -194,6 +200,8 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 {
 	s32 column = x / 50.f;
 	s32 row = y / 50.f;
+
+	if (x >= 900 || y >= 1600) return nullptr;
 
 	return &cells[column][row];
 }
