@@ -51,7 +51,7 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 //
 //}
 //Math logic behind jump for parabola jump
-void Player::PlayerJump(f32& dt, GravityDirection& dir) {
+void Player::PlayerJump(f32 const& dt, GravityDirection& dir) {
 	if (!p_isJumping) return;
 	switch (dir) {
 	case GravityDirection::Up:
@@ -70,7 +70,7 @@ void Player::PlayerJump(f32& dt, GravityDirection& dir) {
 	coyoteBuffer = 0.f;
 }
 
-void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
+void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	f32 moveSpeed{ 300.f };
 	bool isMoving{ false };
 	bool isSprint{ false };
@@ -197,7 +197,7 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 }
 
 //Player Movement Logic
-void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
+void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 	//std::cout << "dt: " << dt << std::endl;
 
 	jumpBuffer = max(0, jumpBuffer - dt);
@@ -290,7 +290,7 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 		p_currPos.y,p_Scale.x, p_Scale.y, grid);
 
 	gridCollisionFlag = collideVal;
-	
+
 	f32 halfScaleY = p_Scale.y * 0.5f;
 	f32 halfScaleX = p_Scale.x * 0.5f;
 	f32 bottom = p_currPos.y - halfScaleY;
@@ -298,12 +298,14 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 	f32 left = p_currPos.x - halfScaleX;
 	f32 right = p_currPos.x + halfScaleX;
 
+	//std::cout << p_currPos.y << " " << bottom << std::endl;
+
 	switch (dir) {
 	case GravityDirection::Down:
 		if (gridCollisionFlag & COLLISION_BOTTOM) {
 			p_velocityVector.y = 0.f;
 			grid->SnapToCell(&bottom);
-			p_currPos.y = bottom + halfScaleY + 50.f;
+			p_currPos.y = bottom + halfScaleY;
 			p_isGrounded = true;
 			p_isJumping = false;
 			//std::cout << "after: " << p_currPos.y << std::endl;
@@ -311,25 +313,24 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 			//this->UpdatePosition(p_currPos);
 			//PRINT("Collision Bottom\n");
 		}
-		if (gridCollisionFlag & COLLISION_TOP) {
-			p_velocityVector.y = 0.f;
-			grid->SnapToCell(&top);
-			p_currPos.y = top - halfScaleY;
-		}
-		if (gridCollisionFlag & COLLISION_LEFT) {
-			canMoveLeft = false;
-			p_velocityVector.x = 0.f;
-			grid->SnapToCell(&left);
-			p_currPos.x = left + halfScaleX;
-		}
-		if (gridCollisionFlag & COLLISION_RIGHT) {
-			canMoveRight = false;
-			p_velocityVector.x = 0.f;
-			grid->SnapToCell(&right);
-			p_currPos.x = right - halfScaleX;
-		}
+		//if (gridCollisionFlag & COLLISION_TOP) {
+		//	p_velocityVector.y = 0.f;
+		//	grid->SnapToCell(&top);
+		//	p_currPos.y = top - halfScaleY;
+		//}
+		//if (gridCollisionFlag & COLLISION_LEFT) {
+		//	canMoveLeft = false;
+		//	p_velocityVector.x = 0.f;
+		//	grid->SnapToCell(&left);
+		//	p_currPos.x = left + halfScaleX;
+		//}
+		//if (gridCollisionFlag & COLLISION_RIGHT) {
+		//	canMoveRight = false;
+		//	p_velocityVector.x = 0.f;
+		//	grid->SnapToCell(&right);
+		//	p_currPos.x = right - halfScaleX;
+		//}
 		break;
-
 	}
 }
 
