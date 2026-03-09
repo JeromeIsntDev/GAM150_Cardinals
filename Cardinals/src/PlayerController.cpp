@@ -295,12 +295,20 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 	switch (dir) {
 	case GravityDirection::Down:
 		if (gridCollisionFlag & COLLISION_BOTTOM) {
-			std::cout << "snapping" << std::endl;
 			p_isGrounded = true;
 			p_isJumping = false;
 			p_velocityVector.y = 0.f;
 			grid->SnapToCell(&p_initialPos.y);
 		}
+		if (gridCollisionFlag & COLLISION_TOP) {
+			p_velocityVector.y = 0.f;
+			grid->SnapToCell(&p_initialPos.y);
+		}
+		//if (gridCollisionFlag & COLLISION_LEFT) {
+		//	canMoveLeft = false;
+		//	p_velocityVector.x = 0.f;
+		//	grid->SnapToCell(&p_initialPos.x);
+		//}
 		break;
 
 	}
@@ -337,28 +345,35 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	//bottom
 	float b_x1, b_y1, b_x2, b_y2;
 	b_x1 = PosX - scaleX / 4.f;
-	//grid->SnapToCell(&b_x1);
+	grid->SnapToCell(&b_x1);
 	b_y1 = PosY - scaleY / 2.f;
-	//grid->SnapToCell(&b_y1);
+	grid->SnapToCell(&b_y1);
 	b_x2 = PosX + scaleX / 4.f;
-	//grid->SnapToCell(&b_x2);
+	grid->SnapToCell(&b_x2);
 	b_y2 = PosY - scaleY / 2.f;
-	//grid->SnapToCell(&b_y2);
+	grid->SnapToCell(&b_y2);
+	
+	std::cout << "Player Pos X: " << p_initialPos.x << " || " << p_initialPos.y << std::endl;
+	std::cout << "Bottom points: " << b_x1 << " || " << b_y1 << std::endl;
+
 	//all checks
-	if (grid->GetCellObjectTag(static_cast<int>(r_x1) + 800, 450 -static_cast<int>(r_y1)) == GameObjectTag::Static||
-		grid->GetCellObjectTag(static_cast<int>(r_x2) + 800, 450 -static_cast<int>(r_y2)) == GameObjectTag::Static) {
+	if (grid->GetCellObjectTag(r_x1 + 800.f, 450.f - r_y1) == GameObjectTag::Static||
+		grid->GetCellObjectTag(r_x2 + 800.f, 450.f - r_y2) == GameObjectTag::Static) {
+		std::cout << "collided right" << std::endl;
 		Flag += COLLISION_RIGHT;
 	}
-	if (grid->GetCellObjectTag(static_cast<int>(l_x1) + 800, 450 - static_cast<int>(l_y1)) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(static_cast<int>(l_x2) + 800, 450 - static_cast<int>(l_y2)) == GameObjectTag::Static) {
+	if (grid->GetCellObjectTag(l_x1 + 800.f, 450.f - l_y1) == GameObjectTag::Static ||
+		grid->GetCellObjectTag(l_x2 + 800.f, 450.f - l_y2) == GameObjectTag::Static) {
+		std::cout << "collided left" << std::endl;
 		Flag += COLLISION_LEFT;
 	}
-	if (grid->GetCellObjectTag(static_cast<int>(t_x1) + 800, 450 - static_cast<int>(t_y1)) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(static_cast<int>(t_x2) + 800, 450 - static_cast<int>(t_y2)) == GameObjectTag::Static) {
+	if (grid->GetCellObjectTag(t_x1 + 800.f, 450.f - t_y1) == GameObjectTag::Static ||
+		grid->GetCellObjectTag(t_x2 + 800.f, 450.f - t_y2) == GameObjectTag::Static) {
+		std::cout << "collided top" << std::endl;
 		Flag += COLLISION_TOP;
 	}
-	if (grid->GetCellObjectTag(static_cast<int>(b_x1) + 800, 450 - static_cast<int>(b_y1)) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(static_cast<int>(b_x2) + 800, 450 - static_cast<int>(b_y2)) == GameObjectTag::Static) {
+	if (grid->GetCellObjectTag(b_x1 + 800.f, 450.f - b_y1) == GameObjectTag::Static ||
+		grid->GetCellObjectTag(b_x2 + 800.f, 450.f - b_y2) == GameObjectTag::Static) {
 		std::cout << "collided bottom" << std::endl;
 		Flag += COLLISION_BOTTOM;
 	}
