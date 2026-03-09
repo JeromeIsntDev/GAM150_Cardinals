@@ -140,7 +140,7 @@ void Level1_Initialize()
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 75.f);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 80.f);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture);
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
