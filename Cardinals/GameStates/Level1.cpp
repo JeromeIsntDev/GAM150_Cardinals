@@ -127,10 +127,6 @@ void Level1_Load() {
 		u32 tag = static_cast<u32>(objData[i]._tag);
 		grid.SpawnNewTile(tag, pos.x + 800.f, 450.f - pos.y);
 	}
-
-	for (GameObject* obj : grid.objs) {
-		PRINT("OBJECT\n");
-	}
 }
 
 void Level1_Initialize()

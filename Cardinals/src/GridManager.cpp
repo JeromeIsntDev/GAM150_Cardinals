@@ -76,7 +76,8 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	GridCell* cell = GetCell(y, x);
 
 	if (cell->obj) {
-		std::cout << "Cell Filled Already!" << std::endl;
+		PRINT("[DEBUG] => Cell Filled Already!\n");
+		PRINT("[DEBUG] => Cell Tag: %d\n", cell->tag);
 		return;
 	}
 
@@ -106,13 +107,20 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	//	break;
 	//}
 
-	PRINT("[DEBUG] => Spawn at Grid Coordinates: %f,%f\n", x, y);
+	/*PRINT("[DEBUG] => Spawn at Grid Coordinates: %f,%f\n", cell->position.x, cell->position.y);
+	f32 ax = cell->position.x;
+	f32 ay = cell->position.y;
+	GridToWorld(&ax, &ay);
+	PRINT("[DEBUG] => Spawn at World Coordinates: %f,%f\n", ax,ay);*/
+
 	GameObject* obj = new GameObject{};
 	obj->SetMesh(tileMesh);
 	obj->SetTexture(&tileTexture);
 	obj->UpdateScale({ 50.f,50.f });
 	obj->UpdatePosition({ cell->position.x - 800.f , 450.f - cell->position.y });
 	obj->_tag = static_cast<GameObjectTag>(tag);
+
+	cell->tag = obj->_tag;
 
 	// leaving the tagging alone cuz im eepy
 	TileUV uv{};
@@ -134,13 +142,37 @@ void Grid::SnapToCell(f32* val)
 	s32 integral = static_cast<s32>(newVal);
 	*val = (static_cast<f32>(integral) + .5f) - 20.f;
 }
+/*!
+	\brief Converts grid coordinates to world coordinates
+*/
+void Grid::GridToWorld(f32* x, f32* y)
+{
+	f32 prevX{ *x }, prevY{ *y };
+	*x = prevX - 800.f;
+	*y = -(prevY - 450.f);
+}
+
+/*!
+	\brief Converts world coordinates to grid coordinates
+*/
+void Grid::WorldToGrid(f32* x, f32* y)
+{
+	f32 prevX{ *x }, prevY{ *y };
+	*x = prevX + 800.f;
+	*y = prevY + 450.f;
+}
 
 void Grid::DeleteTile(f32 x, f32 y)
 {
 	GridCell* cell = GetCell(y, x);
 
+	//f32 ax{ cell->position.x }, ay{ cell->position.y };
+	//GridToWorld(&ax, &ay);
+	//PRINT("GRID/MOUSE TO WORLD: %f, %f\n", ax, ay);
+
 	if (cell->obj == nullptr) {
-		std::cout << "Cell Empty!" << std::endl;
+		//std::cout << "Cell Empty!" << std::endl;
+		PRINT("[DEBUG] => Cell Tag: %d\n", cell->tag);
 		return;
 	}
 
@@ -157,16 +189,6 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 	s32 row = y / 50.f;
 
 	return &cells[column][row];
-}
-
-GameObjectTag Grid::GetCellObjectTag(f32 x, f32 y)
-{
-	GridCell* cell = GetCell(x, y);
-	if(cell == nullptr)return GameObjectTag::GameObjectTagNumber;
-	if (cell->obj) {
-		return cell->obj->_tag;
-	}
-	return GameObjectTag::GameObjectTagNumber;
 }
 
 //std::vector<GameObject*> Grid::GetCellGameObject() const

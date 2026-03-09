@@ -299,6 +299,7 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 			p_isJumping = false;
 			p_velocityVector.y = 0.f;
 			grid->SnapToCell(&p_initialPos.y);
+			PRINT("Collision Bottom\n");
 		}
 		if (gridCollisionFlag & COLLISION_TOP) {
 			p_velocityVector.y = 0.f;
@@ -332,9 +333,13 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	//grid->SnapToCell(&r_x2);
 	y2 = PosY - quarterScaleY;
 
-	if (grid->GetCellObjectTag(x1 + 800.f, 450.f - y1) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(x2 + 800.f, 450.f - y2) == GameObjectTag::Static) {
+	grid->WorldToGrid(&x1, &y1);
+	grid->WorldToGrid(&x2, &y2);
+
+	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
+		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_RIGHT;
+		//PRINT("Collision Right\n");
 	}
 
 	x1 = PosX - halfScaleX;
@@ -344,10 +349,14 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	x2 = PosX - halfScaleX;
 	//grid->SnapToCell(&r_x2);
 	y2 = PosY - quarterScaleY;
+
+	grid->WorldToGrid(&x1, &y1);
+	grid->WorldToGrid(&x2, &y2);
 	
-	if (grid->GetCellObjectTag(x1 + 800.f, 450.f - y1) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(x2 + 800.f, 450.f - y1) == GameObjectTag::Static) {
+	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
+		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_LEFT;
+		//PRINT("Collision Left\n");
 	}
 
 	x1 = PosX + quarterScaleX;
@@ -358,9 +367,13 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	//grid->SnapToCell(&r_x2);
 	y2 = PosY + quarterScaleY;
 
-	if (grid->GetCellObjectTag(x1 + 800.f, 350.f - y1) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(x2 + 800.f, 350.f - y2) == GameObjectTag::Static) {
+	grid->WorldToGrid(&x1, &y1);
+	grid->WorldToGrid(&x2, &y2);
+
+	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
+		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_TOP;
+		//PRINT("Collision Top\n");
 	}
 
 	x1 = PosX + quarterScaleX;
@@ -370,15 +383,17 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	x2 = PosX - quarterScaleX;
 	//grid->SnapToCell(&r_x2);
 	y2 = PosY - halfScaleY;
+	grid->WorldToGrid(&x1, &y1);
+	grid->WorldToGrid(&x2, &y2);
 
+	//PRINT("%f, %f\n", grid->GetCellWorld(x1,y1)->position.y, grid->GetCellWorld(x1, y1)->position.x);
 
-	if(grid->GetCell(x1 + 800.f, 450.f - y1)->obj) PRINT("Cell TAG: %d\n", grid->GetCell(x1 + 800.f, 450.f - y1)->obj->_tag);
-	PRINT("COORDINATES: %f,%f\n", x1 + 800.f, 350.f - y1);
-
-	if (grid->GetCellObjectTag(x1 + 800.f, 350.f - y1) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(x2 + 800.f, 350.f - y2) == GameObjectTag::Static) {
+	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
+		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_BOTTOM;
+		//PRINT("Collision Bottom\n");
 	}
+
 	return Flag;
 }
 

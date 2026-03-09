@@ -14,6 +14,7 @@ struct GridCell {
 	u32 column, row;
 	AEVec2 position;
 	GameObject* obj;
+	GameObjectTag tag = GameObjectTag::GameObjectTagNumber;
 
 	GridCell();
 	~GridCell();
@@ -40,10 +41,10 @@ struct Grid {
 	void SpawnNewTile(int const&, f32, f32);
 	void DeleteTile(f32, f32);
 	void SnapToCell(f32*);
+	void GridToWorld(f32*, f32*);
+	void WorldToGrid(f32*, f32*);
 
 	GridCell* GetCell(f32 x, f32 y);
-	GameObjectTag GetCellObjectTag(f32, f32);
-	//std::vector<GameObject*> GetCellGameObject() const;
 };
 
 #endif // !_GRID_MANAGER
