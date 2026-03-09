@@ -333,7 +333,7 @@ void Level1_Update() {
 	mainPlayer.hasCollided = false;
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
-
+	mainPlayer.CheckBinaryCollision(grid,mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());

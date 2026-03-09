@@ -285,6 +285,84 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	UpdatePosition(p_initialPos);
 }
 
+
+void Player::CheckBinaryCollision(Grid& grid, GravityDirection& dir) {
+	int collideVal = CheckInstanceBinaryMapCollision(p_initialPos.x,
+		p_initialPos.y,p_Scale.x, p_Scale.y, grid);
+
+	gridCollisionFlag = collideVal;
+
+	switch (dir) {
+	case GravityDirection::Down:
+		if (gridCollisionFlag & COLLISION_BOTTOM) {
+			grid.SnapToCell(&p_initialPos.y);
+			p_isGrounded = true;
+			p_isJumping = false;
+			p_velocityVector.y = 0.f;
+		}
+		break;
+
+	}
+}
+
+int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid grid) {
+	int Flag = 0;
+	//right side
+	f32 r_x1, r_y1, r_x2, r_y2;
+	r_x1 = PosX + scaleX / 2.f;
+	//grid.SnapToCell(&r_x1);
+	r_y1 = PosY + scaleY / 4.f;
+	//grid.SnapToCell(&r_y1);
+	r_x2 = PosX + scaleX / 2.f;
+	//grid.SnapToCell(&r_x2);
+	r_y2 = PosY - scaleY / 4.f;
+	//grid.SnapToCell(&r_y2);
+	//left side
+	float l_x1, l_y1, l_x2, l_y2;
+	l_x1 = PosX - scaleX / 2.f;
+	l_y1 = PosY + scaleY / 4.f;
+	l_x2 = PosX - scaleX / 2.f;
+	l_y2 = PosY - scaleY / 4.f;
+	//top
+	float t_x1, t_y1, t_x2, t_y2;
+	t_x1 = PosX - scaleX / 4.f;
+	//grid.SnapToCell(&t_x1);
+	t_y1 = PosY + scaleY / 2.f;
+	//grid.SnapToCell(&t_y1);
+	t_x2 = PosX + scaleX / 4.f;
+	//grid.SnapToCell(&t_x2);
+	t_y2 = PosY + scaleY / 2.f;
+	//grid.SnapToCell(&t_y2);
+	//bottom
+	float b_x1, b_y1, b_x2, b_y2;
+	b_x1 = PosX - scaleX / 4.f;
+	//grid.SnapToCell(&b_x1);
+	b_y1 = PosY - scaleY / 2.f;
+	//grid.SnapToCell(&b_y1);
+	b_x2 = PosX + scaleX / 4.f;
+	//grid.SnapToCell(&b_x2);
+	b_y2 = PosY - scaleY / 2.f;
+	//grid.SnapToCell(&b_y2);
+	//all checks
+	if (grid.GetCell(static_cast<int>(r_x1), static_cast<int>(r_y1)) ||
+		grid.GetCell(static_cast<int>(r_x2), static_cast<int>(r_y2))) {
+		Flag += COLLISION_RIGHT;
+	}
+	if (grid.GetCell(static_cast<int>(l_x1), static_cast<int>(l_y1)) ||
+		grid.GetCell(static_cast<int>(l_x2), static_cast<int>(l_y2))) {
+		Flag += COLLISION_LEFT;
+	}
+	if (grid.GetCell(static_cast<int>(t_x1), static_cast<int>(t_y1)) ||
+		grid.GetCell(static_cast<int>(t_x2), static_cast<int>(t_y2))) {
+		Flag += COLLISION_TOP;
+	}
+	if (grid.GetCell(static_cast<int>(b_x1), static_cast<int>(b_y1)) ||
+		grid.GetCell(static_cast<int>(b_x2), static_cast<int>(b_y2))) {
+		Flag += COLLISION_BOTTOM;
+	}
+	return Flag;
+}
+
 void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& dir)
 {
 	for (GameObject* obj : objs) {
@@ -327,165 +405,165 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 				p_initialPos = p_previousPos;
 			}
 		}
-		else {
-			f32 overlapX =
-				(std::min)(this->GetCollider().p_maxPoint.x, obj->GetCollider().p_maxPoint.x) -
-				(std::max)(this->GetCollider().p_minPoint.x, obj->GetCollider().p_minPoint.x);
+		/*else {
+		//	f32 overlapX =
+		//		(std::min)(this->GetCollider().p_maxPoint.x, obj->GetCollider().p_maxPoint.x) -
+		//		(std::max)(this->GetCollider().p_minPoint.x, obj->GetCollider().p_minPoint.x);
 
-			f32 overlapY =
-				(std::min)(this->GetCollider().p_maxPoint.y, obj->GetCollider().p_maxPoint.y) -
-				(std::max)(this->GetCollider().p_minPoint.y, obj->GetCollider().p_minPoint.y);
+		//	f32 overlapY =
+		//		(std::min)(this->GetCollider().p_maxPoint.y, obj->GetCollider().p_maxPoint.y) -
+		//		(std::max)(this->GetCollider().p_minPoint.y, obj->GetCollider().p_minPoint.y);
 
-			if (overlapX <= 0.f || overlapY <= 0.f) continue;
+		//	if (overlapX <= 0.f || overlapY <= 0.f) continue;
 
-			// Resolve on smallest penetration axis (Y axis)
-			if (overlapY <= overlapX + 5.f)
-			{
-				AEVec2 tmpPos = this->GetPosition();
-				switch (dir) {
-				case Player::GravityDirection::Up:
-					if (this->GetCollider().p_maxPoint.y > obj->GetCollider().p_minPoint.y &&
-						this->GetCollider().p_maxPoint.y < obj->GetCollider().p_maxPoint.y)
-					{
-						tmpPos.y -= overlapY;
-						this->UpdatePosition(tmpPos);
+		//	// Resolve on smallest penetration axis (Y axis)
+		//	if (overlapY <= overlapX + 5.f)
+		//	{
+		//		AEVec2 tmpPos = this->GetPosition();
+		//		switch (dir) {
+		//		case Player::GravityDirection::Up:
+		//			if (this->GetCollider().p_maxPoint.y > obj->GetCollider().p_minPoint.y &&
+		//				this->GetCollider().p_maxPoint.y < obj->GetCollider().p_maxPoint.y)
+		//			{
+		//				tmpPos.y -= overlapY;
+		//				this->UpdatePosition(tmpPos);
 
-						if (this->p_velocityVector.y > 0.f)
-							this->p_velocityVector.y = 0.f;
-						this->p_isGrounded = true;
-						this->p_isJumping = false;
-					}
-					//if player is under collidable
-					else if (this->GetCollider().p_maxPoint.y > obj->GetCollider().p_minPoint.y &&
-							 this->GetCollider().p_maxPoint.y < obj->GetCollider().p_maxPoint.y)
-					{
-						tmpPos.y += overlapY;
-						this->UpdatePosition(tmpPos);
+		//				if (this->p_velocityVector.y > 0.f)
+		//					this->p_velocityVector.y = 0.f;
+		//				this->p_isGrounded = true;
+		//				this->p_isJumping = false;
+		//			}
+		//			//if player is under collidable
+		//			else if (this->GetCollider().p_maxPoint.y > obj->GetCollider().p_minPoint.y &&
+		//					 this->GetCollider().p_maxPoint.y < obj->GetCollider().p_maxPoint.y)
+		//			{
+		//				tmpPos.y += overlapY;
+		//				this->UpdatePosition(tmpPos);
 
-						if (this->p_velocityVector.y < 0.f)
-							this->p_velocityVector.y = 0.f;
-					}
-					break;
-				case Player::GravityDirection::Down:
-					//if player is above collidable
-					if (this->GetCollider().p_minPoint.y < obj->GetCollider().p_maxPoint.y &&
-						this->GetCollider().p_maxPoint.y > obj->GetCollider().p_maxPoint.y)
-					{
-						if (this->p_velocityVector.y < 0.f)
-							this->p_velocityVector.y = 0.f;
-						tmpPos.y += overlapY;
-						this->UpdatePosition(tmpPos);
-						this->p_isGrounded = true;
-						this->p_isJumping = false;
-					}
-					//if player is under collidable
-					else if (this->GetCollider().p_maxPoint.y > obj->GetCollider().p_minPoint.y &&
-							 this->GetCollider().p_maxPoint.y < obj->GetCollider().p_maxPoint.y)
-					{
-						if (this->p_velocityVector.y > 0.f)
-							this->p_velocityVector.y = 0.f;
-						tmpPos.y -= overlapY;
-						this->UpdatePosition(tmpPos);
+		//				if (this->p_velocityVector.y < 0.f)
+		//					this->p_velocityVector.y = 0.f;
+		//			}
+		//			break;
+		//		case Player::GravityDirection::Down:
+		//			//if player is above collidable
+		//			if (this->GetCollider().p_minPoint.y < obj->GetCollider().p_maxPoint.y &&
+		//				this->GetCollider().p_maxPoint.y > obj->GetCollider().p_maxPoint.y)
+		//			{
+		//				if (this->p_velocityVector.y < 0.f)
+		//					this->p_velocityVector.y = 0.f;
+		//				tmpPos.y += overlapY;
+		//				this->UpdatePosition(tmpPos);
+		//				this->p_isGrounded = true;
+		//				this->p_isJumping = false;
+		//			}
+		//			//if player is under collidable
+		//			else if (this->GetCollider().p_maxPoint.y > obj->GetCollider().p_minPoint.y &&
+		//					 this->GetCollider().p_maxPoint.y < obj->GetCollider().p_maxPoint.y)
+		//			{
+		//				if (this->p_velocityVector.y > 0.f)
+		//					this->p_velocityVector.y = 0.f;
+		//				tmpPos.y -= overlapY;
+		//				this->UpdatePosition(tmpPos);
 
-					}
-					break;
-				case Player::GravityDirection::Left:
-				case Player::GravityDirection::Right:
-					if (this->GetCollider().p_maxPoint.y > obj->GetCollider().p_minPoint.y &&
-						this->GetCollider().p_maxPoint.y < obj->GetCollider().p_maxPoint.y)
-					{
-						// Player hit OBJECT BOTTOM side
-						std::cout << "left hit" << std::endl;
-						tmpPos.y -= overlapY;
-						this->canMoveLeft = false;
-					}
-					else if (this->GetCollider().p_minPoint.y < obj->GetCollider().p_maxPoint.y &&
-							 this->GetCollider().p_minPoint.y > obj->GetCollider().p_minPoint.y)
-					{
-						// Player hit OBJECT TOP side
-						std::cout << "right hit" << std::endl;
-						tmpPos.y += overlapY;
-						this->canMoveRight = false;
-					}
-					this->UpdatePosition(tmpPos);
-					if (this->p_velocityVector.y > 0.f)
-						this->p_velocityVector.y = 0.f;
-					break;
-				default:
-					break;
-				}
-			}
-			else
-			{
-				//temp side collision
-				AEVec2 tmpPos = this->GetPosition();
+		//			}
+		//			break;
+		//		case Player::GravityDirection::Left:
+		//		case Player::GravityDirection::Right:
+		//			if (this->GetCollider().p_maxPoint.y > obj->GetCollider().p_minPoint.y &&
+		//				this->GetCollider().p_maxPoint.y < obj->GetCollider().p_maxPoint.y)
+		//			{
+		//				// Player hit OBJECT BOTTOM side
+		//				std::cout << "left hit" << std::endl;
+		//				tmpPos.y -= overlapY;
+		//				this->canMoveLeft = false;
+		//			}
+		//			else if (this->GetCollider().p_minPoint.y < obj->GetCollider().p_maxPoint.y &&
+		//					 this->GetCollider().p_minPoint.y > obj->GetCollider().p_minPoint.y)
+		//			{
+		//				// Player hit OBJECT TOP side
+		//				std::cout << "right hit" << std::endl;
+		//				tmpPos.y += overlapY;
+		//				this->canMoveRight = false;
+		//			}
+		//			this->UpdatePosition(tmpPos);
+		//			if (this->p_velocityVector.y > 0.f)
+		//				this->p_velocityVector.y = 0.f;
+		//			break;
+		//		default:
+		//			break;
+		//		}
+		//	}
+		//	else
+		//	{
+		//		//temp side collision
+		//		AEVec2 tmpPos = this->GetPosition();
 
-				switch (dir) {
-					//this two cases is for normal vertical check. when X offset is smaller than Y (push X)
-				case Player::GravityDirection::Up:
-				case Player::GravityDirection::Down:
-					if (this->GetCollider().p_maxPoint.x > obj->GetCollider().p_minPoint.x &&
-						this->GetCollider().p_maxPoint.x < obj->GetCollider().p_maxPoint.x)
-					{
-						// Player hit object's LEFT side
-						tmpPos.x -= overlapX; 
-						this->canMoveRight = false;
-					}
-					else if (this->GetCollider().p_minPoint.x < obj->GetCollider().p_maxPoint.x &&
-							 this->GetCollider().p_minPoint.x > obj->GetCollider().p_minPoint.x)
-					{
-						// Player hit object's RIGHT side
-						tmpPos.x += overlapX;
-						this->canMoveLeft = false;
-					}
-					this->UpdatePosition(tmpPos);
-					this->p_velocityVector.x = 0.f;
-					break;
-				case Player::GravityDirection::Left:
-					if (this->GetPosition().x > obj->GetPosition().x)
-					{
-						tmpPos.x += overlapX;
-						this->UpdatePosition(tmpPos);
+		//		switch (dir) {
+		//			//this two cases is for normal vertical check. when X offset is smaller than Y (push X)
+		//		case Player::GravityDirection::Up:
+		//		case Player::GravityDirection::Down:
+		//			if (this->GetCollider().p_maxPoint.x > obj->GetCollider().p_minPoint.x &&
+		//				this->GetCollider().p_maxPoint.x < obj->GetCollider().p_maxPoint.x)
+		//			{
+		//				// Player hit object's LEFT side
+		//				tmpPos.x -= overlapX; 
+		//				this->canMoveRight = false;
+		//			}
+		//			else if (this->GetCollider().p_minPoint.x < obj->GetCollider().p_maxPoint.x &&
+		//					 this->GetCollider().p_minPoint.x > obj->GetCollider().p_minPoint.x)
+		//			{
+		//				// Player hit object's RIGHT side
+		//				tmpPos.x += overlapX;
+		//				this->canMoveLeft = false;
+		//			}
+		//			this->UpdatePosition(tmpPos);
+		//			this->p_velocityVector.x = 0.f;
+		//			break;
+		//		case Player::GravityDirection::Left:
+		//			if (this->GetPosition().x > obj->GetPosition().x)
+		//			{
+		//				tmpPos.x += overlapX;
+		//				this->UpdatePosition(tmpPos);
 
-						this->p_velocityVector.x = 0.f;
-						this->p_isGrounded = true;
-						this->p_isJumping = false;
-					}
-					//if player is under collidable
-					else
-					{
-						tmpPos.x -= overlapX;
-						this->UpdatePosition(tmpPos);
+		//				this->p_velocityVector.x = 0.f;
+		//				this->p_isGrounded = true;
+		//				this->p_isJumping = false;
+		//			}
+		//			//if player is under collidable
+		//			else
+		//			{
+		//				tmpPos.x -= overlapX;
+		//				this->UpdatePosition(tmpPos);
 
-						if (this->p_velocityVector.x > 0.f)
-							this->p_velocityVector.x = 0.f;
-					}
-					break;
-				case Player::GravityDirection::Right:
-					if (this->GetPosition().x < obj->GetPosition().x)
-					{
-						tmpPos.x -= overlapX;
-						this->UpdatePosition(tmpPos);
+		//				if (this->p_velocityVector.x > 0.f)
+		//					this->p_velocityVector.x = 0.f;
+		//			}
+		//			break;
+		//		case Player::GravityDirection::Right:
+		//			if (this->GetPosition().x < obj->GetPosition().x)
+		//			{
+		//				tmpPos.x -= overlapX;
+		//				this->UpdatePosition(tmpPos);
 
-						this->p_velocityVector.x = 0.f;
-						this->p_isGrounded = true;
-						this->p_isJumping = false;
-					}
-					//if player is under collidable
-					else
-					{
-						tmpPos.x += overlapX;
-						this->UpdatePosition(tmpPos);
+		//				this->p_velocityVector.x = 0.f;
+		//				this->p_isGrounded = true;
+		//				this->p_isJumping = false;
+		//			}
+		//			//if player is under collidable
+		//			else
+		//			{
+		//				tmpPos.x += overlapX;
+		//				this->UpdatePosition(tmpPos);
 
-						if (this->p_velocityVector.x < 0.f)
-							this->p_velocityVector.x = 0.f;
-					}
-					break;
-				default:
-					break;
-				}
-			}
-		}
+		//				if (this->p_velocityVector.x < 0.f)
+		//					this->p_velocityVector.x = 0.f;
+		//			}
+		//			break;
+		//		default:
+		//			break;
+		//		}
+		//	}
+		//}*/
 	}
 }
 

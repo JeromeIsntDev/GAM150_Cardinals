@@ -19,6 +19,7 @@ from GameObject class from GameObject
 
 #include "../header/GameObject.hpp"
 #include "../header/Physics.hpp"
+#include "../header/GridManager.hpp"
 
 class Player : public GameObject {
 
@@ -64,6 +65,8 @@ public:
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
 
+	int	gridCollisionFlag;
+
 	void InitializePlayer(int health, f32 moveSpeed, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 
 	int GetPlayerHealth() const;
@@ -81,12 +84,19 @@ public:
 	void PlayerInputHandle(f32&, GravityDirection&);
 	void PlayerMovement(f32&, GravityDirection& dir);
 	void PlayerCollision(std::vector<GameObject*> objs,GravityDirection&);
+	void CheckBinaryCollision(Grid& grid, GravityDirection&);
+	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid grid);
 	//Function for Player Jump Logic
 	//Basically the initialize values for PreJumps
 	//void StartJump(AEVec2);
 	//The math and update for during the jump
 	void PlayerJump(f32&, GravityDirection&);
 };
+
+const unsigned int	COLLISION_LEFT = 0x00000001;		//0001
+const unsigned int	COLLISION_RIGHT = 0x00000002;		//0010
+const unsigned int	COLLISION_TOP = 0x00000004;			//0100
+const unsigned int	COLLISION_BOTTOM = 0x00000008;		//1000
 
 
 #endif // !PLAYER_MANAGER
