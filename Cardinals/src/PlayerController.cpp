@@ -291,45 +291,88 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 
 	gridCollisionFlag = collideVal;
 
-	/*f32 halfScaleY = p_Scale.y * 0.5f;
+	f32 halfScaleY = p_Scale.y * 0.5f;
 	f32 halfScaleX = p_Scale.x * 0.5f;
 	f32 bottom = p_currPos.y - halfScaleY;
 	f32 top = p_currPos.y + halfScaleY;
 	f32 left = p_currPos.x - halfScaleX;
-	f32 right = p_currPos.x + halfScaleX;*/
+	f32 right = p_currPos.x + halfScaleX;
 
 	//std::cout << p_currPos.y << " " << bottom << std::endl;
 
 	switch (dir) {
-	case GravityDirection::Down:
-		if (gridCollisionFlag & COLLISION_BOTTOM) {
-			p_velocityVector.y = 0.f;
-			//grid->SnapToCell(&bottom);
-			//p_currPos.y = 0.f;
-			p_isGrounded = true;
-			p_isJumping = false;
-			//std::cout << "after: " << p_currPos.y << std::endl;
-			//this->UpdatePosition(p_currPos);
-			//PRINT("Collision Bottom\n");
-		}
-		//if (gridCollisionFlag & COLLISION_TOP) {
-		//	p_velocityVector.y = 0.f;
-		//	grid->SnapToCell(&top);
-		//	p_currPos.y = top - halfScaleY;
-		//}
-		//if (gridCollisionFlag & COLLISION_LEFT) {
-		//	canMoveLeft = false;
-		//	p_velocityVector.x = 0.f;
-		//	grid->SnapToCell(&left);
-		//	p_currPos.x = left + halfScaleX;
-		//}
-		//if (gridCollisionFlag & COLLISION_RIGHT) {
-		//	canMoveRight = false;
-		//	p_velocityVector.x = 0.f;
-		//	grid->SnapToCell(&right);
-		//	p_currPos.x = right - halfScaleX;
-		//}
-break;
+		case GravityDirection::Down:
+			if (gridCollisionFlag & COLLISION_BOTTOM) {
+				p_velocityVector.y = 0.f;
+				p_isGrounded = true;
+				p_isJumping = false;
+			}
+			if (gridCollisionFlag & COLLISION_TOP) {
+				p_velocityVector.y = 0.f;
+			}
+			if (gridCollisionFlag & COLLISION_LEFT) {
+				canMoveLeft = false;
+				p_velocityVector.x = 0.f;
+			}
+			if (gridCollisionFlag & COLLISION_RIGHT) {
+				canMoveRight = false;
+				p_velocityVector.x = 0.f;
+			}
+		break;
+		case GravityDirection::Up:
+			if (gridCollisionFlag & COLLISION_BOTTOM) {
+				p_velocityVector.y = 0.f;
+			}
+			if (gridCollisionFlag & COLLISION_TOP) {
+				p_velocityVector.y = 0.f;
+				p_isGrounded = true;
+				p_isJumping = false;
+			}
+			if (gridCollisionFlag & COLLISION_LEFT) {
+				canMoveLeft = false;
+				p_velocityVector.x = 0.f;
+			}
+			if (gridCollisionFlag & COLLISION_RIGHT) {
+				canMoveRight = false;
+				p_velocityVector.x = 0.f;
+			}
+		break;
+		case GravityDirection::Left:
+			if (gridCollisionFlag & COLLISION_BOTTOM) {
+				canMoveRight = false;
+				p_velocityVector.y = 0.f;
+			}
+			if (gridCollisionFlag & COLLISION_TOP) {
+				p_velocityVector.y = 0.f;
+				canMoveLeft = false;
+			}
+			if (gridCollisionFlag & COLLISION_LEFT) {
+				p_velocityVector.x = 0.f;
+				p_isGrounded = true;
+				p_isJumping = false;
+			}
+			if (gridCollisionFlag & COLLISION_RIGHT) {
+				p_velocityVector.x = 0.f;
+			}
+		break;
+		case GravityDirection::Right:
+			if (gridCollisionFlag & COLLISION_BOTTOM) {
+				canMoveRight = false;
+				p_velocityVector.y = 0.f;
+			}
+			if (gridCollisionFlag & COLLISION_TOP) {
+				canMoveLeft = false;
+				p_velocityVector.y = 0.f;
+			}
+			if (gridCollisionFlag & COLLISION_LEFT) {
+				p_velocityVector.x = 0.f;
+			}
+			if (gridCollisionFlag & COLLISION_RIGHT) {
+				p_velocityVector.x = 0.f;
+				p_isGrounded = true;
+				p_isJumping = false;
+			}
+		break;
 	}
 }
 
@@ -357,7 +400,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	{
 		if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 			grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
-			//PRINT("[DEBUG] => COLLIDE RIGHT\n");
+			PRINT("[DEBUG] => COLLIDE RIGHT\n");
 			Flag += COLLISION_RIGHT;
 		}
 	}
@@ -377,7 +420,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	{
 		if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 			grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
-			//PRINT("[DEBUG] => COLLIDE LEFT\n");
+			PRINT("[DEBUG] => COLLIDE LEFT\n");
 			Flag += COLLISION_LEFT;
 		}
 	}
@@ -398,7 +441,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	{
 		if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 			grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
-			//PRINT("[DEBUG] => COLLIDE TOP\n");
+			PRINT("[DEBUG] => COLLIDE TOP\n");
 			Flag += COLLISION_TOP;
 		}
 	}
@@ -449,11 +492,11 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 		else if (obj->_tag == GameObjectTag::GravUp) {
 			std::cout << "grav up" << std::endl;
 			grav = Player::GravityDirection::Up;
-			p_Scale.y = -50.f;
+			//p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravDown) {
 			grav = Player::GravityDirection::Down;
-			p_Scale.y = 50.f;
+			//p_Scale.y = 50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravLeft) {
 			grav = Player::GravityDirection::Left;
