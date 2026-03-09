@@ -291,11 +291,11 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 		p_initialPos.y,p_Scale.x, p_Scale.y, grid);
 
 	gridCollisionFlag = collideVal;
-	std::cout << "Flag: " << gridCollisionFlag << std::endl;
+	//std::cout << "Flag: " << gridCollisionFlag << std::endl;
 	switch (dir) {
 	case GravityDirection::Down:
 		if (gridCollisionFlag & COLLISION_BOTTOM) {
-			std::cout << "snapping" << std::endl;
+			//std::cout << "snapping" << std::endl;
 			p_isGrounded = true;
 			p_isJumping = false;
 			p_velocityVector.y = 0.f;
@@ -309,57 +309,66 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid* grid) {
 	int Flag = 0;
 	//right side
-	f32 r_x1, r_y1, r_x2, r_y2;
-	r_x1 = PosX + scaleX / 2.f;
+	f32 x1, y1, x2, y2;
+
+	f32 halfScaleX = scaleX * .5f;
+	f32 halfScaleY = scaleY * .5f;
+	f32 quarterScaleX = scaleX * .25f;
+	f32 quarterScaleY = scaleY * .25f;
+
+	x1 = PosX + halfScaleX;
 	//grid->SnapToCell(&r_x1);
-	r_y1 = PosY + scaleY / 4.f;
+	y1 = PosY + quarterScaleY;
 	//grid->SnapToCell(&r_y1);
-	r_x2 = PosX + scaleX / 2.f;
+	x2 = PosX + halfScaleX;
 	//grid->SnapToCell(&r_x2);
-	r_y2 = PosY - scaleY / 4.f;
-	//grid->SnapToCell(&r_y2);
-	//left side
-	float l_x1, l_y1, l_x2, l_y2;
-	l_x1 = PosX - scaleX / 2.f;
-	l_y1 = PosY + scaleY / 4.f;
-	l_x2 = PosX - scaleX / 2.f;
-	l_y2 = PosY - scaleY / 4.f;
-	//top
-	float t_x1, t_y1, t_x2, t_y2;
-	t_x1 = PosX - scaleX / 4.f;
-	//grid->SnapToCell(&t_x1);
-	t_y1 = PosY + scaleY / 2.f;
-	//grid->SnapToCell(&t_y1);
-	t_x2 = PosX + scaleX / 4.f;
-	//grid->SnapToCell(&t_x2);
-	t_y2 = PosY + scaleY / 2.f;
-	//grid->SnapToCell(&t_y2);
-	//bottom
-	float b_x1, b_y1, b_x2, b_y2;
-	b_x1 = PosX - scaleX / 4.f;
-	//grid->SnapToCell(&b_x1);
-	b_y1 = PosY - scaleY / 2.f;
-	//grid->SnapToCell(&b_y1);
-	b_x2 = PosX + scaleX / 4.f;
-	//grid->SnapToCell(&b_x2);
-	b_y2 = PosY - scaleY / 2.f;
-	//grid->SnapToCell(&b_y2);
-	//all checks
-	if (grid->GetCellObjectTag(static_cast<int>(r_x1) + 800, 450 -static_cast<int>(r_y1)) == GameObjectTag::Static||
-		grid->GetCellObjectTag(static_cast<int>(r_x2) + 800, 450 -static_cast<int>(r_y2)) == GameObjectTag::Static) {
+	y2 = PosY - quarterScaleY;
+
+	if (grid->GetCellObjectTag(x1 + 800.f, 450.f - y1) == GameObjectTag::Static ||
+		grid->GetCellObjectTag(x2 + 800.f, 450.f - y2) == GameObjectTag::Static) {
 		Flag += COLLISION_RIGHT;
 	}
-	if (grid->GetCellObjectTag(static_cast<int>(l_x1) + 800, 450 - static_cast<int>(l_y1)) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(static_cast<int>(l_x2) + 800, 450 - static_cast<int>(l_y2)) == GameObjectTag::Static) {
+
+	x1 = PosX - halfScaleX;
+	//grid->SnapToCell(&r_x1);
+	y1 = PosY + quarterScaleY;
+	//grid->SnapToCell(&r_y1);
+	x2 = PosX - halfScaleX;
+	//grid->SnapToCell(&r_x2);
+	y2 = PosY - quarterScaleY;
+	
+	if (grid->GetCellObjectTag(x1 + 800.f, 450.f - y1) == GameObjectTag::Static ||
+		grid->GetCellObjectTag(x2 + 800.f, 450.f - y1) == GameObjectTag::Static) {
 		Flag += COLLISION_LEFT;
 	}
-	if (grid->GetCellObjectTag(static_cast<int>(t_x1) + 800, 450 - static_cast<int>(t_y1)) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(static_cast<int>(t_x2) + 800, 450 - static_cast<int>(t_y2)) == GameObjectTag::Static) {
+
+	x1 = PosX + quarterScaleX;
+	//grid->SnapToCell(&r_x1);
+	y1 = PosY + halfScaleY;
+	//grid->SnapToCell(&r_y1);
+	x2 = PosX - quarterScaleX;
+	//grid->SnapToCell(&r_x2);
+	y2 = PosY + quarterScaleY;
+
+	if (grid->GetCellObjectTag(x1 + 800.f, 350.f - y1) == GameObjectTag::Static ||
+		grid->GetCellObjectTag(x2 + 800.f, 350.f - y2) == GameObjectTag::Static) {
 		Flag += COLLISION_TOP;
 	}
-	if (grid->GetCellObjectTag(static_cast<int>(b_x1) + 800, 450 - static_cast<int>(b_y1)) == GameObjectTag::Static ||
-		grid->GetCellObjectTag(static_cast<int>(b_x2) + 800, 450 - static_cast<int>(b_y2)) == GameObjectTag::Static) {
-		std::cout << "collided bottom" << std::endl;
+
+	x1 = PosX + quarterScaleX;
+	//grid->SnapToCell(&r_x1);
+	y1 = PosY - halfScaleY;
+	//grid->SnapToCell(&r_y1);
+	x2 = PosX - quarterScaleX;
+	//grid->SnapToCell(&r_x2);
+	y2 = PosY - halfScaleY;
+
+
+	if(grid->GetCell(x1 + 800.f, 450.f - y1)->obj) PRINT("Cell TAG: %d\n", grid->GetCell(x1 + 800.f, 450.f - y1)->obj->_tag);
+	PRINT("COORDINATES: %f,%f\n", x1 + 800.f, 350.f - y1);
+
+	if (grid->GetCellObjectTag(x1 + 800.f, 350.f - y1) == GameObjectTag::Static ||
+		grid->GetCellObjectTag(x2 + 800.f, 350.f - y2) == GameObjectTag::Static) {
 		Flag += COLLISION_BOTTOM;
 	}
 	return Flag;

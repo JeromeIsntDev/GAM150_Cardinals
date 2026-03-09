@@ -106,6 +106,7 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	//	break;
 	//}
 
+	PRINT("[DEBUG] => Spawn at Grid Coordinates: %f,%f\n", x, y);
 	GameObject* obj = new GameObject{};
 	obj->SetMesh(tileMesh);
 	obj->SetTexture(&tileTexture);
