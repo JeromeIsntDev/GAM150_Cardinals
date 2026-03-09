@@ -20,6 +20,7 @@ from GameObject class from GameObject
 #include "../header/GameObject.hpp"
 #include "../header/Physics.hpp"
 #include "../header/GridManager.hpp"
+#include "../header/AudioManager.hpp"
 
 class Player : public GameObject {
 
@@ -37,6 +38,8 @@ private:
 	f32 changeCD{ 0.f };
 	f32 jumpForce = 500.f;
 	bool gameOver = false;
+
+	AudioManager& bgm = AudioManager::Instance();
 public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 	AEVec2 p_Scale{ 50.f,50.f };

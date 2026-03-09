@@ -169,6 +169,7 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	//std::cout << "right bool: " << canMoveRight << std::endl;
 
 	if (input.isKeyPressed(AEVK_SPACE) && !p_isJumping) {
+		bgm.PlayAudio("JUMP", AudioType::SFX, 1.f, 0);
 		//adjust jump logic here
 		switch(dir){
 		case Player::GravityDirection::Up:
@@ -494,6 +495,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 
 		if (obj->_tag == GameObjectTag::Win) {
 			//win gate hit
+			bgm.PlayAudio("HITWIN", AudioType::SFX, 1.f, 0);
 			std::cout << "Win gate hit" << std::endl;
 			gameOver = true;
 		}
