@@ -52,6 +52,14 @@ void MainMenu_Load() {
 	bgm.LoadManifest("../../Assets/AudioManifest.txt");
 	tex.LoadManifest("../../Assets/TextureManifest.txt");
 
+	// for persistent objs beyond manifest
+	tex.SetPersistent("TileSheet");
+	tex.SetPersistent("PlayerIdle");
+	tex.SetPersistent("BG_BACKMOST");
+	tex.SetPersistent("BG_BACKMOUNTAIN");
+	tex.SetPersistent("BG_CLOUDS");
+	tex.SetPersistent("BG_FRONTMOUNTAIN");
+
 	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
 
@@ -286,8 +294,7 @@ void MainMenu_Unload() {
 	PRINT("Unload: %s", "Main Menu\n");
 	settingsMenu.reset();
 
-	// jelly to do: dont unload music, dont unload impt buttons, dont unload bg. unload only when player exits entirely
-	tex.UnloadAll(); // this will unload all tex so duneed memmanager here i'll change it eventually so we have one system to unloadall
+	tex.UnloadAll(); // this will unload all tex so duneed memmanager but like snsnoorkk
 
 	if (memoryManager.MassUnload()) PRINT("Unload Success");
 }

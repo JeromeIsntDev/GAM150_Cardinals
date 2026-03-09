@@ -28,9 +28,3 @@ BG_BACKMOST, ../../Assets/Textures/BG_BACKMOST.png, 1600, 900
 BG_MOUNTAIN, ../../Assets/Textures/BG_BACKMOUNTAIN.png, 1600, 900
 BG_CLOUDS, ../../Assets/Textures/BG_CLOUDS.png, 1600, 900
 BG_FRONTMOUNTAIN, ../../Assets/Textures/BG_FRONTMOUNTAIN.png, 1600, 900
-# platforms
-Platform_VL, ../../Assets/Textures/platform1.png
-Platform_VM, ../../Assets/Textures/platform2.png
-Platform_VS, ../../Assets/Textures/platform3.png
-Platform_HS, ../../Assets/Textures/platform4.png
-Platform_HL, ../../Assets/Textures/platform5.png

@@ -42,9 +42,6 @@ namespace {
 void Level1_Load() {
 	PRINT("Load: %s", "Level 1\n");
 
-	// i'll change later
-	tex.LoadManifest("../../Assets/TextureManifest.txt");
-
 	digipenFont.Load_Font(Fonts::Alt, 72.f);
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Change_Text_Color(Colors::Black);
@@ -408,6 +405,7 @@ void Level1_Unload() {
 	if (isGamePaused) isGamePaused = 0;
 	if (isGameOver) isGameOver = 0;
 
-	tex.UnloadAll();
+	tex.UnloadPersistent();
+	//tex.UnloadAll();
 	if (memoryManager.MassUnload()) PRINT("Unload Success!");
 }

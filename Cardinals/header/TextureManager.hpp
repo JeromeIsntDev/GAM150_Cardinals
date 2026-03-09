@@ -21,6 +21,8 @@
 #include <string>
 #include <sstream>
 #include <map>
+#include <unordered_map>
+#include <unordered_set>
 
 struct Color {
     f32 r, g, b, a;
@@ -128,6 +130,7 @@ class TextureManager
 {
 private:
     std::map<std::string, Texture> textureMap;
+    std::unordered_set<std::string> persistentLoad;
 
     TextureManager() = default;
 
@@ -142,6 +145,9 @@ public:
     virtual void LoadManifest(const std::string& path);
     Texture* Get(const std::string& name);
     void UnloadAll();
+
+    void SetPersistent(const std::string& name);
+    void UnloadPersistent();
 };
 
 ///
