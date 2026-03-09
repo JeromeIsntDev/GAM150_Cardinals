@@ -132,9 +132,42 @@ Texture* TextureManager::Get(const std::string& name)
 void TextureManager::UnloadAll()
 {
 	for (auto& pair : textureMap)
+	{
+		if (persistentLoad.count(pair.first)) continue; // skip persistent files
 		pair.second.Unload_Image();
+	}
+
+	for (auto it = textureMap.begin(); it != textureMap.end();)
+	{
+		if (persistentLoad.count(it->first))
+		{
+			it++;
+		}
+		else
+		{
+			it = textureMap.erase(it);
+		}
+	}
+}
+
+void TextureManager::SetPersistent(const std::string& name)
+{
+	// omg waow so thats how it works
+	persistentLoad.insert(name);
+}
+
+void TextureManager::UnloadPersistent() 
+{
+	for (auto& key : persistentLoad)
+	{
+		PRINT("unloaded persistent");
+		textureMap[key].Unload_Image();
+	}
+
+	persistentLoad.clear();
 	textureMap.clear();
 }
+
 
 ///
 /// TEXT
