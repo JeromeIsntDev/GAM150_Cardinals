@@ -58,6 +58,7 @@ void Grid::Clear()
 		delete[] cells[i];
 	}
 	delete[] cells;          
+	cells = nullptr;
 }
 
 void Grid::Draw() const {
@@ -75,7 +76,10 @@ void Grid::Draw() const {
 void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 {
 	GridCell* cell = GetCell(y, x);
-
+	if (cell == nullptr) {
+		PRINT("[WARNING] => Attempting to spawn on NULL Cell!\n");
+		return;
+	}
 	if (cell->obj) {
 		//PRINT("[DEBUG] => Cell Filled Already!\n");
 		//PRINT("[DEBUG] => Cell Tag: %d\n", cell->tag);
@@ -198,10 +202,18 @@ void Grid::DeleteTile(f32 x, f32 y)
 
 GridCell* Grid::GetCell(f32 x, f32 y)
 {
+	if (!cells) {
+		PRINT("[WARNING] => Attemping to get Cells when not-allocated!\n");
+		return nullptr;
+	}
+
 	s32 column = x / 50.f;
 	s32 row = y / 50.f;
 
-	if (x >= 900 || y >= 1600) return nullptr;
+	if (x >= 900 || y >= 1600) {
+		PRINT("[WARNING] => Attemping to go beyond Grid dimensions!\n");
+		return nullptr;
+	}
 
 	return &cells[column][row];
 }

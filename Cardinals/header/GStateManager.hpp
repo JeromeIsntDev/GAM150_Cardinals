@@ -38,5 +38,6 @@ extern FuncPtr Update_State;
 extern FuncPtr Draw_State;
 extern FuncPtr Free_State;
 extern FuncPtr Unload_State;
+extern bool changingState;
 
 #endif // !_Game_State_Manager_

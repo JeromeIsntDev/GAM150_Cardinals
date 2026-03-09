@@ -25,7 +25,11 @@ namespace {
 	// PAUSE MENU
 	std::unique_ptr <Overlay> pauseMenu;
 	std::unique_ptr<Overlay> gameOverMenu;
-	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{}, nextTexture{}, retryTexture{}, candyTexture{}, greyCandyTexture;
+	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, 
+			knobEFXTexture{}, cardBgTexture{}, prevTexture{}, 
+			restartTexture{}, resumeTexture{}, homeTexture{}, 
+			nextTexture{}, retryTexture{}, candyTexture{}, 
+			greyCandyTexture;
 
 	//IMGUI
 	//ControlPanel controlPanel;
@@ -260,7 +264,7 @@ void Level1_Update() {
 		if (input.isMouseBtnTriggered(AEVK_E))
 			ToggleEditorMode();
 
-	if (IsEditorActive()) {
+	if (IsEditorActive() && !isGamePaused && !isGameOver) {
 		
 		//DragObject(levelObjList);
 		tileTag = (tileTag < 0) ? 0 : tileTag;
@@ -402,7 +406,6 @@ void Level1_Free() {
 	PRINT("Free: %s", "Level 1\n");
 	playerEffect.Clear();
 	gravityEffect.Clear();
-	grid.Clear();
 }
 
 void Level1_Unload() {
@@ -414,4 +417,5 @@ void Level1_Unload() {
 
 	//tex.UnloadAll();
 	if (memoryManager.MassUnload()) PRINT("Unload Success!");
+	grid.Clear();
 }

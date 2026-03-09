@@ -3,12 +3,14 @@
 FuncPtr Load_State{}, Init_State{}, Update_State{}, 
 Draw_State{}, Free_State{}, Unload_State{};
 
+bool changingState{ 0 };
+
 GameStateEnum pt_CurrentGameState = NumberOfGameStates;
+
 
 void UpdateGameManagerState(GameStateEnum state)
 {
 	//if (state == pt_CurrentGameState) return;
-
 	if(Free_State) Free_State();
 	if(Unload_State) Unload_State();
 	
