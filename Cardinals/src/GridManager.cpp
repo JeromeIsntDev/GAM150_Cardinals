@@ -131,7 +131,7 @@ void Grid::SnapToCell(f32* val)
 {
 	f32 newVal = *val / 50.f;
 	s32 integral = static_cast<s32>(newVal);
-	*val = (static_cast<f32>(integral) + .5f) - 25.f;
+	*val = (static_cast<f32>(integral) + .5f) + 50.f;
 }
 
 void Grid::DeleteTile(f32 x, f32 y)
@@ -161,6 +161,7 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 GameObjectTag Grid::GetCellObjectTag(f32 x, f32 y)
 {
 	GridCell* cell = GetCell(x, y);
+	if(cell == nullptr)return GameObjectTag::GameObjectTagNumber;
 	if (cell->obj) {
 		return cell->obj->_tag;
 	}

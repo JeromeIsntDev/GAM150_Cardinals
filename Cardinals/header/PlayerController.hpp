@@ -84,8 +84,8 @@ public:
 	void PlayerInputHandle(f32&, GravityDirection&);
 	void PlayerMovement(f32&, GravityDirection& dir);
 	void PlayerCollision(std::vector<GameObject*> objs,GravityDirection&);
-	void CheckBinaryCollision(Grid& grid, GravityDirection&);
-	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid grid);
+	void CheckBinaryCollision(Grid* grid, GravityDirection&);
+	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid* grid);
 	//Function for Player Jump Logic
 	//Basically the initialize values for PreJumps
 	//void StartJump(AEVec2);

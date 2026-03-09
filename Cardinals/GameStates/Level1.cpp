@@ -10,7 +10,6 @@ namespace {
 	//PLAYER VARIABLES
 	f32 playerMovespeed{ 300.f };
 	int  playerHealth{ 3 };
-	Player mainPlayer;
 	Texture playerTexture{};
 	ParticleEffect playerEffect;
 	ParticleEffect gravityEffect;
@@ -37,6 +36,7 @@ namespace {
 	TextureManager& tex = TextureManager::Instance();
 
 	Grid grid;
+	Player mainPlayer;
 }
 
 void Level1_Load() {
@@ -333,7 +333,7 @@ void Level1_Update() {
 	mainPlayer.hasCollided = false;
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
-	mainPlayer.CheckBinaryCollision(grid,mainPlayer.grav);
+	mainPlayer.CheckBinaryCollision(&grid,mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
