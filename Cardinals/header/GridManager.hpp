@@ -42,6 +42,7 @@ struct Grid {
 	void SnapToCell(f32*);
 
 	GridCell* GetCell(f32 x, f32 y);
+	GameObjectTag GetCellObjectTag(f32, f32);
 	//std::vector<GameObject*> GetCellGameObject() const;
 };
 
