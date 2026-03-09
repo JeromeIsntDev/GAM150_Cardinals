@@ -158,6 +158,15 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 	return &cells[column][row];
 }
 
+GameObjectTag Grid::GetCellObjectTag(f32 x, f32 y)
+{
+	GridCell* cell = GetCell(x, y);
+	if (cell->obj) {
+		return cell->obj->_tag;
+	}
+	return GameObjectTag::GameObjectTagNumber;
+}
+
 //std::vector<GameObject*> Grid::GetCellGameObject() const
 //{
 //	std::vector<GameObject*> objs;
