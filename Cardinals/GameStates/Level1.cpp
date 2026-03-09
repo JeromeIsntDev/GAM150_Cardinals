@@ -140,7 +140,7 @@ void Level1_Initialize()
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 200.f);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 75.f);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture);
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
@@ -318,7 +318,7 @@ void Level1_Update() {
 	/*PLAYER STUFF*/
 
 	//f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
-	std::cout << mainPlayer.GetPosition().y << std::endl;
+	//std::cout << mainPlayer.GetPosition().y << std::endl;
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
 
 	mainPlayer.p_isGrounded = false;

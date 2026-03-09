@@ -237,7 +237,7 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		/*p_velocityVector.y += gravity * dt;
 		p_currPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
-	std::cout << "X: " << p_currPos.x << "Y: " << p_currPos.y << std::endl;
+	//std::cout << "X: " << p_currPos.x << "Y: " << p_currPos.y << std::endl;
 	//give a cool down to prevent being able to jump instantly
 	//std::cout << "timer: " << currCD << std::endl;
 	currCD += dt;
@@ -291,23 +291,28 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 		p_currPos.y,p_Scale.x, p_Scale.y, grid);
 
 	gridCollisionFlag = collideVal;
-	std::cout << "Flag: " << gridCollisionFlag << std::endl;
+	
+	f32 halfScaleY = p_Scale.y * 0.5f;
+	f32 bottom = p_currPos.y - halfScaleY;
+	f32 top = p_currPos.y + halfScaleY;
+
 	switch (dir) {
 	case GravityDirection::Down:
 		if (gridCollisionFlag & COLLISION_BOTTOM) {
+			p_velocityVector.y = 0.f;
+			grid->SnapToCell(&bottom);
+			p_currPos.y = bottom + halfScaleY + 50.f;
 			p_isGrounded = true;
 			p_isJumping = false;
-			//std::cout << "before: " << p_currPos.y << std::endl;
-			grid->SnapToCell(&p_currPos.y);
 			//std::cout << "after: " << p_currPos.y << std::endl;
 			std::cout << std::endl;
-			p_velocityVector.y = 0.f;
 			//this->UpdatePosition(p_currPos);
 			//PRINT("Collision Bottom\n");
 		}
 		if (gridCollisionFlag & COLLISION_TOP) {
 			p_velocityVector.y = 0.f;
-			grid->SnapToCell(&p_currPos.y);
+			grid->SnapToCell(&top);
+			p_currPos.y = top - halfScaleY;
 		}
 		//if (gridCollisionFlag & COLLISION_LEFT) {
 		//	canMoveLeft = false;
@@ -369,7 +374,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	//grid->SnapToCell(&r_y1);
 	x2 = PosX - quarterScaleX;
 	//grid->SnapToCell(&r_x2);
-	y2 = PosY + quarterScaleY;
+	y2 = PosY + halfScaleY;
 
 	grid->WorldToGrid(&x1, &y1);
 	grid->WorldToGrid(&x2, &y2);
