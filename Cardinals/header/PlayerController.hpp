@@ -81,8 +81,8 @@ public:
 	void SetGameOver(bool);
 	void SetHealth(int);
 	//void SetPlayerHealth(f32);
-	void PlayerInputHandle(f32&, GravityDirection&);
-	void PlayerMovement(f32&, GravityDirection& dir);
+	void PlayerInputHandle(f32 const&, GravityDirection&);
+	void PlayerMovement(f32 const&, GravityDirection& dir);
 	void PlayerCollision(std::vector<GameObject*> objs,GravityDirection&);
 	void CheckBinaryCollision(Grid* grid, GravityDirection&);
 	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid* grid);
@@ -90,7 +90,7 @@ public:
 	//Basically the initialize values for PreJumps
 	//void StartJump(AEVec2);
 	//The math and update for during the jump
-	void PlayerJump(f32&, GravityDirection&);
+	void PlayerJump(f32 const&, GravityDirection&);
 };
 
 const unsigned int	COLLISION_LEFT = 0x00000001;		//0001
