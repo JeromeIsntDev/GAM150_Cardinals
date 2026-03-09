@@ -285,7 +285,6 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	UpdatePosition(p_currPos);
 }
 
-
 void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 	int collideVal = CheckInstanceBinaryMapCollision(p_currPos.x,
 		p_currPos.y,p_Scale.x, p_Scale.y, grid);
@@ -293,8 +292,11 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 	gridCollisionFlag = collideVal;
 	
 	f32 halfScaleY = p_Scale.y * 0.5f;
+	f32 halfScaleX = p_Scale.x * 0.5f;
 	f32 bottom = p_currPos.y - halfScaleY;
 	f32 top = p_currPos.y + halfScaleY;
+	f32 left = p_currPos.x - halfScaleX;
+	f32 right = p_currPos.x + halfScaleX;
 
 	switch (dir) {
 	case GravityDirection::Down:
@@ -314,11 +316,18 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 			grid->SnapToCell(&top);
 			p_currPos.y = top - halfScaleY;
 		}
-		//if (gridCollisionFlag & COLLISION_LEFT) {
-		//	canMoveLeft = false;
-		//	p_velocityVector.x = 0.f;
-		//	grid->SnapToCell(&p_currPos.x);
-		//}
+		if (gridCollisionFlag & COLLISION_LEFT) {
+			canMoveLeft = false;
+			p_velocityVector.x = 0.f;
+			grid->SnapToCell(&left);
+			p_currPos.x = left + halfScaleX;
+		}
+		if (gridCollisionFlag & COLLISION_RIGHT) {
+			canMoveRight = false;
+			p_velocityVector.x = 0.f;
+			grid->SnapToCell(&right);
+			p_currPos.x = right - halfScaleX;
+		}
 		break;
 
 	}
