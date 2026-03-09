@@ -21,6 +21,7 @@
 #include "PlayerController.hpp"
 #include "UIManager.hpp"
 #include "GameEditor.hpp"
+#include "TextureManager.hpp"
 /*************************************************************************/
 
 //IMGUI
@@ -141,7 +142,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		AESysFrameEnd();
 		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
+		{
 			isGameRunning = 0;
+			//system("pause");
+		}
 	}
 	//resetting callback thing
 	if (g_OrigWndProc) {
@@ -153,6 +157,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	Free_State();
 	Unload_State();
+	TextureManager::GetInstance().UnloadPersistent();
 
 	ClearEditorMemory();
 

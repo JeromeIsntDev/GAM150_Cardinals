@@ -12,7 +12,6 @@
 #include "MainMenu.hpp"
 
 extern int isGameRunning;
-//auto& input = InputHandler::GetInstance();
 
 namespace {
 
@@ -41,7 +40,7 @@ namespace {
 	std::unique_ptr<Button> settingsBtn;
 
 	AudioManager& bgm = AudioManager::Instance();
-	TextureManager& tex = TextureManager::Instance();
+	TextureManager& tex = TextureManager::GetInstance();
 	InputHandler& input = InputHandler::GetInstance();
 }
 
@@ -54,7 +53,7 @@ void MainMenu_Load() {
 
 	// for persistent objs beyond manifest
 	tex.SetPersistent("TileSheet");
-	tex.SetPersistent("PlayerIdle");
+	tex.SetPersistent("playerIdle");
 	tex.SetPersistent("BG_BACKMOST");
 	tex.SetPersistent("BG_BACKMOUNTAIN");
 	tex.SetPersistent("BG_CLOUDS");

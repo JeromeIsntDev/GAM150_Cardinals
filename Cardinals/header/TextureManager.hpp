@@ -84,12 +84,6 @@ namespace Images
     constexpr ImageFile BG_MOUNTAIN{ "../../Assets/Textures/BG_BACKMOUNTAIN.png", 1600.f, 900.f };
     constexpr ImageFile BG_CLOUDS{ "../../Assets/Textures/BG_CLOUDS.png", 1600.f, 900.f };
     constexpr ImageFile BG_FRONTMOUNTAIN{ "../../Assets/Textures/BG_FRONTMOUNTAIN.png", 1600.f, 900.f };
-
-    constexpr ImageFile Platform_VL{ "../../Assets/Textures/platform1.png" };
-    constexpr ImageFile Platform_VM{ "../../Assets/Textures/platform2.png" };
-    constexpr ImageFile Platform_VS{ "../../Assets/Textures/platform3.png" };
-    constexpr ImageFile Platform_HS{ "../../Assets/Textures/platform4.png" };
-    constexpr ImageFile Platform_HL{ "../../Assets/Textures/platform5.png" };
 }
 
 namespace Fonts
@@ -136,7 +130,7 @@ private:
 
 public:
 
-    static TextureManager& Instance() 
+    static TextureManager& GetInstance() 
     {
         static TextureManager instance;
         return instance;
@@ -146,7 +140,7 @@ public:
     Texture* Get(const std::string& name);
     void UnloadAll();
 
-    void SetPersistent(const std::string& name);
+    virtual void SetPersistent(const std::string& name); // share with audio
     void UnloadPersistent();
 };
 

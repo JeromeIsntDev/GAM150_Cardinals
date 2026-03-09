@@ -26,7 +26,7 @@ void Texture::Load_Image(const ImageFile& imageFilePath)
 	_image = AEGfxTextureLoad(imageFilePath.filename);
 	_width = imageFilePath.width;
 	_height = imageFilePath.height;
-	PRINT("Load Image: %s\n", imageFilePath.filename);
+	PRINT("loading image: %s\n", imageFilePath.filename);
 }
 
 void Texture::Set_Image(f32 x, f32 y)
@@ -47,7 +47,7 @@ f32 Texture::Get_Image_Height() const
 void Texture::Unload_Image()
 {
 	if (!_image) return; // already unloaded or never loaded DIE DIE DIE DIE
-	PRINT("Unload Image\n");
+	PRINT("unloading Image\n");
 	AEGfxTextureUnload(_image);
 	_image = nullptr;
 }
@@ -123,7 +123,7 @@ Texture* TextureManager::Get(const std::string& name)
 
 	if (it == textureMap.end()) 
 	{
-		PRINT("Texture not found: %s\n", name.c_str());
+		PRINT("texture not found: %s\n", name.c_str());
 		return nullptr;
 	}
 	return &it->second;
@@ -131,20 +131,17 @@ Texture* TextureManager::Get(const std::string& name)
 
 void TextureManager::UnloadAll()
 {
-	for (auto& pair : textureMap)
-	{
-		if (persistentLoad.count(pair.first)) continue; // skip persistent files
-		pair.second.Unload_Image();
-	}
-
 	for (auto it = textureMap.begin(); it != textureMap.end();)
 	{
 		if (persistentLoad.count(it->first))
 		{
+			PRINT("persistent: %s\n", it->first.c_str());
 			it++;
 		}
 		else
 		{
+			PRINT("unloading: %s\n", it->first.c_str());
+			it->second.Unload_Image();
 			it = textureMap.erase(it);
 		}
 	}
@@ -158,16 +155,22 @@ void TextureManager::SetPersistent(const std::string& name)
 
 void TextureManager::UnloadPersistent() 
 {
-	for (auto& key : persistentLoad)
+	for (auto& key : persistentLoad) 
 	{
-		PRINT("unloaded persistent");
-		textureMap[key].Unload_Image();
+		PRINT("unloading persistent: %s\n", key.c_str());
+		if (textureMap.count(key))
+		{
+			textureMap[key].Unload_Image();
+		}
+		else
+		{
+			PRINT("key not in mmmap: %s\n", key.c_str());
+		}
 	}
 
 	persistentLoad.clear();
 	textureMap.clear();
 }
-
 
 ///
 /// TEXT
