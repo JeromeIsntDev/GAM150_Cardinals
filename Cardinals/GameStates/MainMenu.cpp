@@ -283,7 +283,7 @@ void MainMenu_Free() {
 	PRINT("Free: %s", "Main Menu\n");
 
 	bgm.StopAudio();
-	bgm.Free();
+	//bgm.Free();
 
 	quitUI.Exit();
 	menuUI.Exit();

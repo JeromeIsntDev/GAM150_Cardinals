@@ -23,6 +23,7 @@ namespace Audios
 {
     constexpr const AudioFile BGM{ "../../Assets/Music/bouken.mp3" };
     constexpr const AudioFile SFX{ "../../Assets/Music/ore.mp3" };
+    constexpr const AudioFile CLICK{ "../../Assets/Music/btn_click.wav" };
 }
 
 enum class AudioType { SFX, MUSIC, MASTER };

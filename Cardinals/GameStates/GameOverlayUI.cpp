@@ -134,6 +134,7 @@ void Overlay::OnClick()
 	{
 		if (child->IsActive() && child->IsInteractable() && child->IsPointInside(mousePos.x, mousePos.y))
 		{
+			bgm.PlayAudio("CLICK", AudioType::SFX, 1.f, 0);
 			child->OnClick();
 			break;
 		}

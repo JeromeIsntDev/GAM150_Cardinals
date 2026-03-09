@@ -225,6 +225,7 @@ void UIManager::HandleClick()
             {
                 if (e->IsPointInside(mousePos.x, mousePos.y))
                 {
+                    bgm.PlayAudio("CLICK", AudioType::SFX, 1.f, 0);
                     e->OnClick();
                     std::cout << "Element clicked at: " << mousePos.x << ", " << mousePos.y << std::endl;
                     break;

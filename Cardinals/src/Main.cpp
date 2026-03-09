@@ -158,7 +158,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	Free_State();
 	Unload_State();
 	TextureManager::GetInstance().UnloadPersistent();
-
+	AudioManager::Instance().Free();
 	ClearEditorMemory();
 
 	// free the system

@@ -19,6 +19,7 @@
 #include <functional>
 
 #include "../header/GameObject.hpp"
+#include <AudioManager.hpp>
 
 // this guy IS every ui element
 class UIElement : public GameObject
@@ -85,6 +86,8 @@ private:
 	// i spent too long wondering how to wiggle around this sauuur
 	mutable Text tooltipRenderer;
 	bool isFontLoaded = false;
+	AudioManager& bgm = AudioManager::Instance();
+
 
 public:
 

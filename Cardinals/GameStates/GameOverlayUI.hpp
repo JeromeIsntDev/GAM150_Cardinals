@@ -113,6 +113,7 @@ private:
 	std::function<void()> _onResume;
 	std::function<void()> _onRestart;
 	std::function<void()> _onQuit;
+	AudioManager& bgm = AudioManager::Instance();
 
 public:
 

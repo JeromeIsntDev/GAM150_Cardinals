@@ -3,3 +3,4 @@
 # i'll do this for the images another time lol
 BGM, ../../Assets/Music/bouken.mp3
 SFX, ../../Assets/Music/ore.mp3
+CLICK, ../../Assets/Music/btn_click.wav
