@@ -139,8 +139,9 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 void Grid::SnapToCell(f32* val)
 {
 	f32 newVal = *val / 50.f;
+	//std::cout << "newVal: " << newVal << std::endl;
 	s32 integral = static_cast<s32>(newVal);
-	*val = (static_cast<f32>(integral) + .5f) - 20.f;
+	*val = (static_cast<f32>(integral) * 50.f);
 }
 /*!
 	\brief Converts grid coordinates to world coordinates

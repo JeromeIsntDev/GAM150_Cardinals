@@ -18,7 +18,7 @@ the player movement etc
 
 //Player::Player(f32 health ,f32 moveSpeed,f32 jumpForce ,bool isJump ,f32 score , f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos) 
 //	: p_playerHealth(health), p_moveSpeed(moveSpeed), p_jumpForce(jumpForce),
-//	  p_isJumping(isJump),p_score(score),p_initialPos{xPos,yPos},
+//	  p_isJumping(isJump),p_score(score),p_currPos{xPos,yPos},
 //	  initialYPos(zeroVal),initialVelocity(zeroVal),jumpT(zeroVal),
 //	  GameObject(mesh,AEVec2{0.f,0.f},0.f,AEVec2{200.f,200.f})
 //{}
@@ -30,12 +30,12 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	p_moveSpeed = moveSpeed;
 	p_isJumping = isJump;
 	playerScore = score;
-	p_initialPos.x = xPos;
-	p_initialPos.y = yPos;
-	UpdatePosition(p_initialPos);
+	p_currPos.x = xPos;
+	p_currPos.y = yPos;
+	UpdatePosition(p_currPos);
 	p_velocityVector.y = zeroVal;
 	Player::mesh = newMesh;
-	p_previousPos = p_initialPos;
+	p_previousPos = p_currPos;
 }
 
 //takes in the current player pos, deltaTime & movement vector to update the player pos
@@ -57,12 +57,12 @@ void Player::PlayerJump(f32& dt, GravityDirection& dir) {
 	case GravityDirection::Up:
 	case GravityDirection::Down:
 		p_velocityVector.y += gravity * dt;
-		p_initialPos.y += p_velocityVector.y * dt;
+		p_currPos.y += p_velocityVector.y * dt;
 		break;
 	case GravityDirection::Left:
 	case GravityDirection::Right:
 		p_velocityVector.x += gravity * dt;
-		p_initialPos.x += p_velocityVector.x * dt;
+		p_currPos.x += p_velocityVector.x * dt;
 		break;
 	}
 	
@@ -80,13 +80,13 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 			case GravityDirection::Up:
 			case GravityDirection::Down:
 				p_velocityVector.x = 1.f * p_moveSpeed * dt;
-				p_initialPos.x += p_velocityVector.x;
+				p_currPos.x += p_velocityVector.x;
 				p_velocityVector.x = 0.f;
 				break;
 			case GravityDirection::Left:
 			case GravityDirection::Right:
 				p_velocityVector.y = -1.f * p_moveSpeed * dt;
-				p_initialPos.y += p_velocityVector.y;
+				p_currPos.y += p_velocityVector.y;
 				break;
 			default:
 				break;
@@ -102,13 +102,13 @@ void Player::PlayerInputHandle(f32& dt, GravityDirection& dir) {
 			case GravityDirection::Up:
 			case GravityDirection::Down:
 				p_velocityVector.x = -1.f * p_moveSpeed * dt;
-				p_initialPos.x += p_velocityVector.x;
+				p_currPos.x += p_velocityVector.x;
 				p_velocityVector.x = 0.f;
 				break;
 			case GravityDirection::Left:
 			case GravityDirection::Right:
 				p_velocityVector.y = 1.f * p_moveSpeed * dt;
-				p_initialPos.y += p_velocityVector.y;
+				p_currPos.y += p_velocityVector.y;
 				break;
 			default:
 				break;
@@ -203,30 +203,30 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 	jumpBuffer = max(0, jumpBuffer - dt);
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
 	GravityDirection currDir = dir;
-
+	//std::cout << p_currPos.y << std::endl;
 	//down force velocity (always going downwards) depend on location
 	if (!p_isGrounded) {
 		switch (dir)
 		{
 		case Player::GravityDirection::Up:
 			p_velocityVector.y += (gravity * p_downForce) * dt;
-			p_initialPos.y += (p_velocityVector.y) * dt;
-			p_initialPos.x += (p_velocityVector.x) * dt;
+			p_currPos.y += (p_velocityVector.y) * dt;
+			p_currPos.x += (p_velocityVector.x) * dt;
 			break;
 		case Player::GravityDirection::Down:
 			p_velocityVector.y += (-gravity * p_downForce) * dt;
-			p_initialPos.y += (p_velocityVector.y) * dt;
-			p_initialPos.x += (p_velocityVector.x) * dt;
+			p_currPos.y += (p_velocityVector.y) * dt;
+			p_currPos.x += (p_velocityVector.x) * dt;
 			break;
 		case Player::GravityDirection::Left:
 			p_velocityVector.x += (-gravity * p_downForce) * dt;
-			p_initialPos.x += (p_velocityVector.x) * dt;
-			p_initialPos.y += (p_velocityVector.y) * dt;
+			p_currPos.x += (p_velocityVector.x) * dt;
+			p_currPos.y += (p_velocityVector.y) * dt;
 			break;
 		case Player::GravityDirection::Right:
 			p_velocityVector.x += (gravity * p_downForce) * dt;
-			p_initialPos.x += (p_velocityVector.x) * dt;
-			p_initialPos.y += (p_velocityVector.y) * dt;
+			p_currPos.x += (p_velocityVector.x) * dt;
+			p_currPos.y += (p_velocityVector.y) * dt;
 			break;
 		default:
 			break;
@@ -235,9 +235,9 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 		p_velocityVector.y = AEClamp(p_velocityVector.y, -500.f, 500.f);
 		p_velocityVector.x = AEClamp(p_velocityVector.x, -500.f, 500.f);
 		/*p_velocityVector.y += gravity * dt;
-		p_initialPos.y += (p_velocityVector.y * p_downForce) * dt;*/
+		p_currPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
-	//std::cout << "X: " << p_velocityVector.x << "Y: " << p_velocityVector.y << std::endl;
+	std::cout << "X: " << p_currPos.x << "Y: " << p_currPos.y << std::endl;
 	//give a cool down to prevent being able to jump instantly
 	//std::cout << "timer: " << currCD << std::endl;
 	currCD += dt;
@@ -255,26 +255,26 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 
 	PlayerInputHandle(dt, dir);
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
-	if (p_initialPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
-		p_initialPos = p_previousPos;
+	if (p_currPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
+		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		grav = Player::GravityDirection::Down;
 	}
-	if (p_initialPos.y >= 400.f) {
-		p_initialPos = p_previousPos;
+	if (p_currPos.y >= 400.f) {
+		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		grav = Player::GravityDirection::Down;
 	}
-	if (p_initialPos.x >= 750.f) {
-		p_initialPos = p_previousPos;
+	if (p_currPos.x >= 750.f) {
+		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		grav = Player::GravityDirection::Down;
 	}
-	if (p_initialPos.x <= -750.f) {
-		p_initialPos = p_previousPos;
+	if (p_currPos.x <= -750.f) {
+		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		grav = Player::GravityDirection::Down;
@@ -282,33 +282,37 @@ void Player::PlayerMovement(f32& dt, GravityDirection& dir) {
 
 	//PRINT("Momentum: %f,%f", p_velocityVector.x, p_velocityVector.y);
 
-	UpdatePosition(p_initialPos);
+	UpdatePosition(p_currPos);
 }
 
 
 void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
-	int collideVal = CheckInstanceBinaryMapCollision(p_initialPos.x,
-		p_initialPos.y,p_Scale.x, p_Scale.y, grid);
+	int collideVal = CheckInstanceBinaryMapCollision(p_currPos.x,
+		p_currPos.y,p_Scale.x, p_Scale.y, grid);
 
 	gridCollisionFlag = collideVal;
-	//std::cout << "Flag: " << gridCollisionFlag << std::endl;
+	std::cout << "Flag: " << gridCollisionFlag << std::endl;
 	switch (dir) {
 	case GravityDirection::Down:
 		if (gridCollisionFlag & COLLISION_BOTTOM) {
 			p_isGrounded = true;
 			p_isJumping = false;
+			//std::cout << "before: " << p_currPos.y << std::endl;
+			grid->SnapToCell(&p_currPos.y);
+			//std::cout << "after: " << p_currPos.y << std::endl;
+			std::cout << std::endl;
 			p_velocityVector.y = 0.f;
-			grid->SnapToCell(&p_initialPos.y);
-			PRINT("Collision Bottom\n");
+			//this->UpdatePosition(p_currPos);
+			//PRINT("Collision Bottom\n");
 		}
 		if (gridCollisionFlag & COLLISION_TOP) {
 			p_velocityVector.y = 0.f;
-			grid->SnapToCell(&p_initialPos.y);
+			grid->SnapToCell(&p_currPos.y);
 		}
 		//if (gridCollisionFlag & COLLISION_LEFT) {
 		//	canMoveLeft = false;
 		//	p_velocityVector.x = 0.f;
-		//	grid->SnapToCell(&p_initialPos.x);
+		//	grid->SnapToCell(&p_currPos.x);
 		//}
 		break;
 
@@ -339,7 +343,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_RIGHT;
-		//PRINT("Collision Right\n");
+		PRINT("Collision Right\n");
 	}
 
 	x1 = PosX - halfScaleX;
@@ -356,7 +360,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_LEFT;
-		//PRINT("Collision Left\n");
+		PRINT("Collision Left\n");
 	}
 
 	x1 = PosX + quarterScaleX;
@@ -373,7 +377,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_TOP;
-		//PRINT("Collision Top\n");
+		PRINT("Collision Top\n");
 	}
 
 	x1 = PosX + quarterScaleX;
@@ -391,7 +395,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	if (grid->GetCell(y1, x1)->tag == GameObjectTag::Static ||
 		grid->GetCell(y2, x2)->tag == GameObjectTag::Static) {
 		Flag += COLLISION_BOTTOM;
-		//PRINT("Collision Bottom\n");
+		PRINT("Collision Bottom\n");
 	}
 
 	return Flag;
@@ -436,7 +440,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 				gameOver = true;
 			}
 			else {
-				p_initialPos = p_previousPos;
+				p_currPos = p_previousPos;
 			}
 		}
 		/*else {

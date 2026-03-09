@@ -140,11 +140,12 @@ void Level1_Initialize()
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 75.f);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 200.f, 200.f);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture);
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
 	mainPlayer.UpdateRotation(0.f);
+	mainPlayer.UpdatePosition(mainPlayer.GetPosition());
 	mainPlayer._tag = GameObjectTag::Player;
 	mainPlayer.SetHealth(3);
 
@@ -317,7 +318,7 @@ void Level1_Update() {
 	/*PLAYER STUFF*/
 
 	//f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
-
+	std::cout << mainPlayer.GetPosition().y << std::endl;
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
 
 	mainPlayer.p_isGrounded = false;
@@ -325,7 +326,7 @@ void Level1_Update() {
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid,mainPlayer.grav);
-	//mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
+	mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 
