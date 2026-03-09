@@ -492,11 +492,11 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 		else if (obj->_tag == GameObjectTag::GravUp) {
 			std::cout << "grav up" << std::endl;
 			grav = Player::GravityDirection::Up;
-			//p_Scale.y = -50.f;
+			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravDown) {
 			grav = Player::GravityDirection::Down;
-			//p_Scale.y = 50.f;
+			p_Scale.y = 50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravLeft) {
 			grav = Player::GravityDirection::Left;
