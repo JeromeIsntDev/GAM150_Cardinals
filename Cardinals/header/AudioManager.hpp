@@ -24,6 +24,12 @@ namespace Audios
     constexpr const AudioFile BGM{ "../../Assets/Music/bouken.mp3" };
     constexpr const AudioFile SFX{ "../../Assets/Music/ore.mp3" };
     constexpr const AudioFile CLICK{ "../../Assets/Music/btn_click.wav" };
+    constexpr const AudioFile WALK{ "../../Assets/Music/walk.wav" };
+    constexpr const AudioFile JUMP{ "../../Assets/Music/jump.wav" };
+    constexpr const AudioFile HIT{ "../../Assets/Music/obstacle_hit.wav" };
+    constexpr const AudioFile HITWIN{ "../../Assets/Music/wingate_hit.wav" };
+    constexpr const AudioFile PICKUP{ "../../Assets/Music/pick_up.wav" };
+    constexpr const AudioFile NEXT{ "../../Assets/Music/next.wav" };
 }
 
 enum class AudioType { SFX, MUSIC, MASTER };
