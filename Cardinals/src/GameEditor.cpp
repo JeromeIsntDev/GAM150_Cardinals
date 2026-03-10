@@ -130,12 +130,12 @@ void ChangeTileTag()
 
 void ChangeTileSlice()
 {
-	if (InputHandler::GetInstance().isKeyTriggered(AEVK_DOWN) && editor_tileSlice > 0) {
+	if (InputHandler::GetInstance().isKeyTriggered(AEVK_DOWN)) {
 
-		--editor_tileSlice;
-	}
-	else if (InputHandler::GetInstance().isKeyTriggered(AEVK_UP)) {
 		++editor_tileSlice;
+	}
+	else if (InputHandler::GetInstance().isKeyTriggered(AEVK_UP) && editor_tileSlice > 0) {
+		--editor_tileSlice;
 	}
 
 	editor_tileSlice = static_cast<int>(AEClamp(static_cast<f32>(editor_tileSlice), 0.f, 8.f));
