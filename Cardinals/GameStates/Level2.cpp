@@ -23,11 +23,19 @@ namespace {
 
 	AEGfxVertexList* rectMesh;
 
+	Texture placeholderTexture;
+	Texture verticalPlatformTex;
+	Texture horizontalPlatformTex;
+
 	//UIManager pauseUI;
 	//std::unique_ptr<Button> conBtn, quitBtn;
 
 	std::unique_ptr<Overlay> pauseMenu;	
-	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{}, knobEFXTexture{}, cardBgTexture{}, prevTexture{}, restartTexture{}, resumeTexture{}, homeTexture{}, nextTexture{};
+	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{},
+		knobEFXTexture{}, cardBgTexture{}, prevTexture{},
+		restartTexture{}, resumeTexture{}, homeTexture{},
+		nextTexture{}, retryTexture{}, candyTexture{},
+		greyCandyTexture;
 }
 
 void Level2_Load() {
@@ -44,9 +52,6 @@ void Level2_Load() {
 	playerTexture[0].Load_Image(Images::Player);
 	playerTexture[1].Load_Image(Images::PlayerJump);
 
-	for (Texture& T : playerTexture) {
-		memoryManager.AddTexture(&T);
-	}
 
 	prevTexture.Load_Image(Images::PrevBtn);
 	barTexture.Load_Image(Images::Bar);
@@ -59,11 +64,43 @@ void Level2_Load() {
 	homeTexture.Load_Image(Images::HomeBtn);
 	nextTexture.Load_Image(Images::NextBtn);
 
+	memoryManager.AddTextures({
+		&placeholderTexture,
+		&verticalPlatformTex,
+		&horizontalPlatformTex,
+		&prevTexture,
+		&barTexture,
+		&knobMasterTexture,
+		&knobMusicTexture,
+		&knobEFXTexture,
+		&cardBgTexture,
+		&restartTexture,
+		&resumeTexture,
+		&homeTexture,
+		&nextTexture,
+		&retryTexture,
+		&candyTexture,
+		&greyCandyTexture
+		});
+
+	for (Texture& T : playerTexture) {
+		memoryManager.AddTexture(&T);
+	}
+	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
+	memoryManager.AddMesh(&squareMesh);
+	//memoryManager.AddMesh(&tileMesh);
+
+	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
+	memoryManager.AddFont(&digipenFont);
+	memoryManager.AddFont(&pauseTitleFont);
 }
 
 void Level2_Initialize()
 {
 	PRINT("Initialize: %s", "Level 2\n");
+
+	playerEffect.Init();
+	gravityEffect.Init();
 
 	rectMesh = RectMeshCenter();
 
@@ -111,25 +148,25 @@ void Level2_Initialize()
 	//pauseUI.Add(conBtn.get());
 	//pauseUI.Add(quitBtn.get());
 
-	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
-	memoryManager.AddTexture(&placeholder);
-	memoryManager.AddTexture(&prevTexture);
-	memoryManager.AddTexture(&barTexture);
-	memoryManager.AddTexture(&knobMasterTexture);
-	memoryManager.AddTexture(&knobMusicTexture);
-	memoryManager.AddTexture(&knobEFXTexture);
-	memoryManager.AddTexture(&cardBgTexture);
-	memoryManager.AddTexture(&restartTexture);
-	memoryManager.AddTexture(&resumeTexture);
-	memoryManager.AddTexture(&homeTexture);
-	memoryManager.AddTexture(&nextTexture);
+	//if (!memoryManager.textures.empty()) memoryManager.textures.clear();
+	//memoryManager.AddTexture(&placeholder);
+	//memoryManager.AddTexture(&prevTexture);
+	//memoryManager.AddTexture(&barTexture);
+	//memoryManager.AddTexture(&knobMasterTexture);
+	//memoryManager.AddTexture(&knobMusicTexture);
+	//memoryManager.AddTexture(&knobEFXTexture);
+	//memoryManager.AddTexture(&cardBgTexture);
+	//memoryManager.AddTexture(&restartTexture);
+	//memoryManager.AddTexture(&resumeTexture);
+	//memoryManager.AddTexture(&homeTexture);
+	//memoryManager.AddTexture(&nextTexture);
 
-	if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
-	memoryManager.AddMesh(&rectMesh);
+	//if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
+	//memoryManager.AddMesh(&rectMesh);
 
-	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
-	memoryManager.AddFont(&digipenFont);
-	memoryManager.AddFont(&pauseTitleFont);
+	//if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
+	//memoryManager.AddFont(&digipenFont);
+	//memoryManager.AddFont(&pauseTitleFont);
 }
 
 void Level2_Update() {
@@ -202,11 +239,15 @@ void Level2_Draw() {
 
 void Level2_Free() {
 	PRINT("Free: %s", "Level 2\n");
+	playerEffect.Clear();
+	gravityEffect.Clear();
+	AEGfxMeshFree(rectMesh);
 }
 
 void Level2_Unload() {
 	PRINT("Unload: %s", "Level 2\n");
 	pauseMenu.reset();
+	//gameOverMenu.reset();
 	//pauseUI.Exit();
 	if (isGamePaused) isGamePaused = 0;
 	if (isGameOver) isGameOver = 0;

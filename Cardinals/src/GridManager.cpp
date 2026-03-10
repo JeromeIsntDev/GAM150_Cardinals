@@ -41,6 +41,8 @@ void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH)
 {
 	tileMesh = RectMeshCenterSliced(3, 3);
 	obstacleMesh = RectMeshCenter();
+	gravMesh = RectMeshCenter();
+	winMesh = RectMeshCenter();
 
 	if (sheet) {
 		tileTexture = *sheet;
@@ -58,13 +60,21 @@ void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH)
 	spriteSheet.RegisterAllTiles();
 
 	obstacleTexture.Load_Image(Images::CandyCorn);
+	gravTexture.Load_Image(Images::GravImg);
+	winTexture.Load_Image(Images::WinPortal);
 }
 
 void Grid::Clear()
 {
 	if(tileMesh) AEGfxMeshFree(tileMesh);
 	if (obstacleMesh) AEGfxMeshFree(obstacleMesh);
+	if (gravMesh) {
+		AEGfxMeshFree(gravMesh);
+	}
+	if (winMesh) AEGfxMeshFree(winMesh);
 	obstacleTexture.Unload_Image();
+	gravTexture.Unload_Image();
+	winTexture.Unload_Image();
 	//tileTexture.Unload_Image();
 	objs.clear();
 	for (u32 i = 0; i < rows; ++i) {
@@ -115,6 +125,29 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
 	case GameObjectTag::Obstacle:
 		obj->SetMesh(obstacleMesh);
 		obj->SetTexture(&obstacleTexture);
+		break;
+	case GameObjectTag::Win:
+		obj->SetMesh(winMesh);
+		obj->SetTexture(&winTexture);
+		break;
+	case GameObjectTag::GravUp:
+		obj->SetMesh(gravMesh);
+		obj->SetTexture(&gravTexture);
+		break;
+	case GameObjectTag::GravDown:
+		obj->SetMesh(gravMesh);
+		obj->SetTexture(&gravTexture);
+		obj->UpdateScale({ tileScale,-tileScale });
+		break;
+	case GameObjectTag::GravLeft:
+		obj->SetMesh(gravMesh);
+		obj->SetTexture(&gravTexture);
+		obj->UpdateRotation(PI/2.f);
+		break;
+	case GameObjectTag::Gravright:
+		obj->SetMesh(gravMesh);
+		obj->SetTexture(&gravTexture);
+		obj->UpdateRotation(-(PI / 2.f));
 		break;
 	case GameObjectTag::Static:
 	default:
