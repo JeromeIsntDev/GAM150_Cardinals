@@ -260,25 +260,33 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.y >= 400.f) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.x >= 750.f) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.x <= -750.f) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
 		grav = Player::GravityDirection::Down;
+	}
+
+	if (p_playerHealth <= 0) {
+		gameOver = true;
 	}
 
 	//PRINT("Momentum: %f,%f", p_velocityVector.x, p_velocityVector.y);
