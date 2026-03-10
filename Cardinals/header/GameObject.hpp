@@ -50,13 +50,14 @@ protected:
 	bool isChild;
 	Texture* tex;
 	Collider collider;
+	int slice;
 
 //Functions
 private:
 	void ConcatTransform();
 
 public:
-	GameObjectTag _tag;
+	GameObjectTag _tag{ GameObjectTag::Static };
 
 	virtual ~GameObject() = default; // destructor for polymorphism 
 
@@ -78,6 +79,8 @@ public:
 	virtual void UpdateScale(AEVec2 scale);
 	virtual void SetMesh(AEGfxVertexList* const mesh);
 	virtual void SetTexture(Texture* const texture);
+	virtual void SetSlice(int uvSlice);
+	virtual int GetSlice() const;
 
 	bool HoverMesh(s32 mouseX, s32 mouseY) const;
 

@@ -7,13 +7,14 @@ GameObject DeserializeGameObject(const rapidjson::Value& v) {
     if (   v.HasMember("posx") && v.HasMember("posy") 
         && v.HasMember("rot")
         && v.HasMember("scalex") && v.HasMember("scaley")
-        && v.HasMember("typetag")
+        && v.HasMember("typetag") && v.HasMember("tileslice")
         )
     {
         obj.UpdatePosition(AEVec2{ v["posx"].GetFloat(), v["posy"].GetFloat() });
         obj.UpdateRotation(v["rot"].GetFloat());
         obj.UpdateScale(AEVec2{ v["scalex"].GetFloat(), v["scaley"].GetFloat() });
         obj._tag = static_cast<GameObjectTag>(v["typetag"].GetInt());
+        obj.SetSlice((v["tileslice"].GetInt()));
     }
     else {
         PRINT("[ERROR]: Not deserializing correctly!");
@@ -64,6 +65,7 @@ rapidjson::Value SerializeGameObject(
     v.AddMember("scalex", obj->GetScale().x, allocator);
     v.AddMember("scaley", obj->GetScale().y, allocator);
     v.AddMember("typetag", static_cast<int>(obj->_tag), allocator);
+    v.AddMember("tileslice", obj->GetSlice(), allocator);
 
     return v; // moved, not copied
 }

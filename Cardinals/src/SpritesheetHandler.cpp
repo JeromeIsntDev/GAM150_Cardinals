@@ -61,7 +61,7 @@ bool SpriteSheet::GetUV(int tileID, TileUV& outUV) const
     auto it = idToSlice.find(tileID);
     if (it == idToSlice.end())
     {
-        PRINT("tile not found skissue");
+        PRINT("[DEBUG] => Tile not found!\n");
         return false;
     }
 

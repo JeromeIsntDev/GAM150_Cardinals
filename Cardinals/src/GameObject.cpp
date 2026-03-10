@@ -42,7 +42,7 @@ GameObject::GameObject(const GameObject& rhs)
 		globalRotation(rhs.GetRotation()),
 		globalScale(rhs.GetScale()),
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-		isChild(rhs.IsChild()), mesh(rhs.mesh), _tag(rhs._tag)
+		isChild(rhs.IsChild()), mesh(rhs.mesh), _tag(rhs._tag), slice(rhs.slice)
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
@@ -129,6 +129,16 @@ void GameObject::SetMesh(AEGfxVertexList* const objectmesh)
 void GameObject::SetTexture(Texture* const texture)
 {
 	tex = texture;
+}
+
+void GameObject::SetSlice(int uvSlice)
+{
+	slice = uvSlice;
+}
+
+int GameObject::GetSlice() const
+{
+	return slice;
 }
 
 bool GameObject::HoverMesh(s32 mouseX, s32 mouseY) const

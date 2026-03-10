@@ -82,7 +82,7 @@ void Grid::Draw() const {
 	}
 }
 
-void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
+void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
 {
 	GridCell* cell = GetCell(y, x);
 	if (cell == nullptr) {
@@ -138,12 +138,14 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 	GridToWorld(&ax,&ay);
 	obj->UpdatePosition({ ax , ay });
 	obj->_tag = static_cast<GameObjectTag>(tag);
+	obj->SetSlice(slice);
 
 	cell->tag = obj->_tag;
 
+
 	// leaving the tagging alone cuz im eepy
 	TileUV uv{};
-	if (spriteSheet.GetUV(EditorTileSlice(), uv))
+	if (spriteSheet.GetUV(slice, uv))
 	{
 		obj->uvX = uv.u;
 		obj->uvY = uv.v;

@@ -400,7 +400,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	{
 		if (cell1->tag == GameObjectTag::Static ||
 			cell2->tag == GameObjectTag::Static) {
-			PRINT("[DEBUG] => COLLIDE RIGHT\n");
+			//PRINT("[DEBUG] => COLLIDE RIGHT\n");
 			Flag += COLLISION_RIGHT;
 		}
 	}
@@ -421,7 +421,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	{
 		if (cell1->tag == GameObjectTag::Static ||
 			cell2->tag == GameObjectTag::Static) {
-			PRINT("[DEBUG] => COLLIDE LEFT\n");
+			//PRINT("[DEBUG] => COLLIDE LEFT\n");
 			Flag += COLLISION_LEFT;
 		}
 	}
@@ -442,7 +442,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	{
 		if (cell1->tag == GameObjectTag::Static ||
 			cell2->tag == GameObjectTag::Static) {
-			PRINT("[DEBUG] => COLLIDE TOP\n");
+			//PRINT("[DEBUG] => COLLIDE TOP\n");
 			Flag += COLLISION_TOP;
 		}
 	}
@@ -464,7 +464,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 		if (cell1->tag == GameObjectTag::Static || 
 			cell2->tag == GameObjectTag::Static)
 		{
-			PRINT("[DEBUG] => COLLIDE BOTTOM\n");
+			//PRINT("[DEBUG] => COLLIDE BOTTOM\n");
 			Flag += COLLISION_BOTTOM;
 		}
 	}
