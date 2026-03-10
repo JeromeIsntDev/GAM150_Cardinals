@@ -36,6 +36,7 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	p_velocityVector.y = zeroVal;
 	Player::mesh = newMesh;
 	p_previousPos = p_currPos;
+	grav = GravityDirection::Down;
 }
 
 //takes in the current player pos, deltaTime & movement vector to update the player pos
@@ -491,6 +492,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			//win gate hit
 			bgm.PlayAudio("HITWIN", AudioType::SFX, 1.f, 0);
 			std::cout << "Win gate hit" << std::endl;
+			p_velocityVector = { 0.f,0.f };
 			gameOver = true;
 		}
 		else if (obj->_tag == GameObjectTag::GravUp) {
@@ -516,6 +518,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			}
 			else {
 				p_currPos = p_previousPos;
+				grav = GravityDirection::Down;
 			}
 		}
 		/*else {
