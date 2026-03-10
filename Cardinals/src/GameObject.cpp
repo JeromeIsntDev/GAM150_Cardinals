@@ -28,7 +28,7 @@ GameObject::GameObject()
 		globalRotation(0.f),				
 		globalScale(AEVec2{ 0.f,0.f }),		
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-		isChild(false), mesh(nullptr), _tag(GameObjectTag::Static)
+		isChild(false), mesh(nullptr), _tag(GameObjectTag::Static), slice{ 0 }
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
