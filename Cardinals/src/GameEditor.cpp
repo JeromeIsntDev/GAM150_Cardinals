@@ -117,7 +117,7 @@ int& const EditorTileSlice()
 
 void ChangeTileTag()
 {
-	if (InputHandler::GetInstance().isKeyTriggered(AEVK_LEFT) && editor_tileTag > 0) {
+	if (InputHandler::GetInstance().isKeyTriggered(AEVK_LEFT)) {
 
 		--editor_tileTag;
 	}
@@ -130,7 +130,7 @@ void ChangeTileTag()
 
 void ChangeTileSlice()
 {
-	if (InputHandler::GetInstance().isKeyTriggered(AEVK_DOWN) && editor_tileSlice > 0) {
+	if (InputHandler::GetInstance().isKeyTriggered(AEVK_DOWN)) {
 
 		--editor_tileSlice;
 	}
