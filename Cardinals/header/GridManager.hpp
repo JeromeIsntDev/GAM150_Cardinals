@@ -31,6 +31,10 @@ struct Grid {
 	Texture tileTexture;
 	AEGfxVertexList* obstacleMesh;
 	Texture obstacleTexture;
+	AEGfxVertexList* gravMesh;
+	Texture gravTexture;
+	AEGfxVertexList* winMesh;
+	Texture winTexture;
 
 	GridCell** cells;
 	std::vector<GameObject*> objs;

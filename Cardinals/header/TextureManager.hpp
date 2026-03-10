@@ -81,7 +81,8 @@ namespace Images
     constexpr ImageFile CandyAni{ "../../Assets/Textures/Candy_Animation.png", 50.f, 50.f };
     constexpr ImageFile CandyBall{ "../../Assets/Textures/Candy_Ball.png", 50.f, 50.f };
     constexpr ImageFile CandyCorn{ "../../Assets/Textures/Candy_Corn.png", 160.f, 160.f };
-
+    constexpr ImageFile GravImg{ "../../Assets/Textures/GravityBlock.png", 160.f, 160.f };
+    constexpr ImageFile WinPortal{ "../../Assets/Textures/WinPortal.png", 160.f, 160.f };
     constexpr ImageFile BG_BACKMOST{ "../../Assets/Textures/BG_BACKMOST.png", 1600.f, 900.f };
     constexpr ImageFile BG_MOUNTAIN{ "../../Assets/Textures/BG_BACKMOUNTAIN.png", 1600.f, 900.f };
     constexpr ImageFile BG_CLOUDS{ "../../Assets/Textures/BG_CLOUDS.png", 1600.f, 900.f };
