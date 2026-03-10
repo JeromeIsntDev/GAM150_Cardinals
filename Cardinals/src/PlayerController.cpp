@@ -136,20 +136,6 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 			prevDir = currDir;
 		}
 	}
-	//std::cout << "swapGrav: " << canSwapGrav << std::endl;
-	//if (input.isKeyTriggered(AEVK_DOWN) && canSwapGrav) {
-	//	grav = Player::GravityDirection::Down;
-	//}
-	//if (input.isKeyTriggered(AEVK_UP) && canSwapGrav) {
-	//	grav = Player::GravityDirection::Up;
-	//}
-	//if (input.isKeyTriggered(AEVK_LEFT) && canSwapGrav) {
-	//	grav = Player::GravityDirection::Left;
-	//}
-	//if (input.isKeyTriggered(AEVK_RIGHT) && canSwapGrav) {
-	//	grav = Player::GravityDirection::Right;
-	//}
-
 	//Sprint speed logic
 	if (isSprint) {
 		f32 maxSpeed = moveSpeed * 1.2f;
