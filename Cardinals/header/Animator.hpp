@@ -19,7 +19,7 @@ holds the class Animator that will take in the images for animation to loop
 class Animator : SpriteSheet {
 public:
 	enum { ANIM_FRAMES = 6 };
-	Animator() = default;
+	Animator();
 	void SetAnimTime(f32);
 public:
 	/*
