@@ -67,6 +67,7 @@ void Level1_Load() {
 
 	// bro i'll deak w this later too zzz
 	tileMesh = RectMeshCenterSliced(3,3);
+	squareMesh = RectMeshCenter();
 	//tempUI.InitTooltipFont(Fonts::Main, 30.f);
 	//playerEffectTexture.Load_Image(Images::CandyBall);
 	playerTexture.Load_Image(Images::Player);
@@ -127,10 +128,7 @@ void Level1_Load() {
 	memoryManager.AddFont(&digipenFont);
 	memoryManager.AddFont(&pauseTitleFont);
 
-	squareMesh = RectMeshCenter();
-
 	objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
-
 
 	grid.Load(tex.Get("TileSheet"), 900, 900, 300, 300);
 	grid.Initialize();
@@ -141,8 +139,6 @@ void Level1_Load() {
 
 		AEVec2& pos = objData[i].GetPosition();
 		objData[i].UpdatePosition(pos);
-		//levelObjList.push_back(&objData[i]);
-		//grid.GetCell(pos.x + 800.f, 450.f - pos.y)->obj = &objData[i];
 		u32 tag = static_cast<u32>(objData[i]._tag);
 		grid.SpawnNewTile(tag, pos.x + 800.f, 450.f - pos.y);
 	}
@@ -378,20 +374,13 @@ void Level1_EditorUpdate() {
 	if (IsEditorActive() && !isGamePaused && !isGameOver) {
 
 		//DragObject(levelObjList);
-		TileTag() = (TileTag() < 0) ? 0 : TileTag();
-
-		if (input.isKeyTriggered(AEVK_LEFT) && TileTag() > 0) {
-
-			--TileTag();
-		}
-		else if (input.isKeyTriggered(AEVK_RIGHT)) {
-			++TileTag();
-		}
+		ChangeTileTag();
+		ChangeTileSlice();
 
 		if (input.isKeyTriggered(AEVK_R))
 			RestartLevel(UpdateGameManagerState, Level1);
 
-		if (input.isKeyTriggered(AEVK_S))
+		if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_S))
 			SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", grid.objs);
 
 		if (input.isKeyTriggered(AEVK_Q))
@@ -403,7 +392,7 @@ void Level1_EditorUpdate() {
 			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
 			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
 				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.SpawnNewTile(TileTag(), mousePos.x, mousePos.y);
+			grid.SpawnNewTile(EditorTileTag(), mousePos.x, mousePos.y);
 		}
 
 		if (InputHandler::GetInstance().isKeyTriggered(AEVK_RBUTTON))
@@ -425,10 +414,74 @@ void Level1_EditorDraw() {
 		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
 
 
-		digipenFont.Input_Text("Tile Active: ");
+		digipenFont.Input_Text("Tile Tag: ");
+		digipenFont.Draw_Text(AEVec2{ -100.f, -365.f }, .5f, 1.f);
+		switch (EditorTileTag()) {
+		case 0:
+			digipenFont.Input_Text("Static");
+			break;
+		case 1:
+			digipenFont.Input_Text("Dynamic");
+			break;
+		case 2:
+			digipenFont.Input_Text("Platform");
+			break;
+		case 3:
+			digipenFont.Input_Text("Player");
+			break;
+		case 4:
+			digipenFont.Input_Text("Win");
+			break;
+		case 5:
+			digipenFont.Input_Text("GravUp");
+			break;
+		case 6:
+			digipenFont.Input_Text("GravDown");
+			break;
+		case 7:
+			digipenFont.Input_Text("GravLeft");
+			break;
+		case 8:
+			digipenFont.Input_Text("GravRight");
+			break;
+		case 9:
+			digipenFont.Input_Text("Obstacle");
+			break;
+		}
+		digipenFont.Draw_Text(AEVec2{ 75.f, -365.f }, .5f, 1.f);
+
+		digipenFont.Input_Text("Tile Slice: ");
 		digipenFont.Draw_Text(AEVec2{ -100.f, -415.f }, .5f, 1.f);
-		digipenFont.Input_Float(static_cast<float>(TileTag()));
-		digipenFont.Draw_Text(AEVec2{ 10.f, -415.f }, .5f, 1.f);
+		switch (EditorTileSlice()) {
+		case 0:
+			digipenFont.Input_Text("Top-left");
+			break;
+		case 1:
+			digipenFont.Input_Text("Top-Middle");
+			break;
+		case 2:
+			digipenFont.Input_Text("Top-Right");
+			break;
+		case 3:
+			digipenFont.Input_Text("Middle-Left");
+			break;
+		case 4:
+			digipenFont.Input_Text("Middle-Middle");
+			break;
+		case 5:
+			digipenFont.Input_Text("Middle-Right");
+			break;
+		case 6:
+			digipenFont.Input_Text("Bottom-Left");
+			break;
+		case 7:
+			digipenFont.Input_Text("Bottom-Middle");
+			break;
+		case 8:
+			digipenFont.Input_Text("Bottom-Right");
+			break;
+		}
+		digipenFont.Draw_Text_Corner(15.f, -430.f);
 
 
 		if (IsUsingSaveFile()) {

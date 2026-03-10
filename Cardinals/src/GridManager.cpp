@@ -1,4 +1,13 @@
+/*!***********************************************************************
+\file	GridManager.cpp
+\author	Jerome Lim
+\date	29/02/2026
+\par	Project: Cardinals
+
+\brief	
+**************************************************************************/
 #include "GridManager.hpp"
+#include "GameEditor.hpp"
 #include <cmath>
 
 std::ostream& operator<<(std::ostream& os, const GridCell& cell) {
@@ -81,8 +90,6 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 		return;
 	}
 	if (cell->obj) {
-		//PRINT("[DEBUG] => Cell Filled Already!\n");
-		//PRINT("[DEBUG] => Cell Tag: %d\n", cell->tag);
 		f32 ax{ cell->position.x }, ay{ cell->position.y };
 		PRINT("[DEBUG] => Cell Grid Position: %f, %f\n", ax, ay);
 		PRINT("TO\n");
@@ -136,7 +143,7 @@ void Grid::SpawnNewTile(int const& tag, f32 x, f32 y)
 
 	// leaving the tagging alone cuz im eepy
 	TileUV uv{};
-	if (spriteSheet.GetUV(tag, uv))
+	if (spriteSheet.GetUV(EditorTileSlice(), uv))
 	{
 		obj->uvX = uv.u;
 		obj->uvY = uv.v;

@@ -27,7 +27,8 @@ namespace {
 	bool useSaveFile = false;
 	GameObject lineObject;
 	AEGfxVertexList* lineMesh;
-	int tileTag{0};
+	int editor_tileTag{0};
+	int editor_tileSlice{ 0 };
 
 	const f32 tileWidth{ 50.f };
 	const AEVec2 tileDrawCenter{ -800.f, 450.f };
@@ -50,6 +51,9 @@ void SaveGameObjectToFilepath(std::string filepathSave, std::vector<GameObject*>
 bool IsEditorActive();
 bool IsUsingSaveFile();
 
-int& TileTag();
+int& const EditorTileTag();
+int& const EditorTileSlice();
+void ChangeTileTag();
+void ChangeTileSlice();
 
 #endif // !_GAME_EDITOR_HEADER_

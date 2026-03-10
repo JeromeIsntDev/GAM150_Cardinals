@@ -105,7 +105,38 @@ bool IsUsingSaveFile() {
 	return useSaveFile;
 }
 
-int& TileTag()
+int& const EditorTileTag()
 {
-	return tileTag;
+	return editor_tileTag;
+}
+
+int& const EditorTileSlice()
+{
+	return editor_tileSlice;
+}
+
+void ChangeTileTag()
+{
+	if (InputHandler::GetInstance().isKeyTriggered(AEVK_LEFT) && editor_tileTag > 0) {
+
+		--editor_tileTag;
+	}
+	else if (InputHandler::GetInstance().isKeyTriggered(AEVK_RIGHT)) {
+		++editor_tileTag;
+	}
+	editor_tileTag = static_cast<int>(AEClamp(static_cast<f32>(editor_tileTag), 0.f,
+		static_cast<f32>(GameObjectTag::Obstacle)));
+}
+
+void ChangeTileSlice()
+{
+	if (InputHandler::GetInstance().isKeyTriggered(AEVK_DOWN) && editor_tileSlice > 0) {
+
+		--editor_tileSlice;
+	}
+	else if (InputHandler::GetInstance().isKeyTriggered(AEVK_UP)) {
+		++editor_tileSlice;
+	}
+
+	editor_tileSlice = static_cast<int>(AEClamp(static_cast<f32>(editor_tileSlice), 0.f, 8.f));
 }
