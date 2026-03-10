@@ -56,6 +56,7 @@ namespace Images
     //constexpr ImageFile Background{ "../../Assets/Background.png", 1600.f, 900.f };
     constexpr ImageFile DigipenLogo{ "../../Assets/Textures/DigiPen_WHITE.png", 1525.f, 445.f };
     constexpr ImageFile Player{ "../../Assets/Textures/playerIdle.png", 500.f,500.f };
+    constexpr ImageFile PlayerJump{ "../../Assets/Textures/playerJump.png", 500.f,500.f };
 
 	constexpr ImageFile PrevBtn{ "../../Assets/Textures/Previous_Button.png", 120.f, 120.f };
     constexpr ImageFile ExitBtn{ "../../Assets/Textures/Exit_Button.png", 412.f, 120.f };
