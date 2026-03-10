@@ -1,17 +1,25 @@
 #include "Level2.hpp"
+#include "GameEditor.hpp"
 
 extern bool isGamePaused;
 extern bool isGameOver;
 
 namespace {
+	AEGfxVertexList* squareMesh;
 	Text digipenFont;
 	Text pauseTitleFont;
 
 	Texture placeholder;
-	Texture playerTexture;
 
 	GameObject placeholderObj;
-	GameObject playerObj;
+	
+	//PLAYER VARIABLES
+	f32 playerMovespeed{ 300.f };
+	int  playerHealth{ 3 };
+	Texture playerTexture[2]{};
+	ParticleEffect playerEffect;
+	ParticleEffect gravityEffect;
+	Player mainPlayer;
 
 	AEGfxVertexList* rectMesh;
 
@@ -24,7 +32,8 @@ namespace {
 
 void Level2_Load() {
 	PRINT("Load: %s", "Level 2\n");
-
+	
+	squareMesh = RectMeshCenter();
 	digipenFont.Load_Font(Fonts::Alt, 72.f);
 	digipenFont.Input_Text("Level 2");
 	digipenFont.Change_Text_Color(Colors::Black);
@@ -32,7 +41,12 @@ void Level2_Load() {
 	pauseTitleFont.Load_Font(Fonts::Alt, 72.f);
 
 	placeholder.Load_Image(Images::Placeholder);
-	playerTexture.Load_Image(Images::Player);
+	playerTexture[0].Load_Image(Images::Player);
+	playerTexture[1].Load_Image(Images::PlayerJump);
+
+	for (Texture& T : playerTexture) {
+		memoryManager.AddTexture(&T);
+	}
 
 	prevTexture.Load_Image(Images::PrevBtn);
 	barTexture.Load_Image(Images::Bar);
@@ -58,10 +72,15 @@ void Level2_Initialize()
 	placeholderObj.UpdateScale(AEVec2{ 1600.f, 900.f });
 	placeholderObj.UpdateRotation(0.f);
 
-	playerObj.SetMesh(rectMesh);
-	playerObj.SetTexture(&playerTexture);
-	playerObj.UpdateScale(AEVec2{ 100.f, 100.f });
-	playerObj.UpdateRotation(0.f);
+	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false,
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f);
+	mainPlayer.SetMesh(squareMesh);
+	mainPlayer.SetTexture(&playerTexture[0]);
+	mainPlayer.UpdateScale(mainPlayer.p_Scale);
+	mainPlayer.UpdateRotation(0.f);
+	mainPlayer.UpdatePosition(mainPlayer.GetPosition());
+	mainPlayer._tag = GameObjectTag::Player;
+	mainPlayer.SetHealth(3);
 
 
 	pauseMenu = std::make_unique<Overlay>(rectMesh, PAUSE, -1, []() {isGamePaused = 0; }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); }, []() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level2); });
@@ -93,7 +112,6 @@ void Level2_Initialize()
 	//pauseUI.Add(quitBtn.get());
 
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
-	memoryManager.AddTexture(&playerTexture);
 	memoryManager.AddTexture(&placeholder);
 	memoryManager.AddTexture(&prevTexture);
 	memoryManager.AddTexture(&barTexture);
@@ -141,13 +159,28 @@ void Level2_Update() {
 	
 	//if (!isGamePaused) return;
 	//pauseUI.Update(0.f);
+
+	//PLAYER ITEMS//
+	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
+	if (mainPlayer.GetPlayerJump()) {
+		mainPlayer.SetTexture(&playerTexture[1]);
+	}
+	else {
+		mainPlayer.SetTexture(&playerTexture[0]);
+	}
+	mainPlayer.p_isGrounded = false;
+	mainPlayer.hasCollided = false;
+	mainPlayer.canMoveLeft = true;
+	mainPlayer.canMoveRight = true;
+	//mainPlayer.CheckBinaryCollision(&grid, mainPlayer.grav);
+	//mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
 }
 
 void Level2_Draw() {
 	PRINT("Draw: %s", "Level 2\n");
 	digipenFont.Input_Text("Level 2");
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
-	playerObj.Draw();
+	mainPlayer.Draw();
 
 	//if (!isGamePaused) return;
 	//AEGfxSetTransparency(.8f);
