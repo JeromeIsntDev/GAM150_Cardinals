@@ -35,6 +35,7 @@ namespace {
 	Texture horizontalPlatformTex;
 	Texture backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
+	GameObject gamelives[3]{};
 
 	// PAUSE MENU
 	std::unique_ptr <Overlay> pauseMenu;
@@ -174,7 +175,13 @@ void Level1_Initialize()
 		obj->UpdatePosition(AEVec2{ 0.f, 0.f });
 	}
 
-
+	for (int i{}; i < 3; ++i) {
+		GameObject* live = &gamelives[i];
+		live->SetTexture(&candyTexture);
+		live->SetMesh(squareMesh);
+		live->UpdateScale(AEVec2{ 70.f, 70.f });
+		live->UpdatePosition(AEVec2{ -70.f + i * 70.f, 380.f });
+	}
 	levelTime = 0.f;
 
 	pauseMenu = std::make_unique<Overlay>(squareMesh, PAUSE, -1, 
@@ -285,6 +292,16 @@ void Level1_Update() {
 		gravityEffect.Update(dt, obj->GetPosition(), obj->_tag);
 	}
 
+	for (int i{}; i < 3; ++i) {
+		GameObject* live = &gamelives[i];
+		if (i < mainPlayer.GetPlayerHealth()) {
+			live->SetTexture(&candyTexture);
+		}
+		else {
+			live->SetTexture(&greyCandyTexture);
+		}
+	}
+
 	if (isGamePaused || isGameOver) return;
 	/*PLAYER STUFF*/
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
@@ -331,6 +348,10 @@ void Level1_Draw() {
 
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
+	
+	for (GameObject& live : gamelives) {
+		live.Draw();
+	}
 
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
