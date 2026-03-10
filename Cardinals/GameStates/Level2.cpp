@@ -120,7 +120,7 @@ void Level2_Update() {
 
 	if (pauseMenu) {
 		pauseMenu->Update(dt);
-		if (pauseMenu->IsActive() && input.isMouseBtnTriggered(AEVK_LBUTTON)) {
+		if (pauseMenu->IsActive() && input.isKeyTriggered(AEVK_LBUTTON)) {
 			pauseMenu->OnClick();
 		}
 	}

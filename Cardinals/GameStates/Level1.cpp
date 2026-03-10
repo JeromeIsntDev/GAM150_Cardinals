@@ -1,5 +1,20 @@
+/*!***********************************************************************
+\file	MainMenu.hpp
+\author	Jerome Lim
+\date	15/01/2026
+\par	Project: Cardinals
+
+\brief	Source File for Level 1 Game State
+**************************************************************************/
 #include "Level1.hpp"
 #include "GameEditor.hpp"
+
+
+//----------------------FORWARD DECLERATIONS---------------------------//
+void Level1_EditorUpdate();
+void Level1_EditorDraw();
+void Level1_Parallax();
+//---------------------!FORWARD DECLERATIONS---------------------------//
 
 
 namespace {
@@ -44,7 +59,7 @@ namespace {
 }
 
 void Level1_Load() {
-	PRINT("Load: %s", "Level 1\n");
+	PRINT("[DEBUG | LEVEL] => Load: %s", "Level 1\n");
 
 	digipenFont.Load_Font(Fonts::Alt, 72.f);
 	digipenFont.Input_Text("Level 1");
@@ -135,9 +150,7 @@ void Level1_Load() {
 
 void Level1_Initialize()
 {
-	PRINT("Initialize: %s", "Level 1\n");
-
-	//controlPanel.ControlPanel_Initialize();
+	PRINT("[DEBUG | LEVEL] => Initialize: %s", "Level 1\n");
 
 	playerEffect.Init();
 	gravityEffect.Init();
@@ -198,26 +211,45 @@ void Level1_Initialize()
 void Level1_Update() {
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
-	if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
+	if (pauseMenu) //Checks if pauseMenu Exists
 	{
-		isGamePaused = !isGamePaused;
-		if (pauseMenu)
+		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
+		{
+			isGamePaused = !isGamePaused;
 			pauseMenu->SetActive(isGamePaused);
+		}
+
+		pauseMenu->Update(dt);
+
+		if (pauseMenu->IsActive() && input.isKeyTriggered(AEVK_LBUTTON))
+			pauseMenu->OnClick();
+	}
+	else {
+		PRINT("[WARNING] => Pause Menu Unique Pointer Not Initialized!");
 	}
 
-	if (AEInputCheckTriggered(AEVK_O) && !isGameOver)
-	//if (mainPlayer.IsGameOver() && !isGameOver)
+
+	if (gameOverMenu)
 	{
-		isGameOver = true;
-		isGamePaused = false;
-		gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
+		if (AEInputCheckTriggered(AEVK_O) && !isGameOver)
+		{
+			isGameOver = true;
+			isGamePaused = false;
+			gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
 
-		if (pauseMenu)
 			pauseMenu->SetActive(false);
-
-		if (gameOverMenu)
 			gameOverMenu->SetActive(true);
+		}
+
+		gameOverMenu->Update(dt);
+
+		if (gameOverMenu->IsActive() && input.isKeyTriggered(AEVK_LBUTTON))
+			gameOverMenu->OnClick();
 	}
+	else {
+		PRINT("[WARNING] => Game Over Menu Unique Pointer Not Initialized!");
+	}
+
 
 	if (mainPlayer.getGameOver()) {
 		isGameOver = true;
@@ -227,97 +259,23 @@ void Level1_Update() {
 		mainPlayer.SetGameOver(false);
 	}
 
-	if (pauseMenu)
-	{
-		pauseMenu->Update(dt);
-
-		if (pauseMenu->IsActive() && input.isMouseBtnTriggered(AEVK_LBUTTON))
-			pauseMenu->OnClick();
-	}
-
-
-	if (gameOverMenu)
-	{
-		gameOverMenu->Update(dt);
-
-		if (gameOverMenu->IsActive() && input.isMouseBtnTriggered(AEVK_LBUTTON))
-			gameOverMenu->OnClick();
-	}
-
-
-	//declare mainPlayer variable
-	//PRINT("Update: %s", "Main Menu\n");
-
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetBackgroundColor(0.95f, 0.65f, 0.77f);
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetTransparency(1.f);
 
-	//controlPanel.ControlPanel_Update();
 	if (!isGamePaused && !isGameOver) {
 		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	}
-	//levelTime +=static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
 	if (!IsEditorActive() || IsEditorActive())
-		if (input.isMouseBtnTriggered(AEVK_E))
+		if (input.isKeyTriggered(AEVK_E))
 			ToggleEditorMode();
 
-	if (IsEditorActive() && !isGamePaused && !isGameOver) {
-		
-		//DragObject(levelObjList);
-		tileTag = (tileTag < 0) ? 0 : tileTag;
+	Level1_EditorUpdate();
 
-		if (input.isKeyTriggered(AEVK_LEFT) && tileTag > 0) {
-
-			--tileTag;
-		}
-		else if (input.isKeyTriggered(AEVK_RIGHT)) {
-			++tileTag;
-		}
-
-		if (input.isMouseBtnTriggered(AEVK_R))
-			RestartLevel(UpdateGameManagerState, Level1);
-
-		if (input.isMouseBtnTriggered(AEVK_S))
-			SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", grid.objs);
-
-		if (input.isMouseBtnTriggered(AEVK_Q))
-			ToggleSaveFileMode();
-
-		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_LBUTTON)) 
-		{
-			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
-				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.SpawnNewTile(tileTag, mousePos.x, mousePos.y);
-		}
-
-		if (InputHandler::GetInstance().isMouseBtnTriggered(AEVK_RBUTTON))
-		{
-			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
-				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.DeleteTile(mousePos.x, mousePos.y);
-		}
-	}
-
-
-	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	/*BACKGROUND PARALLAXING*/
-	for (GameObject& obj : backgroundObjs) {
-		f32 offset = mainPlayer.GetPosition().x;
-		f32 offsetFirst = offset / 200.f;
-		f32 offsetSecond = offset / 75.f;
-		f32 offsetThird = offset / 25.f;
-
-		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-	}
+	Level1_Parallax();
 
 	
 	for (GameObject* obj : grid.objs) {
@@ -327,8 +285,6 @@ void Level1_Update() {
 			obj->_tag == GameObjectTag::Gravright)
 		gravityEffect.Update(dt, obj->GetPosition(), obj->_tag);
 	}
-
-	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
 	if (isGamePaused || isGameOver) return;
 	/*PLAYER STUFF*/
@@ -349,7 +305,6 @@ void Level1_Update() {
 }
 
 void Level1_Draw() {
-	//PRINT("Draw: %s", "Level 1\n");
 	
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
 	for (GameObject& obj : backgroundObjs) {
@@ -379,7 +334,91 @@ void Level1_Draw() {
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
 
+	Level1_EditorDraw();
+}
 
+void Level1_Free() {
+	PRINT("[DEBUG | LEVEL] => Free: %s", "Level 1\n");
+
+	playerEffect.Clear();
+	gravityEffect.Clear();
+}
+
+void Level1_Unload() {
+	PRINT("[DEBUG | LEVEL] => Unload: %s", "Level 1\n");
+
+	pauseMenu.reset();
+	gameOverMenu.reset();
+	if (isGamePaused) isGamePaused = 0;
+	if (isGameOver) isGameOver = 0;
+
+	//tex.UnloadAll();
+	if (memoryManager.MassUnload()) PRINT("[MEM DEBUG] => Level 1 Unload Success!\n");
+	grid.Clear();
+}
+
+
+void Level1_Parallax() {
+	//Reduce Colour -> To Bright
+	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
+	for (GameObject& obj : backgroundObjs) {
+		f32 offset = mainPlayer.GetPosition().x;
+		f32 offsetFirst = offset / 200.f;
+		f32 offsetSecond = offset / 75.f;
+		f32 offsetThird = offset / 25.f;
+
+		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
+		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
+		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
+	}
+	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+void Level1_EditorUpdate() {
+	if (IsEditorActive() && !isGamePaused && !isGameOver) {
+
+		//DragObject(levelObjList);
+		TileTag() = (TileTag() < 0) ? 0 : TileTag();
+
+		if (input.isKeyTriggered(AEVK_LEFT) && TileTag() > 0) {
+
+			--TileTag();
+		}
+		else if (input.isKeyTriggered(AEVK_RIGHT)) {
+			++TileTag();
+		}
+
+		if (input.isKeyTriggered(AEVK_R))
+			RestartLevel(UpdateGameManagerState, Level1);
+
+		if (input.isKeyTriggered(AEVK_S))
+			SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", grid.objs);
+
+		if (input.isKeyTriggered(AEVK_Q))
+			ToggleSaveFileMode();
+
+		if (InputHandler::GetInstance().isKeyTriggered(AEVK_LBUTTON))
+		{
+			AEVec2 mousePos{ 0.f,0.f };
+			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
+			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
+				mousePos.y < 0.f || mousePos.y > 900.f) return;
+			grid.SpawnNewTile(TileTag(), mousePos.x, mousePos.y);
+		}
+
+		if (InputHandler::GetInstance().isKeyTriggered(AEVK_RBUTTON))
+		{
+			AEVec2 mousePos{ 0.f,0.f };
+			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
+			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
+				mousePos.y < 0.f || mousePos.y > 900.f) return;
+			grid.DeleteTile(mousePos.x, mousePos.y);
+		}
+	}
+}
+
+
+void Level1_EditorDraw() {
 	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
 	if (IsEditorActive()) {
 		digipenFont.Input_Text("Editor Active");
@@ -388,7 +427,7 @@ void Level1_Draw() {
 
 		digipenFont.Input_Text("Tile Active: ");
 		digipenFont.Draw_Text(AEVec2{ -100.f, -415.f }, .5f, 1.f);
-		digipenFont.Input_Float(static_cast<float>(tileTag));
+		digipenFont.Input_Float(static_cast<float>(TileTag()));
 		digipenFont.Draw_Text(AEVec2{ 10.f, -415.f }, .5f, 1.f);
 
 
@@ -400,22 +439,4 @@ void Level1_Draw() {
 		mainPlayer.DebugDraw();
 		DrawDebugObjects(grid.objs);
 	}
-}
-
-void Level1_Free() {
-	PRINT("Free: %s", "Level 1\n");
-	playerEffect.Clear();
-	gravityEffect.Clear();
-}
-
-void Level1_Unload() {
-	PRINT("Unload: %s", "Level 1\n");
-	pauseMenu.reset();
-	gameOverMenu.reset();
-	if (isGamePaused) isGamePaused = 0;
-	if (isGameOver) isGameOver = 0;
-
-	//tex.UnloadAll();
-	if (memoryManager.MassUnload()) PRINT("Unload Success!");
-	grid.Clear();
 }

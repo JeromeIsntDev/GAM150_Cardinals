@@ -8,7 +8,6 @@ void InitializeEditor()
 void ClearEditorMemory()
 {
 	AEGfxMeshFree(lineMesh);
-	editorText.Unload_Image();
 }
 
 void DragObject(std::vector<GameObject*> objs)
@@ -33,7 +32,7 @@ void DragObject(std::vector<GameObject*> objs)
 			obj->UpdatePosition(AEVec2{ currentPos.x + mx, currentPos.y - my });
 
 			AEInputMouseWheelDelta(&mx);
-			if (InputHandler::GetInstance().isMouseBtnPressed(AEVK_LSHIFT)) {
+			if (InputHandler::GetInstance().isKeyTriggered(AEVK_LSHIFT)) {
 				mx *= 10;
 			}
 			my = mx;
@@ -51,13 +50,13 @@ void DrawTileOutline() {
 	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 1.f);
 
 	for (int i{}; i < 18; ++i) {
-		lineObject.UpdatePosition({0.f,450.f - 50.f * i});
-		lineObject.UpdateScale({1600.f, 1.f});
+		lineObject.UpdatePosition({0.f, tileDrawCenter.y - tileWidth * i});
+		lineObject.UpdateScale(horizontalScale);
 		lineObject.DebugDraw();
 	}
 	for (int i{}; i < 32; ++i) {
-		lineObject.UpdatePosition({ -800.f + 50.f * i,0.f });
-		lineObject.UpdateScale({ 1.f,900.f });
+		lineObject.UpdatePosition({ tileDrawCenter.x + tileWidth * i,0.f });
+		lineObject.UpdateScale(verticalScale);
 		lineObject.DebugDraw();
 	}
 	AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
@@ -104,4 +103,9 @@ bool IsEditorActive()
 
 bool IsUsingSaveFile() {
 	return useSaveFile;
+}
+
+int& TileTag()
+{
+	return tileTag;
 }

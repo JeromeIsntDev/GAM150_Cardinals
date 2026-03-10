@@ -14,6 +14,7 @@
 #define _GAME_EDITOR_HEADER_
 
 #include <vector>
+#include <AEEngine.h>
 #include "GameObject.hpp"
 #include "GStateManager.hpp"
 #include "GameSaver.hpp"
@@ -26,8 +27,12 @@ namespace {
 	bool useSaveFile = false;
 	GameObject lineObject;
 	AEGfxVertexList* lineMesh;
-	int tileTag;
-	Texture editorText;
+	int tileTag{0};
+
+	const f32 tileWidth{ 50.f };
+	const AEVec2 tileDrawCenter{ -800.f, 450.f };
+	const AEVec2 horizontalScale{ 1600.f , 1.f };
+	const AEVec2 verticalScale{ 1.f , 900.f };
 }
 
 void InitializeEditor();
@@ -44,5 +49,7 @@ void SaveGameObjectToFilepath(std::string filepathSave, std::vector<GameObject*>
 
 bool IsEditorActive();
 bool IsUsingSaveFile();
+
+int& TileTag();
 
 #endif // !_GAME_EDITOR_HEADER_

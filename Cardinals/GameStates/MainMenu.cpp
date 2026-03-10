@@ -27,7 +27,7 @@ namespace {
 	Texture tex_digipenLogo{};
 	GameObject go_digipenLogo, menuBG;
 	f32 logo_transparency = 0.f;
-	s8 isLogoDrawn = 0;
+	s8 isDigipenLogoDrawn = 0;
 	s32 mouseX, mouseY;
 	bool quitMenuOpen = false;
 
@@ -46,7 +46,7 @@ namespace {
 
 
 void MainMenu_Load() {
-	PRINT("Load: %s", "Main Menu\n");
+	PRINT("[DEBUG | LEVEL] => Load: %s", "Main Menu\n");
 
 	bgm.LoadManifest("../../Assets/AudioManifest.txt");
 	tex.LoadManifest("../../Assets/TextureManifest.txt");
@@ -108,22 +108,28 @@ void MainMenu_Load() {
 }
 
 void MainMenu_Initialize()
-{
-	bgm.Init();
+{	
+	PRINT("[DEBUG | LEVEL] => Initialize: %s", "Main Menu\n");
 
-	// play the bgm for the main menu, looped
+	bgm.Init();
 	bgm.PlayAudio("BGM", AudioType::MUSIC, 1.f, -1);
 
 	squareMesh = RectMeshCenter();
 	go_digipenLogo.SetMesh(squareMesh);
 
 	menuBG.SetMesh(squareMesh); menuBG.SetTexture(&menuBGTexture);
-	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f }); menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() }); menuBG.UpdateRotation(0.f);
+	menuBG.UpdatePosition(AEVec2{ 0.f, 0.f }); 
+	menuBG.UpdateScale(AEVec2{ menuBGTexture.Get_Image_Width(), menuBGTexture.Get_Image_Height() }); 
+	menuBG.UpdateRotation(0.f);
 
 	settingsMenu = std::make_unique<Overlay>(squareMesh, SETTINGS, -1, [](){}, nullptr);
 
-	settingsMenu->SetTextures(PauseMenuTextures{ &menuBGTexture, &cardBgTexture, &barTexture, 
-		&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, &prevTexture, nullptr, nullptr, nullptr, &settingsFont });
+	settingsMenu->SetTextures(
+		PauseMenuTextures{ 
+			&menuBGTexture, &cardBgTexture, &barTexture, 
+			&knobMasterTexture, &knobMusicTexture, &knobEFXTexture, 
+			&prevTexture, nullptr, nullptr, nullptr, &settingsFont 
+		});
 
 	// BUTTONS
 
@@ -134,36 +140,63 @@ void MainMenu_Initialize()
 	Texture* creditsTex = tex.Get("CreditsBtn");
 	Texture* settingsTex = tex.Get("SettingsBtn");
 
-	startBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, 0.f }, 0.f, AEVec2{ startTex->Get_Image_Width(), startTex->Get_Image_Height() });
+	startBtn = std::make_unique<Button>(
+		squareMesh, 
+		AEVec2{ 0.f, 0.f }, 
+		0.f, 
+		AEVec2{ startTex->Get_Image_Width(), startTex->Get_Image_Height() }
+	);
 	startBtn->SetTexture(startTex); startBtn->SetActive(true); startBtn->SetInteractable(true);
 	startBtn->SetTooltipText("Into Level Select!");
 
-	creditsBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -300.f }, 0.f, AEVec2{ creditsTex->Get_Image_Width(), creditsTex->Get_Image_Height() });
+	creditsBtn = std::make_unique<Button>(
+		squareMesh, 
+		AEVec2{ 0.f, -300.f }, 
+		0.f, 
+		AEVec2{ creditsTex->Get_Image_Width(), creditsTex->Get_Image_Height() }
+	);
 	creditsBtn->SetTexture(creditsTex); creditsBtn->SetActive(true); creditsBtn->SetInteractable(true);
 	creditsBtn->SetTooltipText("Credits & Thanks!");
 
-	exitBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -150.f }, 0.f, AEVec2{ exitTex->Get_Image_Width(), exitTex->Get_Image_Height() });
+	exitBtn = std::make_unique<Button>(
+		squareMesh, 
+		AEVec2{ 0.f, -150.f },
+		0.f, AEVec2{ exitTex->Get_Image_Width(), exitTex->Get_Image_Height() }
+	);
 	exitBtn->SetTexture(exitTex); exitBtn->SetActive(true); exitBtn->SetInteractable(true);
 	exitBtn->SetTooltipText("Quit Menu!");
 
 	// HAVENT CHANGED
-	yesBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -50.f }, 0.f, AEVec2{ 200.f, 100.f });
+	yesBtn = std::make_unique<Button>(
+		squareMesh, 
+		AEVec2{ 0.f, -50.f }, 
+		0.f, 
+		AEVec2{ 200.f, 100.f }
+	);
 	yesBtn->SetTexture(&yesTexture); yesBtn->SetActive(true); yesBtn->SetInteractable(true);
 	yesBtn->SetTooltipText("");
 
 	// HAVENT CHANGED
-	noBtn = std::make_unique<Button>(squareMesh, AEVec2{ 0.f, -175.f }, 0.f, AEVec2{ 200.f, 100.f });
+	noBtn = std::make_unique<Button>(
+		squareMesh, 
+		AEVec2{ 0.f, -175.f }, 
+		0.f, 
+		AEVec2{ 200.f, 100.f }
+	);
 	noBtn->SetTexture(&noTexture); noBtn->SetActive(true); noBtn->SetInteractable(true);
 	noBtn->SetTooltipText("");
 
-	settingsBtn = std::make_unique<Button>(squareMesh, AEVec2{710.f,360.f}, 0.f, AEVec2{ settingsTex->Get_Image_Width(), settingsTex->Get_Image_Height()});
+	settingsBtn = std::make_unique<Button>(
+		squareMesh, 
+		AEVec2{710.f,360.f}, 
+		0.f, 
+		AEVec2{ settingsTex->Get_Image_Width(), settingsTex->Get_Image_Height()}
+	);
 	settingsBtn->SetTexture(settingsTex); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
 	noBtn->SetTooltipText("Adjust Sliders!");
-	settingsBtn->SetOnClick([]() 
-		{
-			settingsMenu->SetActive(true);
-			//menuUI.ForceResetToolTips();
-		});
+	settingsBtn->SetOnClick(
+		[]() { settingsMenu->SetActive(true); }
+	);
 
 	quitUI.Add(yesBtn.get());
 	quitUI.Add(noBtn.get());
@@ -193,21 +226,25 @@ void MainMenu_Initialize()
 		});
 
 	// control all buttons with the manager
-	menuUI.Add(startBtn.get()); menuUI.Add(exitBtn.get()); menuUI.Add(creditsBtn.get()); menuUI.Add(settingsBtn.get());
+	menuUI.Add(startBtn.get()); 
+	menuUI.Add(exitBtn.get()); 
+	menuUI.Add(creditsBtn.get()); 
+	menuUI.Add(settingsBtn.get());
 
 	go_digipenLogo.SetTexture(&tex_digipenLogo);
-	go_digipenLogo.UpdatePosition(AEVec2{ 0.f, 0.f });
-	go_digipenLogo.UpdateScale(AEVec2{ tex_digipenLogo.Get_Image_Width(), tex_digipenLogo.Get_Image_Height() });
+	go_digipenLogo.UpdatePosition({0.f,0.f});
+	go_digipenLogo.UpdateScale(
+		AEVec2{ 
+			tex_digipenLogo.Get_Image_Width(),
+			tex_digipenLogo.Get_Image_Height() 
+		});
 	go_digipenLogo.UpdateRotation(0.f);
-
-	PRINT("Initialize: %s", "Main Menu\n");
 }
 
 void MainMenu_Update() {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	Color bg = Colors::PastelPurple;
-	AEGfxSetBackgroundColor(bg.r, bg.g, bg.b);
+	AEGfxSetBackgroundColor(Colors::PastelPurple.r, Colors::PastelPurple.g, Colors::PastelPurple.b);
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 
 	AEGfxSetTransparency(logo_transparency);
@@ -216,16 +253,19 @@ void MainMenu_Update() {
 
 	if (input.isKeyTriggered(AEVK_SPACE)) {
 		logo_transparency = 1.f;
-		isLogoDrawn = 1;
+		isDigipenLogoDrawn = 1;
 	}
 
-	if (isLogoDrawn) 
+	if (isDigipenLogoDrawn) 
 	{
+		if (logo_transparency < 1.f) {
+			logo_transparency += dt * 4.f;
+		}
 		if (quitMenuOpen) { quitUI.Update(dt); }
 		else if (settingsMenu->IsActive()) {
 			settingsMenu->Update(dt);
 
-			if (input.isMouseBtnTriggered(AEVK_LBUTTON)) {
+			if (input.isKeyTriggered(AEVK_LBUTTON)) {
 				settingsMenu->OnClick();
 			}
 		}
@@ -235,21 +275,20 @@ void MainMenu_Update() {
 	else 
 	{
 		if (AEFrameRateControllerGetFrameCount() < 100) {
-			logo_transparency += 0.02f;
+			logo_transparency += dt;
 		}
 		else if (AEFrameRateControllerGetFrameCount() > 100 && (AEFrameRateControllerGetFrameCount() < 200)) {
-			logo_transparency -= 0.02f;
+			logo_transparency -= dt;
 		}
 		else if (AEFrameRateControllerGetFrameCount() > 200) {
-			logo_transparency = 1.f;
-			isLogoDrawn = 1;
+			isDigipenLogoDrawn = 1;
 		}
 	}
 }
 
 void MainMenu_Draw() {
 
-	if (!isLogoDrawn) {
+	if (!isDigipenLogoDrawn) {
 		go_digipenLogo.Draw();
 		digipenFont.Draw_Text(AEVec2{ 0, -330.f }, 1.f, logo_transparency);
 		return;
@@ -280,7 +319,7 @@ void MainMenu_Draw() {
 }
 
 void MainMenu_Free() {
-	PRINT("Free: %s", "Main Menu\n");
+	PRINT("[DEBUG | LEVEL] => Free: %s", "Main Menu\n");
 
 	bgm.StopAudio();
 	//bgm.Free();
@@ -290,10 +329,10 @@ void MainMenu_Free() {
 }
 
 void MainMenu_Unload() {
-	PRINT("Unload: %s", "Main Menu\n");
+	PRINT("[DEBUG | LEVEL] => Unload: %s", "Main Menu\n");
 	settingsMenu.reset();
 
 	tex.UnloadAll(); // this will unload all tex so duneed memmanager but like snsnoorkk
 
-	if (memoryManager.MassUnload()) PRINT("Unload Success");
+	if (memoryManager.MassUnload()) PRINT("[MEM DEBUG] => Main Menu Unload Success\n");
 }

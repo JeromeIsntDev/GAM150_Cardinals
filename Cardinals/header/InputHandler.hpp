@@ -41,8 +41,6 @@ public:
 
 	bool isKeyPressed(u8 key); // held
 	bool isKeyTriggered(u8 key); // jst once
-	bool isMouseBtnPressed(u8 button);
-	bool isMouseBtnTriggered(u8 button);
 
 	bool isKeyReleased(u8 key);
 

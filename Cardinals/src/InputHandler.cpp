@@ -22,16 +22,6 @@ bool InputHandler::isKeyTriggered(u8 key)
 	return AEInputCheckTriggered(key);
 }
 
-bool InputHandler::isMouseBtnPressed(u8 button)
-{
-	return AEInputCheckCurr(button);
-}
-
-bool InputHandler::isMouseBtnTriggered(u8 button)
-{
-	return AEInputCheckTriggered(button);
-}
-
 bool InputHandler::isKeyReleased(u8 key)
 {
 	return AEInputCheckReleased(key);

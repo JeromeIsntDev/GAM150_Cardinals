@@ -213,7 +213,7 @@ void UIManager::HandleClick()
 
     // mouse pointing calculation because screen view is NNNOOTT the same as game view iykwim
     // yk idk if this was a problem i just coded it cuz i felt like it wld have an issue lol
-    if (input.isMouseBtnTriggered(AEVK_LBUTTON))
+    if (input.isKeyTriggered(AEVK_LBUTTON))
     {
         AEVec2 mousePos = GetNewMousePos();
 
