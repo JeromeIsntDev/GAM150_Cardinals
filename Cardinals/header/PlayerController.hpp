@@ -36,7 +36,7 @@ private:
 	f32 maxCD{ 0.4f };
 	f32 currCD{ 0.f };
 	f32 changeCD{ 0.f };
-	f32 jumpForce = 500.f;
+	f32 jumpForce = 1250.f;
 	bool gameOver = false;
 
 	AudioManager& bgm = AudioManager::Instance();

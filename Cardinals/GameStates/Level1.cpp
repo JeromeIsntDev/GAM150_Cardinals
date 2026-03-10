@@ -25,7 +25,7 @@ namespace {
 	//PLAYER VARIABLES
 	f32 playerMovespeed{ 300.f };
 	int  playerHealth{ 3 };
-	Texture playerTexture{};
+	Texture playerTexture[2]{};
 	ParticleEffect playerEffect;
 	ParticleEffect gravityEffect;
 
@@ -70,7 +70,8 @@ void Level1_Load() {
 	squareMesh = RectMeshCenter();
 	//tempUI.InitTooltipFont(Fonts::Main, 30.f);
 	//playerEffectTexture.Load_Image(Images::CandyBall);
-	playerTexture.Load_Image(Images::Player);
+	playerTexture[0].Load_Image(Images::Player);
+	playerTexture[1].Load_Image(Images::PlayerJump);
 	placeholderTexture.Load_Image(Images::Placeholder);
 	backgrounds[0].Load_Image(Images::BG_BACKMOST);
 	backgrounds[1].Load_Image(Images::BG_CLOUDS);
@@ -97,8 +98,7 @@ void Level1_Load() {
 	//textures.push_back(&playerEffectTexture);
 	
 	memoryManager.AddTextures({
-			&playerTexture,
-			& placeholderTexture,
+			&placeholderTexture,
 			&verticalPlatformTex,
 			&horizontalPlatformTex,
 			&prevTexture,
@@ -115,6 +115,10 @@ void Level1_Load() {
 			&candyTexture,
 			&greyCandyTexture
 		});
+
+	for (Texture& T : playerTexture) {
+		memoryManager.AddTexture(&T);
+	}
 
 	for (Texture& t : backgrounds) {
 		memoryManager.AddTexture(&t);
@@ -155,7 +159,7 @@ void Level1_Initialize()
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
 		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f);
 	mainPlayer.SetMesh(squareMesh);
-	mainPlayer.SetTexture(&playerTexture);
+	mainPlayer.SetTexture(&playerTexture[0]);
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer.UpdatePosition(mainPlayer.GetPosition());
@@ -284,11 +288,13 @@ void Level1_Update() {
 
 	if (isGamePaused || isGameOver) return;
 	/*PLAYER STUFF*/
-
-	//f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
-	//std::cout << mainPlayer.GetPosition().y << std::endl;
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
-
+	if (mainPlayer.GetPlayerJump()) {
+		mainPlayer.SetTexture(&playerTexture[1]);
+	}
+	else {
+		mainPlayer.SetTexture(&playerTexture[0]);
+	}
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
 	mainPlayer.canMoveLeft = true;

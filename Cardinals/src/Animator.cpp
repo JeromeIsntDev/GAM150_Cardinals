@@ -13,14 +13,35 @@ Functions definition for Animator objects
 
 #include "../header/Animator.hpp"
 
-Animator::Animator():
-	animTime{0}, animArr{}
-{}
-
-void Animator::SetAnimTime(f32 time) {
-	animTime = time;
+void Animator::AnimationUpd(f32& dt) {
+	if (!isPlaying)return;
+	//functionality here
+	animTime += dt;
+	if (animTime >= frameDur) {
+		animTime = 0.f;
+		//go to next frame
+		currFrame++;
+	}
 }
 
+void Animator::SetFrameTime(f32 time) {
+	frameDur = time;
+}
+
+bool Animator::GetLoop() const {
+	return isLoop;
+}
+bool Animator::GetPlaying() const {
+	return isPlaying;
+}
+
+int Animator::GetCurrFrame() const {
+	return currFrame;
+}
+
+f32 Animator::GetFrameDur() const {
+	return frameDur;
+}
 f32 Animator::GetAnimTime() const {
 	return animTime;
 }

@@ -136,20 +136,6 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 			prevDir = currDir;
 		}
 	}
-	//std::cout << "swapGrav: " << canSwapGrav << std::endl;
-	//if (input.isKeyTriggered(AEVK_DOWN) && canSwapGrav) {
-	//	grav = Player::GravityDirection::Down;
-	//}
-	//if (input.isKeyTriggered(AEVK_UP) && canSwapGrav) {
-	//	grav = Player::GravityDirection::Up;
-	//}
-	//if (input.isKeyTriggered(AEVK_LEFT) && canSwapGrav) {
-	//	grav = Player::GravityDirection::Left;
-	//}
-	//if (input.isKeyTriggered(AEVK_RIGHT) && canSwapGrav) {
-	//	grav = Player::GravityDirection::Right;
-	//}
-
 	//Sprint speed logic
 	if (isSprint) {
 		f32 maxSpeed = moveSpeed * 1.2f;
@@ -260,25 +246,33 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.y >= 400.f) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.x >= 750.f) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.x <= -750.f) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
 		grav = Player::GravityDirection::Down;
+	}
+
+	if (p_playerHealth <= 0) {
+		gameOver = true;
 	}
 
 	//PRINT("Momentum: %f,%f", p_velocityVector.x, p_velocityVector.y);
