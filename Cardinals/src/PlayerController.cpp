@@ -25,7 +25,7 @@ the player movement etc
 
 auto& input = InputHandler::GetInstance();
 
-void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* newMesh, f32 xPos, f32 yPos) {
+void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* newMesh, f32 xPos, f32 yPos, bool gOver) {
 	p_playerHealth = health;
 	p_moveSpeed = moveSpeed;
 	p_isJumping = isJump;
@@ -37,6 +37,7 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	Player::mesh = newMesh;
 	p_previousPos = p_currPos;
 	grav = GravityDirection::Down;
+	gameOver = gOver;
 }
 
 //takes in the current player pos, deltaTime & movement vector to update the player pos
@@ -511,6 +512,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			grav = Player::GravityDirection::Right;
 		}
 		else if (obj->_tag == GameObjectTag::Obstacle) {
+			bgm.PlayAudio("HIT", AudioType::SFX, 1.f, 0);
 			std::cout << "obstacle hit" << std::endl;
 			p_playerHealth--;
 			if (p_playerHealth <= 0) {

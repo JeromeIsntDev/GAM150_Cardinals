@@ -43,7 +43,7 @@ namespace {
 			knobEFXTexture{}, cardBgTexture{}, prevTexture{}, 
 			restartTexture{}, resumeTexture{}, homeTexture{}, 
 			nextTexture{}, retryTexture{}, candyTexture{}, 
-			greyCandyTexture;
+			greyCandyTexture{};
 
 	//IMGUI
 	//ControlPanel controlPanel;
@@ -156,7 +156,7 @@ void Level1_Initialize()
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f, false);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture[0]);
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
@@ -352,6 +352,7 @@ void Level1_Unload() {
 	gameOverMenu.reset();
 	if (isGamePaused) isGamePaused = 0;
 	if (isGameOver) isGameOver = 0;
+	if (mainPlayer.getGameOver()) mainPlayer.SetGameOver(false);
 
 	//tex.UnloadAll();
 	if (memoryManager.MassUnload()) PRINT("[MEM DEBUG] => Level 1 Unload Success!\n");
