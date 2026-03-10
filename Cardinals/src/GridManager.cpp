@@ -40,6 +40,7 @@ void Grid::Initialize()
 void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH) 
 {
 	tileMesh = RectMeshCenterSliced(3, 3);
+	obstacleMesh = RectMeshCenter();
 
 	if (sheet) {
 		tileTexture = *sheet;
@@ -56,11 +57,14 @@ void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH)
 	spriteSheet.Slice(tileTexture);
 	spriteSheet.RegisterAllTiles();
 
+	obstacleTexture.Load_Image(Images::CandyCorn);
 }
 
 void Grid::Clear()
 {
 	if(tileMesh) AEGfxMeshFree(tileMesh);
+	if (obstacleMesh) AEGfxMeshFree(obstacleMesh);
+	obstacleTexture.Unload_Image();
 	//tileTexture.Unload_Image();
 	objs.clear();
 	for (u32 i = 0; i < rows; ++i) {
@@ -98,63 +102,36 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
 		return;
 	}
 
-	//editorText.Unload_Image();
-	////qstd::cout << "Spawning: " << tileTag << std::endl;
-	//switch (static_cast<GameObjectTag>(tag))
-	//{
-	//case GameObjectTag::GravUp:
-	//	PRINT("GRAVUP TILE\n");
-	//	editorText.Load_Image(Images::Lollipop);
-	//	break;
-	//case GameObjectTag::GravDown:
-	//	editorText.Load_Image(Images::Lollipop);
-	//	break;
-	//case GameObjectTag::GravLeft:
-	//	editorText.Load_Image(Images::Lollipop);
-	//	break;
-	//case GameObjectTag::Gravright:
-	//	editorText.Load_Image(Images::Lollipop);
-	//	break;
-	//case GameObjectTag::Win:
-	//	PRINT("WIN TILE\n");
-	//	editorText.Load_Image(Images::Placeholder);
-	//	break;
-	//default:
-	//	editorText.Load_Image(Images::Placeholder);
-	//	break;
-	//}
-
-	/*PRINT("[DEBUG] => Spawn at Grid Coordinates: %f,%f\n", cell->position.x, cell->position.y);
-	f32 ax = cell->position.x;
-	f32 ay = cell->position.y;
-	GridToWorld(&ax, &ay);
-	PRINT("[DEBUG] => Spawn at World Coordinates: %f,%f\n", ax,ay);*/
-
 	GameObject* obj = new GameObject{};
-	obj->SetMesh(tileMesh);
-	obj->SetTexture(&tileTexture);
-	obj->UpdateScale({ 50.f,50.f });
+	obj->UpdateScale({ tileScale,tileScale });
 	f32 ax{ cell->position.x }, ay{ cell->position.y };
 	GridToWorld(&ax,&ay);
 	obj->UpdatePosition({ ax , ay });
 	obj->_tag = static_cast<GameObjectTag>(tag);
-	obj->SetSlice(slice);
-
-	cell->tag = obj->_tag;
-
-
-	// leaving the tagging alone cuz im eepy
+	
 	TileUV uv{};
-	if (spriteSheet.GetUV(slice, uv))
+	switch (obj->_tag)
 	{
-		obj->uvX = uv.u;
-		obj->uvY = uv.v;
+	case GameObjectTag::Obstacle:
+		obj->SetMesh(obstacleMesh);
+		obj->SetTexture(&obstacleTexture);
+		break;
+	case GameObjectTag::Static:
+	default:
+		obj->SetMesh(tileMesh);
+		obj->SetTexture(&tileTexture);
+		obj->SetSlice(slice);
+		if (spriteSheet.GetUV(slice, uv))
+		{
+			obj->uvX = uv.u;
+			obj->uvY = uv.v;
+		}
+		break;
 	}
 
+	cell->tag = obj->_tag;
 	cell->obj = obj;
 	objs.push_back(obj);
-
-	//PRINT("[DEBUG] => Created New Tile at (%f, %f). With tag: %d\n", obj->GetPosition().x, obj->GetPosition().y, cell->tag);
 }
 
 void Grid::SnapToCell(f32* val)

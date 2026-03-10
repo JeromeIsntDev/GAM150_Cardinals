@@ -35,7 +35,6 @@ namespace {
 	Texture horizontalPlatformTex;
 	Texture backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
-	//std::vector<GameObject> objData;
 
 	// PAUSE MENU
 	std::unique_ptr <Overlay> pauseMenu;

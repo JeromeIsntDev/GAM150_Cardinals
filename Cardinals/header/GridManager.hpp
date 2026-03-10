@@ -26,8 +26,11 @@ struct Grid {
 	const u32 rows{ 18 };
 	const u32 columns{ 32 };
 
+	const f32 tileScale{ 50.f };
 	AEGfxVertexList* tileMesh;
 	Texture tileTexture;
+	AEGfxVertexList* obstacleMesh;
+	Texture obstacleTexture;
 
 	GridCell** cells;
 	std::vector<GameObject*> objs;
