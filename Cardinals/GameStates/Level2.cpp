@@ -134,12 +134,6 @@ void Level2_Initialize()
 	backgrounds[1] = tex.Get("BG_CLOUDS");
 	backgrounds[2] = tex.Get("BG_MOUNTAIN");
 	backgrounds[3] = tex.Get("BG_FRONTMOUNTAIN");
-	//rectMesh = RectMeshCenter();
-
-	//placeholderObj.SetMesh(rectMesh);
-	//placeholderObj.SetTexture(&placeholder);
-	//placeholderObj.UpdateScale(AEVec2{ 1600.f, 900.f });
-	//placeholderObj.UpdateRotation(0.f);
 
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false,
 		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f, false);
@@ -198,28 +192,6 @@ void Level2_Initialize()
 		live->UpdateScale(AEVec2{ 70.f, 70.f });
 		live->UpdatePosition(AEVec2{ -70.f + i * 70.f, 380.f });
 	}
-	//conBtn = std::make_unique<Button>(rectMesh,
-	//	AEVec2{ 0.f, 50.f }, 
-	//	0.f, 
-	//	AEVec2{ 200.f, 100.f });
-	//conBtn->SetTexture(&placeholder); conBtn->SetActive(true); conBtn->SetInteractable(true);
-	//conBtn->SetOnClick([]() {
-	//	PRINT("Continue Pressed\n");
-	//	isGamePaused = 0;
-	//	});
-
-	//quitBtn = std::make_unique<Button>(rectMesh,
-	//	AEVec2{ 0.f, -100.f },
-	//	0.f,
-	//	AEVec2{ 200.f, 100.f });
-	//quitBtn->SetTexture(&placeholder); quitBtn->SetActive(true); quitBtn->SetInteractable(true);
-	//quitBtn->SetOnClick([]() {
-	//	PRINT("Exit Pressed\n");
-	//	UpdateGameManagerState(GameStateEnum::MainMenu);
-	//	});
-
-	//pauseUI.Add(conBtn.get());
-	//pauseUI.Add(quitBtn.get());
 
 }
 
@@ -354,6 +326,7 @@ void Level2_Draw() {
 	}
 	grid.Draw();
 	mainPlayer.Draw();
+	playerEffect.DrawParticle();
 
 	digipenFont.Input_Text("Time: ");
 	digipenFont.Draw_Text(675.f, 400.f);

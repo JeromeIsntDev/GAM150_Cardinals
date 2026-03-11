@@ -63,7 +63,7 @@ void MainMenu_Load() {
 	cardinalsFont.Input_Text("cardinals");
 
 	digipenFont.Load_Font(Fonts::Main, 30.f);
-	digipenFont.Input_Text("All content (C) 2025 Digipen Institute of Technology Singapore. All Rights Reserved");
+	digipenFont.Input_Text("All content (C) 2026 Digipen Institute of Technology Singapore. All Rights Reserved");
 
 	menuUI.InitTooltipFont(Fonts::Main, 30.f);
 	quitUI.InitTooltipFont(Fonts::Main, 30.f);
@@ -210,6 +210,7 @@ void MainMenu_Initialize()
 
 	creditsBtn->SetOnClick([]() {
 		PRINT("Credits Pressed");
+		UpdateGameManagerState(GameStateEnum::Credits);
 		});
 
 	exitBtn->SetOnClick([]() {
