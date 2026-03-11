@@ -12,12 +12,14 @@ namespace {
 	//PLAYER VARIABLES
 	f32 playerMovespeed{ 300.f };
 	int  playerHealth{ 3 };
-	Texture playerTexture[2]{};
+	Texture *playerTexture[2]{};
 	ParticleEffect playerEffect;
 	ParticleEffect gravityEffect;
 	Player mainPlayer;
 
-	Texture placeholderTexture;
+	TextureManager& tex = TextureManager::GetInstance();
+
+	Texture *placeholderTexture;
 	Texture verticalPlatformTex;
 	Texture horizontalPlatformTex;
 
@@ -29,11 +31,11 @@ namespace {
 
 	std::unique_ptr <Overlay> pauseMenu;
 	std::unique_ptr<Overlay> gameOverMenu;
-	Texture barTexture{}, knobMasterTexture{}, knobMusicTexture{},
-		knobEFXTexture{}, cardBgTexture{}, prevTexture{},
-		restartTexture{}, resumeTexture{}, homeTexture{},
-		nextTexture{}, retryTexture{}, candyTexture{},
-		greyCandyTexture{};
+	Texture *barTexture{}, *knobMasterTexture{}, *knobMusicTexture{},
+        *knobEFXTexture{}, *cardBgTexture{}, *prevTexture{},
+        *restartTexture{}, *resumeTexture{}, *homeTexture{},
+        *nextTexture{}, *retryTexture{}, *candyTexture{},
+        *greyCandyTexture{};
 }
 
 void Level2_Load() {
@@ -44,30 +46,11 @@ void Level2_Load() {
 	digipenFont.Input_Text("Level 2");
 	digipenFont.Change_Text_Color(Colors::Black);
 
-	//placeholder.Load_Image(Images::Placeholder);
-	playerTexture[0].Load_Image(Images::Player);
-	playerTexture[1].Load_Image(Images::PlayerJump);
-	placeholderTexture.Load_Image(Images::Placeholder);
-
-
 	pauseTitleFont.Load_Font(Fonts::Alt, 72.f);
-	prevTexture.Load_Image(Images::PrevBtn);
-	barTexture.Load_Image(Images::Bar);
-	knobMasterTexture.Load_Image(Images::KnobMaster);
-	knobMusicTexture.Load_Image(Images::KnobMusic);
-	knobEFXTexture.Load_Image(Images::KnobEFX);
-	cardBgTexture.Load_Image(Images::CardBg);
-	restartTexture.Load_Image(Images::RestartBtn);
-	resumeTexture.Load_Image(Images::ResumeBtn);
-	homeTexture.Load_Image(Images::HomeBtn);
-	nextTexture.Load_Image(Images::NextBtn);
-	retryTexture.Load_Image(Images::RetryBtn);
-	candyTexture.Load_Image(Images::Candy);
-	greyCandyTexture.Load_Image(Images::CandyGrey);
 
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 
-	memoryManager.AddTextures({
+	/*memoryManager.AddTextures({
 			&placeholderTexture,
 			&verticalPlatformTex,
 			&horizontalPlatformTex,
@@ -88,7 +71,7 @@ void Level2_Load() {
 
 	for (Texture& T : playerTexture) {
 		memoryManager.AddTexture(&T);
-	}
+	}*/
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	memoryManager.AddMesh(&squareMesh);
 	//memoryManager.AddMesh(&tileMesh);
@@ -105,6 +88,22 @@ void Level2_Initialize()
 	playerEffect.Init();
 	gravityEffect.Init();
 
+	placeholderTexture = tex.Get("Placeholder");
+	cardBgTexture = tex.Get("CardBg");
+	prevTexture = tex.Get("PrevBtn");
+	barTexture = tex.Get("Bar");
+	knobMasterTexture = tex.Get("KnobMaster");
+	knobMusicTexture = tex.Get("KnobMusic");
+	knobEFXTexture = tex.Get("KnobEFX");
+	restartTexture = tex.Get("RestartBtn");
+	resumeTexture = tex.Get("ResumeBtn");
+	homeTexture = tex.Get("HomeBtn");
+	nextTexture = tex.Get("NextBtn");
+	retryTexture = tex.Get("RetryBtn");
+	candyTexture = tex.Get("Candy");
+	greyCandyTexture = tex.Get("CandyGrey");
+	playerTexture[0] = tex.Get("Player");
+	playerTexture[1] = tex.Get("PlayerJump");
 	//rectMesh = RectMeshCenter();
 
 	//placeholderObj.SetMesh(rectMesh);
@@ -115,7 +114,7 @@ void Level2_Initialize()
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false,
 		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f, false);
 	mainPlayer.SetMesh(squareMesh);
-	mainPlayer.SetTexture(&playerTexture[0]);
+	mainPlayer.SetTexture(playerTexture[0]);
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer.UpdatePosition(mainPlayer.GetPosition());
@@ -131,10 +130,10 @@ void Level2_Initialize()
 
 	pauseMenu->SetTextures(
 		PauseMenuTextures{
-			&placeholderTexture, &cardBgTexture, &barTexture,
-			&knobMasterTexture, &knobMusicTexture, &knobEFXTexture,
-			&prevTexture, &resumeTexture, &restartTexture,
-			&homeTexture, &pauseTitleFont
+			placeholderTexture, cardBgTexture, barTexture,
+			knobMasterTexture, knobMusicTexture, knobEFXTexture,
+			prevTexture, resumeTexture, restartTexture,
+			homeTexture, &pauseTitleFont
 		});
 	isGamePaused = 0;
 
@@ -147,9 +146,9 @@ void Level2_Initialize()
 
 	gameOverMenu->SetTextures(
 		GameOverTextures{
-			&placeholderTexture, &cardBgTexture, &candyTexture,
-			&greyCandyTexture, &retryTexture, &homeTexture,
-			&nextTexture, &pauseTitleFont, &digipenFont
+			placeholderTexture, cardBgTexture, candyTexture,
+			greyCandyTexture, retryTexture, homeTexture,
+			nextTexture, &pauseTitleFont, &digipenFont
 		});
 	isGameOver = 0;
 	//conBtn = std::make_unique<Button>(rectMesh,
@@ -250,10 +249,10 @@ void Level2_Update() {
 	//PLAYER ITEMS//
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
 	if (mainPlayer.GetPlayerJump()) {
-		mainPlayer.SetTexture(&playerTexture[1]);
+		mainPlayer.SetTexture(playerTexture[1]);
 	}
 	else {
-		mainPlayer.SetTexture(&playerTexture[0]);
+		mainPlayer.SetTexture(playerTexture[0]);
 	}
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
