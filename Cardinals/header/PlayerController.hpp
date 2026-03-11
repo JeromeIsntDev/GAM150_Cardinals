@@ -78,6 +78,7 @@ public:
 	bool GetPlayerJump() const;
 	bool GetPlayerCollide() const;
 	AEVec2 GetPrevPos() const;
+	AEVec2 GetVelocity() const;
 	bool getGameOver() const;
 	//set the player health
 	void SetPlayerCollide(bool);

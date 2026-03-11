@@ -46,6 +46,6 @@ f32 Animator::GetAnimTime() const {
 	return animTime;
 }
 
-std::array<TileUV, Animator::ANIM_FRAMES> Animator::GetArr() const {
+std::array<Texture, Animator::ANIM_FRAMES> Animator::GetArr() const {
 	return animArr;
 }
