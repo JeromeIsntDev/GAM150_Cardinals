@@ -332,7 +332,7 @@ void MainMenu_Unload() {
 	PRINT("[DEBUG | LEVEL] => Unload: %s", "Main Menu\n");
 	settingsMenu.reset();
 
-	tex.UnloadAll(); // this will unload all tex so duneed memmanager but like snsnoorkk
+	//tex.UnloadAll(); // this will unload all tex so duneed memmanager but like snsnoorkk
 
 	if (memoryManager.MassUnload()) PRINT("[MEM DEBUG] => Main Menu Unload Success\n");
 }
