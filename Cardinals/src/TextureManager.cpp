@@ -123,7 +123,7 @@ Texture* TextureManager::Get(const std::string& name)
 
 	if (it == textureMap.end()) 
 	{
-		PRINT("texture not found: %s\n", name.c_str());
+		PRINT("[WARNING | Texture] => Texture not found: %s\n", name.c_str());
 		return nullptr;
 	}
 	return &it->second;
@@ -135,12 +135,12 @@ void TextureManager::UnloadAll()
 	{
 		if (persistentLoad.count(it->first))
 		{
-			PRINT("persistent: %s\n", it->first.c_str());
+			PRINT("[DEBUG | Texture] => Persistent: %s\n", it->first.c_str());
 			it++;
 		}
 		else
 		{
-			PRINT("unloading: %s\n", it->first.c_str());
+			PRINT("[DEBUG | Texture] => Unloading: %s\n", it->first.c_str());
 			it->second.Unload_Image();
 			it = textureMap.erase(it);
 		}
