@@ -714,6 +714,10 @@ AEVec2 Player::GetPrevPos() const {
 	return p_previousPos;
 }
 
+AEVec2 Player::GetVelocity() const {
+	return p_velocityVector;
+}
+
 int Player::GetPlayerHealth() const{
 	return p_playerHealth;
 }
