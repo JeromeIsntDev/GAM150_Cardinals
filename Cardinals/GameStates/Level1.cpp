@@ -35,6 +35,7 @@ namespace {
 	Texture horizontalPlatformTex;
 	Texture backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
+	GameObject gamelives[3]{};
 
 	// PAUSE MENU
 	std::unique_ptr <Overlay> pauseMenu;
@@ -43,7 +44,7 @@ namespace {
 			knobEFXTexture{}, cardBgTexture{}, prevTexture{}, 
 			restartTexture{}, resumeTexture{}, homeTexture{}, 
 			nextTexture{}, retryTexture{}, candyTexture{}, 
-			greyCandyTexture;
+			greyCandyTexture{};
 
 	//IMGUI
 	//ControlPanel controlPanel;
@@ -156,7 +157,7 @@ void Level1_Initialize()
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f, false);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture[0]);
 	mainPlayer.UpdateScale(mainPlayer.p_Scale);
@@ -174,7 +175,13 @@ void Level1_Initialize()
 		obj->UpdatePosition(AEVec2{ 0.f, 0.f });
 	}
 
-
+	for (int i{}; i < 3; ++i) {
+		GameObject* live = &gamelives[i];
+		live->SetTexture(&candyTexture);
+		live->SetMesh(squareMesh);
+		live->UpdateScale(AEVec2{ 70.f, 70.f });
+		live->UpdatePosition(AEVec2{ -70.f + i * 70.f, 380.f });
+	}
 	levelTime = 0.f;
 
 	pauseMenu = std::make_unique<Overlay>(squareMesh, PAUSE, -1, 
@@ -341,6 +348,16 @@ void Level1_Update() {
 	// 4. APPLY TO ENGINE (Combine the spring and the shake!)
 	AEGfxSetCamPosition(springX + currentShakeX, springY + currentShakeY);
 
+	for (int i{}; i < 3; ++i) {
+		GameObject* live = &gamelives[i];
+		if (i < mainPlayer.GetPlayerHealth()) {
+			live->SetTexture(&candyTexture);
+		}
+		else {
+			live->SetTexture(&greyCandyTexture);
+		}
+	}
+
 	if (isGamePaused || isGameOver) return;
 	/*PLAYER STUFF*/
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
@@ -386,6 +403,10 @@ void Level1_Draw() {
 
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
+	
+	for (GameObject& live : gamelives) {
+		live.Draw();
+	}
 
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
@@ -407,6 +428,7 @@ void Level1_Unload() {
 	gameOverMenu.reset();
 	if (isGamePaused) isGamePaused = 0;
 	if (isGameOver) isGameOver = 0;
+	if (mainPlayer.getGameOver()) mainPlayer.SetGameOver(false);
 
 	//tex.UnloadAll();
 	if (memoryManager.MassUnload()) PRINT("[MEM DEBUG] => Level 1 Unload Success!\n");
