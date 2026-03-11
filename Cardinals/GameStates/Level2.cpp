@@ -43,6 +43,9 @@ namespace {
 
 	GameObject gamelives[3]{};
 
+	Texture *backgrounds[4]{};
+	GameObject backgroundObjs[4]{};
+
 	Grid grid;
 	Player mainPlayer;
 }
@@ -127,6 +130,10 @@ void Level2_Initialize()
 	greyCandyTexture = tex.Get("CandyGrey");
 	playerTexture[0] = tex.Get("Player");
 	playerTexture[1] = tex.Get("PlayerJump");
+	backgrounds[0] = tex.Get("BG_BACKMOST");
+	backgrounds[1] = tex.Get("BG_CLOUDS");
+	backgrounds[2] = tex.Get("BG_MOUNTAIN");
+	backgrounds[3] = tex.Get("BG_FRONTMOUNTAIN");
 	//rectMesh = RectMeshCenter();
 
 	//placeholderObj.SetMesh(rectMesh);
@@ -174,6 +181,15 @@ void Level2_Initialize()
 			nextTexture, &pauseTitleFont, &digipenFont
 		});
 	isGameOver = 0;
+
+	for (int i{}; i < 4; ++i) {
+		GameObject* obj = &backgroundObjs[i];
+		obj->SetMesh(squareMesh);
+		obj->SetTexture(backgrounds[i]);
+		obj->UpdateScale(AEVec2{ 1700.f, 960.f });
+		obj->UpdateRotation(0.f);
+		obj->UpdatePosition(AEVec2{ 0.f, 0.f });
+	}
 
 	for (int i{}; i < 3; ++i) {
 		GameObject* live = &gamelives[i];
@@ -272,6 +288,7 @@ void Level2_Update() {
 			ToggleEditorMode();
 
 	Level2_EditorUpdate();
+	Level2_Parallax();
 
 	if (isGamePaused || isGameOver) return;
 
@@ -322,7 +339,10 @@ void Level2_Update() {
 
 void Level2_Draw() {
 	//playerEffect.DrawParticle();
-
+	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
+	for (GameObject& obj : backgroundObjs) {
+		obj.Draw();
+	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	for (GameObject* obj : grid.objs) {
 		//obj->Draw();
@@ -372,6 +392,22 @@ void Level2_Unload() {
 	grid.Clear();
 }
 
+void Level2_Parallax() {
+	//Reduce Colour -> To Bright
+	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
+	for (GameObject& obj : backgroundObjs) {
+		f32 offset = mainPlayer.GetPosition().x;
+		f32 offsetFirst = offset / 200.f;
+		f32 offsetSecond = offset / 75.f;
+		f32 offsetThird = offset / 25.f;
+
+		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
+		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
+		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
+	}
+	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
 void Level2_EditorUpdate() {
 	if (IsEditorActive() && !isGamePaused && !isGameOver) {
 
@@ -407,7 +443,6 @@ void Level2_EditorUpdate() {
 		}
 	}
 }
-
 
 void Level2_EditorDraw() {
 	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
