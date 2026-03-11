@@ -2,6 +2,8 @@
 #ifndef _Level2_Header_
 #define _Level2_Header_
 
+#define NOMINMAX
+
 #include <iostream>
 
 #include <AEEngine.h>
