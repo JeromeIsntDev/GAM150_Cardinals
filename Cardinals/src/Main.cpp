@@ -134,6 +134,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 				UpdateGameManagerState(GameStateEnum::Level1);
 				std::cout << "loaded L1\n";
 			}
+			ImGui::SameLine();
+			if (ImGui::Button("Load L2")) {
+				std::cout << "loading L2\n";
+				UpdateGameManagerState(GameStateEnum::Level2);
+				std::cout << "loaded L2\n";
+			}
 			ImGui::End();
 		}
 		//render logic for IMGUI
