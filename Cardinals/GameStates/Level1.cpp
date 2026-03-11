@@ -160,7 +160,7 @@ void Level1_Initialize()
 		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f, false);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture[0]);
-	mainPlayer.UpdateScale(mainPlayer.p_Scale);
+	mainPlayer.UpdateScale(AEVec2{50.f,50.f});
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer.UpdatePosition(mainPlayer.GetPosition());
 	mainPlayer._tag = GameObjectTag::Player;
