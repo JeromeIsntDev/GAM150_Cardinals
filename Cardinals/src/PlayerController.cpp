@@ -518,6 +518,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			else {
 				p_currPos = p_previousPos;
 				grav = GravityDirection::Down;
+				p_Scale = { 50.f,50.f };
 			}
 		}
 	}
