@@ -26,7 +26,7 @@ void Texture::Load_Image(const ImageFile& imageFilePath)
 	_image = AEGfxTextureLoad(imageFilePath.filename);
 	_width = imageFilePath.width;
 	_height = imageFilePath.height;
-	PRINT("loading image: %s\n", imageFilePath.filename);
+	PRINT("[DEBUG | Texture] => loading image: %s\n", imageFilePath.filename);
 }
 
 void Texture::Set_Image(f32 x, f32 y)
@@ -47,7 +47,7 @@ f32 Texture::Get_Image_Height() const
 void Texture::Unload_Image()
 {
 	if (!_image) return; // already unloaded or never loaded DIE DIE DIE DIE
-	PRINT("unloading Image\n");
+	PRINT("[DEBUG | Texture] => unloading Image\n");
 	AEGfxTextureUnload(_image);
 	_image = nullptr;
 }
@@ -74,7 +74,7 @@ void Texture::Load_Image(const std::string& path, float w, float h)
 	_width = w;
 	_height = h;
 
-	PRINT("at %s, result: %s | dimensions: %.0fx%.0f\n", path.c_str(), _image ? "loaded bro" : "failed bro", _width, _height);
+	PRINT("[ERROR | Texture] => at %s, result: %s | dimensions: %.0fx%.0f\n", path.c_str(), _image ? "loaded bro" : "failed bro", _width, _height);
 }
 
 ///
@@ -88,7 +88,7 @@ void TextureManager::LoadManifest(const std::string& path)
 
 	if (!file.is_open())
 	{
-		PRINT("ERROR: where tf is ur manifest?? at %s\n", path.c_str());
+		PRINT("[ERROR | Texture] => where tf is ur manifest?? at %s\n", path.c_str());
 		return;
 	}
 

@@ -27,7 +27,6 @@
     <ClCompile Include="src\InputHandler.cpp" />
     <ClCompile Include="GameStates\Credits.cpp" />
     <ClCompile Include="GameStates\LevelMenu.cpp" />
-    <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\GameEditor.cpp" />
     <ClCompile Include="src\ParticleEffect.cpp" />
     <ClCompile Include="src\MemoryManager.cpp" />
