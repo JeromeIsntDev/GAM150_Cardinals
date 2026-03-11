@@ -47,6 +47,7 @@ struct Grid {
 	void Draw() const;
 	void SpawnNewTile(int const&, int const&, f32, f32);
 	void DeleteTile(f32, f32);
+	void ChangeTile(GridCell* cell) const;
 	void SnapToCell(f32*);
 	void GridToWorld(f32*, f32*);
 	void WorldToGrid(f32*, f32*);

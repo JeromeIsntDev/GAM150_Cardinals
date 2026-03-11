@@ -109,6 +109,8 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
 		PRINT("TO\n");
 		GridToWorld(&ax, &ay);
 		PRINT("[DEBUG] => Cell World Position: %f, %f\n\n", ax, ay);
+
+		ChangeTile(cell);
 		return;
 	}
 
@@ -137,7 +139,7 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
 	case GameObjectTag::GravDown:
 		obj->SetMesh(gravMesh);
 		obj->SetTexture(&gravTexture);
-		obj->UpdateScale({ tileScale,-tileScale });
+		obj->UpdateRotation(PI);
 		break;
 	case GameObjectTag::GravLeft:
 		obj->SetMesh(gravMesh);
@@ -216,6 +218,43 @@ void Grid::DeleteTile(f32 x, f32 y)
 	cell->obj = nullptr;
 }
 
+void Grid::ChangeTile(GridCell* cell) const
+{
+	TileUV uv{};
+	int slice{ 0 };
+	switch (cell->obj->_tag)
+	{
+	case GameObjectTag::Static:
+		slice = cell->obj->GetSlice();
+		++slice;
+		if (slice > spriteSheet.slices.size() - 1) slice = 0;
+		cell->obj->SetSlice(slice);
+		if (spriteSheet.GetUV(slice, uv))
+		{
+			cell->obj->uvX = uv.u;
+			cell->obj->uvY = uv.v;
+		}
+		break;
+	case GameObjectTag::GravUp:
+		cell->obj->_tag = GameObjectTag::GravLeft;
+		break;
+	case GameObjectTag::GravDown:
+		cell->obj->_tag = GameObjectTag::Gravright;
+		break;
+	case GameObjectTag::GravLeft:
+		cell->obj->_tag = GameObjectTag::GravDown;
+		break;
+	case GameObjectTag::Gravright:
+		cell->obj->_tag = GameObjectTag::GravUp;
+		break;
+	default:
+		break;
+	}
+
+	if(cell->obj->_tag != GameObjectTag::Static)
+		cell->obj->UpdateRotation(cell->obj->GetRotation() + PI / 2);
+}
+
 GridCell* Grid::GetCell(f32 x, f32 y)
 {
 	if (!cells) {
@@ -233,18 +272,6 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 
 	return &cells[column][row];
 }
-
-//std::vector<GameObject*> Grid::GetCellGameObject() const
-//{
-//	std::vector<GameObject*> objs;
-//	for (u32 i{}; i < rows; ++i) {
-//		for (u32 j{}; j < columns; ++j) {
-//			if (cells[i][j].obj == nullptr) continue;
-//			objs.push_back(cells[i][j].obj);
-//		}
-//	}
-//	return objs;
-//}
 
 GridCell::GridCell()
 	: column{ 0 }, row{ 0 }, position {0.f, 0.f}, obj{nullptr}
