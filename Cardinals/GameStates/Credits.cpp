@@ -10,14 +10,14 @@ namespace {
 	f32 endY = 1300.f;
 	f32 winHeight = 900.f;
 	f32 speed = 3.f;
-	f32 fading = 1.f;
+	f32 fading;
 
 	TextureManager& tex = TextureManager::GetInstance();
 	InputHandler& input = InputHandler::GetInstance();
 
 	GameObject logo;
 
-	f32 quit_dt = 12.f;
+	f32 quit_dt;
 	bool quitCredits = false;
 }
 
@@ -49,7 +49,8 @@ void Credits_Initialize()
 	logo.UpdateScale(AEVec2{ 685.f, 200.f });
 	quitCredits = false;
 	fading = 1.f;
-	quit_dt = 11.f;
+	quit_dt = 2.f;
+	titleFont.Change_Text_Color(Colors::PastelYellow);
 	PRINT("Initialize: %s", "Credits\n");
 }
 
@@ -65,7 +66,7 @@ void Credits_Update() {
 	startY += startY > endY ? 0.f : speed;
 	logo.UpdatePosition(AEVec2{ 0.f, startY - 1150.f });
 
-	if (!quitCredits) {
+	if (!quitCredits && startY >= endY) {
 		quit_dt -= dt;
 		fading -= quit_dt <= 1.f ? dt : 0;
 	}
