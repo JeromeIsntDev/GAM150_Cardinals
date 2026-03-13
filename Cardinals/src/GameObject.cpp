@@ -170,41 +170,46 @@ void GameObject::DrawSprite(f32 offX, f32 offY) const
 
 void GameObject::DebugDraw() const
 {
+	AEVec2 maxCollider = GetCollider().p_maxPoint;
+	AEVec2 minCollider = GetCollider().p_minPoint;
+	AEVec2 scale;
 	switch (_tag)
 	{
 	case GameObjectTag::Platform: 
 		AEGfxSetColorToMultiply(1.f, 0.f, 0.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::Player:
 		AEGfxSetColorToAdd(0.f, .25f, .25f, 0.f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::Win:
 		AEGfxSetColorToMultiply(0.f, 3.f, 0.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::GravUp:
 		AEGfxSetColorToAdd(0.f, .65f, 0.f, 0.f);
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::GravDown:
 		AEGfxSetColorToAdd(.65f, 0.f, 0.f, 0.f);
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::GravLeft:
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::Gravright:
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	default:
 		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.5f);
+		AEVec2Set(&scale, globalScale.x, globalScale.y);
 		break;
 	}
-
-	AEVec2 maxCollider = GetCollider().p_maxPoint;
-	AEVec2 minCollider = GetCollider().p_minPoint;
-
-	AEVec2 scale;
-	AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 
 	AEMtx33 transform, trans, rot, scl;
 
