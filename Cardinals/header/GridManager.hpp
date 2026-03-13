@@ -45,7 +45,7 @@ struct Grid {
 	void Load(Texture* sheet = nullptr, int sheetW = 900, int sheetH = 900, int tileW = 300, int tileH = 300);
 	void Clear();
 	void Draw() const;
-	void SpawnNewTile(int const&, int const&, f32, f32);
+	void SpawnNewTile(int const&, int const&, f32, f32, f32);
 	void DeleteTile(f32, f32);
 	void ChangeTile(GridCell* cell) const;
 	void SnapToCell(f32*);

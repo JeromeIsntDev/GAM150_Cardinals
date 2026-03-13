@@ -144,7 +144,8 @@ void Level1_Load() {
 		AEVec2& pos = objData[i].GetPosition();
 		objData[i].UpdatePosition(pos);
 		u32 tag = static_cast<u32>(objData[i]._tag);
-		grid.SpawnNewTile(tag, objData[i].GetSlice(), pos.x + 800.f, 450.f - pos.y);
+		grid.WorldToGrid(&pos.x, &pos.y);
+		grid.SpawnNewTile(tag, objData[i].GetSlice(), pos.x, pos.y, objData[i].GetRotation());
 	}
 }
 
@@ -419,7 +420,7 @@ void Level1_EditorUpdate() {
 			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
 			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
 				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.SpawnNewTile(EditorTileTag(), EditorTileSlice(), mousePos.x, mousePos.y);
+			grid.SpawnNewTile(EditorTileTag(), EditorTileSlice(), mousePos.x, mousePos.y, 0.f);
 		}
 
 		if (InputHandler::GetInstance().isKeyTriggered(AEVK_RBUTTON))

@@ -96,7 +96,7 @@ void Grid::Draw() const {
 	}
 }
 
-void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
+void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
 {
 	GridCell* cell = GetCell(y, x);
 	if (cell == nullptr) {
@@ -120,6 +120,7 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
 	GridToWorld(&ax,&ay);
 	obj->UpdatePosition({ ax , ay });
 	obj->_tag = static_cast<GameObjectTag>(tag);
+	obj->UpdateRotation(rot);
 	
 	TileUV uv{};
 	switch (obj->_tag)
@@ -251,8 +252,10 @@ void Grid::ChangeTile(GridCell* cell) const
 		break;
 	}
 
+	f32 rot = cell->obj->GetRotation() + PI / 2;
+	if (rot >= PI * 2) rot = 0;
 	if(cell->obj->_tag != GameObjectTag::Static)
-		cell->obj->UpdateRotation(cell->obj->GetRotation() + PI / 2);
+		cell->obj->UpdateRotation(rot);
 }
 
 GridCell* Grid::GetCell(f32 x, f32 y)

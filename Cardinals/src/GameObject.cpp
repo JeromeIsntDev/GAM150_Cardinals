@@ -24,11 +24,11 @@ AEMtx33 GameObject::GetTransform() const
 
 GameObject::GameObject()
 	:	
-		globalPosition(AEVec2{ 0.f,0.f }),	
-		globalRotation(0.f),				
-		globalScale(AEVec2{ 0.f,0.f }),		
-		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-		isChild(false), mesh(nullptr), _tag(GameObjectTag::Static), slice{ 0 }
+	globalPosition{ 0.f,0.f },	
+	globalRotation{ 0.f },				
+	globalScale{ 0.f,0.f },		
+	mtx_translation{ 0 }, mtx_rotation{ 0 }, mtx_scale{ 0 }, mtx_transform{ 0 },
+	isChild{ false }, mesh{ nullptr }, _tag{ GameObjectTag::Static }, slice{ 0 }
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
@@ -38,11 +38,11 @@ GameObject::GameObject()
 
 GameObject::GameObject(const GameObject& rhs)
 	:
-		globalPosition(rhs.GetPosition()),
-		globalRotation(rhs.GetRotation()),
-		globalScale(rhs.GetScale()),
-		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-		isChild(rhs.IsChild()), mesh(rhs.mesh), _tag(rhs._tag), slice(rhs.slice)
+	globalPosition{ rhs.GetPosition() },
+	globalRotation{ rhs.GetRotation() },
+	globalScale{ rhs.GetScale() },
+	mtx_translation{ 0 }, mtx_rotation{ 0 }, mtx_scale{ 0 }, mtx_transform{ 0 },
+	isChild{ rhs.IsChild() }, mesh{ rhs.mesh }, _tag{ rhs._tag }, slice{ rhs.slice }
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
@@ -52,11 +52,11 @@ GameObject::GameObject(const GameObject& rhs)
 
 GameObject::GameObject(AEGfxVertexList* mesh)
 	: 
-	globalPosition(AEVec2{ 0.f,0.f }),
-	globalRotation(0.f), 
-	globalScale(AEVec2{ 0.f,0.f }), 
-	mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-	isChild(false), mesh(mesh), _tag(GameObjectTag::Static)
+	globalPosition{ 0.f,0.f },
+	globalRotation{ 0.f }, 
+	globalScale{ 0.f,0.f }, 
+	mtx_translation{ 0 }, mtx_rotation{ 0 }, mtx_scale{ 0 }, mtx_transform{ 0 },
+	isChild{ false }, mesh{ mesh }, _tag{ GameObjectTag::Static }, slice{ 0 }
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
