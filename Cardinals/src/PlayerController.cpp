@@ -33,7 +33,9 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	p_currPos.x = xPos;
 	p_currPos.y = yPos;
 	UpdatePosition(p_currPos);
+	p_velocityVector.x = zeroVal;
 	p_velocityVector.y = zeroVal;
+	p_Scale.y = 50.f;
 	Player::mesh = newMesh;
 	p_previousPos = p_currPos;
 	grav = GravityDirection::Down;
@@ -192,7 +194,6 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 	jumpBuffer = max(0, jumpBuffer - dt);
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
 	GravityDirection currDir = dir;
-	//std::cout << p_currPos.y << std::endl;
 	//down force velocity (always going downwards) depend on location
 	if (!p_isGrounded) {
 		switch (dir)
@@ -208,11 +209,15 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 			p_currPos.x += (p_velocityVector.x) * dt;
 			break;
 		case Player::GravityDirection::Left:
+			if (p_velocityVector.x > 0.f)
+				p_velocityVector.x = 0.f;
 			p_velocityVector.x += (-gravity * p_downForce) * dt;
 			p_currPos.x += (p_velocityVector.x) * dt;
 			p_currPos.y += (p_velocityVector.y) * dt;
 			break;
 		case Player::GravityDirection::Right:
+			if (p_velocityVector.x < 0.f)
+				p_velocityVector.x = 0.f;
 			p_velocityVector.x += (gravity * p_downForce) * dt;
 			p_currPos.x += (p_velocityVector.x) * dt;
 			p_currPos.y += (p_velocityVector.y) * dt;
@@ -274,6 +279,8 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 	}
 
 	if (p_playerHealth <= 0) {
+		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
 		gameOver = true;
 	}
 
@@ -490,7 +497,8 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			//win gate hit
 			bgm.PlayAudio("HITWIN", AudioType::SFX, 1.f, 0);
 			std::cout << "Win gate hit" << std::endl;
-			p_velocityVector = { 0.f,0.f };
+			p_velocityVector = { 0.f, 0.f };
+			p_Scale = { 50.f,50.f };
 			gameOver = true;
 		}
 		else if (obj->_tag == GameObjectTag::GravUp) {
@@ -513,11 +521,14 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			std::cout << "obstacle hit" << std::endl;
 			p_playerHealth--;
 			if (p_playerHealth <= 0) {
+				p_velocityVector = { 0.f, 0.f };
+				p_Scale = { 50.f,50.f };
 				gameOver = true;
 			}
 			else {
 				p_currPos = p_previousPos;
 				grav = GravityDirection::Down;
+				p_velocityVector = { 0.f, 0.f };
 				p_Scale = { 50.f,50.f };
 			}
 		}
