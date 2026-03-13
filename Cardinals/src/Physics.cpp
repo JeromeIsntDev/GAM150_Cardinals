@@ -23,6 +23,7 @@ void Collider::UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLength)
 	f32 halfHeight = abs(yLength * 0.5f);
 	const f32 padding = 5.f;
 
+
 	p_minPoint = { centrePoint.x - halfWidth + padding,  centrePoint.y - halfHeight + padding};
 	p_maxPoint = { centrePoint.x + halfWidth - padding,  centrePoint.y + halfHeight - padding};
 }
