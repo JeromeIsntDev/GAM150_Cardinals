@@ -33,6 +33,7 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	p_currPos.x = xPos;
 	p_currPos.y = yPos;
 	UpdatePosition(p_currPos);
+	UpdateRotation(0.f);
 	p_velocityVector.x = zeroVal;
 	p_velocityVector.y = zeroVal;
 	p_Scale.y = 50.f;
@@ -158,21 +159,25 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	//std::cout << "left bool: " << canMoveLeft << std::endl;
 	//std::cout << "right bool: " << canMoveRight << std::endl;
 
-	if (input.isKeyPressed(AEVK_SPACE) && !p_isJumping) {
+	if (input.isKeyTriggered(AEVK_SPACE) && !p_isJumping) {
 		bgm.PlayAudio("JUMP", AudioType::SFX, 1.f, 0);
 		//adjust jump logic here
 		switch(dir){
 		case Player::GravityDirection::Up:
 			p_velocityVector.y = -jumpForce;
+			p_velocityVector.x = 0.f;
 			break;
 		case Player::GravityDirection::Down:
 			p_velocityVector.y = jumpForce;
+			p_velocityVector.x = 0.f;
 			break;
 		case Player::GravityDirection::Left:
 			p_velocityVector.x = jumpForce;
+			p_velocityVector.y = 0.f;
 			break;
 		case Player::GravityDirection::Right:
 			p_velocityVector.x = -jumpForce;
+			p_velocityVector.y = 0.f;
 			break;
 		default:
 			break;
@@ -209,15 +214,11 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 			p_currPos.x += (p_velocityVector.x) * dt;
 			break;
 		case Player::GravityDirection::Left:
-			if (p_velocityVector.x > 0.f)
-				p_velocityVector.x = 0.f;
 			p_velocityVector.x += (-gravity * p_downForce) * dt;
 			p_currPos.x += (p_velocityVector.x) * dt;
 			p_currPos.y += (p_velocityVector.y) * dt;
 			break;
 		case Player::GravityDirection::Right:
-			if (p_velocityVector.x < 0.f)
-				p_velocityVector.x = 0.f;
 			p_velocityVector.x += (gravity * p_downForce) * dt;
 			p_currPos.x += (p_velocityVector.x) * dt;
 			p_currPos.y += (p_velocityVector.y) * dt;
@@ -505,17 +506,25 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 		else if (obj->_tag == GameObjectTag::GravUp) {
 			std::cout << "grav up" << std::endl;
 			grav = Player::GravityDirection::Up;
+			p_isJumping = true;
 			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravDown) {
 			grav = Player::GravityDirection::Down;
+			p_isJumping = true;
 			p_Scale.y = 50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravLeft) {
 			grav = Player::GravityDirection::Left;
+			p_Scale.y = 50.f;
+			UpdateRotation(-(PI / 2.f));
+			p_isJumping = true;
 		}
 		else if (obj->_tag == GameObjectTag::Gravright) {
 			grav = Player::GravityDirection::Right;
+			UpdateRotation(-(PI / 2.f));
+			p_Scale.y = -50.f;
+			p_isJumping = true;
 		}
 		else if (obj->_tag == GameObjectTag::Obstacle) {
 			bgm.PlayAudio("HIT", AudioType::SFX, 1.f, 0);
