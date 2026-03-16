@@ -281,6 +281,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 	if (p_playerHealth <= 0) {
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
+		grav = Player::GravityDirection::Down;
 		gameOver = true;
 	}
 
@@ -523,6 +524,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			if (p_playerHealth <= 0) {
 				p_velocityVector = { 0.f, 0.f };
 				p_Scale = { 50.f,50.f };
+				grav = GravityDirection::Down;
 				gameOver = true;
 			}
 			else {
