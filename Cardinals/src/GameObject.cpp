@@ -24,11 +24,11 @@ AEMtx33 GameObject::GetTransform() const
 
 GameObject::GameObject()
 	:	
-		globalPosition(AEVec2{ 0.f,0.f }),	
-		globalRotation(0.f),				
-		globalScale(AEVec2{ 0.f,0.f }),		
-		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-		isChild(false), mesh(nullptr), _tag(GameObjectTag::Static), slice{ 0 }
+	globalPosition{ 0.f,0.f },	
+	globalRotation{ 0.f },				
+	globalScale{ 0.f,0.f },		
+	mtx_translation{ 0 }, mtx_rotation{ 0 }, mtx_scale{ 0 }, mtx_transform{ 0 },
+	isChild{ false }, mesh{ nullptr }, _tag{ GameObjectTag::Static }, slice{ 0 }
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
@@ -38,11 +38,11 @@ GameObject::GameObject()
 
 GameObject::GameObject(const GameObject& rhs)
 	:
-		globalPosition(rhs.GetPosition()),
-		globalRotation(rhs.GetRotation()),
-		globalScale(rhs.GetScale()),
-		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-		isChild(rhs.IsChild()), mesh(rhs.mesh), _tag(rhs._tag), slice(rhs.slice)
+	globalPosition{ rhs.GetPosition() },
+	globalRotation{ rhs.GetRotation() },
+	globalScale{ rhs.GetScale() },
+	mtx_translation{ 0 }, mtx_rotation{ 0 }, mtx_scale{ 0 }, mtx_transform{ 0 },
+	isChild{ rhs.IsChild() }, mesh{ rhs.mesh }, _tag{ rhs._tag }, slice{ rhs.slice }
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
@@ -52,11 +52,11 @@ GameObject::GameObject(const GameObject& rhs)
 
 GameObject::GameObject(AEGfxVertexList* mesh)
 	: 
-	globalPosition(AEVec2{ 0.f,0.f }),
-	globalRotation(0.f), 
-	globalScale(AEVec2{ 0.f,0.f }), 
-	mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-	isChild(false), mesh(mesh), _tag(GameObjectTag::Static)
+	globalPosition{ 0.f,0.f },
+	globalRotation{ 0.f }, 
+	globalScale{ 0.f,0.f }, 
+	mtx_translation{ 0 }, mtx_rotation{ 0 }, mtx_scale{ 0 }, mtx_transform{ 0 },
+	isChild{ false }, mesh{ mesh }, _tag{ GameObjectTag::Static }, slice{ 0 }
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
@@ -128,7 +128,7 @@ void GameObject::SetMesh(AEGfxVertexList* const objectmesh)
 
 void GameObject::SetTexture(Texture* const texture)
 {
-	tex = texture;
+	this->go_texture = texture;
 }
 
 void GameObject::SetSlice(int uvSlice)
@@ -155,7 +155,7 @@ bool GameObject::HoverMesh(s32 mouseX, s32 mouseY) const
 void GameObject::Draw() const
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxTextureSet(tex->Get_Image(), 0.f, 0.f);
+	AEGfxTextureSet(go_texture->Get_Image(), 0.f, 0.f);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
@@ -163,57 +163,59 @@ void GameObject::Draw() const
 void GameObject::DrawSprite(f32 offX, f32 offY) const
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxTextureSet(tex->Get_Image(), offX, offY);
+	AEGfxTextureSet(go_texture->Get_Image(), offX, offY);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
 
 void GameObject::DebugDraw() const
 {
+	AEVec2 maxCollider = GetCollider().p_maxPoint;
+	AEVec2 minCollider = GetCollider().p_minPoint;
+	AEVec2 scale;
 	switch (_tag)
 	{
 	case GameObjectTag::Platform: 
 		AEGfxSetColorToMultiply(1.f, 0.f, 0.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::Player:
 		AEGfxSetColorToAdd(0.f, .25f, .25f, 0.f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::Win:
 		AEGfxSetColorToMultiply(0.f, 3.f, 0.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::GravUp:
 		AEGfxSetColorToAdd(0.f, .65f, 0.f, 0.f);
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::GravDown:
 		AEGfxSetColorToAdd(.65f, 0.f, 0.f, 0.f);
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::GravLeft:
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	case GameObjectTag::Gravright:
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	default:
 		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.5f);
+		AEVec2Set(&scale, globalScale.x, globalScale.y);
 		break;
 	}
 
-	AEVec2 maxCollider = GetCollider().p_maxPoint;
-	AEVec2 minCollider = GetCollider().p_minPoint;
-
-	AEVec2 scale;
-	AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
-
-	AEMtx33 transform, trans, rot, scl;
-
-	AEMtx33Trans(&trans, globalPosition.x, globalPosition.y);
-	AEMtx33Rot(&rot, globalRotation);
+	AEMtx33 transform, scl;
 	AEMtx33Scale(&scl, scale.x, scale.y);
 
-	AEMtx33Concat(&transform, &rot, &scl);
-	AEMtx33Concat(&transform, &trans, &transform);
+	AEMtx33Concat(&transform, &mtx_rotation, &scl);
+	AEMtx33Concat(&transform, &mtx_translation, &transform);
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetTransform(transform.m);

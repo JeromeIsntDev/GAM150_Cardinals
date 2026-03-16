@@ -105,12 +105,12 @@ bool IsUsingSaveFile() {
 	return useSaveFile;
 }
 
-int& const EditorTileTag()
+int& EditorTileTag()
 {
 	return editor_tileTag;
 }
 
-int& const EditorTileSlice()
+int& EditorTileSlice()
 {
 	return editor_tileSlice;
 }

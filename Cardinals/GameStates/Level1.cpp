@@ -52,7 +52,7 @@ namespace {
 	f32 levelTime{};
 
 	InputHandler& input = InputHandler::GetInstance();
-	TextureManager& tex = TextureManager::GetInstance();
+	TextureManager& go_texture = TextureManager::GetInstance();
 
 	Grid grid;
 	Player mainPlayer;
@@ -134,7 +134,7 @@ void Level1_Load() {
 
 	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
 
-	grid.Load(tex.Get("TileSheet"), 900, 900, 300, 300);
+	grid.Load(go_texture.Get("TileSheet"), 900, 900, 300, 300);
 	grid.Initialize();
 
 	for (int i{}; i < objData.size(); ++i) {
@@ -144,7 +144,8 @@ void Level1_Load() {
 		AEVec2& pos = objData[i].GetPosition();
 		objData[i].UpdatePosition(pos);
 		u32 tag = static_cast<u32>(objData[i]._tag);
-		grid.SpawnNewTile(tag, objData[i].GetSlice(), pos.x + 800.f, 450.f - pos.y);
+		grid.WorldToGrid(&pos.x, &pos.y);
+		grid.SpawnNewTile(tag, objData[i].GetSlice(), pos.x, pos.y, objData[i].GetRotation());
 	}
 }
 
@@ -160,7 +161,7 @@ void Level1_Initialize()
 		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f, false);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture[0]);
-	mainPlayer.UpdateScale(mainPlayer.p_Scale);
+	mainPlayer.UpdateScale(AEVec2{50.f,50.f});
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer.UpdatePosition(mainPlayer.GetPosition());
 	mainPlayer._tag = GameObjectTag::Player;
@@ -372,7 +373,7 @@ void Level1_Update() {
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid,mainPlayer.grav);
-	mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
+	mainPlayer.PlayerCollision(grid.objs);
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 }
@@ -439,7 +440,7 @@ void Level1_Unload() {
 void Level1_Parallax() {
 	//Reduce Colour -> To Bright
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	for (GameObject& obj : backgroundObjs) {
+	/*for (GameObject& obj : backgroundObjs) {
 		f32 offset = mainPlayer.GetPosition().x;
 		f32 offsetFirst = offset / 200.f;
 		f32 offsetSecond = offset / 75.f;
@@ -448,7 +449,16 @@ void Level1_Parallax() {
 		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-	}
+	}*/
+
+	f32 offset = mainPlayer.GetPosition().x;
+	f32 offsetFirst = offset / 200.f;
+	f32 offsetSecond = offset / 75.f;
+	f32 offsetThird = offset / 25.f;
+
+	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
@@ -474,7 +484,7 @@ void Level1_EditorUpdate() {
 			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
 			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
 				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.SpawnNewTile(EditorTileTag(), EditorTileSlice(), mousePos.x, mousePos.y);
+			grid.SpawnNewTile(EditorTileTag(), EditorTileSlice(), mousePos.x, mousePos.y, 0.f);
 		}
 
 		if (InputHandler::GetInstance().isKeyTriggered(AEVK_RBUTTON))

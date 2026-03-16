@@ -76,7 +76,7 @@ public:
 	
 	VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 width);
 	
-	void Update(f32 dt) override; // from UIElement
+	void Update(); // from UIElement
 	void Draw() const override; // from GameObject
 	void OnClick() override;
 
@@ -124,8 +124,8 @@ public:
 	void OnClick() override;
 
 	void SetActive(bool active) override;
-	void SetTextures(const PauseMenuTextures& tex);
-	void SetTextures(const GameOverTextures& tex);
+	void SetTextures(const PauseMenuTextures& go_texture);
+	void SetTextures(const GameOverTextures& go_texture);
 
 	void SetupPauseMenu();
 	void SetupSettingsMenu();

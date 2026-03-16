@@ -29,14 +29,12 @@ struct Grid {
 	const f32 tileScale{ 50.f };
 	AEGfxVertexList* tileMesh;
 	Texture tileTexture;
-	AEGfxVertexList* obstacleMesh;
+	AEGfxVertexList* standardMesh;
 	Texture obstacleTexture;
-	AEGfxVertexList* gravMesh;
 	Texture gravTexture;
-	AEGfxVertexList* winMesh;
 	Texture winTexture;
 
-	GridCell** cells;
+	GridCell** cells = nullptr;
 	std::vector<GameObject*> objs;
 
 	SpriteSheet spriteSheet;
@@ -45,8 +43,9 @@ struct Grid {
 	void Load(Texture* sheet = nullptr, int sheetW = 900, int sheetH = 900, int tileW = 300, int tileH = 300);
 	void Clear();
 	void Draw() const;
-	void SpawnNewTile(int const&, int const&, f32, f32);
+	void SpawnNewTile(int const&, int const&, f32, f32, f32);
 	void DeleteTile(f32, f32);
+	void ChangeTile(GridCell* cell) const;
 	void SnapToCell(f32*);
 	void GridToWorld(f32*, f32*);
 	void WorldToGrid(f32*, f32*);

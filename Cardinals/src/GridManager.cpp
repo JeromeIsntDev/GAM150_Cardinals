@@ -31,8 +31,8 @@ void Grid::Initialize()
 	for (u32 i{}; i < rows; ++i) {
 		for (u32 j{}; j < columns; ++j) {
 			cells[i][j].position = {j*50.f + 25.f, i*50.f + 25.f};
-			cells[i][j].column = static_cast<float>(j);
-			cells[i][j].row = static_cast<float>(i);
+			cells[i][j].column = static_cast<u32>(j);
+			cells[i][j].row = static_cast<u32>(i);
 		}
 	}
 }
@@ -40,9 +40,7 @@ void Grid::Initialize()
 void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH) 
 {
 	tileMesh = RectMeshCenterSliced(3, 3);
-	obstacleMesh = RectMeshCenter();
-	gravMesh = RectMeshCenter();
-	winMesh = RectMeshCenter();
+	standardMesh = RectMeshCenter();
 
 	if (sheet) {
 		tileTexture = *sheet;
@@ -67,11 +65,7 @@ void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH)
 void Grid::Clear()
 {
 	if(tileMesh) AEGfxMeshFree(tileMesh);
-	if (obstacleMesh) AEGfxMeshFree(obstacleMesh);
-	if (gravMesh) {
-		AEGfxMeshFree(gravMesh);
-	}
-	if (winMesh) AEGfxMeshFree(winMesh);
+	if (standardMesh) AEGfxMeshFree(standardMesh);
 	obstacleTexture.Unload_Image();
 	gravTexture.Unload_Image();
 	winTexture.Unload_Image();
@@ -96,7 +90,7 @@ void Grid::Draw() const {
 	}
 }
 
-void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
+void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
 {
 	GridCell* cell = GetCell(y, x);
 	if (cell == nullptr) {
@@ -109,6 +103,8 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
 		PRINT("TO\n");
 		GridToWorld(&ax, &ay);
 		PRINT("[DEBUG] => Cell World Position: %f, %f\n\n", ax, ay);
+
+		ChangeTile(cell);
 		return;
 	}
 
@@ -118,34 +114,35 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
 	GridToWorld(&ax,&ay);
 	obj->UpdatePosition({ ax , ay });
 	obj->_tag = static_cast<GameObjectTag>(tag);
+	obj->UpdateRotation(rot);
 	
 	TileUV uv{};
 	switch (obj->_tag)
 	{
 	case GameObjectTag::Obstacle:
-		obj->SetMesh(obstacleMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&obstacleTexture);
 		break;
 	case GameObjectTag::Win:
-		obj->SetMesh(winMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&winTexture);
 		break;
 	case GameObjectTag::GravUp:
-		obj->SetMesh(gravMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&gravTexture);
 		break;
 	case GameObjectTag::GravDown:
-		obj->SetMesh(gravMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&gravTexture);
-		obj->UpdateScale({ tileScale,-tileScale });
+		obj->UpdateRotation(PI);
 		break;
 	case GameObjectTag::GravLeft:
-		obj->SetMesh(gravMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&gravTexture);
 		obj->UpdateRotation(PI/2.f);
 		break;
 	case GameObjectTag::Gravright:
-		obj->SetMesh(gravMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&gravTexture);
 		obj->UpdateRotation(-(PI / 2.f));
 		break;
@@ -169,12 +166,9 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y)
 
 void Grid::SnapToCell(f32* val)
 {
-	////std::cout << "snap Val: " << *val << std::endl;
-	//f32 newVal = *val / 50.f;
-	////std::cout << "newVal: " << newVal << std::endl;
-	//s32 integral = static_cast<s32>(newVal);
-	//*val = (static_cast<f32>(integral) * 50.f);
-	*val = std::floor(*val / 50.f) * 50.f;
+	int sign = *val > 0 ? 1 : -1;
+	int newVal = static_cast<int>((*val)/50.f);
+	*val = static_cast<f32>(newVal) * 50.f + 25.f * static_cast<f32>(sign);
 }
 /*!
 	\brief Converts grid coordinates to world coordinates
@@ -219,6 +213,45 @@ void Grid::DeleteTile(f32 x, f32 y)
 	cell->obj = nullptr;
 }
 
+void Grid::ChangeTile(GridCell* cell) const
+{
+	TileUV uv{};
+	int slice{ 0 };
+	switch (cell->obj->_tag)
+	{
+	case GameObjectTag::Static:
+		slice = cell->obj->GetSlice();
+		++slice;
+		if (slice > spriteSheet.slices.size() - 1) slice = 0;
+		cell->obj->SetSlice(slice);
+		if (spriteSheet.GetUV(slice, uv))
+		{
+			cell->obj->uvX = uv.u;
+			cell->obj->uvY = uv.v;
+		}
+		break;
+	case GameObjectTag::GravUp:
+		cell->obj->_tag = GameObjectTag::GravLeft;
+		break;
+	case GameObjectTag::GravDown:
+		cell->obj->_tag = GameObjectTag::Gravright;
+		break;
+	case GameObjectTag::GravLeft:
+		cell->obj->_tag = GameObjectTag::GravDown;
+		break;
+	case GameObjectTag::Gravright:
+		cell->obj->_tag = GameObjectTag::GravUp;
+		break;
+	default:
+		break;
+	}
+
+	f32 rot = cell->obj->GetRotation() + PI / 2;
+	if (rot >= PI * 2) rot = 0;
+	if(cell->obj->_tag != GameObjectTag::Static)
+		cell->obj->UpdateRotation(rot);
+}
+
 GridCell* Grid::GetCell(f32 x, f32 y)
 {
 	if (!cells) {
@@ -226,8 +259,8 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 		return nullptr;
 	}
 
-	s32 column = x / 50.f;
-	s32 row = y / 50.f;
+	s32 column = static_cast<s32>(x / 50.f);
+	s32 row = static_cast<s32>(y / 50.f);
 
 	if (x >= 900 || y >= 1600) {
 		PRINT("[WARNING] => Attemping to go beyond Grid dimensions!\n");
@@ -236,18 +269,6 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 
 	return &cells[column][row];
 }
-
-//std::vector<GameObject*> Grid::GetCellGameObject() const
-//{
-//	std::vector<GameObject*> objs;
-//	for (u32 i{}; i < rows; ++i) {
-//		for (u32 j{}; j < columns; ++j) {
-//			if (cells[i][j].obj == nullptr) continue;
-//			objs.push_back(cells[i][j].obj);
-//		}
-//	}
-//	return objs;
-//}
 
 GridCell::GridCell()
 	: column{ 0 }, row{ 0 }, position {0.f, 0.f}, obj{nullptr}

@@ -40,6 +40,7 @@ private:
 	AEMtx33 mtx_rotation;
 	AEMtx33 mtx_scale;
 	AEMtx33 mtx_transform;
+	Texture* go_texture;
 
 //Variables
 protected:
@@ -48,7 +49,6 @@ protected:
 	f32 globalRotation;
 	AEVec2 globalScale;
 	bool isChild;
-	Texture* tex;
 	Collider collider;
 	int slice;
 
@@ -84,7 +84,7 @@ public:
 
 	bool HoverMesh(s32 mouseX, s32 mouseY) const;
 
-	Texture* GetTexture() const { return tex; }
+	Texture* GetTexture() const { return go_texture; }
 	AEMtx33 GetTransform() const;
 
 	// for UI, updates behavior

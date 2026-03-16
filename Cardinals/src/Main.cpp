@@ -83,10 +83,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	ImGui::StyleColorsDark();
 
-	ImGuiStyle& style = ImGui::GetStyle();
+	//ImGuiStyle& style = ImGui::GetStyle();
 
 	bool panelOpen = false;
-	bool focusKB = false;
+	//bool focusKB = false;
 
 	InitializeEditor();
 
@@ -104,6 +104,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			UpdateGameManagerState(GameStateEnum::Level2);
 		}
 		if (AEInputCheckReleased(AEVK_3)) {
+			UpdateGameManagerState(GameStateEnum::Level3);
+		}
+		if (AEInputCheckReleased(AEVK_9)) {
 			UpdateGameManagerState(GameStateEnum::Credits);
 		}
 
@@ -133,6 +136,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 				std::cout << "loading L1\n";
 				UpdateGameManagerState(GameStateEnum::Level1);
 				std::cout << "loaded L1\n";
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Load L2")) {
+				std::cout << "loading L2\n";
+				UpdateGameManagerState(GameStateEnum::Level2);
+				std::cout << "loaded L2\n";
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Load L3")) {
+				std::cout << "loading L3\n";
+				UpdateGameManagerState(GameStateEnum::Level3);
+				std::cout << "loaded L3\n";
 			}
 			ImGui::End();
 		}

@@ -33,7 +33,10 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	p_currPos.x = xPos;
 	p_currPos.y = yPos;
 	UpdatePosition(p_currPos);
+	UpdateRotation(0.f);
+	p_velocityVector.x = zeroVal;
 	p_velocityVector.y = zeroVal;
+	p_Scale.y = 50.f;
 	Player::mesh = newMesh;
 	p_previousPos = p_currPos;
 	grav = GravityDirection::Down;
@@ -156,21 +159,25 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	//std::cout << "left bool: " << canMoveLeft << std::endl;
 	//std::cout << "right bool: " << canMoveRight << std::endl;
 
-	if (input.isKeyPressed(AEVK_SPACE) && !p_isJumping) {
+	if (input.isKeyTriggered(AEVK_SPACE) && !p_isJumping) {
 		bgm.PlayAudio("JUMP", AudioType::SFX, 1.f, 0);
 		//adjust jump logic here
 		switch(dir){
 		case Player::GravityDirection::Up:
 			p_velocityVector.y = -jumpForce;
+			p_velocityVector.x = 0.f;
 			break;
 		case Player::GravityDirection::Down:
 			p_velocityVector.y = jumpForce;
+			p_velocityVector.x = 0.f;
 			break;
 		case Player::GravityDirection::Left:
 			p_velocityVector.x = jumpForce;
+			p_velocityVector.y = 0.f;
 			break;
 		case Player::GravityDirection::Right:
 			p_velocityVector.x = -jumpForce;
+			p_velocityVector.y = 0.f;
 			break;
 		default:
 			break;
@@ -192,7 +199,6 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 	jumpBuffer = max(0, jumpBuffer - dt);
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
 	GravityDirection currDir = dir;
-	//std::cout << p_currPos.y << std::endl;
 	//down force velocity (always going downwards) depend on location
 	if (!p_isGrounded) {
 		switch (dir)
@@ -249,6 +255,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		p_playerHealth--;
+		UpdateRotation(0.f);
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.y >= 400.f) {
@@ -256,6 +263,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		p_playerHealth--;
+		UpdateRotation(0.f);
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.x >= 750.f) {
@@ -263,6 +271,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		p_playerHealth--;
+		UpdateRotation(0.f);
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.x <= -750.f) {
@@ -270,10 +279,14 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		p_playerHealth--;
+		UpdateRotation(0.f);
 		grav = Player::GravityDirection::Down;
 	}
 
 	if (p_playerHealth <= 0) {
+		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
+		grav = Player::GravityDirection::Down;
 		gameOver = true;
 	}
 
@@ -288,13 +301,6 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 
 	gridCollisionFlag = collideVal;
 
-	f32 halfScaleY = p_Scale.y * 0.5f;
-	f32 halfScaleX = p_Scale.x * 0.5f;
-	f32 bottom = p_currPos.y - halfScaleY;
-	f32 top = p_currPos.y + halfScaleY;
-	f32 left = p_currPos.x - halfScaleX;
-	f32 right = p_currPos.x + halfScaleX;
-
 	//std::cout << p_currPos.y << " " << bottom << std::endl;
 
 	switch (dir) {
@@ -303,71 +309,88 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 				p_velocityVector.y = 0.f;
 				p_isGrounded = true;
 				p_isJumping = false;
+				grid->SnapToCell(&p_currPos.y);
 			}
 			if (gridCollisionFlag & COLLISION_TOP) {
 				p_velocityVector.y = 0.f;
+				grid->SnapToCell(&p_currPos.y);
 			}
 			if (gridCollisionFlag & COLLISION_LEFT) {
 				canMoveLeft = false;
 				p_velocityVector.x = 0.f;
+				grid->SnapToCell(&p_currPos.x);
+				//PRINT("DEBUG LEFT");
 			}
 			if (gridCollisionFlag & COLLISION_RIGHT) {
 				canMoveRight = false;
 				p_velocityVector.x = 0.f;
+				grid->SnapToCell(&p_currPos.x);
 			}
 		break;
 		case GravityDirection::Up:
 			if (gridCollisionFlag & COLLISION_BOTTOM) {
 				p_velocityVector.y = 0.f;
+				grid->SnapToCell(&p_currPos.y);
 			}
 			if (gridCollisionFlag & COLLISION_TOP) {
 				p_velocityVector.y = 0.f;
 				p_isGrounded = true;
 				p_isJumping = false;
+				grid->SnapToCell(&p_currPos.y);
 			}
 			if (gridCollisionFlag & COLLISION_LEFT) {
 				canMoveLeft = false;
 				p_velocityVector.x = 0.f;
+				grid->SnapToCell(&p_currPos.x);
 			}
 			if (gridCollisionFlag & COLLISION_RIGHT) {
 				canMoveRight = false;
 				p_velocityVector.x = 0.f;
+				grid->SnapToCell(&p_currPos.x);
 			}
 		break;
 		case GravityDirection::Left:
 			if (gridCollisionFlag & COLLISION_BOTTOM) {
 				canMoveRight = false;
 				p_velocityVector.y = 0.f;
+				grid->SnapToCell(&p_currPos.y);
 			}
 			if (gridCollisionFlag & COLLISION_TOP) {
 				p_velocityVector.y = 0.f;
 				canMoveLeft = false;
+				grid->SnapToCell(&p_currPos.y);
 			}
 			if (gridCollisionFlag & COLLISION_LEFT) {
 				p_velocityVector.x = 0.f;
 				p_isGrounded = true;
 				p_isJumping = false;
+				grid->SnapToCell(&p_currPos.x);
 			}
 			if (gridCollisionFlag & COLLISION_RIGHT) {
 				p_velocityVector.x = 0.f;
+				grid->SnapToCell(&p_currPos.x);
 			}
 		break;
 		case GravityDirection::Right:
 			if (gridCollisionFlag & COLLISION_BOTTOM) {
 				canMoveRight = false;
 				p_velocityVector.y = 0.f;
+				grid->SnapToCell(&p_currPos.y);
 			}
 			if (gridCollisionFlag & COLLISION_TOP) {
 				canMoveLeft = false;
 				p_velocityVector.y = 0.f;
+				grid->SnapToCell(&p_currPos.y);
 			}
 			if (gridCollisionFlag & COLLISION_LEFT) {
 				p_velocityVector.x = 0.f;
+				grid->SnapToCell(&p_currPos.x);
 			}
 			if (gridCollisionFlag & COLLISION_RIGHT) {
 				p_velocityVector.x = 0.f;
 				p_isGrounded = true;
 				p_isJumping = false;
+				grid->SnapToCell(&p_currPos.x);
 			}
 		break;
 	}
@@ -385,11 +408,8 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	GridCell* cell1, *cell2;
 
 	x1 = PosX + halfScaleX;
-	//grid->SnapToCell(&r_x1);
 	y1 = PosY + quarterScaleY;
-	//grid->SnapToCell(&r_y1);
 	x2 = PosX + halfScaleX;
-	//grid->SnapToCell(&r_x2);
 	y2 = PosY - quarterScaleY;
 
 	if (!grid) return Flag;
@@ -402,17 +422,13 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	{
 		if (cell1->tag == GameObjectTag::Static ||
 			cell2->tag == GameObjectTag::Static) {
-			//PRINT("[DEBUG] => COLLIDE RIGHT\n");
 			Flag += COLLISION_RIGHT;
 		}
 	}
 
-	x1 = PosX - halfScaleX;
-	//grid->SnapToCell(&r_x1);
+	x1 = PosX - halfScaleX - .2f; //Added for some padding due to no conversion of world to grid initially
 	y1 = PosY + quarterScaleY;
-	//grid->SnapToCell(&r_y1);
 	x2 = PosX - halfScaleX;
-	//grid->SnapToCell(&r_x2);
 	y2 = PosY - quarterScaleY;
 
 	grid->WorldToGrid(&x1, &y1);
@@ -423,17 +439,13 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	{
 		if (cell1->tag == GameObjectTag::Static ||
 			cell2->tag == GameObjectTag::Static) {
-			//PRINT("[DEBUG] => COLLIDE LEFT\n");
 			Flag += COLLISION_LEFT;
 		}
 	}
 
 	x1 = PosX + quarterScaleX;
-	//grid->SnapToCell(&r_x1);
-	y1 = PosY + halfScaleY;
-	//grid->SnapToCell(&r_y1);
+	y1 = PosY + halfScaleY + .1f; //Added for some padding due to no conversion of world to grid initially
 	x2 = PosX - quarterScaleX;
-	//grid->SnapToCell(&r_x2);
 	y2 = PosY + halfScaleY;
 
 	grid->WorldToGrid(&x1, &y1);
@@ -444,17 +456,13 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	{
 		if (cell1->tag == GameObjectTag::Static ||
 			cell2->tag == GameObjectTag::Static) {
-			//PRINT("[DEBUG] => COLLIDE TOP\n");
 			Flag += COLLISION_TOP;
 		}
 	}
 
 	x1 = PosX + quarterScaleX;
-	//grid->SnapToCell(&r_x1);
 	y1 = PosY - halfScaleY;
-	//grid->SnapToCell(&r_y1);
 	x2 = PosX - quarterScaleX;
-	//grid->SnapToCell(&r_x2);
 	y2 = PosY - halfScaleY;
 
 	grid->WorldToGrid(&x1, &y1);
@@ -464,20 +472,15 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	if (cell1 && cell2)
 	{
 		if (cell1->tag == GameObjectTag::Static || 
-			cell2->tag == GameObjectTag::Static)
-		{
-			//PRINT("[DEBUG] => COLLIDE BOTTOM\n");
+			cell2->tag == GameObjectTag::Static) {
 			Flag += COLLISION_BOTTOM;
 		}
 	}
 
-	f32 playerX{ PosX }, playerY{ PosY };
-	grid->WorldToGrid(&playerX, &playerY);
-
 	return Flag;
 }
 
-void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& dir)
+void Player::PlayerCollision(std::vector<GameObject*> objs)
 {
 	for (GameObject* obj : objs) {
 		if (this->_tag == obj->_tag) continue;
@@ -493,37 +496,52 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			//win gate hit
 			bgm.PlayAudio("HITWIN", AudioType::SFX, 1.f, 0);
 			std::cout << "Win gate hit" << std::endl;
-			p_velocityVector = { 0.f,0.f };
+			p_velocityVector = { 0.f, 0.f };
+			p_Scale = { 50.f,50.f };
+			UpdateRotation(0.f);
 			gameOver = true;
 		}
 		else if (obj->_tag == GameObjectTag::GravUp) {
 			std::cout << "grav up" << std::endl;
 			grav = Player::GravityDirection::Up;
+			UpdateRotation(0.f);
 			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravDown) {
 			grav = Player::GravityDirection::Down;
+			UpdateRotation(0.f);
 			p_Scale.y = 50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravLeft) {
 			grav = Player::GravityDirection::Left;
+			p_Scale.y = 50.f;
+			UpdateRotation(-(PI / 2.f));
 		}
 		else if (obj->_tag == GameObjectTag::Gravright) {
 			grav = Player::GravityDirection::Right;
+			UpdateRotation(-(PI / 2.f));
+			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::Obstacle) {
 			bgm.PlayAudio("HIT", AudioType::SFX, 1.f, 0);
 			std::cout << "obstacle hit" << std::endl;
+
 			// 1. Always trigger the screen shake on hit!
 			this->pendingCamShake = 5.f; 
 
+			UpdateRotation(0.f);
 			p_playerHealth--;
 			if (p_playerHealth <= 0) {
+				p_velocityVector = { 0.f, 0.f };
+				p_Scale = { 50.f,50.f };
+				grav = GravityDirection::Down;
 				gameOver = true;
 			}
 			else {
 				p_currPos = p_previousPos;
 				grav = GravityDirection::Down;
+				p_velocityVector = { 0.f, 0.f };
+				p_Scale = { 50.f,50.f };
 			}
 		}
 	}

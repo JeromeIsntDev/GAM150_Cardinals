@@ -71,7 +71,7 @@ public:
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
 
-	int	gridCollisionFlag;
+	int	gridCollisionFlag{};
 
 	void InitializePlayer(int health, f32 moveSpeed, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos, bool gOver);
 
@@ -90,7 +90,7 @@ public:
 	//void SetPlayerHealth(f32);
 	void PlayerInputHandle(f32 const&, GravityDirection&);
 	void PlayerMovement(f32 const&, GravityDirection& dir);
-	void PlayerCollision(std::vector<GameObject*> objs,GravityDirection&);
+	void PlayerCollision(std::vector<GameObject*> objs);
 	void CheckBinaryCollision(Grid* grid, GravityDirection&);
 	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid* grid);
 	//Function for Player Jump Logic

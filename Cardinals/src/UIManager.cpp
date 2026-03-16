@@ -41,7 +41,7 @@ void UIElement::ResetTooltip() { isToolTipShown = false; } // reset every frame 
 
 bool UIElement::IsPointInside(float x, float y) const 
 {
-    return HoverMesh(x, y);
+    return HoverMesh(static_cast<s32>(x), static_cast<s32>(y));
 }
 
 bool UIElement::ToggleActive(u8 key)

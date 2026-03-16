@@ -29,7 +29,7 @@ public:
     int sheetW, sheetH, tileW, tileH;
     int rows, cols;
     float uvW, uvH;
-    Texture tex;
+    Texture go_texture{};
 
     std::vector<TileUV> slices; // all the sliced up uv rects
     std::unordered_map<int, int> idToSlice; // tileID > slices[] index
@@ -37,14 +37,14 @@ public:
 public:
 
     void Load(const std::string& path, float w, float h);
-    void Slice(Texture tex);
+    void Slice(Texture go_texture);
 
     void RegisterAllTiles(); // flat index > ID
     // uhh in case we gotta map diff tags to diff tiles
     //void RegisterSpecificTile(int tileID, int tileIndex);
 
     bool GetUV(int tileID, TileUV& outUV) const; // no way in hell u wanna get it changed i think
-    Texture& GetTexture() { return tex; }
+    Texture& GetTexture() { return go_texture; }
 };
 
 #endif
