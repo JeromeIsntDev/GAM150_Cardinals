@@ -87,7 +87,7 @@ public:
 	//void SetPlayerHealth(f32);
 	void PlayerInputHandle(f32 const&, GravityDirection&);
 	void PlayerMovement(f32 const&, GravityDirection& dir);
-	void PlayerCollision(std::vector<GameObject*> objs,GravityDirection&);
+	void PlayerCollision(std::vector<GameObject*> objs);
 	void CheckBinaryCollision(Grid* grid, GravityDirection&);
 	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid* grid);
 	//Function for Player Jump Logic

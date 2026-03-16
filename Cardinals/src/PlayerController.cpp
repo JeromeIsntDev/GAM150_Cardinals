@@ -255,6 +255,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		p_playerHealth--;
+		UpdateRotation(0.f);
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.y >= 400.f) {
@@ -262,6 +263,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		p_playerHealth--;
+		UpdateRotation(0.f);
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.x >= 750.f) {
@@ -269,6 +271,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		p_playerHealth--;
+		UpdateRotation(0.f);
 		grav = Player::GravityDirection::Down;
 	}
 	if (p_currPos.x <= -750.f) {
@@ -276,6 +279,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
 		p_playerHealth--;
+		UpdateRotation(0.f);
 		grav = Player::GravityDirection::Down;
 	}
 
@@ -297,13 +301,6 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 
 	gridCollisionFlag = collideVal;
 
-	f32 halfScaleY = p_Scale.y * 0.5f;
-	f32 halfScaleX = p_Scale.x * 0.5f;
-	f32 bottom = p_currPos.y - halfScaleY;
-	f32 top = p_currPos.y + halfScaleY;
-	f32 left = p_currPos.x - halfScaleX;
-	f32 right = p_currPos.x + halfScaleX;
-
 	//std::cout << p_currPos.y << " " << bottom << std::endl;
 
 	switch (dir) {
@@ -322,7 +319,7 @@ void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
 				canMoveLeft = false;
 				p_velocityVector.x = 0.f;
 				grid->SnapToCell(&p_currPos.x);
-				PRINT("DEBUG LEFT");
+				//PRINT("DEBUG LEFT");
 			}
 			if (gridCollisionFlag & COLLISION_RIGHT) {
 				canMoveRight = false;
@@ -483,7 +480,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	return Flag;
 }
 
-void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& dir)
+void Player::PlayerCollision(std::vector<GameObject*> objs)
 {
 	for (GameObject* obj : objs) {
 		if (this->_tag == obj->_tag) continue;
@@ -501,34 +498,34 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, GravityDirection& di
 			std::cout << "Win gate hit" << std::endl;
 			p_velocityVector = { 0.f, 0.f };
 			p_Scale = { 50.f,50.f };
+			UpdateRotation(0.f);
 			gameOver = true;
 		}
 		else if (obj->_tag == GameObjectTag::GravUp) {
 			std::cout << "grav up" << std::endl;
 			grav = Player::GravityDirection::Up;
-			p_isJumping = true;
+			UpdateRotation(0.f);
 			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravDown) {
 			grav = Player::GravityDirection::Down;
-			p_isJumping = true;
+			UpdateRotation(0.f);
 			p_Scale.y = 50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravLeft) {
 			grav = Player::GravityDirection::Left;
 			p_Scale.y = 50.f;
 			UpdateRotation(-(PI / 2.f));
-			p_isJumping = true;
 		}
 		else if (obj->_tag == GameObjectTag::Gravright) {
 			grav = Player::GravityDirection::Right;
 			UpdateRotation(-(PI / 2.f));
 			p_Scale.y = -50.f;
-			p_isJumping = true;
 		}
 		else if (obj->_tag == GameObjectTag::Obstacle) {
 			bgm.PlayAudio("HIT", AudioType::SFX, 1.f, 0);
 			std::cout << "obstacle hit" << std::endl;
+			UpdateRotation(0.f);
 			p_playerHealth--;
 			if (p_playerHealth <= 0) {
 				p_velocityVector = { 0.f, 0.f };
