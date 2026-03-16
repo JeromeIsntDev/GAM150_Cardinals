@@ -113,7 +113,7 @@ void Level3_Initialize()
 	backgrounds[3] = tex.Get("BG_FRONTMOUNTAIN");
 
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false,
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f, false);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 75.f, AEGfxGetWinMinY() + 100.f, false);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(playerTexture[0]);
 	mainPlayer.UpdateScale(AEVec2{ 50.f,50.f });
@@ -269,7 +269,7 @@ void Level3_Update() {
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid, mainPlayer.grav);
-	mainPlayer.PlayerCollision(grid.objs, mainPlayer.grav);
+	mainPlayer.PlayerCollision(grid.objs);
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 }
