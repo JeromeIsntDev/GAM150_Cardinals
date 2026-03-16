@@ -62,31 +62,8 @@ void Level2_Load() {
 
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 
-	/*memoryManager.AddTextures({
-			&placeholderTexture,
-			&verticalPlatformTex,
-			&horizontalPlatformTex,
-			&prevTexture,
-			&barTexture,
-			&knobMasterTexture,
-			&knobMusicTexture,
-			&knobEFXTexture,
-			&cardBgTexture,
-			&restartTexture,
-			&resumeTexture,
-			&homeTexture,
-			&nextTexture,
-			&retryTexture,
-			&candyTexture,
-			&greyCandyTexture
-		});
-
-	for (Texture& T : playerTexture) {
-		memoryManager.AddTexture(&T);
-	}*/
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	memoryManager.AddMesh(&squareMesh);
-	//memoryManager.AddMesh(&tileMesh);
 
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&digipenFont);
