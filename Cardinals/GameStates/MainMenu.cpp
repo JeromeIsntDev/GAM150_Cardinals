@@ -40,7 +40,7 @@ namespace {
 	std::unique_ptr<Button> settingsBtn;
 
 	AudioManager& bgm = AudioManager::Instance();
-	TextureManager& tex = TextureManager::GetInstance();
+	TextureManager& go_texture = TextureManager::GetInstance();
 	InputHandler& input = InputHandler::GetInstance();
 }
 
@@ -49,15 +49,15 @@ void MainMenu_Load() {
 	PRINT("[DEBUG | LEVEL] => Load: %s", "Main Menu\n");
 
 	bgm.LoadManifest("../../Assets/AudioManifest.txt");
-	tex.LoadManifest("../../Assets/TextureManifest.txt");
+	go_texture.LoadManifest("../../Assets/TextureManifest.txt");
 
 	// for persistent objs beyond manifest
-	tex.SetPersistent("TileSheet");
-	tex.SetPersistent("playerIdle");
-	tex.SetPersistent("BG_BACKMOST");
-	tex.SetPersistent("BG_BACKMOUNTAIN");
-	tex.SetPersistent("BG_CLOUDS");
-	tex.SetPersistent("BG_FRONTMOUNTAIN");
+	go_texture.SetPersistent("TileSheet");
+	go_texture.SetPersistent("playerIdle");
+	go_texture.SetPersistent("BG_BACKMOST");
+	go_texture.SetPersistent("BG_BACKMOUNTAIN");
+	go_texture.SetPersistent("BG_CLOUDS");
+	go_texture.SetPersistent("BG_FRONTMOUNTAIN");
 
 	cardinalsFont.Load_Font(Fonts::Alt, 160.f);
 	cardinalsFont.Input_Text("cardinals");
@@ -135,10 +135,10 @@ void MainMenu_Initialize()
 
 	// follow new format hahaha... ptrs.. ahhahahah
 	// im crine bro
-	Texture* startTex = tex.Get("StartBtn");
-	Texture* exitTex = tex.Get("ExitBtn");
-	Texture* creditsTex = tex.Get("CreditsBtn");
-	Texture* settingsTex = tex.Get("SettingsBtn");
+	Texture* startTex = go_texture.Get("StartBtn");
+	Texture* exitTex = go_texture.Get("ExitBtn");
+	Texture* creditsTex = go_texture.Get("CreditsBtn");
+	Texture* settingsTex = go_texture.Get("SettingsBtn");
 
 	startBtn = std::make_unique<Button>(
 		squareMesh, 

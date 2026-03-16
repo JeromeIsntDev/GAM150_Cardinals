@@ -83,10 +83,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	ImGui::StyleColorsDark();
 
-	ImGuiStyle& style = ImGui::GetStyle();
+	//ImGuiStyle& style = ImGui::GetStyle();
 
 	bool panelOpen = false;
-	bool focusKB = false;
+	//bool focusKB = false;
 
 	InitializeEditor();
 

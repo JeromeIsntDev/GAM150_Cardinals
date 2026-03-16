@@ -31,8 +31,8 @@ void Grid::Initialize()
 	for (u32 i{}; i < rows; ++i) {
 		for (u32 j{}; j < columns; ++j) {
 			cells[i][j].position = {j*50.f + 25.f, i*50.f + 25.f};
-			cells[i][j].column = static_cast<float>(j);
-			cells[i][j].row = static_cast<float>(i);
+			cells[i][j].column = static_cast<u32>(j);
+			cells[i][j].row = static_cast<u32>(i);
 		}
 	}
 }
@@ -40,9 +40,7 @@ void Grid::Initialize()
 void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH) 
 {
 	tileMesh = RectMeshCenterSliced(3, 3);
-	obstacleMesh = RectMeshCenter();
-	gravMesh = RectMeshCenter();
-	winMesh = RectMeshCenter();
+	standardMesh = RectMeshCenter();
 
 	if (sheet) {
 		tileTexture = *sheet;
@@ -67,11 +65,7 @@ void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH)
 void Grid::Clear()
 {
 	if(tileMesh) AEGfxMeshFree(tileMesh);
-	if (obstacleMesh) AEGfxMeshFree(obstacleMesh);
-	if (gravMesh) {
-		AEGfxMeshFree(gravMesh);
-	}
-	if (winMesh) AEGfxMeshFree(winMesh);
+	if (standardMesh) AEGfxMeshFree(standardMesh);
 	obstacleTexture.Unload_Image();
 	gravTexture.Unload_Image();
 	winTexture.Unload_Image();
@@ -126,29 +120,29 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
 	switch (obj->_tag)
 	{
 	case GameObjectTag::Obstacle:
-		obj->SetMesh(obstacleMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&obstacleTexture);
 		break;
 	case GameObjectTag::Win:
-		obj->SetMesh(winMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&winTexture);
 		break;
 	case GameObjectTag::GravUp:
-		obj->SetMesh(gravMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&gravTexture);
 		break;
 	case GameObjectTag::GravDown:
-		obj->SetMesh(gravMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&gravTexture);
 		obj->UpdateRotation(PI);
 		break;
 	case GameObjectTag::GravLeft:
-		obj->SetMesh(gravMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&gravTexture);
 		obj->UpdateRotation(PI/2.f);
 		break;
 	case GameObjectTag::Gravright:
-		obj->SetMesh(gravMesh);
+		obj->SetMesh(standardMesh);
 		obj->SetTexture(&gravTexture);
 		obj->UpdateRotation(-(PI / 2.f));
 		break;
@@ -265,8 +259,8 @@ GridCell* Grid::GetCell(f32 x, f32 y)
 		return nullptr;
 	}
 
-	s32 column = x / 50.f;
-	s32 row = y / 50.f;
+	s32 column = static_cast<s32>(x / 50.f);
+	s32 row = static_cast<s32>(y / 50.f);
 
 	if (x >= 900 || y >= 1600) {
 		PRINT("[WARNING] => Attemping to go beyond Grid dimensions!\n");

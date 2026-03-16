@@ -29,14 +29,12 @@ struct Grid {
 	const f32 tileScale{ 50.f };
 	AEGfxVertexList* tileMesh;
 	Texture tileTexture;
-	AEGfxVertexList* obstacleMesh;
+	AEGfxVertexList* standardMesh;
 	Texture obstacleTexture;
-	AEGfxVertexList* gravMesh;
 	Texture gravTexture;
-	AEGfxVertexList* winMesh;
 	Texture winTexture;
 
-	GridCell** cells;
+	GridCell** cells = nullptr;
 	std::vector<GameObject*> objs;
 
 	SpriteSheet spriteSheet;

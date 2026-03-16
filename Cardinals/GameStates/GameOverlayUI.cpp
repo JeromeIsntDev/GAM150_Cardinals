@@ -29,7 +29,7 @@ void VolSlider::OnClick()
 	isDragging = true;
 }
 
-void VolSlider::Update(f32 dt) 
+void VolSlider::Update() 
 {
 	if (!IsActive() || !IsInteractable()) return;
 
@@ -212,40 +212,40 @@ void Overlay::Draw() const
 	AEGfxSetTransparency(1.f);
 }
 
-void Overlay::SetTextures(const PauseMenuTextures& tex)
+void Overlay::SetTextures(const PauseMenuTextures& go_texture)
 {
-	if (tex.bg) bg.SetTexture(tex.bg);
-	if (tex.cardBg) cardBG.SetTexture(tex.cardBg);
+	if (go_texture.bg) bg.SetTexture(go_texture.bg);
+	if (go_texture.cardBg) cardBG.SetTexture(go_texture.cardBg);
 
-	if (_masterSlider) _masterSlider->SetTextures(tex.bar, tex.knobMaster);
-	if (_musicSlider)  _musicSlider->SetTextures(tex.bar, tex.knobMusic);
-	if (_sfxSlider)    _sfxSlider->SetTextures(tex.bar, tex.knobSFX);
-	if (_prevBtn)      _prevBtn->SetTexture(tex.prevBtn);
-	if (_resumeBtn)    _resumeBtn->SetTexture(tex.resumeBtn);
-	if (_restartBtn)   _restartBtn->SetTexture(tex.restartBtn);
-	if (_homeBtn)      _homeBtn->SetTexture(tex.homeBtn);
+	if (_masterSlider) _masterSlider->SetTextures(go_texture.bar, go_texture.knobMaster);
+	if (_musicSlider)  _musicSlider->SetTextures(go_texture.bar, go_texture.knobMusic);
+	if (_sfxSlider)    _sfxSlider->SetTextures(go_texture.bar, go_texture.knobSFX);
+	if (_prevBtn)      _prevBtn->SetTexture(go_texture.prevBtn);
+	if (_resumeBtn)    _resumeBtn->SetTexture(go_texture.resumeBtn);
+	if (_restartBtn)   _restartBtn->SetTexture(go_texture.restartBtn);
+	if (_homeBtn)      _homeBtn->SetTexture(go_texture.homeBtn);
 
-	if (tex.titleFont) _titleFont = tex.titleFont;
+	if (go_texture.titleFont) _titleFont = go_texture.titleFont;
 }
 
-void Overlay::SetTextures(const GameOverTextures& tex)
+void Overlay::SetTextures(const GameOverTextures& go_texture)
 {
-	if (tex.bg) bg.SetTexture(tex.bg);
-	if (tex.cardBg) cardBG.SetTexture(tex.cardBg);
-	if (tex.greyCandy) {
-		candy1.SetTexture(tex.greyCandy);
-		candy2.SetTexture(tex.greyCandy);
-		candy3.SetTexture(tex.greyCandy);
+	if (go_texture.bg) bg.SetTexture(go_texture.bg);
+	if (go_texture.cardBg) cardBG.SetTexture(go_texture.cardBg);
+	if (go_texture.greyCandy) {
+		candy1.SetTexture(go_texture.greyCandy);
+		candy2.SetTexture(go_texture.greyCandy);
+		candy3.SetTexture(go_texture.greyCandy);
 	}
-	if (tex.greyCandy) greyCandy = tex.greyCandy;
-	if (tex.candy) candy = tex.candy;
+	if (go_texture.greyCandy) greyCandy = go_texture.greyCandy;
+	if (go_texture.candy) candy = go_texture.candy;
 
-	if (_restartBtn)   _restartBtn->SetTexture(tex.restartBtn);
-	if (_homeBtn)      _homeBtn->SetTexture(tex.homeBtn);
-	if (_nextBtn)      _nextBtn->SetTexture(tex.nextBtn);
+	if (_restartBtn)   _restartBtn->SetTexture(go_texture.restartBtn);
+	if (_homeBtn)      _homeBtn->SetTexture(go_texture.homeBtn);
+	if (_nextBtn)      _nextBtn->SetTexture(go_texture.nextBtn);
 
-	if (tex.titleFont) _titleFont = tex.titleFont;
-	if (tex.bodyFont) _bodyFont = tex.bodyFont;
+	if (go_texture.titleFont) _titleFont = go_texture.titleFont;
+	if (go_texture.bodyFont) _bodyFont = go_texture.bodyFont;
 }
 
 void Overlay::SetupPauseMenu()

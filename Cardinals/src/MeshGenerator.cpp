@@ -68,7 +68,7 @@ AEGfxVertexList* CircleMesh(u32 segments) {
 
 	AEGfxMeshStart();
 
-	for (int i = 0; i < segments; ++i)
+	for (u32 i = 0; i < segments; ++i)
 	{
 		f32 a1 = (f32)i / segments * 2.0f * PI;
 		f32 a2 = (f32)(i + 1) / segments * 2.0f * PI;
