@@ -20,7 +20,7 @@ namespace {
 	ParticleEffect playerEffect;
 	ParticleEffect gravityEffect;
 
-	TextureManager& tex = TextureManager::GetInstance();
+	TextureManager& go_texture = TextureManager::GetInstance();
 
 	Texture *placeholderTexture;
 	Texture verticalPlatformTex;
@@ -94,7 +94,7 @@ void Level2_Load() {
 
 	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level2_GameObjects.json");
 
-	grid.Load(tex.Get("TileSheet"), 900, 900, 300, 300);
+	grid.Load(go_texture.Get("TileSheet"), 900, 900, 300, 300);
 	grid.Initialize();
 	for (int i{}; i < objData.size(); ++i) {
 		objData[i].SetMesh(grid.tileMesh);
@@ -115,26 +115,26 @@ void Level2_Initialize()
 	playerEffect.Init();
 	gravityEffect.Init();
 
-	placeholderTexture = tex.Get("Placeholder");
-	cardBgTexture = tex.Get("CardBg");
-	prevTexture = tex.Get("PrevBtn");
-	barTexture = tex.Get("Bar");
-	knobMasterTexture = tex.Get("KnobMaster");
-	knobMusicTexture = tex.Get("KnobMusic");
-	knobEFXTexture = tex.Get("KnobEFX");
-	restartTexture = tex.Get("RestartBtn");
-	resumeTexture = tex.Get("ResumeBtn");
-	homeTexture = tex.Get("HomeBtn");
-	nextTexture = tex.Get("NextBtn");
-	retryTexture = tex.Get("RetryBtn");
-	candyTexture = tex.Get("Candy");
-	greyCandyTexture = tex.Get("CandyGrey");
-	playerTexture[0] = tex.Get("Player");
-	playerTexture[1] = tex.Get("PlayerJump");
-	backgrounds[0] = tex.Get("BG_BACKMOST");
-	backgrounds[1] = tex.Get("BG_CLOUDS");
-	backgrounds[2] = tex.Get("BG_MOUNTAIN");
-	backgrounds[3] = tex.Get("BG_FRONTMOUNTAIN");
+	placeholderTexture = go_texture.Get("Placeholder");
+	cardBgTexture = go_texture.Get("CardBg");
+	prevTexture = go_texture.Get("PrevBtn");
+	barTexture = go_texture.Get("Bar");
+	knobMasterTexture = go_texture.Get("KnobMaster");
+	knobMusicTexture = go_texture.Get("KnobMusic");
+	knobEFXTexture = go_texture.Get("KnobEFX");
+	restartTexture = go_texture.Get("RestartBtn");
+	resumeTexture = go_texture.Get("ResumeBtn");
+	homeTexture = go_texture.Get("HomeBtn");
+	nextTexture = go_texture.Get("NextBtn");
+	retryTexture = go_texture.Get("RetryBtn");
+	candyTexture = go_texture.Get("Candy");
+	greyCandyTexture = go_texture.Get("CandyGrey");
+	playerTexture[0] = go_texture.Get("Player");
+	playerTexture[1] = go_texture.Get("PlayerJump");
+	backgrounds[0] = go_texture.Get("BG_BACKMOST");
+	backgrounds[1] = go_texture.Get("BG_CLOUDS");
+	backgrounds[2] = go_texture.Get("BG_MOUNTAIN");
+	backgrounds[3] = go_texture.Get("BG_FRONTMOUNTAIN");
 
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false,
 		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f, false);
@@ -369,7 +369,7 @@ void Level2_Unload() {
 void Level2_Parallax() {
 	//Reduce Colour -> To Bright
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	for (GameObject& obj : backgroundObjs) {
+	/*for (GameObject& obj : backgroundObjs) {
 		f32 offset = mainPlayer.GetPosition().x;
 		f32 offsetFirst = offset / 200.f;
 		f32 offsetSecond = offset / 75.f;
@@ -378,7 +378,16 @@ void Level2_Parallax() {
 		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-	}
+	}*/
+
+	f32 offset = mainPlayer.GetPosition().x;
+	f32 offsetFirst = offset / 200.f;
+	f32 offsetSecond = offset / 75.f;
+	f32 offsetThird = offset / 25.f;
+
+	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 }
 

@@ -12,7 +12,7 @@ namespace {
 	f32 speed = 3.f;
 	f32 fading;
 
-	TextureManager& tex = TextureManager::GetInstance();
+	TextureManager& go_texture = TextureManager::GetInstance();
 	InputHandler& input = InputHandler::GetInstance();
 
 	GameObject logo;
@@ -45,7 +45,7 @@ void Credits_Initialize()
 {
 	startY = -430.f;
 	logo.SetMesh(squareMesh);
-	logo.SetTexture(tex.Get("DigipenLogo"));
+	logo.SetTexture(go_texture.Get("DigipenLogo"));
 	logo.UpdateScale(AEVec2{ 685.f, 200.f });
 	quitCredits = false;
 	fading = 1.f;

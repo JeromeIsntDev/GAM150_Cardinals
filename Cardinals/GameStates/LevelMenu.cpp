@@ -123,7 +123,7 @@ void LevelMenu_Update() {
 
 	AEGfxSetTransparency(1.f);
 
-	uiManager.Update(AEFrameRateControllerGetFrameTime());
+	uiManager.Update(static_cast<float>(AEFrameRateControllerGetFrameTime()));
 }
 
 void LevelMenu_Draw() {

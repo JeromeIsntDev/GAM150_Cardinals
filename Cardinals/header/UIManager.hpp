@@ -97,7 +97,7 @@ public:
 	void InitTooltipFont(const FontFile& font, float size);
 
 	void Add(UIElement* element); // just adds it so it Exists
-	void Update(float dt); // loops thru all elements and calls their updaate
+	virtual void Update(float dt); // loops thru all elements and calls their updaate
 	void Draw() const;
 	void HandleClick();
 	void Exit(); // for the VECTORS

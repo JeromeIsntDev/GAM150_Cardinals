@@ -52,7 +52,7 @@ namespace {
 	f32 levelTime{};
 
 	InputHandler& input = InputHandler::GetInstance();
-	TextureManager& tex = TextureManager::GetInstance();
+	TextureManager& go_texture = TextureManager::GetInstance();
 
 	Grid grid;
 	Player mainPlayer;
@@ -134,7 +134,7 @@ void Level1_Load() {
 
 	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
 
-	grid.Load(tex.Get("TileSheet"), 900, 900, 300, 300);
+	grid.Load(go_texture.Get("TileSheet"), 900, 900, 300, 300);
 	grid.Initialize();
 
 	for (int i{}; i < objData.size(); ++i) {
@@ -385,7 +385,7 @@ void Level1_Unload() {
 void Level1_Parallax() {
 	//Reduce Colour -> To Bright
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	for (GameObject& obj : backgroundObjs) {
+	/*for (GameObject& obj : backgroundObjs) {
 		f32 offset = mainPlayer.GetPosition().x;
 		f32 offsetFirst = offset / 200.f;
 		f32 offsetSecond = offset / 75.f;
@@ -394,7 +394,16 @@ void Level1_Parallax() {
 		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-	}
+	}*/
+
+	f32 offset = mainPlayer.GetPosition().x;
+	f32 offsetFirst = offset / 200.f;
+	f32 offsetSecond = offset / 75.f;
+	f32 offsetThird = offset / 25.f;
+
+	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 }
 

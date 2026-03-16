@@ -13,16 +13,16 @@ Handles all the spritesheet reading and tilemap textures.
 
 void SpriteSheet::Load(const std::string& path, float w, float h)
 {
-    tex.Load_Image(path, w, h);
+    go_texture.Load_Image(path, w, h);
 
-    sheetW = tex.Get_Image_Width();
-    sheetH = tex.Get_Image_Height();
+    sheetW = static_cast<int>(go_texture.Get_Image_Width());
+    sheetH = static_cast<int>(go_texture.Get_Image_Height());
 
 }
 
 void SpriteSheet::Slice(Texture t)
 {
-    tex = t;
+    go_texture = t;
     slices.clear(); // reset
 
     // rows and column slicing bro

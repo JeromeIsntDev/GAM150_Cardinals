@@ -51,8 +51,8 @@ void SaveGameObjectToFilepath(std::string filepathSave, std::vector<GameObject*>
 bool IsEditorActive();
 bool IsUsingSaveFile();
 
-int& const EditorTileTag();
-int& const EditorTileSlice();
+int& EditorTileTag();
+int& EditorTileSlice();
 void ChangeTileTag();
 void ChangeTileSlice();
 

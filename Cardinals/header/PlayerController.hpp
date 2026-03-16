@@ -68,7 +68,7 @@ public:
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
 
-	int	gridCollisionFlag;
+	int	gridCollisionFlag{};
 
 	void InitializePlayer(int health, f32 moveSpeed, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos, bool gOver);
 

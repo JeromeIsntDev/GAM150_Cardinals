@@ -128,7 +128,7 @@ void GameObject::SetMesh(AEGfxVertexList* const objectmesh)
 
 void GameObject::SetTexture(Texture* const texture)
 {
-	tex = texture;
+	this->go_texture = texture;
 }
 
 void GameObject::SetSlice(int uvSlice)
@@ -155,7 +155,7 @@ bool GameObject::HoverMesh(s32 mouseX, s32 mouseY) const
 void GameObject::Draw() const
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxTextureSet(tex->Get_Image(), 0.f, 0.f);
+	AEGfxTextureSet(go_texture->Get_Image(), 0.f, 0.f);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
@@ -163,7 +163,7 @@ void GameObject::Draw() const
 void GameObject::DrawSprite(f32 offX, f32 offY) const
 {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxTextureSet(tex->Get_Image(), offX, offY);
+	AEGfxTextureSet(go_texture->Get_Image(), offX, offY);
 	AEGfxSetTransform(GetTransform().m);
 	AEGfxMeshDraw(mesh, AE_GFX_MDM_TRIANGLES);
 }
@@ -211,14 +211,11 @@ void GameObject::DebugDraw() const
 		break;
 	}
 
-	AEMtx33 transform, trans, rot, scl;
-
-	AEMtx33Trans(&trans, globalPosition.x, globalPosition.y);
-	AEMtx33Rot(&rot, globalRotation);
+	AEMtx33 transform, scl;
 	AEMtx33Scale(&scl, scale.x, scale.y);
 
-	AEMtx33Concat(&transform, &rot, &scl);
-	AEMtx33Concat(&transform, &trans, &transform);
+	AEMtx33Concat(&transform, &mtx_rotation, &scl);
+	AEMtx33Concat(&transform, &mtx_translation, &transform);
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	AEGfxSetTransform(transform.m);
