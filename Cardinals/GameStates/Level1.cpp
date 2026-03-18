@@ -14,6 +14,7 @@
 void Level1_EditorUpdate();
 void Level1_EditorDraw();
 void Level1_Parallax();
+void Tutorial();
 //---------------------!FORWARD DECLERATIONS---------------------------//
 
 
@@ -56,6 +57,9 @@ namespace {
 
 	Grid grid;
 	Player mainPlayer;
+
+	//TUTORIAL VARIABLES
+	int checkPoints;
 }
 
 void Level1_Load() {
@@ -152,6 +156,8 @@ void Level1_Load() {
 void Level1_Initialize()
 {
 	PRINT("[DEBUG | LEVEL] => Initialize: %s", "Level 1\n");
+
+	checkPoints = 0;
 
 	playerEffect.Init();
 	gravityEffect.Init();
@@ -357,6 +363,8 @@ void Level1_Draw() {
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
 
+	if(!pauseMenu->IsActive() && !gameOverMenu->IsActive())Tutorial();
+
 	Level1_EditorDraw();
 }
 
@@ -385,17 +393,6 @@ void Level1_Unload() {
 void Level1_Parallax() {
 	//Reduce Colour -> To Bright
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	/*for (GameObject& obj : backgroundObjs) {
-		f32 offset = mainPlayer.GetPosition().x;
-		f32 offsetFirst = offset / 200.f;
-		f32 offsetSecond = offset / 75.f;
-		f32 offsetThird = offset / 25.f;
-
-		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-	}*/
-
 	f32 offset = mainPlayer.GetPosition().x;
 	f32 offsetFirst = offset / 200.f;
 	f32 offsetSecond = offset / 75.f;
@@ -442,7 +439,6 @@ void Level1_EditorUpdate() {
 		}
 	}
 }
-
 
 void Level1_EditorDraw() {
 	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
@@ -529,4 +525,79 @@ void Level1_EditorDraw() {
 		mainPlayer.DebugDraw();
 		DrawDebugObjects(grid.objs);
 	}
+}
+
+void Tutorial() {
+
+	digipenFont.Change_Text_Color(Colors::White);
+	if (mainPlayer.GetPosition().x > -200.f) {
+		switch (checkPoints) {
+		case 0:
+			if (mainPlayer.GetPosition().x > -200.f) ++checkPoints;
+			break;
+		case 1:
+			digipenFont.Input_Text("Avoid the CANDY CORN!!!");
+			digipenFont.Draw_Text(0.f, 50.f);
+			if (mainPlayer.GetPosition().x > 35.f) ++checkPoints;
+			break;
+		case 2:
+			digipenFont.Input_Text("Touch the GRAVITY CHANGERS!");
+			digipenFont.Draw_Text(0.f, 50.f);
+			if (mainPlayer.GetPosition().y > 100.f) {
+				++checkPoints;
+			}
+			else if (mainPlayer.GetPosition().x > 375.f) {
+				checkPoints = 10;
+			}
+			break;
+		case 3:
+			digipenFont.Input_Text("You can move along the ceiling!");
+			digipenFont.Draw_Text(150.f, 75.f);
+			if (mainPlayer.GetPosition().x > 450.f) ++checkPoints;
+			break;
+		case 4:
+			digipenFont.Input_Text("Touch the COTTON PORTAL and go to");
+			digipenFont.Draw_Text(350.f, 45.f);
+			digipenFont.Input_Text("the next level!");
+			digipenFont.Draw_Text(350.f, 15.f);
+			break;
+		case 10:
+			digipenFont.Input_Text("Or don't touch them...");
+			digipenFont.Draw_Text(0.f, 50.f);
+			if (mainPlayer.GetPosition().y > 100.f) {
+				checkPoints = 3;
+			}
+			else if (mainPlayer.GetPosition().x > 450.f) {
+				checkPoints = 4;
+			}
+			break;
+		default:
+			checkPoints = 0;
+			break;
+		}
+	}
+	else {
+		switch (mainPlayer.GetPlayerHealth()) {
+		case 3:
+			
+			digipenFont.Input_Text("Welcome to Cardinals!");
+			digipenFont.Draw_Text(-400.f, 175.f);
+			digipenFont.Input_Text("Use 'A' and 'D' to move left and right.");
+			digipenFont.Draw_Text(-400.f, 145.f);
+			digipenFont.Input_Text("Use 'L-Shift' to sprint.");
+			digipenFont.Draw_Text(-400.f, 115.f);
+			digipenFont.Input_Text("Use 'Space' to jump.");
+			digipenFont.Draw_Text(-400.f, 85.f);
+			break;
+		case 2:
+			digipenFont.Input_Text("Oops! Try Again!");
+			digipenFont.Draw_Text(-400.f, 100.f);
+			break;
+		case 1:
+			digipenFont.Input_Text("Umm... You can do it! ...");
+			digipenFont.Draw_Text(-400.f, 100.f);
+			break;
+		};
+	}
+	digipenFont.Change_Text_Color(Colors::White);
 }
