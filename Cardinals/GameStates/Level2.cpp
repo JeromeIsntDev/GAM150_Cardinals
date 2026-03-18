@@ -71,7 +71,7 @@ void Level2_Load() {
 
 	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level2_GameObjects.json");
 
-	grid.Load(go_texture.Get("TileSheet"), 900, 900, 300, 300);
+	grid.Load(go_texture.Get("TileSheet"), 900, 1200, 300, 300);
 	grid.Initialize();
 	for (int i{}; i < objData.size(); ++i) {
 		objData[i].SetMesh(grid.tileMesh);

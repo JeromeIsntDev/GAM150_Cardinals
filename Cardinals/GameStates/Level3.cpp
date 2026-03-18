@@ -70,7 +70,7 @@ void Level3_Load() {
 	memoryManager.AddFont(&pauseTitleFont);
 
 	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level3_GameObjects.json");
-	grid.Load(tex.Get("TileSheet"), 900, 900, 300, 300);
+	grid.Load(tex.Get("TileSheet"), 900, 1200, 300, 300);
 	grid.Initialize();
 	for (int i{}; i < objData.size(); ++i) {
 		objData[i].SetMesh(grid.tileMesh);

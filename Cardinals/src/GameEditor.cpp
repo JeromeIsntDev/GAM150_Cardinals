@@ -138,5 +138,5 @@ void ChangeTileSlice()
 		--editor_tileSlice;
 	}
 
-	editor_tileSlice = static_cast<int>(AEClamp(static_cast<f32>(editor_tileSlice), 0.f, 8.f));
+	editor_tileSlice = static_cast<int>(AEClamp(static_cast<f32>(editor_tileSlice), 0.f, 11.f));
 }

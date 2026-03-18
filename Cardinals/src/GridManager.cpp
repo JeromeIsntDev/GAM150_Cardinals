@@ -39,7 +39,7 @@ void Grid::Initialize()
 
 void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH) 
 {
-	tileMesh = RectMeshCenterSliced(3, 3);
+	tileMesh = RectMeshCenterSliced(4, 3);
 	standardMesh = RectMeshCenter();
 
 	if (sheet) {

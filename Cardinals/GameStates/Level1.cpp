@@ -19,7 +19,7 @@ void Level1_Parallax();
 
 namespace {
 	AEGfxVertexList* squareMesh;
-	AEGfxVertexList* tileMesh;
+	//AEGfxVertexList* tileMesh;
 	Text digipenFont, pauseTitleFont;
 
 	//PLAYER VARIABLES
@@ -65,9 +65,8 @@ void Level1_Load() {
 	digipenFont.Input_Text("Level 1");
 	digipenFont.Change_Text_Color(Colors::Black);
 
-	// bro i'll deak w this later too zzz
-	tileMesh = RectMeshCenterSliced(3,3);
 	squareMesh = RectMeshCenter();
+
 	//tempUI.InitTooltipFont(Fonts::Main, 30.f);
 	//playerEffectTexture.Load_Image(Images::CandyBall);
 	playerTexture[0].Load_Image(Images::Player);
@@ -126,7 +125,6 @@ void Level1_Load() {
 
 	if (!memoryManager.meshes.empty()) memoryManager.meshes.clear();
 	memoryManager.AddMesh(&squareMesh);
-	memoryManager.AddMesh(&tileMesh);
 
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&digipenFont);
@@ -134,11 +132,11 @@ void Level1_Load() {
 
 	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
 
-	grid.Load(go_texture.Get("TileSheet"), 900, 900, 300, 300);
+	// bro
+	grid.Load(go_texture.Get("TileSheet"), 900, 1200, 300, 300);
 	grid.Initialize();
 
 	for (int i{}; i < objData.size(); ++i) {
-		objData[i].SetMesh(grid.tileMesh);
 		objData[i].SetTexture(&grid.tileTexture);
 
 		AEVec2& pos = objData[i].GetPosition();
@@ -516,6 +514,18 @@ void Level1_EditorDraw() {
 			break;
 		case 8:
 			digipenFont.Input_Text("Bottom-Right");
+			break;
+		case 9:
+			digipenFont.Input_Text("9");
+			break;
+		case 10:
+			digipenFont.Input_Text("10");
+			break;
+		case 11:
+			digipenFont.Input_Text("11");
+			break;
+		case 12:
+			digipenFont.Input_Text("12");
 			break;
 		}
 		digipenFont.Draw_Text_Corner(15.f, -430.f);
