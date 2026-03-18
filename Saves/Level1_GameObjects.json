@@ -88,7 +88,7 @@
       "scalex": 50.0,
       "scaley": 50.0,
       "typetag": 0,
-      "tileslice": 4
+      "tileslice": 9
     },
     {
       "posx": -775.0,
@@ -1888,7 +1888,7 @@
       "scalex": 50.0,
       "scaley": 50.0,
       "typetag": 0,
-      "tileslice": 4
+      "tileslice": 10
     },
     {
       "posx": 775.0,

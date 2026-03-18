@@ -516,13 +516,13 @@ void Level1_EditorDraw() {
 			digipenFont.Input_Text("Bottom-Right");
 			break;
 		case 9:
-			digipenFont.Input_Text("9");
+			digipenFont.Input_Text("Connector 1");
 			break;
 		case 10:
-			digipenFont.Input_Text("10");
+			digipenFont.Input_Text("Connector 2");
 			break;
 		case 11:
-			digipenFont.Input_Text("11");
+			digipenFont.Input_Text("Connector 3");
 			break;
 		}
 		digipenFont.Draw_Text_Corner(15.f, -430.f);
