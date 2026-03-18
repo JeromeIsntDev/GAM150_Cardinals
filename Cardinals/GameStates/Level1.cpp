@@ -524,9 +524,6 @@ void Level1_EditorDraw() {
 		case 11:
 			digipenFont.Input_Text("11");
 			break;
-		case 12:
-			digipenFont.Input_Text("12");
-			break;
 		}
 		digipenFont.Draw_Text_Corner(15.f, -430.f);
 
