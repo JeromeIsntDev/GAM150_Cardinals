@@ -84,7 +84,7 @@ public:
 
 	bool HoverMesh(s32 mouseX, s32 mouseY) const;
 
-	Texture* GetTexture() const { return go_texture; }
+	Texture* GetTexture() const;
 	AEMtx33 GetTransform() const;
 
 	// for UI, updates behavior

@@ -346,17 +346,6 @@ void Level2_Unload() {
 void Level2_Parallax() {
 	//Reduce Colour -> To Bright
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	/*for (GameObject& obj : backgroundObjs) {
-		f32 offset = mainPlayer.GetPosition().x;
-		f32 offsetFirst = offset / 200.f;
-		f32 offsetSecond = offset / 75.f;
-		f32 offsetThird = offset / 25.f;
-
-		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-	}*/
-
 	f32 offset = mainPlayer.GetPosition().x;
 	f32 offsetFirst = offset / 200.f;
 	f32 offsetSecond = offset / 75.f;
