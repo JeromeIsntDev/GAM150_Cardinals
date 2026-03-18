@@ -79,48 +79,45 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	f32 moveSpeed{ 300.f };
 	bool isMoving{ false };
 	bool isSprint{ false };
-	if (input.isKeyPressed(AEVK_D)) {
-		if (canMoveRight) {
-			switch (dir) {
-			case GravityDirection::Up:
-			case GravityDirection::Down:
-				p_velocityVector.x = 1.f * p_moveSpeed * dt;
-				p_currPos.x += p_velocityVector.x;
-				p_velocityVector.x = 0.f;
-				break;
-			case GravityDirection::Left:
-			case GravityDirection::Right:
-				p_velocityVector.y = -1.f * p_moveSpeed * dt;
-				p_currPos.y += p_velocityVector.y;
-				break;
-			default:
-				break;
+
+	switch (dir) {
+		case GravityDirection::Left:
+		case GravityDirection::Right:
+			if (canMoveRight) {
+				if (input.isKeyPressed(AEVK_S)) {
+					p_velocityVector.y = -1.f * p_moveSpeed * dt;
+					p_currPos.y += p_velocityVector.y;
+					p_Scale.x = 50.f;
+				}
 			}
-		}
-		p_Scale.x = 50.f;
-		isMoving = true;
-	}
-	if (input.isKeyPressed(AEVK_A)) {
-		//p_velocityVector.x = 0.f;
-		if (canMoveLeft) {
-			switch (dir) {
-			case GravityDirection::Up:
-			case GravityDirection::Down:
-				p_velocityVector.x = -1.f * p_moveSpeed * dt;
-				p_currPos.x += p_velocityVector.x;
-				p_velocityVector.x = 0.f;
-				break;
-			case GravityDirection::Left:
-			case GravityDirection::Right:
-				p_velocityVector.y = 1.f * p_moveSpeed * dt;
-				p_currPos.y += p_velocityVector.y;
-				break;
-			default:
-				break;
+			if (canMoveLeft) {
+				if (input.isKeyPressed(AEVK_W)) {
+					p_velocityVector.y = 1.f * p_moveSpeed * dt;
+					p_currPos.y += p_velocityVector.y;
+					p_Scale.x = -50.f;
+				}
 			}
-		}
-		p_Scale.x = -50.f;
-		isMoving = true;
+			isMoving = true;
+			break;
+		case GravityDirection::Up:
+		case GravityDirection::Down:
+			if (canMoveRight) {
+				if (input.isKeyPressed(AEVK_D)) {
+					p_velocityVector.x = 1.f * p_moveSpeed * dt;
+					p_currPos.x += p_velocityVector.x;
+					p_velocityVector.x = 0.f;
+					p_Scale.x = 50.f;
+				}
+			}
+			if (canMoveLeft) {
+				if (input.isKeyPressed(AEVK_A)) {
+					p_velocityVector.x = -1.f * p_moveSpeed * dt;
+					p_currPos.x += p_velocityVector.x;
+					p_velocityVector.x = 0.f;
+					p_Scale.x = -50.f;
+				}
+			}
+			isMoving = true;
 	}
 	if (input.isKeyPressed(AEVK_LSHIFT) && isMoving) {
 		isSprint = true;
