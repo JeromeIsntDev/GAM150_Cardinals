@@ -129,7 +129,7 @@ public:
 
 	void SetupPauseMenu();
 	void SetupSettingsMenu();
-	void SetupLevelMenu(int level);
+	void SetupLevelMenu();
 	void UpdateGameOverMenu(f32 time, int health);
 };
 

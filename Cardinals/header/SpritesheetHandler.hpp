@@ -26,9 +26,9 @@ struct TileUV
 class SpriteSheet 
 {
 public:
-    int sheetW, sheetH, tileW, tileH;
-    int rows, cols;
-    float uvW, uvH;
+    int sheetW{}, sheetH{}, tileW{}, tileH{};
+    int rows{}, cols{};
+    float uvW{}, uvH{};
     Texture go_texture{};
 
     std::vector<TileUV> slices; // all the sliced up uv rects

@@ -105,7 +105,7 @@ Overlay::Overlay(AEGfxVertexList* mesh, GAMEMODE mode, int levelIndex,
 			break;
 
 		case LEVEL:
-			SetupLevelMenu(_gameLevel);
+			SetupLevelMenu();
 			break;
 	}
 
@@ -336,7 +336,7 @@ void Overlay::SetupSettingsMenu()
 	AddChild(prevBtn);
 }
 
-void Overlay::SetupLevelMenu(int level)
+void Overlay::SetupLevelMenu()
 {
 	// level pause menu
 	_titleText = "GAME OVER";
