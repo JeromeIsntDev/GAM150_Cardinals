@@ -205,6 +205,10 @@ void GameObject::DebugDraw() const
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
 		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
+	case GameObjectTag::Obstacle:
+		AEGfxSetColorToAdd(.65f, 0.f, 0.f, 0.f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
+		break;
 	default:
 		AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 0.5f);
 		AEVec2Set(&scale, globalScale.x, globalScale.y);
