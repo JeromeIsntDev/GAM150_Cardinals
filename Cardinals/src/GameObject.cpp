@@ -17,6 +17,11 @@ void GameObject::ConcatTransform()
 	AEMtx33Concat(&mtx_transform, &mtx_translation, &mtx_transform);
 }
 
+Texture* GameObject::GetTexture() const
+{
+	return go_texture;
+}
+
 AEMtx33 GameObject::GetTransform() const
 {
 	return mtx_transform;
