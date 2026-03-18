@@ -217,6 +217,15 @@ void Level1_Initialize()
 			&nextTexture, &pauseTitleFont, &digipenFont 
 		});
 	isGameOver = 0;
+
+	for (GameObject* obj : grid.objs) {
+		//obj->Draw();
+		if (obj->_tag == GameObjectTag::GravUp ||
+			obj->_tag == GameObjectTag::GravDown ||
+			obj->_tag == GameObjectTag::GravLeft ||
+			obj->_tag == GameObjectTag::Gravright)
+			gravityEffect.ResizeGrav();
+	}
 }
 
 void Level1_Update() {
@@ -325,7 +334,7 @@ void Level1_Update() {
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
-
+	playerEffect.ResizePlayer(mainPlayer.isSprint);
 }
 
 void Level1_Draw() {

@@ -171,6 +171,14 @@ void Level2_Initialize()
 		live->UpdatePosition(AEVec2{ -70.f + i * 70.f, 380.f });
 	}
 
+	for (GameObject* obj : grid.objs) {
+		//obj->Draw();
+		if (obj->_tag == GameObjectTag::GravUp ||
+			obj->_tag == GameObjectTag::GravDown ||
+			obj->_tag == GameObjectTag::GravLeft ||
+			obj->_tag == GameObjectTag::Gravright)
+			gravityEffect.ResizeGrav();
+	}
 }
 
 void Level2_Update() {
@@ -286,11 +294,10 @@ void Level2_Update() {
 
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
-
+	playerEffect.ResizePlayer(mainPlayer.isSprint);
 }
 
 void Level2_Draw() {
-	//playerEffect.DrawParticle();
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
 	for (GameObject& obj : backgroundObjs) {
 		obj.Draw();

@@ -77,8 +77,8 @@ void Player::PlayerJump(f32 const& dt, GravityDirection& dir) {
 
 void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	f32 moveSpeed{ 300.f };
-	bool isMoving{ false };
-	bool isSprint{ false };
+	isMoving = false;
+	isSprint = false;
 
 	switch (dir) {
 		case GravityDirection::Left:
