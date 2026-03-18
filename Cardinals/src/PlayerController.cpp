@@ -491,7 +491,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 
 		if (obj->_tag == GameObjectTag::Win) {
 			//win gate hit
-			bgm.PlayAudio("HITWIN", AudioType::SFX, 1.f, 0);
+			bgm.PlayAudio("WINOVERLAY", AudioType::MUSIC, 1.f, -1);
 			std::cout << "Win gate hit" << std::endl;
 			p_velocityVector = { 0.f, 0.f };
 			p_Scale = { 50.f,50.f };
@@ -499,38 +499,55 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 			gameOver = true;
 		}
 		else if (obj->_tag == GameObjectTag::GravUp) {
+			if (!audioPlayed) {
+				bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
+				audioPlayed = true;
+			}
 			std::cout << "grav up" << std::endl;
 			grav = Player::GravityDirection::Up;
 			UpdateRotation(0.f);
 			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravDown) {
+			if (!audioPlayed) {
+				bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
+				audioPlayed = true;
+			}
 			grav = Player::GravityDirection::Down;
 			UpdateRotation(0.f);
 			p_Scale.y = 50.f;
 		}
 		else if (obj->_tag == GameObjectTag::GravLeft) {
+			if (!audioPlayed) {
+				bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
+				audioPlayed = true;
+			}
 			grav = Player::GravityDirection::Left;
 			p_Scale.y = 50.f;
 			UpdateRotation(-(PI / 2.f));
 		}
 		else if (obj->_tag == GameObjectTag::Gravright) {
+			if (!audioPlayed) {
+				bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
+				audioPlayed = true;
+			}
 			grav = Player::GravityDirection::Right;
 			UpdateRotation(-(PI / 2.f));
 			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::Obstacle) {
-			bgm.PlayAudio("HIT", AudioType::SFX, 1.f, 0);
 			std::cout << "obstacle hit" << std::endl;
 			UpdateRotation(0.f);
 			p_playerHealth--;
 			if (p_playerHealth <= 0) {
+				bgm.PlayAudio("FAILOVERLAY", AudioType::MUSIC, 1.f, -1);
 				p_velocityVector = { 0.f, 0.f };
 				p_Scale = { 50.f,50.f };
 				grav = GravityDirection::Down;
 				gameOver = true;
 			}
 			else {
+				bgm.PlayAudio("HIT", AudioType::SFX, 1.f, 0);
 				p_currPos = p_previousPos;
 				grav = GravityDirection::Down;
 				p_velocityVector = { 0.f, 0.f };

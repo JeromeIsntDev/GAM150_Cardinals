@@ -11,6 +11,8 @@ namespace {
 	std::unique_ptr<Button> backBtn;
 	
 	UIManager uiManager;
+	
+	AudioManager& bgm = AudioManager::Instance();
 }
 
 
@@ -38,6 +40,7 @@ void LevelMenu_Load() {
 void LevelMenu_Initialize()
 {
 	PRINT("Initialize: %s", "Level Menu\n");
+	bgm.PlayAudio("LEVEL", AudioType::MUSIC, 1.f, -1);
 
 	buttonMesh = RectMeshCenter();
 	lvl1Btn = std::make_unique<Button>(buttonMesh, AEVec2{ -300.f, 50.f }, 0.f, AEVec2{ buttonTexture.Get_Image_Width(), buttonTexture.Get_Image_Height() });
@@ -150,6 +153,7 @@ void LevelMenu_Free() {
 	PRINT("Free: %s", "Level Menu\n");
 	textToUse.Free_Font();
 	uiManager.Exit();
+	bgm.StopAudio();
 }
 
 void LevelMenu_Unload() {

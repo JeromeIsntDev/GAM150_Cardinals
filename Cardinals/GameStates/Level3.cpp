@@ -270,6 +270,7 @@ void Level3_Update() {
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid, mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
+	mainPlayer.audioPlayed = mainPlayer.hasCollided;
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 }

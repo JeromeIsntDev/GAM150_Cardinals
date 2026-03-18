@@ -7,6 +7,9 @@ CLICK, ../../Assets/Music/btn_click.wav
 WALK, ../../Assets/Music/walk.wav
 JUMP, ../../Assets/Music/jump.wav
 HIT, ../../Assets/Music/obstacle_hit.wav
-HITWIN, ../../Assets/Music/wingate_hit.wav
 PICKUP, ../../Assets/Music/pick_up.wav
 NEXT, ../../Assets/Music/next.wav
+GRAVITY, ../../Assets/Music/gravity.wav
+LEVEL, ../../Assets/Music/level_bg.wav
+FAILOVERLAY, ../../Assets/Music/fail_overlay.wav
+WINOVERLAY, ../../Assets/Music/win_overlay.wav
