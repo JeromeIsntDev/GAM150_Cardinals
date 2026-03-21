@@ -86,6 +86,10 @@ void LevelMenu_Initialize()
 	lvl4Btn->SetTexture(&buttonTexture);
 	lvl4Btn->SetActive(true);
 	lvl4Btn->SetInteractable(true);
+	lvl4Btn->SetOnClick([]() {
+		PRINT("Level 4 Pressed\n");
+		UpdateGameManagerState(GameStateEnum::Level4);
+		});
 
 
 	lvl5Btn = std::make_unique<Button>(buttonMesh,

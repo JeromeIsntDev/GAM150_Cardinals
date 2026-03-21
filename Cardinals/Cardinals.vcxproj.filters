@@ -34,6 +34,7 @@
     <ClCompile Include="src\SpritesheetHandler.cpp" />
     <ClCompile Include="GameStates\GameOverlayUI.cpp" />
     <ClCompile Include="src\Animator.cpp" />
+    <ClCompile Include="GameStates\Level4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -108,6 +109,7 @@
     <ClInclude Include="header\SpritesheetHandler.hpp" />
     <ClInclude Include="GameStates\GameOverlayUI.hpp" />
     <ClInclude Include="header\Animator.hpp" />
+    <ClInclude Include="GameStates\Level4.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />
