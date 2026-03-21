@@ -70,9 +70,9 @@ public:
 	void SetVolume(AudioType type, f32 vol);
 
     //Group
-    void PauseAudio();
-    void ResumeAudio();
-    void StopAudio();
+    void PauseAudio() const;
+    void ResumeAudio() const;
+    void StopAudio() const;
 
     // text reading for asset loading lol
     void LoadManifest(const std::string& path);

@@ -13,3 +13,4 @@ GRAVITY, ../../Assets/Music/gravity.wav
 LEVEL, ../../Assets/Music/level_bg.wav
 FAILOVERLAY, ../../Assets/Music/fail_overlay.wav
 WINOVERLAY, ../../Assets/Music/win_overlay.wav
+GAMEPLAY, ../../Assets/Music/gameplay.wav

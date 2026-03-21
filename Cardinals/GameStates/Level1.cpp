@@ -54,6 +54,7 @@ namespace {
 
 	InputHandler& input = InputHandler::GetInstance();
 	TextureManager& go_texture = TextureManager::GetInstance();
+	AudioManager& bgm = AudioManager::Instance();
 
 	Grid grid;
 	Player mainPlayer;
@@ -154,6 +155,8 @@ void Level1_Load() {
 void Level1_Initialize()
 {
 	PRINT("[DEBUG | LEVEL] => Initialize: %s", "Level 1\n");
+	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
+	bgm.SetVolume(AudioType::MUSIC, 0.8f);
 
 	checkPoints = 0;
 
@@ -235,6 +238,7 @@ void Level1_Update() {
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
 		{
+			bgm.PauseAudio();
 			isGamePaused = !isGamePaused;
 			pauseMenu->SetActive(isGamePaused);
 		}
@@ -253,6 +257,7 @@ void Level1_Update() {
 	{
 		if (AEInputCheckTriggered(AEVK_O) && !isGameOver)
 		{
+			bgm.PauseAudio();
 			isGameOver = true;
 			isGamePaused = false;
 			gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
@@ -286,6 +291,7 @@ void Level1_Update() {
 	AEGfxSetTransparency(1.f);
 
 	if (!isGamePaused && !isGameOver) {
+		bgm.ResumeAudio();
 		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	}
 
@@ -381,6 +387,7 @@ void Level1_Free() {
 
 	playerEffect.Clear();
 	gravityEffect.Clear();
+	bgm.StopAudio();
 }
 
 void Level1_Unload() {

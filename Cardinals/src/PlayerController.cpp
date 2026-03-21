@@ -491,6 +491,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 
 		if (obj->_tag == GameObjectTag::Win) {
 			//win gate hit
+			bgm.StopAudio();
 			bgm.PlayAudio("WINOVERLAY", AudioType::MUSIC, 1.f, -1);
 			std::cout << "Win gate hit" << std::endl;
 			p_velocityVector = { 0.f, 0.f };
@@ -540,6 +541,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 			UpdateRotation(0.f);
 			p_playerHealth--;
 			if (p_playerHealth <= 0) {
+				bgm.StopAudio();
 				bgm.PlayAudio("FAILOVERLAY", AudioType::MUSIC, 1.f, -1);
 				p_velocityVector = { 0.f, 0.f };
 				p_Scale = { 50.f,50.f };

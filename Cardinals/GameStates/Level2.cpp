@@ -21,6 +21,7 @@ namespace {
 	ParticleEffect gravityEffect;
 
 	TextureManager& go_texture = TextureManager::GetInstance();
+	AudioManager& bgm = AudioManager::Instance();
 
 	Texture *placeholderTexture;
 	Texture verticalPlatformTex;
@@ -88,6 +89,8 @@ void Level2_Load() {
 void Level2_Initialize()
 {
 	PRINT("Initialize: %s", "Level 2\n");
+	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
+	bgm.SetVolume(AudioType::MUSIC, 0.8f);
 
 	playerEffect.Init();
 	gravityEffect.Init();
@@ -188,6 +191,7 @@ void Level2_Update() {
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
 		{
+			bgm.PauseAudio();
 			isGamePaused = !isGamePaused;
 			pauseMenu->SetActive(isGamePaused);
 		}
@@ -205,6 +209,7 @@ void Level2_Update() {
 	{
 		if (AEInputCheckTriggered(AEVK_O) && !isGameOver)
 		{
+			bgm.PauseAudio();
 			isGameOver = true;
 			isGamePaused = false;
 			gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
@@ -238,6 +243,7 @@ void Level2_Update() {
 	AEGfxSetTransparency(1.f);
 
 	if (!isGamePaused && !isGameOver) {
+		bgm.ResumeAudio();
 		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	}
 
@@ -338,6 +344,7 @@ void Level2_Free() {
 	PRINT("Free: %s", "Level 2\n");
 	playerEffect.Clear();
 	gravityEffect.Clear();
+	bgm.StopAudio();
 }
 
 void Level2_Unload() {

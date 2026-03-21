@@ -116,19 +116,19 @@ void AudioManager::SetVolume(AudioType type, f32 vol)
 	AEAudioSetGroupVolume(sfxGroup, masterVol * sfxVol);
 }
 
-void AudioManager::PauseAudio()
+void AudioManager::PauseAudio() const
 {
 	AEAudioPauseGroup(musicGroup);
 	//AEAudioPauseGroup(sfxGroup);
 }
 
-void AudioManager::ResumeAudio()
+void AudioManager::ResumeAudio() const
 {
 	AEAudioResumeGroup(musicGroup);
 	//AEAudioResumeGroup(sfxGroup);
 }
 
-void AudioManager::StopAudio()
+void AudioManager::StopAudio() const
 {
 	AEAudioStopGroup(musicGroup);
 	//AEAudioStopGroup(sfxGroup);
