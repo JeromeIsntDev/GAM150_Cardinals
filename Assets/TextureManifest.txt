@@ -26,8 +26,12 @@ Background, ../../Assets/Textures/MenuBG.png, 1600, 900
 Placeholder, ../../Assets/Textures/MissingTexture.png, 1600, 900
 Button, ../../Assets/Textures/Button.png, 200, 200
 Lollipop, ../../Assets/Textures/Lollipop.png, 100, 100
-Candy, ../../Assets/Textures/Candy.png, 50, 50 CandyBall, ../../Assets/Textures/Candy_Ball.png, 50, 50
+Candy, ../../Assets/Textures/Candy.png, 50, 50 
 CandyGrey, ../../Assets/Textures/Candy_Grey.png, 50, 50
+Candy_Corn1, ../../Assets/Textures/Candy_Corn1.png, 50, 50
+Cotton_Candy, ../../Assets/Textures/Cotton_Candy.png, 50, 50
+Macaron, ../../Assets/Textures/Macaron.png, 50, 50
+Sweet, ../../Assets/Textures/Sweet.png, 50, 50
 # game bg
 TileSheet, ../../Assets/Textures/TileSheet.png, 900, 1200
 BG_BACKMOST, ../../Assets/Textures/BG_BACKMOST.png, 1600, 900

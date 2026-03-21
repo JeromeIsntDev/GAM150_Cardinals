@@ -14,24 +14,38 @@
 #include <cmath>
 
 ParticleEffect::ParticleEffect()
-    : circleMesh(nullptr), playerPrevPos{ 0.f,0.f }, gravityParticle{0}, playerParticle{15}
+    : circleMesh(nullptr), squareMesh(nullptr), playerPrevPos{ 0.f,0.f }, gravityParticle{ 0 }, playerParticle{ 15 }
 
 {
     for (int i = 0; i < MAX_PARTICLES; ++i)
     {
         particles[i] = {};
     }
+    for (int j = 0; j < 4; ++j)
+    {
+        imageTextures[j] = nullptr;
+    }
 }
 
 void ParticleEffect::Init()
 {
     circleMesh = CircleMesh(16);
+    squareMesh = RectMeshCenter();
+
+    imageTextures[0] = tex.Get("Candy_Corn1");
+    imageTextures[1] = tex.Get("Cotton_Candy");
+    imageTextures[2] = tex.Get("Macaron");
+    imageTextures[3] = tex.Get("Sweet");    
+    
     for (int i = 0; i < MAX_PARTICLES; i++)
     {
         particles[i].flag = false;
+        particles[i].alternate = (i % 4 == 0);
         particles[i].pMesh = circleMesh;
+        if (particles[i].alternate) {
+            particles[i].candy.SetMesh(squareMesh);
+        }
     }
-
 }
 
 void ParticleEffect::Emit(AEVec2 position)
@@ -68,6 +82,15 @@ void ParticleEffect::Emit(AEVec2 position)
         p->dirCurr = oppositeDir + (((float)rand() / RAND_MAX) - 0.5f) * PI;
         p->speed = 20.f + ((float)rand() / RAND_MAX) * 40.f;
         p->color = palette[rand() % 6];
+
+        if (p->alternate) {
+            float scale = 0.f;
+            scale = 10.f + ((float)rand() / RAND_MAX) * 5.f;
+            particles[i].candy.SetTexture(imageTextures[rand() % 4]);
+            p->candy.UpdatePosition(p->pos);
+            p->candy.UpdateScale({ scale, scale });
+        }
+
         playerParticle--;
         break; // spawn one per frame to stagger them
     }
@@ -126,6 +149,13 @@ void ParticleEffect::Emit(AEVec2 position, GameObjectTag grav)
         p->dirCurr = baseDir;
         p->speed = 2.f + ((float)rand() / RAND_MAX) * 10.f;
         p->color = palette[rand() % 6];
+
+        if (p->alternate) {
+            particles[i].candy.SetTexture(imageTextures[rand() % 4]);
+            p->candy.UpdatePosition(p->pos);
+            p->candy.UpdateScale({ p->scale.x * 2, p->scale.y * 2 });
+        }
+
         gravityParticle--;
         break; // spawn one per frame to stagger them
     }
@@ -143,6 +173,10 @@ void ParticleEffect::Update(float dt, AEVec2 pos, GameObjectTag grav)
         p->alpha = p->lifeRemaining / p->lifetime;
         p->pos.x += cosf(p->dirCurr) * p->speed * dt;
         p->pos.y += sinf(p->dirCurr) * p->speed * dt;
+
+        if (p->alternate) {
+            p->candy.UpdatePosition(p->pos);
+        }
 
         if (p->lifeRemaining <= 0.f) {
             if (p->type == TYPE::PLAYER) {
@@ -179,6 +213,7 @@ void ParticleEffect::DrawParticle()
     {
         ParticleObjInst* p = &particles[i];
         if (!p->flag) continue;
+        if (p->alternate) continue;
 
         AEMtx33 scale, trans;
         AEMtx33Scale(&scale, p->scale.x, p->scale.y);
@@ -194,12 +229,29 @@ void ParticleEffect::DrawParticle()
     // reset state so nothing bleeds into subsequent draws
     AEGfxSetTransparency(1.0f);
     AEGfxSetColorToAdd(0.f, 0.f, 0.f, 0.f);
+
+    for (int i = 0; i < MAX_PARTICLES; i++)
+    {
+        ParticleObjInst* p = &particles[i];
+        if (!p->flag) continue;
+        if (!p->alternate) continue;
+
+        if (p->candy.GetTexture()) {
+            p->candy.Draw();
+        }
+    }
 }
 
 void ParticleEffect::Clear()
 {
-    if (circleMesh)
+    if (circleMesh) {
         AEGfxMeshFree(circleMesh);
+        circleMesh = nullptr;
+    }
+    if (squareMesh) {
+        AEGfxMeshFree(squareMesh);
+        squareMesh = nullptr;
+    }
 
 }
 

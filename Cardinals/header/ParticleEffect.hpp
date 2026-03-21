@@ -29,6 +29,15 @@ static const Color palette[] = {
     Colors::PastelYellow
 };
 
+struct ImageTexture {
+    Texture coffee;
+    Texture candycorn;
+    Texture cottoncandy;
+    Texture macaron;
+    Texture sweet;
+};
+
+
 enum TYPE {
     GRAVITY,
     PLAYER
@@ -48,6 +57,8 @@ struct ParticleObjInst
     AEMtx33				transform;	
     Color               color;
     TYPE                type;
+    bool                alternate;
+    GameObject          candy;
 
 };
 
@@ -55,8 +66,10 @@ class ParticleEffect
 {
 private:
     ParticleObjInst particles[MAX_PARTICLES];
-    AEGfxVertexList* circleMesh;
+    AEGfxVertexList* circleMesh, *squareMesh;
     AEVec2 playerPrevPos;
+    TextureManager& tex = TextureManager::GetInstance();
+    Texture* imageTextures[4];
 
     int gravityParticle;
     int playerParticle;
