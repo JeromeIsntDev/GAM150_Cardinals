@@ -12,6 +12,8 @@
 #include <crtdbg.h> // To check for memory leaks
 #include <AEEngine.h>
 #include <iostream>
+#include <vector>
+#include <string>
 
 //GAME INCLUDES
 /*************************************************************************/
@@ -45,6 +47,11 @@ static LRESULT CALLBACK ImGuiHookWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPA
 	return CallWindowProc(g_OrigWndProc, hWnd, msg, wParam, lParam);
 }
 
+static std::vector<std::string> g_logs;
+
+void AddLog(const std::string& msg) {
+	g_logs.push_back(msg);
+}
 
 static char buffer[128] = "";
 MemoryManager memoryManager;
@@ -120,34 +127,63 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
+		//if log more than 200 items
+		if (g_logs.size() > 200) {
+			g_logs.erase(g_logs.begin());
+		}
 		//command panel logic goes here
 		if (panelOpen) {
 			//change hardcode to smth else later
-			ImGui::SetNextWindowSize(ImVec2(400.f, 300.f), ImGuiCond_FirstUseEver);
+			ImGui::SetNextWindowSize(ImVec2(400.f, 400.f), ImGuiCond_FirstUseEver);
 			ImGui::SetNextWindowPos(ImVec2(850.f, 50.f));
-			ImGui::Begin("Panel");
+			ImGui::Begin("Control Panel");
 			if (ImGui::Button("Main Menu")) {
-				std::cout << "Loading Mainmenu\n";
+				AddLog("Loading Mainmenu");
 				UpdateGameManagerState(GameStateEnum::MainMenu);
-				std::cout << "Mainmenu loaded";
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Load L1")) {
-				std::cout << "loading L1\n";
+				AddLog("Loading Level 1");
 				UpdateGameManagerState(GameStateEnum::Level1);
-				std::cout << "loaded L1\n";
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Load L2")) {
-				std::cout << "loading L2\n";
+				AddLog("Loading Level 2");
 				UpdateGameManagerState(GameStateEnum::Level2);
-				std::cout << "loaded L2\n";
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Load L3")) {
-				std::cout << "loading L3\n";
+				AddLog("Loading Level 3");
 				UpdateGameManagerState(GameStateEnum::Level3);
-				std::cout << "loaded L3\n";
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Load L4")) {
+				AddLog("Loading Level 4");
+				UpdateGameManagerState(GameStateEnum::Level4);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Clear Log")) {
+				g_logs.clear();
+			}
+
+			ImGui::Separator();
+
+			ImGui::BeginChild("LogRegion", ImVec2(0, 120), true);
+
+			for (const auto& log : g_logs) {
+				ImGui::TextUnformatted(log.c_str());
+			}
+
+			// auto-scroll if already at bottom
+			if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
+				ImGui::SetScrollHereY(1.0f);
+			}
+			ImGui::EndChild();
+
+			ImGui::Separator();
+
+			if (ImGui::Button("Test Button")) {
+				AddLog("Functionality Not Added");
 			}
 			ImGui::End();
 		}
