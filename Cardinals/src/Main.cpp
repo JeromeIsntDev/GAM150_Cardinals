@@ -48,10 +48,9 @@ static LRESULT CALLBACK ImGuiHookWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPA
 }
 
 static std::vector<std::string> g_logs;
-
-void AddLog(const std::string& msg) {
-	g_logs.push_back(msg);
-}
+//FORWARD DECLARATION;
+void ControlPanelFunction();
+void AddLog(const std::string& msg);
 
 static char buffer[128] = "";
 MemoryManager memoryManager;
@@ -133,59 +132,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		//command panel logic goes here
 		if (panelOpen) {
-			//change hardcode to smth else later
-			ImGui::SetNextWindowSize(ImVec2(400.f, 400.f), ImGuiCond_FirstUseEver);
-			ImGui::SetNextWindowPos(ImVec2(850.f, 50.f));
-			ImGui::Begin("Control Panel");
-			if (ImGui::Button("Main Menu")) {
-				AddLog("Loading Mainmenu");
-				UpdateGameManagerState(GameStateEnum::MainMenu);
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Load L1")) {
-				AddLog("Loading Level 1");
-				UpdateGameManagerState(GameStateEnum::Level1);
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Load L2")) {
-				AddLog("Loading Level 2");
-				UpdateGameManagerState(GameStateEnum::Level2);
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Load L3")) {
-				AddLog("Loading Level 3");
-				UpdateGameManagerState(GameStateEnum::Level3);
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Load L4")) {
-				AddLog("Loading Level 4");
-				UpdateGameManagerState(GameStateEnum::Level4);
-			}
-			ImGui::SameLine();
-			if (ImGui::Button("Clear Log")) {
-				g_logs.clear();
-			}
-
-			ImGui::Separator();
-
-			ImGui::BeginChild("LogRegion", ImVec2(0, 120), true);
-
-			for (const auto& log : g_logs) {
-				ImGui::TextUnformatted(log.c_str());
-			}
-
-			// auto-scroll if already at bottom
-			if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
-				ImGui::SetScrollHereY(1.0f);
-			}
-			ImGui::EndChild();
-
-			ImGui::Separator();
-
-			if (ImGui::Button("Test Button")) {
-				AddLog("Functionality Not Added");
-			}
-			ImGui::End();
+			ControlPanelFunction();
 		}
 		//render logic for IMGUI
 		ImGui::Render();
@@ -216,4 +163,63 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// free the system
 	AESysExit();
 
+}
+
+void AddLog(const std::string& msg) {
+	g_logs.push_back(msg);
+}
+
+void ControlPanelFunction() {
+	ImGui::SetNextWindowSize(ImVec2(400.f, 400.f), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowPos(ImVec2(850.f, 50.f));
+	ImGui::Begin("Control Panel");
+	if (ImGui::Button("Main Menu")) {
+		AddLog("Loading Mainmenu");
+		UpdateGameManagerState(GameStateEnum::MainMenu);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Load L1")) {
+		AddLog("Loading Level 1");
+		UpdateGameManagerState(GameStateEnum::Level1);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Load L2")) {
+		AddLog("Loading Level 2");
+		UpdateGameManagerState(GameStateEnum::Level2);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Load L3")) {
+		AddLog("Loading Level 3");
+		UpdateGameManagerState(GameStateEnum::Level3);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Load L4")) {
+		AddLog("Loading Level 4");
+		UpdateGameManagerState(GameStateEnum::Level4);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Clear Log")) {
+		g_logs.clear();
+	}
+
+	ImGui::Separator();
+
+	ImGui::BeginChild("LogRegion", ImVec2(0, 120), true);
+
+	for (const auto& log : g_logs) {
+		ImGui::TextUnformatted(log.c_str());
+	}
+
+	// auto-scroll if already at bottom
+	if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) {
+		ImGui::SetScrollHereY(1.0f);
+	}
+	ImGui::EndChild();
+
+	ImGui::Separator();
+
+	if (ImGui::Button("Test Button")) {
+		AddLog("Functionality Not Added");
+	}
+	ImGui::End();
 }
