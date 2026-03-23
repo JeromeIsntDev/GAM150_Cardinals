@@ -271,5 +271,5 @@ void ParticleEffect::ResizeGrav() {
 }
 
 void ParticleEffect::ResizePlayer(bool isSprint) {
-    playerParticle = isSprint ? 50 : 15;
+    playerParticle = isSprint ? 100 : 15;
 }
