@@ -187,6 +187,11 @@ void Level2_Initialize()
 void Level2_Update() {
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
+	if (isGameOver) {
+		if (input.isKeyTriggered(AEVK_R))
+			RestartLevel(UpdateGameManagerState, Level2);
+	}
+
 	if (pauseMenu) //Checks if pauseMenu Exists
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)

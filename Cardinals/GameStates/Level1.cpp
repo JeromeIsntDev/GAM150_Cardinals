@@ -234,6 +234,11 @@ void Level1_Initialize()
 void Level1_Update() {
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
+	if (isGameOver) {
+		if (input.isKeyTriggered(AEVK_R))
+			RestartLevel(UpdateGameManagerState, Level1);
+	}
+
 	if (pauseMenu) //Checks if pauseMenu Exists
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
@@ -296,7 +301,7 @@ void Level1_Update() {
 	}
 
 	if (!IsEditorActive() || IsEditorActive())
-		if (input.isKeyTriggered(AEVK_E))
+		if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_E))
 			ToggleEditorMode();
 
 	Level1_EditorUpdate();
