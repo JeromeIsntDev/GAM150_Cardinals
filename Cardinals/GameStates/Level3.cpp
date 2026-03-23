@@ -1,10 +1,9 @@
-#include "../GameStates/Level3.hpp"
+#include "Level3.hpp"
 #include "GameEditor.hpp"
 
 void Level3_EditorUpdate();
 void Level3_EditorDraw();
 void Level3_Parallax();
-void Level3_Tutorial();
 
 extern bool isGamePaused;
 extern bool isGameOver;
@@ -50,8 +49,6 @@ namespace {
 
 	Grid grid;
 	Player mainPlayer;
-
-	int checkPoints = 0;
 }
 
 void Level3_Load() {
@@ -90,7 +87,6 @@ void Level3_Load() {
 
 void Level3_Initialize()
 {
-	checkPoints = 0;
 	PRINT("Initialize: %s", "Level 3\n");
 	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
 	bgm.SetVolume(AudioType::MUSIC, 0.8f);
@@ -120,7 +116,7 @@ void Level3_Initialize()
 	backgrounds[3] = tex.Get("BG_FRONTMOUNTAIN");
 
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false,
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 75.f, AEGfxGetWinMinY() + 100.f, false);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 75.f, AEGfxGetWinMinY() + 450.f, false);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(playerTexture[0]);
 	mainPlayer.UpdateScale(AEVec2{ 50.f,50.f });
@@ -134,7 +130,7 @@ void Level3_Initialize()
 	pauseMenu = std::make_unique<Overlay>(squareMesh, PAUSE, -1,
 		[]() {isGamePaused = 0; },
 		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
-		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level3); });
+		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level4); });
 
 	pauseMenu->SetTextures(
 		PauseMenuTextures{
@@ -147,10 +143,10 @@ void Level3_Initialize()
 
 	gameOverMenu = std::make_unique<Overlay>(
 		squareMesh,
-		LEVEL, 3,
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); },
+		LEVEL, 4,
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level5); },
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level3); });
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); });
 
 	gameOverMenu->SetTextures(
 		GameOverTextures{
@@ -329,8 +325,6 @@ void Level3_Draw() {
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
 
-	Level3_Tutorial();
-
 	Level3_EditorDraw();
 
 	//PRINT("Draw: %s", "Level 3\n");
@@ -499,14 +493,4 @@ void Level3_EditorDraw() {
 		mainPlayer.DebugDraw();
 		DrawDebugObjects(grid.objs);
 	}
-}
-
-void Level3_Tutorial() {
-	if (checkPoints > 0) return;
-	digipenFont.Change_Text_Color(Colors::White);
-	if (mainPlayer.GetPosition().y > 0.f) ++checkPoints;
-
-	digipenFont.Input_Text("Use 'W' and 'S' to move Vertically!");
-	digipenFont.Draw_Text(-200.f, -375.f);
-	digipenFont.Change_Text_Color(Colors::White);
 }
