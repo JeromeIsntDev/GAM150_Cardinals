@@ -104,8 +104,6 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
 		GridToWorld(&ax, &ay);
 		PRINT("[DEBUG] => Cell World Position: %f, %f\n\n", ax, ay);
 
-		PRINT("[DEBUG] => Cell Tag: %d\n", cell->obj->_tag);
-
 		ChangeTile(cell);
 		return;
 	}
