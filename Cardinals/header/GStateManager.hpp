@@ -11,6 +11,7 @@
 #include "../GameStates/Level1.hpp"
 #include "../GameStates/Level2.hpp"
 #include "../GameStates/Level3.hpp"
+#include "../GameStates/Level4.hpp"
 
 typedef void(*FuncPtr)(void);
 

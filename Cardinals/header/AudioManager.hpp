@@ -30,6 +30,8 @@ namespace Audios
     constexpr const AudioFile HITWIN{ "../../Assets/Music/wingate_hit.wav" };
     constexpr const AudioFile PICKUP{ "../../Assets/Music/pick_up.wav" };
     constexpr const AudioFile NEXT{ "../../Assets/Music/next.wav" };
+    constexpr const AudioFile FAIL_EFFECT{ "../../Assets/Music/next.wav" };
+    constexpr const AudioFile GRAVITY{ "../../Assets/Music/gravity_change.wav" };
 }
 
 enum class AudioType { SFX, MUSIC, MASTER };
@@ -68,9 +70,9 @@ public:
 	void SetVolume(AudioType type, f32 vol);
 
     //Group
-    void PauseAudio();
-    void ResumeAudio();
-    void StopAudio();
+    void PauseAudio() const;
+    void ResumeAudio() const;
+    void StopAudio() const;
 
     // text reading for asset loading lol
     void LoadManifest(const std::string& path);

@@ -17,6 +17,11 @@ void GameObject::ConcatTransform()
 	AEMtx33Concat(&mtx_transform, &mtx_translation, &mtx_transform);
 }
 
+Texture* GameObject::GetTexture() const
+{
+	return go_texture;
+}
+
 AEMtx33 GameObject::GetTransform() const
 {
 	return mtx_transform;
@@ -28,7 +33,8 @@ GameObject::GameObject()
 	globalRotation{ 0.f },				
 	globalScale{ 0.f,0.f },		
 	mtx_translation{ 0 }, mtx_rotation{ 0 }, mtx_scale{ 0 }, mtx_transform{ 0 },
-	isChild{ false }, mesh{ nullptr }, _tag{ GameObjectTag::Static }, slice{ 0 }
+	isChild{ false }, mesh{ nullptr }, _tag{ GameObjectTag::Static }, slice{ 0 },
+	go_texture{nullptr}
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
@@ -42,7 +48,8 @@ GameObject::GameObject(const GameObject& rhs)
 	globalRotation{ rhs.GetRotation() },
 	globalScale{ rhs.GetScale() },
 	mtx_translation{ 0 }, mtx_rotation{ 0 }, mtx_scale{ 0 }, mtx_transform{ 0 },
-	isChild{ rhs.IsChild() }, mesh{ rhs.mesh }, _tag{ rhs._tag }, slice{ rhs.slice }
+	isChild{ rhs.IsChild() }, mesh{ rhs.mesh }, _tag{ rhs._tag }, slice{ rhs.slice },
+	go_texture{ nullptr }
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
@@ -56,7 +63,8 @@ GameObject::GameObject(AEGfxVertexList* mesh)
 	globalRotation{ 0.f }, 
 	globalScale{ 0.f,0.f }, 
 	mtx_translation{ 0 }, mtx_rotation{ 0 }, mtx_scale{ 0 }, mtx_transform{ 0 },
-	isChild{ false }, mesh{ mesh }, _tag{ GameObjectTag::Static }, slice{ 0 }
+	isChild{ false }, mesh{ mesh }, _tag{ GameObjectTag::Static }, slice{ 0 },
+	go_texture{ nullptr }
 {
 	AEMtx33Trans(&mtx_translation, globalPosition.x, globalPosition.y);
 	AEMtx33Rot(&mtx_rotation, globalRotation);
@@ -70,7 +78,7 @@ GameObject::GameObject(AEGfxVertexList* mesh, AEVec2 translate, f32 rotate, AEVe
 		globalRotation(rotate),		
 		globalScale(scale),			
 		mtx_translation({ 0 }), mtx_rotation({ 0 }), mtx_scale({ 0 }), mtx_transform({ 0 }),
-		isChild(false), mesh(mesh), _tag(GameObjectTag::Static)
+		isChild(false), mesh(mesh), _tag(GameObjectTag::Static), go_texture{ nullptr }
 {
 	AEMtx33Trans(&mtx_translation, translate.x, translate.y);
 	AEMtx33Rot(&mtx_rotation, rotate);
@@ -203,6 +211,10 @@ void GameObject::DebugDraw() const
 		break;
 	case GameObjectTag::Gravright:
 		AEGfxSetColorToMultiply(1.f, 0.f, 1.f, 0.5f);
+		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
+		break;
+	case GameObjectTag::Obstacle:
+		AEGfxSetColorToAdd(.65f, 0.f, 0.f, 0.f);
 		AEVec2Set(&scale, maxCollider.x - minCollider.x, maxCollider.y - minCollider.y);
 		break;
 	default:

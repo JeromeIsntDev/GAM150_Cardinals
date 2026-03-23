@@ -18,7 +18,7 @@
 #include <TextureManager.hpp>
 #include <GameObject.hpp>
 #include <MeshGenerator.hpp>
-static const int MAX_PARTICLES = 15;
+static const int MAX_PARTICLES = 300;
 
 static const Color palette[] = {
     Colors::PastelPink,
@@ -27,6 +27,20 @@ static const Color palette[] = {
     Colors::PastelBlue,
     Colors::PastelGreen,
     Colors::PastelYellow
+};
+
+struct ImageTexture {
+    Texture coffee;
+    Texture candycorn;
+    Texture cottoncandy;
+    Texture macaron;
+    Texture sweet;
+};
+
+
+enum TYPE {
+    GRAVITY,
+    PLAYER
 };
 
 struct ParticleObjInst
@@ -42,17 +56,28 @@ struct ParticleObjInst
     float				dirCurr;
     AEMtx33				transform;	
     Color               color;
+    TYPE                type;
+    bool                alternate;
+    GameObject          candy;
+
 };
 
 class ParticleEffect
 {
 private:
     ParticleObjInst particles[MAX_PARTICLES];
-    AEGfxVertexList* circleMesh;
+    AEGfxVertexList* circleMesh, *squareMesh;
     AEVec2 playerPrevPos;
+    TextureManager& tex = TextureManager::GetInstance();
+    Texture* imageTextures[4];
+
+    int gravityParticle;
+    int playerParticle;
 
 public:
     ParticleEffect();
+
+    int ActiveParticle(TYPE type);
 
     void Init();
     void Emit(AEVec2 position);
@@ -60,6 +85,8 @@ public:
     void Update(float dt, AEVec2 position, GameObjectTag grav = GameObjectTag::Static);
     void DrawParticle();
     void Clear();
+    void ResizeGrav();
+    void ResizePlayer(bool isSprint);
 };
 
 #endif // !_Particle_Effect_Header_

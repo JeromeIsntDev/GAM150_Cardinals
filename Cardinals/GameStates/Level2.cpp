@@ -21,6 +21,7 @@ namespace {
 	ParticleEffect gravityEffect;
 
 	TextureManager& go_texture = TextureManager::GetInstance();
+	AudioManager& bgm = AudioManager::Instance();
 
 	Texture *placeholderTexture;
 	Texture verticalPlatformTex;
@@ -71,7 +72,7 @@ void Level2_Load() {
 
 	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level2_GameObjects.json");
 
-	grid.Load(go_texture.Get("TileSheet"), 900, 900, 300, 300);
+	grid.Load(go_texture.Get("TileSheet"), 900, 1200, 300, 300);
 	grid.Initialize();
 	for (int i{}; i < objData.size(); ++i) {
 		objData[i].SetMesh(grid.tileMesh);
@@ -88,6 +89,8 @@ void Level2_Load() {
 void Level2_Initialize()
 {
 	PRINT("Initialize: %s", "Level 2\n");
+	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
+	bgm.SetVolume(AudioType::MUSIC, 0.8f);
 
 	playerEffect.Init();
 	gravityEffect.Init();
@@ -171,6 +174,14 @@ void Level2_Initialize()
 		live->UpdatePosition(AEVec2{ -70.f + i * 70.f, 380.f });
 	}
 
+	for (GameObject* obj : grid.objs) {
+		//obj->Draw();
+		if (obj->_tag == GameObjectTag::GravUp ||
+			obj->_tag == GameObjectTag::GravDown ||
+			obj->_tag == GameObjectTag::GravLeft ||
+			obj->_tag == GameObjectTag::Gravright)
+			gravityEffect.ResizeGrav();
+	}
 }
 
 void Level2_Update() {
@@ -180,6 +191,7 @@ void Level2_Update() {
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
 		{
+			bgm.PauseAudio();
 			isGamePaused = !isGamePaused;
 			pauseMenu->SetActive(isGamePaused);
 		}
@@ -197,6 +209,7 @@ void Level2_Update() {
 	{
 		if (AEInputCheckTriggered(AEVK_O) && !isGameOver)
 		{
+			bgm.PauseAudio();
 			isGameOver = true;
 			isGamePaused = false;
 			gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
@@ -230,6 +243,7 @@ void Level2_Update() {
 	AEGfxSetTransparency(1.f);
 
 	if (!isGamePaused && !isGameOver) {
+		bgm.ResumeAudio();
 		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	}
 
@@ -282,13 +296,14 @@ void Level2_Update() {
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid, mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
+	mainPlayer.audioPlayed = mainPlayer.hasCollided;
+
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
-
+	playerEffect.ResizePlayer(mainPlayer.isSprint);
 }
 
 void Level2_Draw() {
-	//playerEffect.DrawParticle();
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
 	for (GameObject& obj : backgroundObjs) {
 		obj.Draw();
@@ -329,6 +344,7 @@ void Level2_Free() {
 	PRINT("Free: %s", "Level 2\n");
 	playerEffect.Clear();
 	gravityEffect.Clear();
+	bgm.StopAudio();
 }
 
 void Level2_Unload() {
@@ -346,17 +362,6 @@ void Level2_Unload() {
 void Level2_Parallax() {
 	//Reduce Colour -> To Bright
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	/*for (GameObject& obj : backgroundObjs) {
-		f32 offset = mainPlayer.GetPosition().x;
-		f32 offsetFirst = offset / 200.f;
-		f32 offsetSecond = offset / 75.f;
-		f32 offsetThird = offset / 25.f;
-
-		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-	}*/
-
 	f32 offset = mainPlayer.GetPosition().x;
 	f32 offsetFirst = offset / 200.f;
 	f32 offsetSecond = offset / 75.f;
@@ -476,6 +481,15 @@ void Level2_EditorDraw() {
 			break;
 		case 8:
 			digipenFont.Input_Text("Bottom-Right");
+			break;
+		case 9:
+			digipenFont.Input_Text("Connector 1");
+			break;
+		case 10:
+			digipenFont.Input_Text("Connector 2");
+			break;
+		case 11:
+			digipenFont.Input_Text("Connector 3");
 			break;
 		}
 		digipenFont.Draw_Text_Corner(15.f, -430.f);

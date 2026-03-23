@@ -21,6 +21,7 @@ namespace {
 	ParticleEffect gravityEffect;
 
 	TextureManager& tex = TextureManager::GetInstance();
+	AudioManager& bgm = AudioManager::Instance();
 
 	Texture* placeholderTexture;
 	Texture verticalPlatformTex;
@@ -70,7 +71,7 @@ void Level3_Load() {
 	memoryManager.AddFont(&pauseTitleFont);
 
 	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level3_GameObjects.json");
-	grid.Load(tex.Get("TileSheet"), 900, 900, 300, 300);
+	grid.Load(tex.Get("TileSheet"), 900, 1200, 300, 300);
 	grid.Initialize();
 	for (int i{}; i < objData.size(); ++i) {
 		objData[i].SetMesh(grid.tileMesh);
@@ -87,6 +88,8 @@ void Level3_Load() {
 void Level3_Initialize()
 {
 	PRINT("Initialize: %s", "Level 3\n");
+	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
+	bgm.SetVolume(AudioType::MUSIC, 0.8f);
 
 	playerEffect.Init();
 	gravityEffect.Init();
@@ -169,6 +172,15 @@ void Level3_Initialize()
 		live->UpdateScale(AEVec2{ 70.f, 70.f });
 		live->UpdatePosition(AEVec2{ -70.f + i * 70.f, 380.f });
 	}
+
+	for (GameObject* obj : grid.objs) {
+		//obj->Draw();
+		if (obj->_tag == GameObjectTag::GravUp ||
+			obj->_tag == GameObjectTag::GravDown ||
+			obj->_tag == GameObjectTag::GravLeft ||
+			obj->_tag == GameObjectTag::Gravright)
+			gravityEffect.ResizeGrav();
+	}
 }
 
 void Level3_Update() {
@@ -178,6 +190,7 @@ void Level3_Update() {
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
 		{
+			bgm.PauseAudio();
 			isGamePaused = !isGamePaused;
 			pauseMenu->SetActive(isGamePaused);
 		}
@@ -194,6 +207,7 @@ void Level3_Update() {
 	{
 		if (AEInputCheckTriggered(AEVK_O) && !isGameOver)
 		{
+			bgm.PauseAudio();
 			isGameOver = true;
 			isGamePaused = false;
 			gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
@@ -226,6 +240,7 @@ void Level3_Update() {
 	AEGfxSetTransparency(1.f);
 
 	if (!isGamePaused && !isGameOver) {
+		bgm.ResumeAudio();
 		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	}
 
@@ -270,8 +285,10 @@ void Level3_Update() {
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid, mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
+	mainPlayer.audioPlayed = mainPlayer.hasCollided;
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
+	playerEffect.ResizePlayer(mainPlayer.isSprint);
 }
 
 void Level3_Draw() {
@@ -317,6 +334,7 @@ void Level3_Free() {
 	PRINT("Free: %s", "Level 3\n");
 	playerEffect.Clear();
 	gravityEffect.Clear();
+	bgm.StopAudio();
 }
 
 void Level3_Unload() {
@@ -334,16 +352,14 @@ void Level3_Unload() {
 void Level3_Parallax() {
 	//Reduce Colour -> To Bright
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	for (GameObject& obj : backgroundObjs) {
-		f32 offset = mainPlayer.GetPosition().x;
-		f32 offsetFirst = offset / 200.f;
-		f32 offsetSecond = offset / 75.f;
-		f32 offsetThird = offset / 25.f;
+	f32 offset = mainPlayer.GetPosition().x;
+	f32 offsetFirst = offset / 200.f;
+	f32 offsetSecond = offset / 75.f;
+	f32 offsetThird = offset / 25.f;
 
-		backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
-		backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
-	}
+	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
@@ -455,6 +471,15 @@ void Level3_EditorDraw() {
 			break;
 		case 8:
 			digipenFont.Input_Text("Bottom-Right");
+			break;
+		case 9:
+			digipenFont.Input_Text("Connector 1");
+			break;
+		case 10:
+			digipenFont.Input_Text("Connector 2");
+			break;
+		case 11:
+			digipenFont.Input_Text("Connector 3");
 			break;
 		}
 		digipenFont.Draw_Text_Corner(15.f, -430.f);

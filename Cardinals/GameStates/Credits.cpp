@@ -77,7 +77,6 @@ void Credits_Update() {
 
 	if (quit_dt <= 0.f) quitCredits = true;
 
-	PRINT("drawat: %.2f\n", quit_dt);
 }
 
 void Credits_Draw() {

@@ -30,9 +30,10 @@ void SpriteSheet::Slice(Texture t)
     {
         for (int c = 0; c < cols; c++)
         {
-            // 1 * uvW, etc. it just slices based on the index kinda
-            // pushes into slices[]
-            slices.push_back({ c * uvW, r * uvH, uvW, uvH });
+            f32 xPos = (f32)(c * tileW) / sheetW;
+            f32 yPos = (f32)(r * tileH) / sheetH;
+
+            slices.push_back({ xPos, yPos, uvW, uvH });
         }
     }
 }

@@ -68,6 +68,12 @@ void UpdateGameManagerState(GameStateEnum state)
 		Unload_State = Level3_Unload;
 		break;
 	case Level4:
+		Load_State = Level4_Load;
+		Init_State = Level4_Initialize;
+		Update_State = Level4_Update;
+		Draw_State = Level4_Draw;
+		Free_State = Level4_Free;
+		Unload_State = Level4_Unload;
 		break;
 	case Level5:
 		break;

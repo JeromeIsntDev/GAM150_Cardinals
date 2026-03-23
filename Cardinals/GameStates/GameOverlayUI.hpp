@@ -124,12 +124,12 @@ public:
 	void OnClick() override;
 
 	void SetActive(bool active) override;
-	void SetTextures(const PauseMenuTextures& go_texture);
-	void SetTextures(const GameOverTextures& go_texture);
+	void SetTextures(const PauseMenuTextures& pauseTex);
+	void SetTextures(const GameOverTextures& gameOverTex);
 
 	void SetupPauseMenu();
 	void SetupSettingsMenu();
-	void SetupLevelMenu(int level);
+	void SetupLevelMenu();
 	void UpdateGameOverMenu(f32 time, int health);
 };
 

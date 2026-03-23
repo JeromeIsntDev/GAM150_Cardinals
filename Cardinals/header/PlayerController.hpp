@@ -68,6 +68,9 @@ public:
 	f32 coyoteBuffer{ 0.f };
 	GravityDirection grav = Player::GravityDirection::Down;
 	bool hasCollided{ false };
+	bool audioPlayed{ false };
+	bool isMoving{ false };
+	bool isSprint{ false };
 	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
 	//Gets the player data
 
