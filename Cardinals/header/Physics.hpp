@@ -9,7 +9,7 @@ struct Collider {
 	//AABB
 	AEVec2 p_minPoint;
 	AEVec2 p_maxPoint;
-	void UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLtength,GameObjectTag tag);
+	void UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLtength,const GameObjectTag& tag);
 };
 
 bool CollisionDetected(const Collider&, const Collider&);
