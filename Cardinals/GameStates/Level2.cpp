@@ -47,11 +47,6 @@ namespace {
 	Texture *backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
 
-	//BOOL for player
-	bool isLoaded = false;
-	const f32 loadBuffer = 0.15f;
-	f32 timerLoad = 0.f;
-
 	Grid grid;
 	Player mainPlayer;
 }
@@ -96,8 +91,6 @@ void Level2_Initialize()
 	PRINT("Initialize: %s", "Level 2\n");
 	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
 	bgm.SetVolume(AudioType::MUSIC, 0.8f);
-
-	isLoaded = false;
 
 	playerEffect.Init();
 	gravityEffect.Init();
@@ -297,19 +290,7 @@ void Level2_Update() {
 	else {
 		mainPlayer.SetTexture(playerTexture[0]);
 	}
-
-	if (!isLoaded) {
-		mainPlayer.p_isGrounded = true;
-
-		timerLoad += dt;  // accumulate over time
-
-		if (timerLoad >= loadBuffer) {
-			isLoaded = true;
-			mainPlayer.p_isGrounded = false;
-			timerLoad = 0.0f;
-		}
-	}
-
+	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
