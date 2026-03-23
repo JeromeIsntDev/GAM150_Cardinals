@@ -22,7 +22,7 @@
     <ClCompile Include="GameStates\MainMenu.cpp" />
     <ClCompile Include="GameStates\Level1.cpp" />
     <ClCompile Include="GameStates\Level2.cpp" />
-    <ClCompile Include="GameStates\Level3.cpp" />
+    <ClCompile Include="GameStates\Level4.cpp" />
     <ClCompile Include="src\UIManager.cpp" />
     <ClCompile Include="src\InputHandler.cpp" />
     <ClCompile Include="GameStates\Credits.cpp" />
@@ -34,7 +34,7 @@
     <ClCompile Include="src\SpritesheetHandler.cpp" />
     <ClCompile Include="GameStates\GameOverlayUI.cpp" />
     <ClCompile Include="src\Animator.cpp" />
-    <ClCompile Include="GameStates\Level4.cpp" />
+    <ClCompile Include="GameStates\Level3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -61,7 +61,7 @@
     <ClInclude Include="GameStates\MainMenu.hpp" />
     <ClInclude Include="GameStates\Level1.hpp" />
     <ClInclude Include="GameStates\Level2.hpp" />
-    <ClInclude Include="GameStates\Level3.hpp" />
+    <ClInclude Include="GameStates\Level4.hpp" />
     <ClInclude Include="header\UIManager.hpp" />
     <ClInclude Include="header\InputHandler.hpp" />
     <ClInclude Include="GameStates\Credits.hpp" />
@@ -109,7 +109,7 @@
     <ClInclude Include="header\SpritesheetHandler.hpp" />
     <ClInclude Include="GameStates\GameOverlayUI.hpp" />
     <ClInclude Include="header\Animator.hpp" />
-    <ClInclude Include="GameStates\Level4.hpp" />
+    <ClInclude Include="GameStates\Level3.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />

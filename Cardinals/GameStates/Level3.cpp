@@ -1,4 +1,4 @@
-#include "../GameStates/Level3.hpp"
+#include "Level3.hpp"
 #include "GameEditor.hpp"
 
 void Level3_EditorUpdate();
@@ -120,7 +120,7 @@ void Level3_Initialize()
 	backgrounds[3] = tex.Get("BG_FRONTMOUNTAIN");
 
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false,
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 75.f, AEGfxGetWinMinY() + 100.f, false);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 75.f, AEGfxGetWinMinY() + 450.f, false);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(playerTexture[0]);
 	mainPlayer.UpdateScale(AEVec2{ 50.f,50.f });
@@ -134,7 +134,7 @@ void Level3_Initialize()
 	pauseMenu = std::make_unique<Overlay>(squareMesh, PAUSE, -1,
 		[]() {isGamePaused = 0; },
 		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
-		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level3); });
+		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level4); });
 
 	pauseMenu->SetTextures(
 		PauseMenuTextures{
@@ -147,10 +147,10 @@ void Level3_Initialize()
 
 	gameOverMenu = std::make_unique<Overlay>(
 		squareMesh,
-		LEVEL, 3,
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); },
+		LEVEL, 4,
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level5); },
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level3); });
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); });
 
 	gameOverMenu->SetTextures(
 		GameOverTextures{
@@ -328,9 +328,7 @@ void Level3_Draw() {
 
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
-
 	Level3_Tutorial();
-
 	Level3_EditorDraw();
 
 	//PRINT("Draw: %s", "Level 3\n");
@@ -506,7 +504,7 @@ void Level3_Tutorial() {
 	digipenFont.Change_Text_Color(Colors::White);
 	if (mainPlayer.GetPosition().y > 0.f) ++checkPoints;
 
-	digipenFont.Input_Text("Use 'W' and 'S' to move Vertically!");
-	digipenFont.Draw_Text(-200.f, -375.f);
+	digipenFont.Input_Text("Use 'W' and 'S'\nto move Vertically!");
+	digipenFont.Draw_Text(-475.f, 0.f);
 	digipenFont.Change_Text_Color(Colors::White);
 }

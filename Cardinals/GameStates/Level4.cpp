@@ -1,9 +1,10 @@
-#include "Level4.hpp"
+#include "../GameStates/Level4.hpp"
 #include "GameEditor.hpp"
 
 void Level4_EditorUpdate();
 void Level4_EditorDraw();
 void Level4_Parallax();
+
 
 extern bool isGamePaused;
 extern bool isGameOver;
@@ -116,7 +117,7 @@ void Level4_Initialize()
 	backgrounds[3] = tex.Get("BG_FRONTMOUNTAIN");
 
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false,
-		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 75.f, AEGfxGetWinMinY() + 450.f, false);
+		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 75.f, AEGfxGetWinMinY() + 100.f, false);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(playerTexture[0]);
 	mainPlayer.UpdateScale(AEVec2{ 50.f,50.f });
@@ -130,7 +131,7 @@ void Level4_Initialize()
 	pauseMenu = std::make_unique<Overlay>(squareMesh, PAUSE, -1,
 		[]() {isGamePaused = 0; },
 		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
-		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level4); });
+		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level3); });
 
 	pauseMenu->SetTextures(
 		PauseMenuTextures{
@@ -143,10 +144,10 @@ void Level4_Initialize()
 
 	gameOverMenu = std::make_unique<Overlay>(
 		squareMesh,
-		LEVEL, 4,
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level5); },
+		LEVEL, 3,
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); },
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); });
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level3); });
 
 	gameOverMenu->SetTextures(
 		GameOverTextures{
@@ -325,13 +326,14 @@ void Level4_Draw() {
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
 
+
 	Level4_EditorDraw();
 
 	//PRINT("Draw: %s", "Level 3\n");
 }
 
 void Level4_Free() {
-	PRINT("Free: %s", "Level 3\n");
+	PRINT("Free: %s", "Level 4\n");
 	playerEffect.Clear();
 	gravityEffect.Clear();
 	bgm.StopAudio();
