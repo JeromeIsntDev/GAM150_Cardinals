@@ -59,6 +59,11 @@ namespace {
 	Grid grid;
 	Player mainPlayer;
 
+	//BOOL for player
+	bool isLoaded = false;
+	const f32 loadBuffer = 0.15f;
+	f32 timerLoad = 0.f;
+
 	//TUTORIAL VARIABLES
 	int checkPoints;
 }
@@ -157,7 +162,7 @@ void Level1_Initialize()
 	PRINT("[DEBUG | LEVEL] => Initialize: %s", "Level 1\n");
 	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
 	bgm.SetVolume(AudioType::MUSIC, 0.8f);
-
+	isLoaded = false;
 	checkPoints = 0;
 
 	playerEffect.Init();
@@ -331,7 +336,17 @@ void Level1_Update() {
 	else {
 		mainPlayer.SetTexture(&playerTexture[0]);
 	}
-	mainPlayer.p_isGrounded = false;
+	if (!isLoaded) {
+		mainPlayer.p_isGrounded = true;
+
+		timerLoad += dt;  // accumulate over time
+
+		if (timerLoad >= loadBuffer) {
+			isLoaded = true;
+			mainPlayer.p_isGrounded = false;
+			timerLoad = 0.0f; // optional reset
+		}
+	}
 	mainPlayer.hasCollided = false;
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
