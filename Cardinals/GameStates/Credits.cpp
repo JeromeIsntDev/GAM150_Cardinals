@@ -6,6 +6,7 @@ namespace {
 
 	Text titleFont;
 	Text nameFont;
+	Text quitFont;
 	f32 startY;
 	f32 endY = 1300.f;
 	f32 winHeight = 900.f;
@@ -24,10 +25,12 @@ namespace {
 void Credits_Load() {
 	titleFont.Load_Font(Fonts::Main, 25.f);
 	nameFont.Load_Font(Fonts::Main, 50.f);
+	quitFont.Load_Font(Fonts::Main, 25.f);
 
 	//for every additional name \n\n one \n in name is \n\n in title 
 	titleFont.Input_Text("By Orbital Candy\n\n\n\n\n TECHNICAL LEAD\n\n\n\nGAMEPLAY PROGRAMMER\n\n\n\n UI & ART LEAD\n\n\n\n SYSTEM PROGRAMMER\n\n\n\n\n\n\n\nFACULTY and ADVISORS\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPRESIDENT\n\n\n\nEXECUTIVES\n\n\n\n\n\n\n\n\n\nWWW.DIGIPEN.EDU\nAll content (C) 2026 Digipen Institute of Technology Singapore. All Rights Reserved");
 	nameFont.Input_Text("Cardinals\n\n\n\nJerome Lim\n\nSadric Koh\n\nBreanne Chua\n\nShirley Liau\nZoey Tan\n\n\nGerald Wong\nSoroor Malekmohammadi Faradounbeh\nTommy Tan\n\n\n\nCreated at\n\n\n\n\n\n\n\nClaude Comair\n\nChu Jason Yeu Tat   Michael Gats\nTan Chek Ming   Prasanna Kumar Ghali\nMandy Wong   Johnny Deek");
+	quitFont.Input_Text("Press Q to quit");
 
 	squareMesh = RectMeshCenter();
 
@@ -37,6 +40,7 @@ void Credits_Load() {
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&titleFont);
 	memoryManager.AddFont(&nameFont);
+	memoryManager.AddFont(&quitFont);
 
 	PRINT("Load: %s", "Credits\n");
 }
@@ -77,11 +81,24 @@ void Credits_Update() {
 
 	if (quit_dt <= 0.f) quitCredits = true;
 
+	int wheelDelta = 0;
+	AEInputMouseWheelDelta(&wheelDelta);
+	if (wheelDelta != 0) {
+		startY += startY > endY ? 0.f : speed * (- wheelDelta);
+	}
+	if (input.isKeyPressed(AEVK_DOWN)) {
+		startY += startY > endY ? 0.f : speed * 2;
+	}
+	else if (input.isKeyPressed(AEVK_UP)) {
+		startY -= startY > endY ? 0.f : speed * 2;
+	}
+
 }
 
 void Credits_Draw() {
 	titleFont.Draw_Text(AEVec2{ 0, startY }, 1.f, fading);
 	nameFont.Draw_Text(AEVec2{ 0, startY + 37.5f }, 1.f, fading);
+	quitFont.Draw_Text(AEVec2{ -700, 425 }, 1.f, fading);
 
 	if (startY >= endY - winHeight) {
 		logo.Draw();

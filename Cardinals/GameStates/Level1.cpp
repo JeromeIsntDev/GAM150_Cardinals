@@ -14,6 +14,7 @@
 void Level1_EditorUpdate();
 void Level1_EditorDraw();
 void Level1_Parallax();
+void Level1_UIDraw();
 void Tutorial();
 //---------------------!FORWARD DECLERATIONS---------------------------//
 
@@ -37,6 +38,7 @@ namespace {
 	Texture backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
 	GameObject gamelives[3]{};
+	GameObject timerBackground;
 
 	// PAUSE MENU
 	std::unique_ptr <Overlay> pauseMenu;
@@ -97,6 +99,7 @@ void Level1_Load() {
 	retryTexture.Load_Image(Images::RetryBtn);
 	candyTexture.Load_Image(Images::Candy);
 	greyCandyTexture.Load_Image(Images::CandyGrey);
+
 
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	//textures.push_back(&playerEffectTexture);
@@ -162,6 +165,11 @@ void Level1_Initialize()
 
 	playerEffect.Init();
 	gravityEffect.Init();
+
+	timerBackground.SetMesh(squareMesh);
+	timerBackground.SetTexture(&cardBgTexture);
+	timerBackground.UpdatePosition({ 0.f, 400.f });
+	timerBackground.UpdateScale({ 200.f, 50.f });
 
 	//Player Init
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
@@ -234,6 +242,11 @@ void Level1_Initialize()
 void Level1_Update() {
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
+	if (isGameOver) {
+		if (input.isKeyTriggered(AEVK_R))
+			RestartLevel(UpdateGameManagerState, Level1);
+	}
+
 	if (pauseMenu) //Checks if pauseMenu Exists
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
@@ -296,7 +309,7 @@ void Level1_Update() {
 	}
 
 	if (!IsEditorActive() || IsEditorActive())
-		if (input.isKeyTriggered(AEVK_E))
+		if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_E))
 			ToggleEditorMode();
 
 	Level1_EditorUpdate();
@@ -419,14 +432,6 @@ void Level1_Draw() {
 	grid.Draw();
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
-
-	digipenFont.Input_Text("Time: ");
-	digipenFont.Draw_Text(675.f, 400.f);
-	digipenFont.Input_Float(levelTime);
-	digipenFont.Draw_Text_Corner(725.f, 387.f);
-
-	digipenFont.Input_Text("Level 1");
-	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
 	
 	for (GameObject& live : gamelives) {
 		live.Draw();
@@ -437,6 +442,9 @@ void Level1_Draw() {
 
 	if(!pauseMenu->IsActive() && !gameOverMenu->IsActive())Tutorial();
 
+	//timerBackground.Draw();
+
+	Level1_UIDraw();
 	Level1_EditorDraw();
 }
 
@@ -475,6 +483,16 @@ void Level1_Parallax() {
 	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+}
+
+void Level1_UIDraw() {
+	/*digipenFont.Input_Text("Time: ");
+	digipenFont.Draw_Text(675.f, 400.f);*/
+	/*digipenFont.Input_Float(levelTime);
+	digipenFont.Draw_Text_Corner(725.f, 387.f);*/
+
+	//digipenFont.Input_Text("Level 1");
+	//digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
 }
 
 void Level1_EditorUpdate() {
@@ -516,6 +534,17 @@ void Level1_EditorUpdate() {
 void Level1_EditorDraw() {
 	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
 	if (IsEditorActive()) {
+
+		digipenFont.Change_Text_Color(Colors::Black);
+
+		if (IsUsingSaveFile()) {
+			digipenFont.Input_Text("Using Save File");
+			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
+		}
+		DrawTileOutline();
+		mainPlayer.DebugDraw();
+		DrawDebugObjects(grid.objs);
+
 		digipenFont.Input_Text("Editor Active");
 		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
 
@@ -597,15 +626,7 @@ void Level1_EditorDraw() {
 			break;
 		}
 		digipenFont.Draw_Text_Corner(15.f, -430.f);
-
-
-		if (IsUsingSaveFile()) {
-			digipenFont.Input_Text("Using Save File");
-			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
-		}
-		DrawTileOutline();
-		mainPlayer.DebugDraw();
-		DrawDebugObjects(grid.objs);
+		digipenFont.Change_Text_Color(Colors::White);
 	}
 }
 
@@ -619,12 +640,12 @@ void Tutorial() {
 			break;
 		case 1:
 			digipenFont.Input_Text("Avoid the CANDY CORN!!!");
-			digipenFont.Draw_Text(0.f, 50.f);
+			digipenFont.Draw_Text({ 0.f, 50.f }, .5f, 1.f);
 			if (mainPlayer.GetPosition().x > 35.f) ++checkPoints;
 			break;
 		case 2:
 			digipenFont.Input_Text("Touch the GRAVITY CHANGERS!");
-			digipenFont.Draw_Text(0.f, 50.f);
+			digipenFont.Draw_Text({ 0.f, 50.f }, .5f, 1.f);
 			if (mainPlayer.GetPosition().y > 100.f) {
 				++checkPoints;
 			}
@@ -634,18 +655,18 @@ void Tutorial() {
 			break;
 		case 3:
 			digipenFont.Input_Text("You can move along the ceiling!");
-			digipenFont.Draw_Text(150.f, 75.f);
+			digipenFont.Draw_Text({ 150.f, 75.f }, .5f, 1.f);
 			if (mainPlayer.GetPosition().x > 450.f) ++checkPoints;
 			break;
 		case 4:
 			digipenFont.Input_Text("Touch the COTTON PORTAL and go to");
-			digipenFont.Draw_Text(350.f, 45.f);
+			digipenFont.Draw_Text({ 350.f, 45.f }, .5f, 1.f);
 			digipenFont.Input_Text("the next level!");
-			digipenFont.Draw_Text(350.f, 15.f);
+			digipenFont.Draw_Text({ 350.f, 15.f }, .5f, 1.f);
 			break;
 		case 10:
 			digipenFont.Input_Text("Or don't touch them...");
-			digipenFont.Draw_Text(0.f, 50.f);
+			digipenFont.Draw_Text({ 0.f, 50.f }, .5f, 1.f);
 			if (mainPlayer.GetPosition().y > 100.f) {
 				checkPoints = 3;
 			}
@@ -659,25 +680,25 @@ void Tutorial() {
 		}
 	}
 	else {
+		static f32 firstText = -160.f;
 		switch (mainPlayer.GetPlayerHealth()) {
 		case 3:
-			
 			digipenFont.Input_Text("Welcome to Cardinals!");
-			digipenFont.Draw_Text(-400.f, 175.f);
+			digipenFont.Draw_Text({ -555.f, firstText }, .5f, 1.f);
 			digipenFont.Input_Text("Use 'A' and 'D' to move left and right.");
-			digipenFont.Draw_Text(-400.f, 145.f);
+			digipenFont.Draw_Text({-555.f, firstText - 50.f}, .35f, 1.f);
 			digipenFont.Input_Text("Use 'L-Shift' to sprint.");
-			digipenFont.Draw_Text(-400.f, 115.f);
+			digipenFont.Draw_Text({-555.f, firstText - 75.f}, .35f, 1.f);
 			digipenFont.Input_Text("Use 'Space' to jump.");
-			digipenFont.Draw_Text(-400.f, 85.f);
+			digipenFont.Draw_Text({ -555.f,firstText - 100.f }, .35f, 1.f);
 			break;
 		case 2:
 			digipenFont.Input_Text("Oops! Try Again!");
-			digipenFont.Draw_Text(-400.f, 100.f);
+			digipenFont.Draw_Text({ -555.f, firstText }, .35f, 1.f);
 			break;
 		case 1:
 			digipenFont.Input_Text("Umm... You can do it! ...");
-			digipenFont.Draw_Text(-400.f, 100.f);
+			digipenFont.Draw_Text({ -555.f, firstText } ,.35f, 1.f);
 			break;
 		};
 	}

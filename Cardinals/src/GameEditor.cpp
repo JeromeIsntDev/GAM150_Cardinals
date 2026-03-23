@@ -92,7 +92,6 @@ void ToggleSaveFileMode() {
 
 void RestartLevel(void(*restart)(GameStateEnum), GameStateEnum state)
 {
-	if (!canEdit) return;
 	restart(state);
 }
 

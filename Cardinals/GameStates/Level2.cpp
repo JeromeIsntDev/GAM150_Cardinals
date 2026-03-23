@@ -4,6 +4,7 @@
 void Level2_EditorUpdate();
 void Level2_EditorDraw();
 void Level2_Parallax();
+void Level2_UIDraw();
 
 extern bool isGamePaused;
 extern bool isGameOver;
@@ -187,6 +188,11 @@ void Level2_Initialize()
 void Level2_Update() {
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
+	if (isGameOver) {
+		if (input.isKeyTriggered(AEVK_R))
+			RestartLevel(UpdateGameManagerState, Level2);
+	}
+
 	if (pauseMenu) //Checks if pauseMenu Exists
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
@@ -247,9 +253,9 @@ void Level2_Update() {
 		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	}
 
-	if (!IsEditorActive() || IsEditorActive())
-		if (input.isKeyTriggered(AEVK_E))
-			ToggleEditorMode();
+	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_E))
+		ToggleEditorMode();
+		
 
 	Level2_EditorUpdate();
 	Level2_Parallax();
@@ -321,14 +327,6 @@ void Level2_Draw() {
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
 
-	digipenFont.Input_Text("Time: ");
-	digipenFont.Draw_Text(675.f, 400.f);
-	digipenFont.Input_Float(levelTime);
-	digipenFont.Draw_Text_Corner(725.f, 387.f);
-
-	digipenFont.Input_Text("Level 2");
-	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
-
 	for (GameObject& live : gamelives) {
 		live.Draw();
 	}
@@ -373,6 +371,16 @@ void Level2_Parallax() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+void Level2_UIDraw() {
+	digipenFont.Input_Text("Time: ");
+	digipenFont.Draw_Text(675.f, 400.f);
+	digipenFont.Input_Float(levelTime);
+	digipenFont.Draw_Text_Corner(725.f, 387.f);
+
+	digipenFont.Input_Text("Level 2");
+	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
+}
+
 void Level2_EditorUpdate() {
 	if (IsEditorActive() && !isGamePaused && !isGameOver) {
 
@@ -412,6 +420,15 @@ void Level2_EditorUpdate() {
 void Level2_EditorDraw() {
 	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
 	if (IsEditorActive()) {
+		if (IsUsingSaveFile()) {
+			digipenFont.Input_Text("Using Save File");
+			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
+		}
+		DrawTileOutline();
+		mainPlayer.DebugDraw();
+		DrawDebugObjects(grid.objs);
+
+		digipenFont.Change_Text_Color(Colors::Black);
 		digipenFont.Input_Text("Editor Active");
 		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
 
@@ -493,14 +510,6 @@ void Level2_EditorDraw() {
 			break;
 		}
 		digipenFont.Draw_Text_Corner(15.f, -430.f);
-
-
-		if (IsUsingSaveFile()) {
-			digipenFont.Input_Text("Using Save File");
-			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
-		}
-		DrawTileOutline();
-		mainPlayer.DebugDraw();
-		DrawDebugObjects(grid.objs);
+		digipenFont.Change_Text_Color(Colors::White);
 	}
 }

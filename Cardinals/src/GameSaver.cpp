@@ -92,7 +92,7 @@ void SaveObjectsToJson(std::vector<GameObject*> gameObjects, std::string filepat
 
     std::ofstream ofs(filepath);
     if (!ofs.is_open()) {
-        std::cerr << "Error: cannot open output file";
+        std::cerr << "[ERROR]: Cannot open output file";
         return;
     }
 

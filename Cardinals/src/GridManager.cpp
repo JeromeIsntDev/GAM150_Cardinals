@@ -108,60 +108,62 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
 		return;
 	}
 
-	GameObject* obj = new GameObject{};
-	obj->UpdateScale({ tileScale,tileScale });
+	cell->obj
+	/*GameObject* obj*/ = new GameObject{};
+	cell->obj->UpdateScale({ tileScale,tileScale });
 	f32 ax{ cell->position.x }, ay{ cell->position.y };
 	GridToWorld(&ax,&ay);
-	obj->UpdatePosition({ ax , ay });
-	obj->_tag = static_cast<GameObjectTag>(tag);
-	obj->UpdateRotation(rot);
-	
+	cell->obj->_tag = static_cast<GameObjectTag>(tag);
+	cell->obj->UpdatePosition({ ax , ay });
+	cell->obj->UpdateRotation(rot);
+
 	TileUV uv{};
-	switch (obj->_tag)
+	switch (cell->obj->_tag)
 	{
 	case GameObjectTag::Obstacle:
-		obj->SetMesh(standardMesh);
-		obj->SetTexture(&obstacleTexture);
+		cell->obj->SetMesh(standardMesh);
+		cell->obj->SetTexture(&obstacleTexture);
 		break;
 	case GameObjectTag::Win:
-		obj->SetMesh(standardMesh);
-		obj->SetTexture(&winTexture);
+		cell->obj->SetMesh(standardMesh);
+		cell->obj->SetTexture(&winTexture);
 		break;
 	case GameObjectTag::GravUp:
-		obj->SetMesh(standardMesh);
-		obj->SetTexture(&gravTexture);
+		cell->obj->SetMesh(standardMesh);
+		cell->obj->SetTexture(&gravTexture);
 		break;
 	case GameObjectTag::GravDown:
-		obj->SetMesh(standardMesh);
-		obj->SetTexture(&gravTexture);
-		obj->UpdateRotation(PI);
+		cell->obj->SetMesh(standardMesh);
+		cell->obj->SetTexture(&gravTexture);
+		cell->obj->UpdateRotation(PI);
 		break;
 	case GameObjectTag::GravLeft:
-		obj->SetMesh(standardMesh);
-		obj->SetTexture(&gravTexture);
-		obj->UpdateRotation(PI/2.f);
+		cell->obj->SetMesh(standardMesh);
+		cell->obj->SetTexture(&gravTexture);
+		cell->obj->UpdateRotation(PI/2.f);
 		break;
 	case GameObjectTag::Gravright:
-		obj->SetMesh(standardMesh);
-		obj->SetTexture(&gravTexture);
-		obj->UpdateRotation(-(PI / 2.f));
+		cell->obj->SetMesh(standardMesh);
+		cell->obj->SetTexture(&gravTexture);
+		cell->obj->UpdateRotation(-(PI / 2.f));
 		break;
 	case GameObjectTag::Static:
 	default:
-		obj->SetMesh(tileMesh);
-		obj->SetTexture(&tileTexture);
-		obj->SetSlice(slice);
+		cell->obj->SetMesh(tileMesh);
+		cell->obj->SetTexture(&tileTexture);
+		cell->obj->SetSlice(slice);
 		if (spriteSheet.GetUV(slice, uv))
 		{
-			obj->uvX = uv.u;
-			obj->uvY = uv.v;
+			cell->obj->uvX = uv.u;
+			cell->obj->uvY = uv.v;
 		}
 		break;
 	}
 
-	cell->tag = obj->_tag;
-	cell->obj = obj;
-	objs.push_back(obj);
+	cell->tag = static_cast<GameObjectTag>(tag);
+	objs.push_back(cell->obj);
+
+	PRINT("[DEBUG] => Cell Object Tag: %d\n", cell->obj->_tag);
 }
 
 void Grid::SnapToCell(f32* val)

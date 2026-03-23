@@ -4,6 +4,7 @@
 void Level3_EditorUpdate();
 void Level3_EditorDraw();
 void Level3_Parallax();
+void Level3_UIDraw();
 void Level3_Tutorial();
 
 extern bool isGamePaused;
@@ -190,6 +191,11 @@ void Level3_Initialize()
 void Level3_Update() {
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
+	if (isGameOver) {
+		if (input.isKeyTriggered(AEVK_R))
+			RestartLevel(UpdateGameManagerState, Level3);
+	}
+	
 	if (pauseMenu) //Checks if pauseMenu Exists
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
@@ -314,14 +320,6 @@ void Level3_Draw() {
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
 
-	digipenFont.Input_Text("Time: ");
-	digipenFont.Draw_Text(675.f, 400.f);
-	digipenFont.Input_Float(levelTime);
-	digipenFont.Draw_Text_Corner(725.f, 387.f);
-
-	digipenFont.Input_Text("Level 3");
-	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
-
 	for (GameObject& live : gamelives) {
 		live.Draw();
 	}
@@ -367,6 +365,17 @@ void Level3_Parallax() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+void Level3_UIDraw()
+{
+	digipenFont.Input_Text("Time: ");
+	digipenFont.Draw_Text(675.f, 400.f);
+	digipenFont.Input_Float(levelTime);
+	digipenFont.Draw_Text_Corner(725.f, 387.f);
+
+	digipenFont.Input_Text("Level 3");
+	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
+}
+
 void Level3_EditorUpdate() {
 	if (IsEditorActive() && !isGamePaused && !isGameOver) {
 
@@ -406,6 +415,15 @@ void Level3_EditorUpdate() {
 void Level3_EditorDraw() {
 	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
 	if (IsEditorActive()) {
+		if (IsUsingSaveFile()) {
+			digipenFont.Input_Text("Using Save File");
+			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
+		}
+		DrawTileOutline();
+		mainPlayer.DebugDraw();
+		DrawDebugObjects(grid.objs);
+
+		digipenFont.Change_Text_Color(Colors::Black);
 		digipenFont.Input_Text("Editor Active");
 		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
 
@@ -487,24 +505,18 @@ void Level3_EditorDraw() {
 			break;
 		}
 		digipenFont.Draw_Text_Corner(15.f, -430.f);
-
-
-		if (IsUsingSaveFile()) {
-			digipenFont.Input_Text("Using Save File");
-			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
-		}
-		DrawTileOutline();
-		mainPlayer.DebugDraw();
-		DrawDebugObjects(grid.objs);
+		digipenFont.Change_Text_Color(Colors::White);
 	}
 }
 
 void Level3_Tutorial() {
-	if (checkPoints > 0) return;
 	digipenFont.Change_Text_Color(Colors::White);
-	if (mainPlayer.GetPosition().y > 0.f) ++checkPoints;
+	if (mainPlayer.GetPosition().x > -150.f) ++checkPoints;
 
-	digipenFont.Input_Text("Use 'W' and 'S'\nto move Vertically!");
-	digipenFont.Draw_Text(-475.f, 0.f);
+	if (checkPoints <= 0) return;
+	digipenFont.Input_Text("Use 'W' and 'S'");
+	digipenFont.Draw_Text({ -100.f, 275.f }, .35f, 1.f);
+	digipenFont.Input_Text("to move Vertically!");
+	digipenFont.Draw_Text({ -100.f, 250.f }, .35f, 1.f);
 	digipenFont.Change_Text_Color(Colors::White);
 }

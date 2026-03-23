@@ -407,6 +407,7 @@ void Overlay::UpdateGameOverMenu(f32 time, int health)
 		candy1.SetTexture(candy);
 		candy2.SetTexture(candy);
 		candy3.SetTexture(candy);
+		_titleText = "LEVEL COMPLETE";
 		break;
 
 	case TWO_STARS:
@@ -414,6 +415,7 @@ void Overlay::UpdateGameOverMenu(f32 time, int health)
 		candy1.SetTexture(candy);
 		candy2.SetTexture(candy);
 		candy3.SetTexture(greyCandy);
+		_titleText = "LEVEL COMPLETE";
 		break;
 
 	case ONE_STAR:
@@ -421,6 +423,7 @@ void Overlay::UpdateGameOverMenu(f32 time, int health)
 		candy1.SetTexture(candy);
 		candy2.SetTexture(greyCandy);
 		candy3.SetTexture(greyCandy);
+		_titleText = "LEVEL COMPLETE";
 		break;
 
 	case LOSE:
@@ -428,6 +431,7 @@ void Overlay::UpdateGameOverMenu(f32 time, int health)
 		candy1.SetTexture(greyCandy);
 		candy2.SetTexture(greyCandy);
 		candy3.SetTexture(greyCandy);
+		_titleText = "LEVEL FAILED";
 		_homeBtn->UpdatePosition({ -150.f, -220.f });
 		_restartBtn->UpdatePosition({ 150.f, -220.f });
 		_nextBtn->UpdatePosition({ 900.f, -500.f }); // hide outside screen

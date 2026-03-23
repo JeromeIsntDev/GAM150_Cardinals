@@ -4,6 +4,7 @@
 void Level4_EditorUpdate();
 void Level4_EditorDraw();
 void Level4_Parallax();
+void Level4_UIDraw();
 
 
 extern bool isGamePaused;
@@ -187,6 +188,11 @@ void Level4_Initialize()
 void Level4_Update() {
 	f32 dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
+	if (isGameOver) {
+		if (input.isKeyTriggered(AEVK_R))
+			RestartLevel(UpdateGameManagerState, Level4);
+	}
+
 	if (pauseMenu) //Checks if pauseMenu Exists
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
@@ -311,14 +317,6 @@ void Level4_Draw() {
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
 
-	digipenFont.Input_Text("Time: ");
-	digipenFont.Draw_Text(675.f, 400.f);
-	digipenFont.Input_Float(levelTime);
-	digipenFont.Draw_Text_Corner(725.f, 387.f);
-
-	digipenFont.Input_Text("Level 4");
-	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
-
 	for (GameObject& live : gamelives) {
 		live.Draw();
 	}
@@ -365,6 +363,17 @@ void Level4_Parallax() {
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+void Level4_UIDraw()
+{
+	digipenFont.Input_Text("Time: ");
+	digipenFont.Draw_Text(675.f, 400.f);
+	digipenFont.Input_Float(levelTime);
+	digipenFont.Draw_Text_Corner(725.f, 387.f);
+
+	digipenFont.Input_Text("Level 4");
+	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
+}
+
 void Level4_EditorUpdate() {
 	if (IsEditorActive() && !isGamePaused && !isGameOver) {
 
@@ -404,6 +413,15 @@ void Level4_EditorUpdate() {
 void Level4_EditorDraw() {
 	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
 	if (IsEditorActive()) {
+		if (IsUsingSaveFile()) {
+			digipenFont.Input_Text("Using Save File");
+			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
+		}
+		DrawTileOutline();
+		mainPlayer.DebugDraw();
+		DrawDebugObjects(grid.objs);
+
+		digipenFont.Change_Text_Color(Colors::Black);
 		digipenFont.Input_Text("Editor Active");
 		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
 
@@ -485,14 +503,6 @@ void Level4_EditorDraw() {
 			break;
 		}
 		digipenFont.Draw_Text_Corner(15.f, -430.f);
-
-
-		if (IsUsingSaveFile()) {
-			digipenFont.Input_Text("Using Save File");
-			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
-		}
-		DrawTileOutline();
-		mainPlayer.DebugDraw();
-		DrawDebugObjects(grid.objs);
+		digipenFont.Change_Text_Color(Colors::White);
 	}
 }
