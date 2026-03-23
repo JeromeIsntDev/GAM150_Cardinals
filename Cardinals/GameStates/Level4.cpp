@@ -4,7 +4,7 @@
 void Level4_EditorUpdate();
 void Level4_EditorDraw();
 void Level4_Parallax();
-void Level4_Tutorial();
+
 
 extern bool isGamePaused;
 extern bool isGameOver;
@@ -50,8 +50,6 @@ namespace {
 
 	Grid grid;
 	Player mainPlayer;
-
-	int checkPoints = 0;
 }
 
 void Level4_Load() {
@@ -90,7 +88,6 @@ void Level4_Load() {
 
 void Level4_Initialize()
 {
-	checkPoints = 0;
 	PRINT("Initialize: %s", "Level 4\n");
 	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
 	bgm.SetVolume(AudioType::MUSIC, 0.8f);
@@ -329,7 +326,6 @@ void Level4_Draw() {
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
 
-	Level4_Tutorial();
 
 	Level4_EditorDraw();
 
@@ -499,14 +495,4 @@ void Level4_EditorDraw() {
 		mainPlayer.DebugDraw();
 		DrawDebugObjects(grid.objs);
 	}
-}
-
-void Level4_Tutorial() {
-	if (checkPoints > 0) return;
-	digipenFont.Change_Text_Color(Colors::White);
-	if (mainPlayer.GetPosition().y > 0.f) ++checkPoints;
-
-	digipenFont.Input_Text("Use 'W' and 'S' to move Vertically!");
-	digipenFont.Draw_Text(-200.f, -375.f);
-	digipenFont.Change_Text_Color(Colors::White);
 }
