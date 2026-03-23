@@ -17,15 +17,24 @@ from GameObject class from GameObject
 #include <iostream>
 
 
-void Collider::UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLength)
+void Collider::UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLength, GameObjectTag tag)
 {
 	f32 halfWidth = abs(xLength * 0.5f);
 	f32 halfHeight = abs(yLength * 0.5f);
 	const f32 padding = 5.f;
+	const f32 obs_padding = 10.f;
 
+	switch (tag) {
+	case GameObjectTag::Obstacle:
+		p_minPoint = { centrePoint.x - halfWidth + obs_padding,  centrePoint.y - halfHeight + obs_padding };
+		p_maxPoint = { centrePoint.x + halfWidth - obs_padding,  centrePoint.y + halfHeight - obs_padding };
+		break;
+	case GameObjectTag::Player:
+		p_minPoint = { centrePoint.x - halfWidth + obs_padding,  centrePoint.y - halfHeight + obs_padding };
+		p_maxPoint = { centrePoint.x + halfWidth - obs_padding,  centrePoint.y + halfHeight - obs_padding };
+		break;
+	}
 
-	p_minPoint = { centrePoint.x - halfWidth + padding,  centrePoint.y - halfHeight + padding};
-	p_maxPoint = { centrePoint.x + halfWidth - padding,  centrePoint.y + halfHeight - padding};
 }
 
 //collider logic
