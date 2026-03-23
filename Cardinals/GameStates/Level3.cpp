@@ -134,7 +134,7 @@ void Level3_Initialize()
 	pauseMenu = std::make_unique<Overlay>(squareMesh, PAUSE, -1,
 		[]() {isGamePaused = 0; },
 		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
-		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level4); });
+		[]() {isGamePaused = 0; UpdateGameManagerState(GameStateEnum::Level3); });
 
 	pauseMenu->SetTextures(
 		PauseMenuTextures{
@@ -148,7 +148,7 @@ void Level3_Initialize()
 	gameOverMenu = std::make_unique<Overlay>(
 		squareMesh,
 		LEVEL, 4,
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level5); },
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); },
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); });
 
