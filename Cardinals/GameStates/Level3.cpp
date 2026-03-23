@@ -147,10 +147,10 @@ void Level3_Initialize()
 
 	gameOverMenu = std::make_unique<Overlay>(
 		squareMesh,
-		LEVEL, 4,
+		LEVEL, 3,
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); },
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); });
+		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level3); });
 
 	gameOverMenu->SetTextures(
 		GameOverTextures{

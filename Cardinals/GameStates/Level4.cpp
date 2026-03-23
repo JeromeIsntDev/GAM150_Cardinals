@@ -144,7 +144,7 @@ void Level4_Initialize()
 
 	gameOverMenu = std::make_unique<Overlay>(
 		squareMesh,
-		LEVEL, 3,
+		LEVEL, 4,
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level5); },
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
 		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level4); });
