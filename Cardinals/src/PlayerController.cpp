@@ -539,9 +539,6 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 		else if (obj->_tag == GameObjectTag::Obstacle) {
 			std::cout << "obstacle hit" << std::endl;
 
-			// 1. Always trigger the screen shake on hit!
-			this->pendingCamShake = 5.f; 
-
 			UpdateRotation(0.f);
 			p_playerHealth--;
 			if (p_playerHealth <= 0) {
