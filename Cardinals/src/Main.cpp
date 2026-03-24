@@ -112,6 +112,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		if (AEInputCheckReleased(AEVK_3)) {
 			UpdateGameManagerState(GameStateEnum::Level3);
 		}
+		if (AEInputCheckReleased(AEVK_4)) {
+			UpdateGameManagerState(GameStateEnum::Level4);
+		}
+		if (AEInputCheckReleased(AEVK_8)) {
+			UpdateGameManagerState(GameStateEnum::LevelMenu);
+		}
 		if (AEInputCheckReleased(AEVK_9)) {
 			UpdateGameManagerState(GameStateEnum::Credits);
 		}

@@ -44,7 +44,7 @@ namespace {
 
 	f32 levelTime{};
 
-	GameObject gamelives[3]{};
+	GameObject gamelives;
 
 	Texture* backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
@@ -59,9 +59,8 @@ void Level3_Load() {
 	PRINT("Load: %s", "Level 3\n");
 
 	squareMesh = RectMeshCenter();
-	digipenFont.Load_Font(Fonts::Alt, 72.f);
-	digipenFont.Input_Text("Level 3");
-	digipenFont.Change_Text_Color(Colors::Black);
+	digipenFont.Load_Font(Fonts::Alt, 72.f);	
+	digipenFont.Change_Text_Color(Colors::White);
 
 	pauseTitleFont.Load_Font(Fonts::Alt, 72.f);
 
@@ -170,13 +169,10 @@ void Level3_Initialize()
 		obj->UpdatePosition(AEVec2{ 0.f, 0.f });
 	}
 
-	for (int i{}; i < 3; ++i) {
-		GameObject* live = &gamelives[i];
-		live->SetTexture(candyTexture);
-		live->SetMesh(squareMesh);
-		live->UpdateScale(AEVec2{ 70.f, 70.f });
-		live->UpdatePosition(AEVec2{ -70.f + i * 70.f, 380.f });
-	}
+	gamelives.SetTexture(candyTexture);
+	gamelives.SetMesh(squareMesh);
+	gamelives.UpdateScale(AEVec2{ 50.f, 50.f });
+	gamelives.UpdatePosition(AEVec2{ -750.f,-415.f });
 
 	for (GameObject* obj : grid.objs) {
 		//obj->Draw();
@@ -200,7 +196,6 @@ void Level3_Update() {
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
 		{
-			bgm.PauseAudio();
 			isGamePaused = !isGamePaused;
 			pauseMenu->SetActive(isGamePaused);
 		}
@@ -271,16 +266,6 @@ void Level3_Update() {
 			gravityEffect.Update(dt, obj->GetPosition(), obj->_tag);
 	}
 
-	for (int i{}; i < 3; ++i) {
-		GameObject* live = &gamelives[i];
-		if (i < mainPlayer.GetPlayerHealth()) {
-			live->SetTexture(candyTexture);
-		}
-		else {
-			live->SetTexture(greyCandyTexture);
-		}
-	}
-
 	//PLAYER ITEMS//
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
 	if (mainPlayer.GetPlayerJump()) {
@@ -320,13 +305,19 @@ void Level3_Draw() {
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
 
-	for (GameObject& live : gamelives) {
-		live.Draw();
-	}
+	digipenFont.Change_Text_Color(Colors::White);
+	digipenFont.Input_Text("x");
+	digipenFont.Draw_Text(AEVec2{ -720.f, -420.f }, .5f, 1.f);
+	digipenFont.Input_Float((float)mainPlayer.GetPlayerHealth());
+	digipenFont.Draw_Text(AEVec2{ -700.f, -420.f }, .5f, 1.f);
+
+	gamelives.Draw();
 
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
-	Level3_Tutorial();
+
+	if (!pauseMenu->IsActive() && !gameOverMenu->IsActive())Level3_Tutorial();
+
 	Level3_EditorDraw();
 
 	//PRINT("Draw: %s", "Level 3\n");

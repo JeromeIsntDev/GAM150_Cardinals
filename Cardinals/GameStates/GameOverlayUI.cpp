@@ -134,7 +134,7 @@ void Overlay::OnClick()
 	{
 		if (child->IsActive() && child->IsInteractable() && child->IsPointInside(mousePos.x, mousePos.y))
 		{
-			bgm.StopAudio();
+			if (child != _resumeBtn) bgm.StopAudio();
 			if (child == _nextBtn) bgm.PlayAudio("NEXT", AudioType::SFX, 1.f, 0);
 			else bgm.PlayAudio("CLICK", AudioType::SFX, 1.f, 0);
 			child->OnClick();
@@ -204,8 +204,8 @@ void Overlay::Draw() const
 	if (_mode == LEVEL && _bodyFont) {
 		_bodyFont->Input_Text(buffer);
 		_bodyFont->Change_Text_Color(Colors::White);
-		_bodyFont->Draw_Text(0.f, 0.f);
-		_bodyFont->Change_Text_Color(Colors::Black);
+		_bodyFont->Draw_Text(AEVec2{ 0.f, 0.f }, .5f, 1.f);
+		//_bodyFont->Change_Text_Color(Colors::Black);
 	}
 
 	// reset to default
