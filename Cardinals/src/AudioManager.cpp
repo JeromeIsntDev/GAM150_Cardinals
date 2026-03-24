@@ -116,6 +116,17 @@ void AudioManager::SetVolume(AudioType type, f32 vol)
 	AEAudioSetGroupVolume(sfxGroup, masterVol * sfxVol);
 }
 
+f32 AudioManager::GetVolume(AudioType type) const
+{
+	switch (type)
+	{
+		case AudioType::MASTER: return masterVol;
+		case AudioType::MUSIC: return musicVol;
+		case AudioType::SFX: return sfxVol;
+		default: return 1.f;
+	}
+}
+
 void AudioManager::PauseAudio() const
 {
 	AEAudioPauseGroup(musicGroup);

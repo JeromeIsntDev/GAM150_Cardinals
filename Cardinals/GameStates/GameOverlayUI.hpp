@@ -76,9 +76,10 @@ public:
 	
 	VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 width);
 	
-	void Update(); // from UIElement
+	void Update(f32 dt) override; // from UIElement
 	void Draw() const override; // from GameObject
 	void OnClick() override;
+	void SyncKnobToCurrentVolume();
 
 	void SetTextures(Texture* barTex, Texture* knobTex); // unique to VolSlider
 	AudioType GetAudioType() const { return audioType; }

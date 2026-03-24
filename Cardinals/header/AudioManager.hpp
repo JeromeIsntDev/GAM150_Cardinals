@@ -68,6 +68,7 @@ public:
     void LoadAudio(const std::string& name, const std::string& path);
     void PlayAudio(const std::string& name, AudioType type, f32 pitch = 1.0f, s32 loop = 0);
 	void SetVolume(AudioType type, f32 vol);
+	f32 GetVolume(AudioType type) const;
 
     //Group
     void PauseAudio() const;

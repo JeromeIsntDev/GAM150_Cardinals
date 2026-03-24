@@ -22,6 +22,26 @@ VolSlider::VolSlider(AEGfxVertexList* mesh, AudioType type, AEVec2 pos, f32 widt
 	knob.SetActive(true);
 }
 
+void VolSlider::SyncKnobToCurrentVolume()
+{
+	f32 volumePercent = 1.f;
+	switch (audioType)
+	{
+		case AudioType::MUSIC:
+			volumePercent = AudioManager::Instance().GetVolume(AudioType::MUSIC);
+			break;
+		case AudioType::SFX:
+			volumePercent = AudioManager::Instance().GetVolume(AudioType::SFX);
+			break;
+		case AudioType::MASTER:
+			volumePercent = AudioManager::Instance().GetVolume(AudioType::MASTER);
+			break;
+	}
+	f32 barStartX = GetPosition().x - (width / 2.f);
+	f32 newKnobX = barStartX + (volumePercent * width);
+	knob.UpdatePosition(AEVec2{ newKnobX, GetPosition().y });
+}
+
 void VolSlider::OnClick()
 {
 	// start drag on click
@@ -29,8 +49,10 @@ void VolSlider::OnClick()
 	isDragging = true;
 }
 
-void VolSlider::Update() 
+void VolSlider::Update(f32 dt) 
 {
+	(void)dt;
+
 	if (!IsActive() || !IsInteractable()) return;
 
 	if (AEInputCheckReleased(AEVK_LBUTTON))
@@ -76,6 +98,7 @@ void VolSlider::SetTextures(Texture* barTex, Texture* knobTex)
 {
 	if (barTex) GameObject::SetTexture(barTex);
 	if (knobTex) knob.SetTexture(knobTex);
+	SyncKnobToCurrentVolume();
 }
 
 ///
@@ -120,6 +143,7 @@ void Overlay::SetActive(bool active)
 
 	for (auto* child : children)
 	{
+		if (!child) continue;
 		child->SetActive(active);
 		child->SetInteractable(active);
 	}
@@ -132,11 +156,16 @@ void Overlay::OnClick()
 	AEVec2 mousePos = UIManager::GetNewMousePos();
 	for (auto* child : children)
 	{
+		if (!child) continue;
 		if (child->IsActive() && child->IsInteractable() && child->IsPointInside(mousePos.x, mousePos.y))
 		{
-			if (child != _resumeBtn) bgm.StopAudio();
-			if (child == _nextBtn) bgm.PlayAudio("NEXT", AudioType::SFX, 1.f, 0);
-			else bgm.PlayAudio("CLICK", AudioType::SFX, 1.f, 0);
+			if (child == _nextBtn)
+			{
+				bgm.PlayAudio("NEXT", AudioType::SFX, 1.f, 0);
+			} else if (child == _resumeBtn || child == _restartBtn || child == _homeBtn || child == _prevBtn) 
+			{
+				bgm.PlayAudio("CLICK", AudioType::SFX, 1.f, 0);
+			}
 			child->OnClick();
 			break;
 		}
@@ -149,6 +178,7 @@ void Overlay::Update(f32 dt)
 
 	for (auto* child : children)
 	{
+		if (!child) continue;
 		if (child->IsActive())
 		{
 			child->ResetTooltip();
@@ -188,6 +218,7 @@ void Overlay::Draw() const
 	AEGfxSetTransparency(1.f);
 	for (auto* child : children)
 	{
+		if (!child) continue;
 		if (child->IsActive())
 		{
 			AEGfxSetColorToMultiply(child->GetTint().r, child->GetTint().g, child->GetTint().b, child->GetTint().a);
