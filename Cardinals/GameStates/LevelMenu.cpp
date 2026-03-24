@@ -22,7 +22,7 @@ void LevelMenu_Load() {
 	textToUse.Input_Text("Level Menu");
 
 	buttonTexture.Load_Image(Images::Button);
-	exitTexture.Load_Image(Images::PrevBtn);
+	exitTexture.Load_Image(Images::ExitBtn);
 
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	memoryManager.AddTexture(&buttonTexture);
@@ -101,9 +101,9 @@ void LevelMenu_Initialize()
 	lvl5Btn->SetInteractable(true);
 
 	backBtn = std::make_unique<Button>(buttonMesh,
-		AEVec2{ -700.f, 350.f },
+		AEVec2{ -625.f, 375.f },
 		0.f,
-		AEVec2{ 120.f, 120.f });
+		AEVec2{ 280.f, 80.f });
 	backBtn->SetTexture(&exitTexture);
 	backBtn->SetActive(true);
 	backBtn->SetInteractable(true);
