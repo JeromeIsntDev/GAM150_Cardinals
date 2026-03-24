@@ -35,6 +35,7 @@
     <ClCompile Include="GameStates\GameOverlayUI.cpp" />
     <ClCompile Include="src\Animator.cpp" />
     <ClCompile Include="GameStates\Level3.cpp" />
+    <ClCompile Include="src\CameraEffects.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\MeshGenerator.hpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="header\Animator.hpp" />
     <ClInclude Include="GameStates\Level3.hpp" />
     <ClInclude Include="header\GameObjectTag.hpp" />
+    <ClInclude Include="header\CameraEffects.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="imGUI\glfw\lib-vc2010-64\glfw3.lib" />
