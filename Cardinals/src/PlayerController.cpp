@@ -32,6 +32,7 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	playerScore = score;
 	p_currPos.x = xPos;
 	p_currPos.y = yPos;
+	UpdatePosition({xPos, yPos});
 	UpdatePosition(p_currPos);
 	UpdateRotation(0.f);
 	p_velocityVector.x = zeroVal;
@@ -73,6 +74,11 @@ void Player::PlayerJump(f32 const& dt, GravityDirection& dir) {
 	
 	jumpBuffer = 0.f;
 	coyoteBuffer = 0.f;
+}
+
+Player::Player()
+	: GameObject()
+{
 }
 
 void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
@@ -541,6 +547,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 
 			UpdateRotation(0.f);
 			p_playerHealth--;
+			PRINT("[DEBUG] => Player Health: %d", p_playerHealth);
 			if (p_playerHealth <= 0) {
 				bgm.StopAudio();
 				bgm.PlayAudio("FAILOVERLAY", AudioType::MUSIC, 1.f, -1);

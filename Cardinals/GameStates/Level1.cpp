@@ -26,7 +26,7 @@ namespace {
 
 	//PLAYER VARIABLES
 	f32 playerMovespeed{ 300.f };
-	int  playerHealth{ 3 };
+	//int  playerHealth{ 3 };
 	Texture playerTexture[2]{};
 	ParticleEffect playerEffect;
 	ParticleEffect gravityEffect;
@@ -170,13 +170,13 @@ void Level1_Initialize()
 	timerBackground.UpdateScale({ 200.f, 50.f });
 
 	//Player Init
-	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false, 
+	mainPlayer.InitializePlayer(3, playerMovespeed, false, 
 		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 225.f, -25.f, false);
 	mainPlayer.SetMesh(squareMesh);
 	mainPlayer.SetTexture(&playerTexture[0]);
+	mainPlayer.UpdatePosition({ AEGfxGetWinMinX() + 225.f, -25.f });
 	mainPlayer.UpdateScale(AEVec2{50.f,50.f});
 	mainPlayer.UpdateRotation(0.f);
-	mainPlayer.UpdatePosition(mainPlayer.GetPosition());
 	mainPlayer._tag = GameObjectTag::Player;
 	mainPlayer.SetHealth(3);
 
@@ -340,7 +340,6 @@ void Level1_Update() {
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 
 	playerEffect.ResizePlayer(mainPlayer.isSprint);
-	
 }
 
 void Level1_Draw() {

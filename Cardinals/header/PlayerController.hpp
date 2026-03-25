@@ -101,6 +101,8 @@ public:
 	//void StartJump(AEVec2);
 	//The math and update for during the jump
 	void PlayerJump(f32 const&, GravityDirection&);
+
+	Player();
 };
 
 const unsigned int	COLLISION_LEFT = 0x00000001;		//0001

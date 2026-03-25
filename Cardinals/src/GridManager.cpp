@@ -15,7 +15,7 @@ std::ostream& operator<<(std::ostream& os, const GridCell& cell) {
 		<< "Position: " << cell.position.x << "," << cell.position.y;
 
 	if (cell.obj != nullptr) {
-		os << "Cell Object =>" << cell.obj;
+		os << "[DEBUG (Cell Object)] =>" << cell.obj;
 	}
 
 	return os;
