@@ -340,6 +340,8 @@ void Level1_Update() {
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 
 	playerEffect.ResizePlayer(mainPlayer.isSprint);
+
+	//isGamePaused = true;
 }
 
 void Level1_Draw() {
