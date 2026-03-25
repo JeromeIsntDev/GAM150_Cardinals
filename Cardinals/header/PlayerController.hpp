@@ -59,6 +59,7 @@ public:
 	bool canMoveRight{ true };
 	bool canMoveUp{ false };
 	bool canMoveDown{ false };
+	bool canMove{ true };
 	bool canSwapGrav = true;
 	//public Variable for Player (Check if error)
 	bool p_isGrounded{ false };
@@ -71,7 +72,13 @@ public:
 	bool audioPlayed{ false };
 	bool isMoving{ false };
 	bool isSprint{ false };
-	//void UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec);
+
+	//Death psuedo animation
+	f32 rot_Timer{ 0.f };
+	f32 hitCD{ 0.2f };
+	int rot_count{ 0 };
+	bool hitAnim{ false };
+
 	//Gets the player data
 
 	int	gridCollisionFlag{};
@@ -93,7 +100,7 @@ public:
 	//void SetPlayerHealth(f32);
 	void PlayerInputHandle(f32 const&, GravityDirection&);
 	void PlayerMovement(f32 const&, GravityDirection& dir);
-	void PlayerCollision(std::vector<GameObject*> objs);
+	void PlayerCollision(std::vector<GameObject*> objs, f32& dt);
 	void CheckBinaryCollision(Grid* grid, GravityDirection&);
 	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid* grid);
 	//Function for Player Jump Logic

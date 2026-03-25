@@ -285,7 +285,7 @@ void Level2_Update() {
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid, mainPlayer.grav);
-	mainPlayer.PlayerCollision(grid.objs);
+	mainPlayer.PlayerCollision(grid.objs, dt);
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;
 
 
