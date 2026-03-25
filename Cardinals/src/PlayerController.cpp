@@ -42,6 +42,7 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	p_previousPos = p_currPos;
 	grav = GravityDirection::Down;
 	gameOver = gOver;
+	p_isGrounded = true;
 }
 
 //takes in the current player pos, deltaTime & movement vector to update the player pos
@@ -208,23 +209,15 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		{
 		case Player::GravityDirection::Up:
 			p_velocityVector.y += (gravity * p_downForce) * dt;
-			p_currPos.y += (p_velocityVector.y) * dt;
-			p_currPos.x += (p_velocityVector.x) * dt;
 			break;
 		case Player::GravityDirection::Down:
 			p_velocityVector.y += (-gravity * p_downForce) * dt;
-			p_currPos.y += (p_velocityVector.y) * dt;
-			p_currPos.x += (p_velocityVector.x) * dt;
 			break;
 		case Player::GravityDirection::Left:
 			p_velocityVector.x += (-gravity * p_downForce) * dt;
-			p_currPos.x += (p_velocityVector.x) * dt;
-			p_currPos.y += (p_velocityVector.y) * dt;
 			break;
 		case Player::GravityDirection::Right:
 			p_velocityVector.x += (gravity * p_downForce) * dt;
-			p_currPos.x += (p_velocityVector.x) * dt;
-			p_currPos.y += (p_velocityVector.y) * dt;
 			break;
 		default:
 			break;
@@ -232,6 +225,8 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		//CLAMP HERE
 		p_velocityVector.y = AEClamp(p_velocityVector.y, -500.f, 500.f);
 		p_velocityVector.x = AEClamp(p_velocityVector.x, -500.f, 500.f);
+		p_currPos.x += (p_velocityVector.x) * dt;
+		p_currPos.y += (p_velocityVector.y) * dt;
 		/*p_velocityVector.y += gravity * dt;
 		p_currPos.y += (p_velocityVector.y * p_downForce) * dt;*/
 	}
