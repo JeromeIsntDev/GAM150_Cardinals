@@ -245,6 +245,43 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		}
 	}
 
+	if (hitCD > 0.f) {
+		hitCD -= dt;
+	}
+
+	if (hitAnim) {
+		rot_Timer += dt;
+		while (rot_Timer >= .045f && rot_count < 12) {
+			UpdateRotation(this->GetRotation() + (PI / 4.f));
+			std::cout << "this is running" << std::endl;
+			rot_Timer -= .045f;
+			++rot_count;
+		}
+
+		if (rot_count >= 12) {
+			UpdateRotation(0.f);
+			--p_playerHealth;
+
+			rot_Timer = 0.0f;
+			rot_count = 0;
+			hitAnim = false;
+
+			p_currPos = p_previousPos;
+			canMove = true;
+			grav = GravityDirection::Down;
+			p_velocityVector = { 0.f, 0.f };
+			p_Scale = { 50.f, 50.f };
+		}
+		if (p_playerHealth <= 0) {
+			bgm.StopAudio();
+			bgm.PlayAudio("FAILOVERLAY", AudioType::MUSIC, 1.f, -1);
+			p_velocityVector = { 0.f, 0.f };
+			p_Scale = { 50.f,50.f };
+			grav = GravityDirection::Down;
+			gameOver = true;
+		}
+	}
+
 	PlayerInputHandle(dt, dir);
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
 	if (p_currPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
@@ -286,10 +323,9 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		grav = Player::GravityDirection::Down;
 		gameOver = true;
 	}
-
-	//PRINT("Momentum: %f,%f", p_velocityVector.x, p_velocityVector.y);
-
-	UpdatePosition(p_currPos);
+	if (canMove) {
+		UpdatePosition(p_currPos);
+	}
 }
 
 void Player::CheckBinaryCollision(Grid* grid, GravityDirection& dir) {
@@ -477,7 +513,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	return Flag;
 }
 
-void Player::PlayerCollision(std::vector<GameObject*> objs)
+void Player::PlayerCollision(std::vector<GameObject*> objs, f32& dt)
 {
 	for (GameObject* obj : objs) {
 		if (this->_tag == obj->_tag) continue;
@@ -537,25 +573,21 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::Obstacle) {
-			std::cout << "obstacle hit" << std::endl;
-
-			UpdateRotation(0.f);
-			p_playerHealth--;
-			if (p_playerHealth <= 0) {
-				bgm.StopAudio();
-				bgm.PlayAudio("FAILOVERLAY", AudioType::MUSIC, 1.f, -1);
-				p_velocityVector = { 0.f, 0.f };
-				p_Scale = { 50.f,50.f };
-				grav = GravityDirection::Down;
-				gameOver = true;
-			}
-			else {
+			if (!hitAnim && p_playerHealth > 0 && hitCD <= 0.f) {
+				std::cout << "obstacle hit" << std::endl;
+				hitAnim = true;
+				canMove = false;
 				bgm.PlayAudio("HIT", AudioType::SFX, 1.f, 0);
-				p_currPos = p_previousPos;
-				grav = GravityDirection::Down;
-				p_velocityVector = { 0.f, 0.f };
-				p_Scale = { 50.f,50.f };
+				rot_Timer = 0.f;
+				rot_count = 0.f;
+				hitCD = 0.2f;
 			}
+			//else {
+			//	p_currPos = p_previousPos;
+			//	grav = GravityDirection::Down;
+			//	p_velocityVector = { 0.f, 0.f };
+			//	p_Scale = { 50.f,50.f };
+			//}
 		}
 	}
 }
