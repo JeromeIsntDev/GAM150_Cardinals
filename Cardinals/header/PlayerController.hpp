@@ -61,6 +61,7 @@ public:
 	bool canMoveDown{ false };
 	bool canMove{ true };
 	bool canSwapGrav = true;
+	bool isHit{ false };
 	//public Variable for Player (Check if error)
 	bool p_isGrounded{ false };
 	f32 maxJumpBuffer{ 0.12f };

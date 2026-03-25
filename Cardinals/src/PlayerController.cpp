@@ -203,28 +203,76 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 	coyoteBuffer = p_isGrounded ? maxCoyoteBuffer : max(0, coyoteBuffer - dt);
 	GravityDirection currDir = dir;
 	//down force velocity (always going downwards) depend on location
+
+	if (hitCD > 0.f) {
+		hitCD -= dt;
+	}
+
+	if (hitAnim) {
+		rot_Timer += dt;
+		while (rot_Timer >= .045f && rot_count < 12) {
+			UpdateRotation(this->GetRotation() + (PI / 4.f));
+			//std::cout << "this is running" << std::endl;
+			rot_Timer -= .045f;
+			++rot_count;
+		}
+
+		if (rot_count >= 12) {
+			UpdateRotation(0.f);
+			isHit = false;
+			std::cout << "this ran" << std::endl;
+			--p_playerHealth;
+
+			rot_Timer = 0.0f;
+			rot_count = 0;
+			hitAnim = false;
+
+			p_currPos = p_previousPos;
+			canMove = true;
+			grav = GravityDirection::Down;
+			p_velocityVector = { 0.f, 0.f };
+			p_Scale = { 50.f, 50.f };
+		}
+		if (p_playerHealth <= 0) {
+			bgm.StopAudio();
+			bgm.PlayAudio("FAILOVERLAY", AudioType::MUSIC, 1.f, -1);
+			p_velocityVector = { 0.f, 0.f };
+			p_Scale = { 50.f,50.f };
+			grav = GravityDirection::Down;
+			gameOver = true;
+		}
+	}
+
 	if (!p_isGrounded) {
 		switch (dir)
 		{
 		case Player::GravityDirection::Up:
-			p_velocityVector.y += (gravity * p_downForce) * dt;
-			p_currPos.y += (p_velocityVector.y) * dt;
-			p_currPos.x += (p_velocityVector.x) * dt;
+			if (!isHit) {
+				p_velocityVector.y += (gravity * p_downForce) * dt;
+				p_currPos.y += (p_velocityVector.y) * dt;
+				p_currPos.x += (p_velocityVector.x) * dt;
+			}
 			break;
 		case Player::GravityDirection::Down:
-			p_velocityVector.y += (-gravity * p_downForce) * dt;
-			p_currPos.y += (p_velocityVector.y) * dt;
-			p_currPos.x += (p_velocityVector.x) * dt;
+			if (!isHit) {
+				p_velocityVector.y += (-gravity * p_downForce) * dt;
+				p_currPos.y += (p_velocityVector.y) * dt;
+				p_currPos.x += (p_velocityVector.x) * dt;
+			}
 			break;
 		case Player::GravityDirection::Left:
-			p_velocityVector.x += (-gravity * p_downForce) * dt;
-			p_currPos.x += (p_velocityVector.x) * dt;
-			p_currPos.y += (p_velocityVector.y) * dt;
+			if (!isHit) {
+				p_velocityVector.x += (-gravity * p_downForce) * dt;
+				p_currPos.x += (p_velocityVector.x) * dt;
+				p_currPos.y += (p_velocityVector.y) * dt;
+			}
 			break;
 		case Player::GravityDirection::Right:
-			p_velocityVector.x += (gravity * p_downForce) * dt;
-			p_currPos.x += (p_velocityVector.x) * dt;
-			p_currPos.y += (p_velocityVector.y) * dt;
+			if (!isHit) {
+				p_velocityVector.x += (gravity * p_downForce) * dt;
+				p_currPos.x += (p_velocityVector.x) * dt;
+				p_currPos.y += (p_velocityVector.y) * dt;
+			}
 			break;
 		default:
 			break;
@@ -251,46 +299,12 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		}
 	}
 
-	if (hitCD > 0.f) {
-		hitCD -= dt;
-	}
-
-	if (hitAnim) {
-		rot_Timer += dt;
-		while (rot_Timer >= .045f && rot_count < 12) {
-			UpdateRotation(this->GetRotation() + (PI / 4.f));
-			std::cout << "this is running" << std::endl;
-			rot_Timer -= .045f;
-			++rot_count;
-		}
-
-		if (rot_count >= 12) {
-			UpdateRotation(0.f);
-			--p_playerHealth;
-
-			rot_Timer = 0.0f;
-			rot_count = 0;
-			hitAnim = false;
-
-			p_currPos = p_previousPos;
-			canMove = true;
-			grav = GravityDirection::Down;
-			p_velocityVector = { 0.f, 0.f };
-			p_Scale = { 50.f, 50.f };
-		}
-		if (p_playerHealth <= 0) {
-			bgm.StopAudio();
-			bgm.PlayAudio("FAILOVERLAY", AudioType::MUSIC, 1.f, -1);
-			p_velocityVector = { 0.f, 0.f };
-			p_Scale = { 50.f,50.f };
-			grav = GravityDirection::Down;
-			gameOver = true;
-		}
-	}
-
 	PlayerInputHandle(dt, dir);
+
+
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
-	if (p_currPos.y + (GetScale().y * 0.5f) <= -AEGfxGetWindowHeight() + AEGfxGetWinMaxY() + (GetScale().y / 2.f)) {
+	std::cout << p_currPos.y << std::endl;
+	if (p_currPos.y <= -500.f) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
 		p_Scale = { 50.f,50.f };
@@ -578,8 +592,9 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, f32& dt)
 			UpdateRotation(-(PI / 2.f));
 			p_Scale.y = -50.f;
 		}
-		else if (obj->_tag == GameObjectTag::Obstacle) {
+		else if (obj->_tag == GameObjectTag::Obstacle && !isHit) {
 			if (!hitAnim && p_playerHealth > 0 && hitCD <= 0.f) {
+				isHit = true;
 				std::cout << "obstacle hit" << std::endl;
 				hitAnim = true;
 				canMove = false;
@@ -588,12 +603,6 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, f32& dt)
 				rot_count = 0.f;
 				hitCD = 0.2f;
 			}
-			//else {
-			//	p_currPos = p_previousPos;
-			//	grav = GravityDirection::Down;
-			//	p_velocityVector = { 0.f, 0.f };
-			//	p_Scale = { 50.f,50.f };
-			//}
 		}
 	}
 }
