@@ -158,7 +158,6 @@ void Level1_Initialize()
 {
 	PRINT("[DEBUG | LEVEL] => Initialize: %s", "Level 1\n");
 	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
-	bgm.SetVolume(AudioType::MUSIC, 0.8f);
 
 	checkPoints = 0;
 

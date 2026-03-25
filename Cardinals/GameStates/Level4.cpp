@@ -90,7 +90,6 @@ void Level4_Initialize()
 {
 	PRINT("Initialize: %s", "Level 4\n");
 	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
-	bgm.SetVolume(AudioType::MUSIC, 0.8f);
 
 	playerEffect.Init();
 	gravityEffect.Init();
@@ -168,8 +167,8 @@ void Level4_Initialize()
 
 	gamelives.SetTexture(candyTexture);
 	gamelives.SetMesh(squareMesh);
-	gamelives.UpdateScale(AEVec2{ 40.f, 40.f });
-	gamelives.UpdatePosition(AEVec2{ -750.f,-425.f });
+	gamelives.UpdateScale(AEVec2{ 50.f, 50.f });
+	gamelives.UpdatePosition(AEVec2{ -750.f,-415.f });
 
 	for (GameObject* obj : grid.objs) {
 		//obj->Draw();
@@ -304,9 +303,9 @@ void Level4_Draw() {
 
 	digipenFont.Change_Text_Color(Colors::White);
 	digipenFont.Input_Text("x");
-	digipenFont.Draw_Text(AEVec2{ -725.f, -435.f }, .4f, 1.f);
+	digipenFont.Draw_Text(AEVec2{ -720.f, -420.f }, .5f, 1.f);
 	digipenFont.Input_Float((float)mainPlayer.GetPlayerHealth());
-	digipenFont.Draw_Text(AEVec2{ -710.f, -435.f }, .4f, 1.f);
+	digipenFont.Draw_Text(AEVec2{ -700.f, -420.f }, .5f, 1.f);
 
 	gamelives.Draw();
 

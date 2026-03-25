@@ -93,7 +93,6 @@ void Level3_Initialize()
 	checkPoints = 0;
 	PRINT("Initialize: %s", "Level 3\n");
 	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
-	bgm.SetVolume(AudioType::MUSIC, 0.8f);
 
 	playerEffect.Init();
 	gravityEffect.Init();
