@@ -223,10 +223,11 @@ void GameObject::DebugDraw() const
 		break;
 	}
 
-	AEMtx33 transform, scl;
+	AEMtx33 transform, rot, scl;
 	AEMtx33Scale(&scl, scale.x, scale.y);
+	AEMtx33Rot(&rot, 0.f);
 
-	AEMtx33Concat(&transform, &mtx_rotation, &scl);
+	AEMtx33Concat(&transform, &rot, &scl);
 	AEMtx33Concat(&transform, &mtx_translation, &transform);
 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR);
