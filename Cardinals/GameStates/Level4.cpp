@@ -90,7 +90,6 @@ void Level4_Initialize()
 {
 	PRINT("Initialize: %s", "Level 4\n");
 	bgm.PlayAudio("GAMEPLAY", AudioType::MUSIC, 1.f, -1);
-	bgm.SetVolume(AudioType::MUSIC, 0.8f);
 
 	playerEffect.Init();
 	gravityEffect.Init();
