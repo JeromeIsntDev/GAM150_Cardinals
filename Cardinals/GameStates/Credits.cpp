@@ -30,7 +30,7 @@ void Credits_Load() {
 	//for every additional name \n\n one \n in name is \n\n in title 
 	titleFont.Input_Text("By Orbital Candy\n\n\n\n\n TECHNICAL LEAD\n\n\n\nGAMEPLAY PROGRAMMER\n\n\n\n UI & ART LEAD\n\n\n\n SYSTEM PROGRAMMER\n\n\n\n\n\n\n\nFACULTY and ADVISORS\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPRESIDENT\n\n\n\nEXECUTIVES\n\n\n\n\n\n\n\n\n\nWWW.DIGIPEN.EDU\nAll content (C) 2026 Digipen Institute of Technology Singapore. All Rights Reserved");
 	nameFont.Input_Text("Cardinals\n\n\n\nJerome Lim\n\nSadric Koh\n\nBreanne Chua\n\nShirley Liau\nZoey Tan\n\n\nGerald Wong\nSoroor Malekmohammadi Faradounbeh\nTommy Tan\n\n\n\nCreated at\n\n\n\n\n\n\n\nClaude Comair\n\nChu Jason Yeu Tat   Michael Gats\nTan Chek Ming   Prasanna Kumar Ghali\nMandy Wong   Johnny Deek");
-	quitFont.Input_Text("Press Q to quit");
+	quitFont.Input_Text("Press SPACE to quit");
 
 	squareMesh = RectMeshCenter();
 
@@ -75,7 +75,7 @@ void Credits_Update() {
 		fading -= quit_dt <= 1.f ? dt : 0;
 	}
 	
-	if (quitCredits || input.isKeyTriggered(AEVK_Q)){
+	if (quitCredits || input.isKeyTriggered(AEVK_SPACE)){
 		UpdateGameManagerState(GameStateEnum::MainMenu);
 	}
 
@@ -98,7 +98,7 @@ void Credits_Update() {
 void Credits_Draw() {
 	titleFont.Draw_Text(AEVec2{ 0, startY }, 1.f, fading);
 	nameFont.Draw_Text(AEVec2{ 0, startY + 37.5f }, 1.f, fading);
-	quitFont.Draw_Text(AEVec2{ -700, 425 }, 1.f, fading);
+	quitFont.Draw_Text(AEVec2{ -670, 425 }, 1.f, fading);
 
 	if (startY >= endY - winHeight) {
 		logo.Draw();
