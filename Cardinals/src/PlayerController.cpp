@@ -237,9 +237,9 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 			gameOver = true;
 		}
 	}
+	clampedDT = AEMin(0.01667f, dt);
 
 	if (!p_isGrounded) {
-		clampedDT = AEClamp(clampedDT,dt, 0.01667f);
 		switch (dir)
 		{
 		case Player::GravityDirection::Up:
