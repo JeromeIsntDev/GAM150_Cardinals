@@ -99,6 +99,10 @@ void LevelMenu_Initialize()
 	lvl5Btn->SetTexture(&buttonTexture);
 	lvl5Btn->SetActive(true);
 	lvl5Btn->SetInteractable(true);
+	lvl5Btn->SetOnClick([]() {
+		PRINT("Level 5 Pressed\n");
+		UpdateGameManagerState(GameStateEnum::Level5);
+		});
 
 	backBtn = std::make_unique<Button>(buttonMesh,
 		AEVec2{ -700.f, 350.f },
