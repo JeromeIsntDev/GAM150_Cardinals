@@ -269,8 +269,8 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		p_velocityVector.y = AEClamp(p_velocityVector.y, -550.f, 550.f);
 		p_velocityVector.x = AEClamp(p_velocityVector.x, -500.f, 500.f);
 		if (!isHit) {
-			p_currPos.x += (p_velocityVector.x) * dt;
-			p_currPos.y += (p_velocityVector.y) * dt;
+			p_currPos.x += (p_velocityVector.x) * clampedDT;
+			p_currPos.y += (p_velocityVector.y) * clampedDT;
 		}
 		/*p_velocityVector.y += gravity * dt;
 		p_currPos.y += (p_velocityVector.y * p_downForce) * dt;*/
