@@ -148,17 +148,10 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	//Sprint speed logic
 	if (isSprint) {
 		f32 maxSpeed = moveSpeed * 1.2f;
-		if (p_moveSpeed <= maxSpeed) {
-			p_moveSpeed += moveSpeed * dt;
-		}
+		p_moveSpeed = maxSpeed;
 	}
 	else {
-		if (p_moveSpeed > moveSpeed) {
-			p_moveSpeed -= (moveSpeed)*dt;
-		}
-		else {
-			p_moveSpeed = moveSpeed;
-		}
+		p_moveSpeed = moveSpeed;
 	}
 	//std::cout << "left bool: " << canMoveLeft << std::endl;
 	//std::cout << "right bool: " << canMoveRight << std::endl;
