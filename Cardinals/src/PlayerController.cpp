@@ -24,6 +24,7 @@ the player movement etc
 //{}
 
 auto& input = InputHandler::GetInstance();
+f32 clampedDT{};
 
 void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* newMesh, f32 xPos, f32 yPos, bool gOver) {
 	p_playerHealth = health;
@@ -214,7 +215,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		if (rot_count >= 12) {
 			UpdateRotation(0.f);
 			isHit = false;
-			std::cout << "this ran" << std::endl;
+			//std::cout << "this ran" << std::endl;
 			--p_playerHealth;
 
 			rot_Timer = 0.0f;
@@ -238,26 +239,27 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 	}
 
 	if (!p_isGrounded) {
+		clampedDT = AEClamp(clampedDT,dt, 0.01667f);
 		switch (dir)
 		{
 		case Player::GravityDirection::Up:
 			if (!isHit) {
-				p_velocityVector.y += (gravity * p_downForce) * dt;
+				p_velocityVector.y += (gravity * p_downForce) * clampedDT;
 			}
 			break;
 		case Player::GravityDirection::Down:
 			if (!isHit) {
-				p_velocityVector.y += (-gravity * p_downForce) * dt;
+				p_velocityVector.y += (-gravity * p_downForce) * clampedDT;
 			}
 			break;
 		case Player::GravityDirection::Left:
 			if (!isHit) {
-				p_velocityVector.x += (-gravity * p_downForce) * dt;
+				p_velocityVector.x += (-gravity * p_downForce) * clampedDT;
 			}
 			break;
 		case Player::GravityDirection::Right:
 			if (!isHit) {
-				p_velocityVector.x += (gravity * p_downForce) * dt;
+				p_velocityVector.x += (gravity * p_downForce) * clampedDT;
 			}
 			break;
 		default:
@@ -293,7 +295,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 
 
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
-	std::cout << p_currPos.y << std::endl;
+	//std::cout << p_currPos.y << std::endl;
 	if (p_currPos.y <= -500.f) {
 		p_currPos = p_previousPos;
 		p_velocityVector = { 0.f, 0.f };
