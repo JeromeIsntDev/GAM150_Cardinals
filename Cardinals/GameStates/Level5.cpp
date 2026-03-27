@@ -138,13 +138,23 @@ void Level5_Initialize() {
 			homeTexture, &pauseTitleFont
 		});
 	isGamePaused = 0;
-
-	gameOverMenu = std::make_unique<Overlay>(
-		squareMesh,
-		LEVEL, 5,
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Credits); },
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
-		[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level5); });
+	if (counter::specialCount < 4) {
+		std::cout << "Initializing without special" << std::endl;
+		gameOverMenu = std::make_unique<Overlay>(
+			squareMesh,
+			LEVEL, 5,
+			[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Credits); },
+			[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
+			[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level5); });
+	}else{
+		std::cout << "Initializing with special" << std::endl;
+		gameOverMenu = std::make_unique<Overlay>(
+			squareMesh,
+			LEVEL, 5,
+			[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Special); },
+			[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::MainMenu); },
+			[]() {isGameOver = 0; UpdateGameManagerState(GameStateEnum::Level5); });
+	}
 
 	gameOverMenu->SetTextures(
 		GameOverTextures{

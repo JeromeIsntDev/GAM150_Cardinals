@@ -230,6 +230,7 @@ void ControlPanelFunction() {
 	ImGui::EndChild();
 
 	ImGui::Separator();
+	counter::specialCount = static_cast<int>(AEClamp(static_cast<f32>(counter::specialCount), 0, 4));
 	if (ImGui::Button("Display Special Count")) {
 		std::string countText{ "Count: " };
 		countText += std::to_string(counter::specialCount);
@@ -238,7 +239,9 @@ void ControlPanelFunction() {
 	ImGui::SameLine();
 	if (ImGui::Button("Increase Special Count")) {
 		std::string countText{ "Count Added: " };
-		counter::specialCount++;
+		if (counter::specialCount < 4) {
+			counter::specialCount++;
+		}
 		countText += std::to_string(counter::specialCount);
 		AddLog(countText);
 	}

@@ -83,6 +83,14 @@ void UpdateGameManagerState(GameStateEnum state)
 		Free_State = Level5_Free;
 		Unload_State = Level5_Unload;
 		break;
+	case Special:
+		Load_State = LevelS_Load;
+		Init_State = LevelS_Initialize;
+		Update_State = LevelS_Update;
+		Draw_State = LevelS_Draw;
+		Free_State = LevelS_Free;
+		Unload_State = LevelS_Unload;
+		break;
 	default:
 		break;
 	}

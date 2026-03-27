@@ -106,6 +106,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="GameStates\Level5.cpp" />
     <ClCompile Include="GameStates\LevelMenu.cpp" />
     <ClCompile Include="GameStates\MainMenu.cpp" />
+    <ClCompile Include="GameStates\SpecialLevel.cpp" />
     <ClCompile Include="imGUI\imgui.cpp" />
     <ClCompile Include="imGUI\imgui_demo.cpp" />
     <ClCompile Include="imGUI\imgui_draw.cpp" />
@@ -144,6 +145,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="GameStates\Level5.hpp" />
     <ClInclude Include="GameStates\LevelMenu.hpp" />
     <ClInclude Include="GameStates\MainMenu.hpp" />
+    <ClInclude Include="GameStates\SpecialLevel.hpp" />
     <ClInclude Include="header\Animator.hpp" />
     <ClInclude Include="header\AudioManager.hpp" />
     <ClInclude Include="header\CameraEffects.hpp" />

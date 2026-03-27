@@ -254,15 +254,6 @@
     },
     {
       "posx": -675.0,
-      "posy": -225.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 5
-    },
-    {
-      "posx": -675.0,
       "posy": -275.0,
       "rot": 0.0,
       "scalex": 50.0,
@@ -505,88 +496,7 @@
       "tileslice": 4
     },
     {
-      "posx": -725.0,
-      "posy": -125.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 4
-    },
-    {
       "posx": -775.0,
-      "posy": -125.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 4
-    },
-    {
-      "posx": -725.0,
-      "posy": -175.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 4
-    },
-    {
-      "posx": -775.0,
-      "posy": -175.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 4
-    },
-    {
-      "posx": -775.0,
-      "posy": -225.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 4
-    },
-    {
-      "posx": -725.0,
-      "posy": -225.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 4
-    },
-    {
-      "posx": -725.0,
-      "posy": -275.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 4
-    },
-    {
-      "posx": -775.0,
-      "posy": -275.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 4
-    },
-    {
-      "posx": -775.0,
-      "posy": -325.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 4
-    },
-    {
-      "posx": -725.0,
       "posy": -325.0,
       "rot": 0.0,
       "scalex": 50.0,
@@ -863,15 +773,6 @@
       "scaley": 50.0,
       "typetag": 0,
       "tileslice": 0
-    },
-    {
-      "posx": -675.0,
-      "posy": -175.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 5
     },
     {
       "posx": -25.0,
@@ -4060,15 +3961,6 @@
       "tileslice": 9
     },
     {
-      "posx": -675.0,
-      "posy": -125.0,
-      "rot": -1.570796251296997,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 0,
-      "tileslice": 9
-    },
-    {
       "posx": 125.0,
       "posy": -225.0,
       "rot": 1.570796251296997,
@@ -4139,6 +4031,87 @@
       "scaley": 50.0,
       "typetag": 0,
       "tileslice": 4
+    },
+    {
+      "posx": -725.0,
+      "posy": -275.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 10,
+      "tileslice": 0
+    },
+    {
+      "posx": -675.0,
+      "posy": -225.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0,
+      "tileslice": 2
+    },
+    {
+      "posx": -675.0,
+      "posy": -125.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0,
+      "tileslice": 7
+    },
+    {
+      "posx": -725.0,
+      "posy": -125.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0,
+      "tileslice": 7
+    },
+    {
+      "posx": -775.0,
+      "posy": -175.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0,
+      "tileslice": 5
+    },
+    {
+      "posx": -775.0,
+      "posy": -225.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0,
+      "tileslice": 5
+    },
+    {
+      "posx": -775.0,
+      "posy": -275.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0,
+      "tileslice": 5
+    },
+    {
+      "posx": -725.0,
+      "posy": -325.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0,
+      "tileslice": 4
+    },
+    {
+      "posx": -775.0,
+      "posy": -125.0,
+      "rot": -1.570796251296997,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 0,
+      "tileslice": 9
     }
   ]
 }
