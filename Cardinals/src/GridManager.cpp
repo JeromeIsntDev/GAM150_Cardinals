@@ -258,6 +258,7 @@ void Grid::ChangeTile(GridCell* cell) const
 void Grid::RotateTile(f32 x, f32 y, s32 mouseDelta)
 {
 	GridCell* cell = GetCell(y, x);
+	if (!cell->obj) return;
 	f32 rot = cell->obj->GetRotation() + (PI / 2) * (mouseDelta > 0 ? 1 : -1);
 	if (rot >= PI * 2 || rot <= -PI * 2) rot = 0;
 	cell->obj->UpdateRotation(rot);
