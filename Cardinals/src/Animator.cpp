@@ -14,12 +14,13 @@ Functions definition for Animator objects
 #include "../header/Animator.hpp"
 
 void Animator::AnimationUpd(f32& dt) {
+	int i{};
 	if (!isPlaying)return;
 	//functionality here
 	animTime += dt;
 	if (animTime >= frameDur) {
 		animTime = 0.f;
-		//go to next frame
+		//animArr[i++];
 		currFrame++;
 	}
 }
@@ -46,6 +47,6 @@ f32 Animator::GetAnimTime() const {
 	return animTime;
 }
 
-std::array<Texture, Animator::ANIM_FRAMES> Animator::GetArr() const {
+std::array<int, Animator::ANIM_FRAMES> Animator::GetArr() const {
 	return animArr;
 }

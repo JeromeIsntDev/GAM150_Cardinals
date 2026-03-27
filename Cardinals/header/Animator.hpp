@@ -37,14 +37,14 @@ public:
 	f32 GetAnimTime()const;
 	bool GetLoop() const;
 	bool GetPlaying() const;
-	std::array<Texture, ANIM_FRAMES> GetArr() const;
+	std::array<int, ANIM_FRAMES> GetArr() const;
 private:
 	bool isLoop;
 	bool isPlaying;
 	f32 animTime;
 	f32 frameDur; //how long to hold the frame
 	int currFrame;
-	std::array<Texture, ANIM_FRAMES> animArr;
+	std::array<int, ANIM_FRAMES> animArr;
 };
 
 #endif // !
