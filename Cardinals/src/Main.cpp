@@ -55,6 +55,9 @@ void AddLog(const std::string& msg);
 static char buffer[128] = "";
 MemoryManager memoryManager;
 
+namespace counter {
+	int specialCount = 0;
+}
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	_In_opt_ HINSTANCE hPrevInstance,
@@ -204,6 +207,10 @@ void ControlPanelFunction() {
 		UpdateGameManagerState(GameStateEnum::Level4);
 	}
 	ImGui::SameLine();
+	if (ImGui::Button("Load L5")) {
+		AddLog("Loading Level 5");
+		UpdateGameManagerState(GameStateEnum::Level5);
+	}
 	if (ImGui::Button("Clear Log")) {
 		g_logs.clear();
 	}
@@ -223,9 +230,26 @@ void ControlPanelFunction() {
 	ImGui::EndChild();
 
 	ImGui::Separator();
-
-	if (ImGui::Button("Test Button")) {
-		AddLog("Functionality Not Added");
+	if (ImGui::Button("Display Special Count")) {
+		std::string countText{ "Count: " };
+		countText += std::to_string(counter::specialCount);
+		AddLog(countText);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("Increase Special Count")) {
+		std::string countText{ "Count Added: " };
+		counter::specialCount++;
+		countText += std::to_string(counter::specialCount);
+		AddLog(countText);
+	}
+	ImGui::SameLine();
+	if (counter::specialCount > 0) {
+		if (ImGui::Button("Reset Special Count")) {
+			std::string countText{ "Count Resetted: " };
+			counter::specialCount = 0;
+			countText += std::to_string(counter::specialCount);
+			AddLog(countText);
+		}
 	}
 	ImGui::End();
 }

@@ -143,8 +143,12 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	else {
 		p_moveSpeed = moveSpeed;
 	}
-	//std::cout << "left bool: " << canMoveLeft << std::endl;
-	//std::cout << "right bool: " << canMoveRight << std::endl;
+	
+	if (canTouch && input.isKeyTriggered(AEVK_E)) {
+		std::cout << "item pressed" << std::endl;
+		counter::specialCount++;
+		canTouch = false;
+	}
 
 	if (input.isKeyTriggered(AEVK_SPACE) && !p_isJumping) {
 		bgm.PlayAudio("JUMP", AudioType::SFX, 1.f, 0);
@@ -235,7 +239,6 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		}
 	}
 	clampedDT = AEMin(0.01667f, dt);
-
 	if (!p_isGrounded) {
 		switch (dir)
 		{
@@ -522,7 +525,7 @@ int Player::CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 
 	return Flag;
 }
 
-void Player::PlayerCollision(std::vector<GameObject*> objs, f32& dt)
+void Player::PlayerCollision(std::vector<GameObject*> objs)
 {
 	for (GameObject* obj : objs) {
 		if (this->_tag == obj->_tag) continue;
@@ -605,9 +608,13 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, f32& dt)
 				canMove = false;
 				bgm.PlayAudio("HIT", AudioType::SFX, 1.f, 0);
 				rot_Timer = 0.f;
-				rot_count = 0.f;
+				rot_count = 0;
 				hitCD = 0.2f;
 			}
+		}
+		else if (obj->_tag == GameObjectTag::Special && !itemTouched) {
+			canTouch = true;
+			itemTouched = true;
 		}
 	}
 }

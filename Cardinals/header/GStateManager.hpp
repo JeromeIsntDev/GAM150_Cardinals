@@ -16,6 +16,10 @@
 
 typedef void(*FuncPtr)(void);
 
+namespace counter {
+	extern int specialCount;
+}
+
 enum GameStateEnum {
 	MainMenu = 0,
 	Credits,

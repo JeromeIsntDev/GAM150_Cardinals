@@ -60,6 +60,7 @@ void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH)
 	obstacleTexture.Load_Image(Images::CandyCorn);
 	gravTexture.Load_Image(Images::GravImg);
 	winTexture.Load_Image(Images::WinPortal);
+	specialTexture.Load_Image(Images::Placeholder);
 }
 
 void Grid::Clear()
@@ -69,6 +70,7 @@ void Grid::Clear()
 	obstacleTexture.Unload_Image();
 	gravTexture.Unload_Image();
 	winTexture.Unload_Image();
+	specialTexture.Unload_Image();
 	//tileTexture.Unload_Image();
 	objs.clear();
 	for (u32 i = 0; i < rows; ++i) {
@@ -146,6 +148,10 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
 		cell->obj->SetMesh(standardMesh);
 		cell->obj->SetTexture(&gravTexture);
 		cell->obj->UpdateRotation(-(PI / 2.f));
+		break;
+	case GameObjectTag::Special:
+		cell->obj->SetMesh(standardMesh);
+		cell->obj->SetTexture(&specialTexture);
 		break;
 	case GameObjectTag::Static:
 	default:

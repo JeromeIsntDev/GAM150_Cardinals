@@ -33,6 +33,7 @@ struct Grid {
 	Texture obstacleTexture{};
 	Texture gravTexture{};
 	Texture winTexture{};
+	Texture specialTexture{};
 
 	GridCell** cells = nullptr;
 	std::vector<GameObject*> objs{};

@@ -38,9 +38,11 @@ void Collider::UpdateCollider(AEVec2 centrePoint, f32 xLength, f32 yLength, cons
 	case GameObjectTag::GravLeft:
 	case GameObjectTag::Gravright:
 	case GameObjectTag::Win:
+	case GameObjectTag::Special:
 		p_minPoint = { centrePoint.x - halfWidth + grav_padding,  centrePoint.y - halfHeight + grav_padding };
 		p_maxPoint = { centrePoint.x + halfWidth - grav_padding,  centrePoint.y + halfHeight - grav_padding };
 		break;
+
 	case GameObjectTag::Static:
 		p_minPoint = { centrePoint.x - halfWidth + padding,  centrePoint.y - halfHeight + padding };
 		p_maxPoint = { centrePoint.x + halfWidth - padding,  centrePoint.y + halfHeight - padding };

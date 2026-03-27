@@ -124,7 +124,7 @@ void ChangeTileTag()
 		++editor_tileTag;
 	}
 	editor_tileTag = static_cast<int>(AEClamp(static_cast<f32>(editor_tileTag), 0.f,
-		static_cast<f32>(GameObjectTag::Obstacle)));
+		static_cast<f32>(GameObjectTag::Special)));
 }
 
 void ChangeTileSlice()

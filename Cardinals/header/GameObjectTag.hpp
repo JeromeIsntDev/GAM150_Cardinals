@@ -12,6 +12,7 @@ enum class GameObjectTag : int {
 	GravLeft = 7,
 	Gravright = 8,
 	Obstacle = 9,
+	Special = 10,
 
 	GameObjectTagNumber
 };

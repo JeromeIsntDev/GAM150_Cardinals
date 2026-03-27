@@ -334,7 +334,7 @@ void Level1_Update() {
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid,mainPlayer.grav);
-	mainPlayer.PlayerCollision(grid.objs, dt);
+	mainPlayer.PlayerCollision(grid.objs);
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
@@ -515,6 +515,9 @@ void Level1_EditorDraw() {
 			break;
 		case 9:
 			digipenFont.Input_Text("Obstacle");
+			break;
+		case 10:
+			digipenFont.Input_Text("Special");
 			break;
 		}
 		digipenFont.Draw_Text(AEVec2{ 75.f, -365.f }, .5f, 1.f);
