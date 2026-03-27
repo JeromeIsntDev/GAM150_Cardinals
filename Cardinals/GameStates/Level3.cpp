@@ -1,8 +1,6 @@
 #include "Level3.hpp"
 #include "GameEditor.hpp"
 
-void Level3_EditorUpdate();
-void Level3_EditorDraw();
 void Level3_Parallax();
 void Level3_UIDraw();
 void Level3_Tutorial();
@@ -53,6 +51,8 @@ namespace {
 	Player mainPlayer;
 
 	int checkPoints = 0;
+
+	std::string const& savePath{ "../../Saves/Level3_GameObjects.json" };
 }
 
 void Level3_Load() {
@@ -73,7 +73,7 @@ void Level3_Load() {
 	memoryManager.AddFont(&digipenFont);
 	memoryManager.AddFont(&pauseTitleFont);
 
-	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level3_GameObjects.json");
+	std::vector<GameObject> objData = ReadJsonToObjects(savePath.c_str());
 	grid.Load(tex.Get("TileSheet"), 900, 1200, 300, 300);
 	grid.Initialize();
 	for (int i{}; i < objData.size(); ++i) {
@@ -190,7 +190,7 @@ void Level3_Update() {
 		if (input.isKeyTriggered(AEVK_R))
 			RestartLevel(UpdateGameManagerState, Level3);
 	}
-	
+
 	if (pauseMenu) //Checks if pauseMenu Exists
 	{
 		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
@@ -248,13 +248,6 @@ void Level3_Update() {
 		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
 	}
 
-	if (!IsEditorActive() || IsEditorActive())
-		if (input.isKeyTriggered(AEVK_E))
-			ToggleEditorMode();
-
-	Level3_EditorUpdate();
-	Level3_Parallax();
-
 	if (isGamePaused || isGameOver) return;
 
 	for (GameObject* obj : grid.objs) {
@@ -283,15 +276,17 @@ void Level3_Update() {
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 	playerEffect.ResizePlayer(mainPlayer.isSprint);
+
+	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_E))
+		ToggleEditorMode();
+
+	if (IsEditorActive()) {
+		EditorUpdate(&grid, Level3, savePath);
+	}
 }
 
 void Level3_Draw() {
-
-	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	for (GameObject& obj : backgroundObjs) {
-		obj.Draw();
-	}
-	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+	Level3_Parallax();
 	for (GameObject* obj : grid.objs) {
 		//obj->Draw();
 		if (obj->_tag == GameObjectTag::GravUp ||
@@ -315,11 +310,11 @@ void Level3_Draw() {
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
 
-	if (!pauseMenu->IsActive() && !gameOverMenu->IsActive())Level3_Tutorial();
-
-	Level3_EditorDraw();
-
-	//PRINT("Draw: %s", "Level 3\n");
+	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
+	Level3_Tutorial();
+	if (IsEditorActive()) {
+		EditorDraw(digipenFont, grid, mainPlayer);
+	}
 }
 
 void Level3_Free() {
@@ -352,6 +347,9 @@ void Level3_Parallax() {
 	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
 	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
+	for (GameObject& obj : backgroundObjs) {
+		obj.Draw();
+	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
@@ -364,148 +362,6 @@ void Level3_UIDraw()
 
 	digipenFont.Input_Text("Level 3");
 	digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
-}
-
-void Level3_EditorUpdate() {
-	if (IsEditorActive() && !isGamePaused && !isGameOver) {
-
-		//DragObject(levelObjList);
-		ChangeTileTag();
-		ChangeTileSlice();
-
-		if (input.isKeyTriggered(AEVK_R))
-			RestartLevel(UpdateGameManagerState, Level3);
-
-		if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_S))
-			SaveGameObjectToFilepath("../../Saves/Level3_GameObjects.json", grid.objs);
-
-		if (input.isKeyTriggered(AEVK_Q))
-			ToggleSaveFileMode();
-
-		s32 mwDelta{};
-		AEInputMouseWheelDelta(&mwDelta);
-
-		if (InputHandler::GetInstance().isKeyTriggered(AEVK_LBUTTON))
-		{
-			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
-				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.SpawnNewTile(EditorTileTag(), EditorTileSlice(), mousePos.x, mousePos.y, 0.f);
-		}
-		else if (InputHandler::GetInstance().isKeyTriggered(AEVK_RBUTTON))
-		{
-			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
-				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.DeleteTile(mousePos.x, mousePos.y);
-		}
-		else if (abs(mwDelta) > 0) {
-			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
-				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.RotateTile(mousePos.x, mousePos.y, mwDelta);
-		}
-	}
-}
-
-void Level3_EditorDraw() {
-	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
-	if (IsEditorActive()) {
-		if (IsUsingSaveFile()) {
-			digipenFont.Input_Text("Using Save File");
-			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
-		}
-		DrawTileOutline();
-		mainPlayer.DebugDraw();
-		DrawDebugObjects(grid.objs);
-
-		digipenFont.Change_Text_Color(Colors::Black);
-		digipenFont.Input_Text("Editor Active");
-		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
-
-
-		digipenFont.Input_Text("Tile Tag: ");
-		digipenFont.Draw_Text(AEVec2{ -100.f, -365.f }, .5f, 1.f);
-		switch (EditorTileTag()) {
-		case 0:
-			digipenFont.Input_Text("Static");
-			break;
-		case 1:
-			digipenFont.Input_Text("Dynamic");
-			break;
-		case 2:
-			digipenFont.Input_Text("Platform");
-			break;
-		case 3:
-			digipenFont.Input_Text("Player");
-			break;
-		case 4:
-			digipenFont.Input_Text("Win");
-			break;
-		case 5:
-			digipenFont.Input_Text("GravUp");
-			break;
-		case 6:
-			digipenFont.Input_Text("GravDown");
-			break;
-		case 7:
-			digipenFont.Input_Text("GravLeft");
-			break;
-		case 8:
-			digipenFont.Input_Text("GravRight");
-			break;
-		case 9:
-			digipenFont.Input_Text("Obstacle");
-			break;
-		}
-		digipenFont.Draw_Text(AEVec2{ 75.f, -365.f }, .5f, 1.f);
-
-		digipenFont.Input_Text("Tile Slice: ");
-		digipenFont.Draw_Text(AEVec2{ -100.f, -415.f }, .5f, 1.f);
-		switch (EditorTileSlice()) {
-		case 0:
-			digipenFont.Input_Text("Top-left");
-			break;
-		case 1:
-			digipenFont.Input_Text("Top-Middle");
-			break;
-		case 2:
-			digipenFont.Input_Text("Top-Right");
-			break;
-		case 3:
-			digipenFont.Input_Text("Middle-Left");
-			break;
-		case 4:
-			digipenFont.Input_Text("Middle-Middle");
-			break;
-		case 5:
-			digipenFont.Input_Text("Middle-Right");
-			break;
-		case 6:
-			digipenFont.Input_Text("Bottom-Left");
-			break;
-		case 7:
-			digipenFont.Input_Text("Bottom-Middle");
-			break;
-		case 8:
-			digipenFont.Input_Text("Bottom-Right");
-			break;
-		case 9:
-			digipenFont.Input_Text("Connector 1");
-			break;
-		case 10:
-			digipenFont.Input_Text("Connector 2");
-			break;
-		case 11:
-			digipenFont.Input_Text("Connector 3");
-			break;
-		}
-		digipenFont.Draw_Text_Corner(15.f, -430.f);
-		digipenFont.Change_Text_Color(Colors::White);
-	}
 }
 
 void Level3_Tutorial() {

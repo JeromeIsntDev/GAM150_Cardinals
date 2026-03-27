@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <AEEngine.h>
+#include <string>
 #include "GameObject.hpp"
 #include "GStateManager.hpp"
 #include "GameSaver.hpp"
@@ -35,6 +36,11 @@ namespace {
 	const AEVec2 horizontalScale{ 1600.f , 1.f };
 	const AEVec2 verticalScale{ 1.f , 900.f };
 }
+
+void EditorUpdate(Grid*, GameStateEnum, std::string const&);
+void EditorDraw(Text&, Grid&, Player&);
+
+void EditorGetMouse(f32&, f32&);
 
 void InitializeEditor();
 void ClearEditorMemory();

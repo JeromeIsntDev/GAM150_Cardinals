@@ -2179,15 +2179,6 @@
       "tileslice": 0
     },
     {
-      "posx": -225.0,
-      "posy": -425.0,
-      "rot": 0.0,
-      "scalex": 50.0,
-      "scaley": 50.0,
-      "typetag": 9,
-      "tileslice": 0
-    },
-    {
       "posx": -175.0,
       "posy": -425.0,
       "rot": 0.0,
@@ -2308,6 +2299,15 @@
       "posx": 725.0,
       "posy": 425.0,
       "rot": 3.141592502593994,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 9,
+      "tileslice": 0
+    },
+    {
+      "posx": -225.0,
+      "posy": -425.0,
+      "rot": 0.0,
       "scalex": 50.0,
       "scaley": 50.0,
       "typetag": 9,
