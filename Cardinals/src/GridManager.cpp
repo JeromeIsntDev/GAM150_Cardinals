@@ -253,11 +253,14 @@ void Grid::ChangeTile(GridCell* cell) const
 	default:
 		break;
 	}
+}
 
-	f32 rot = cell->obj->GetRotation() + PI / 2;
-	if (rot >= PI * 2) rot = 0;
-	if(cell->obj->_tag != GameObjectTag::Static)
-		cell->obj->UpdateRotation(rot);
+void Grid::RotateTile(f32 x, f32 y, s32 mouseDelta)
+{
+	GridCell* cell = GetCell(y, x);
+	f32 rot = cell->obj->GetRotation() + (PI / 2) * (mouseDelta > 0 ? 1 : -1);
+	if (rot >= PI * 2 || rot <= -PI * 2) rot = 0;
+	cell->obj->UpdateRotation(rot);
 }
 
 GridCell* Grid::GetCell(f32 x, f32 y)

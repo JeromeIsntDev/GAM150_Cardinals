@@ -382,6 +382,9 @@ void Level3_EditorUpdate() {
 		if (input.isKeyTriggered(AEVK_Q))
 			ToggleSaveFileMode();
 
+		s32 mwDelta{};
+		AEInputMouseWheelDelta(&mwDelta);
+
 		if (InputHandler::GetInstance().isKeyTriggered(AEVK_LBUTTON))
 		{
 			AEVec2 mousePos{ 0.f,0.f };
@@ -390,14 +393,20 @@ void Level3_EditorUpdate() {
 				mousePos.y < 0.f || mousePos.y > 900.f) return;
 			grid.SpawnNewTile(EditorTileTag(), EditorTileSlice(), mousePos.x, mousePos.y, 0.f);
 		}
-
-		if (InputHandler::GetInstance().isKeyTriggered(AEVK_RBUTTON))
+		else if (InputHandler::GetInstance().isKeyTriggered(AEVK_RBUTTON))
 		{
 			AEVec2 mousePos{ 0.f,0.f };
 			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
 			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
 				mousePos.y < 0.f || mousePos.y > 900.f) return;
 			grid.DeleteTile(mousePos.x, mousePos.y);
+		}
+		else if (abs(mwDelta) > 0) {
+			AEVec2 mousePos{ 0.f,0.f };
+			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
+			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
+				mousePos.y < 0.f || mousePos.y > 900.f) return;
+			grid.RotateTile(mousePos.x, mousePos.y, mwDelta);
 		}
 	}
 }
