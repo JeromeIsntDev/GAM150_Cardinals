@@ -13,6 +13,7 @@
 #include "../GameStates/Level3.hpp"
 #include "../GameStates/Level4.hpp"
 #include "../GameStates/Level5.hpp"
+#include "../GameStates/SpecialLevel.hpp"
 
 typedef void(*FuncPtr)(void);
 
@@ -29,6 +30,7 @@ enum GameStateEnum {
 	Level3,
 	Level4,
 	Level5,
+	Special,
 
 	NumberOfGameStates
 };

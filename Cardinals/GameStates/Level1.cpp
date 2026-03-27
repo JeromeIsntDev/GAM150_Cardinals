@@ -354,6 +354,7 @@ void Level1_Draw() {
 	grid.Draw();
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
+	gravityEffect.DrawParticle();
 	
 	Level1_UIDraw();
 	gamelives.Draw();
@@ -449,6 +450,8 @@ void Tutorial() {
 			digipenFont.Draw_Text({ 350.f, 45.f }, .5f, 1.f);
 			digipenFont.Input_Text("the next level!");
 			digipenFont.Draw_Text({ 350.f, 15.f }, .5f, 1.f);
+			digipenFont.Input_Text("Press E to interact!");
+			digipenFont.Draw_Text({ 490.f, -20.f}, .25f, 1.f);
 			break;
 		case 10:
 			digipenFont.Input_Text("Or don't touch them...");

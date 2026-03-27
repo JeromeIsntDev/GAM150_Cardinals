@@ -2744,6 +2744,15 @@
       "scaley": 50.0,
       "typetag": 0,
       "tileslice": 6
+    },
+    {
+      "posx": 475.0,
+      "posy": -375.0,
+      "rot": 0.0,
+      "scalex": 50.0,
+      "scaley": 50.0,
+      "typetag": 10,
+      "tileslice": 0
     }
   ]
 }
