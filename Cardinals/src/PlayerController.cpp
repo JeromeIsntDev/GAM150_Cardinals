@@ -22,9 +22,10 @@ the player movement etc
 //	  initialYPos(zeroVal),initialVelocity(zeroVal),jumpT(zeroVal),
 //	  GameObject(mesh,AEVec2{0.f,0.f},0.f,AEVec2{200.f,200.f})
 //{}
-
-auto& input = InputHandler::GetInstance();
-f32 clampedDT{};
+namespace {
+	auto& input = InputHandler::GetInstance();
+	f32 clampedDT{};
+}
 
 void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score, f32 zeroVal, AEGfxVertexList* newMesh, f32 xPos, f32 yPos, bool gOver) {
 	p_playerHealth = health;
@@ -46,18 +47,6 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	p_isGrounded = true;
 }
 
-//takes in the current player pos, deltaTime & movement vector to update the player pos
-//void Player::UpdatePlayerPos(AEVec2 pos, AEVec2 movementVec, AEVec2 velocityVec)
-//{
-//	//input handling
-//	GameObject::UpdatePosition(pos);
-//}
-
-//Takes in the initial value of points for the code to reference during jump state
-//void Player::StartJump(AEVec2 velocityVec) {
-//	if (p_isJumping) return;
-//
-//}
 //Math logic behind jump for parabola jump
 void Player::PlayerJump(f32 const& dt, GravityDirection& dir) {
 	if (!p_isJumping) return;
@@ -201,6 +190,14 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 
 	if (hitCD > 0.f) {
 		hitCD -= dt;
+	}
+
+	if (gravCD > 0.f) {
+		gravCD -= dt;
+	}
+
+	if (gravCD <= 0.f) {
+		gravTouched = false;
 	}
 
 	if (hitAnim) {
@@ -547,42 +544,58 @@ void Player::PlayerCollision(std::vector<GameObject*> objs, f32& dt)
 			UpdateRotation(0.f);
 			gameOver = true;
 		}
-		else if (obj->_tag == GameObjectTag::GravUp) {
-			if (!audioPlayed) {
-				bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
-				audioPlayed = true;
+		else if (obj->_tag == GameObjectTag::GravUp && !gravTouched) {
+			if (gravCD <= 0.f) {
+				gravTouched = true;
+				if (!audioPlayed) {
+					bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
+					audioPlayed = true;
+				}
+				std::cout << "grav up" << std::endl;
+				grav = Player::GravityDirection::Up;
+				UpdateRotation(0.f);
+				p_Scale.y = -50.f;
+				gravCD = 0.3f;
 			}
-			std::cout << "grav up" << std::endl;
-			grav = Player::GravityDirection::Up;
-			UpdateRotation(0.f);
-			p_Scale.y = -50.f;
 		}
-		else if (obj->_tag == GameObjectTag::GravDown) {
-			if (!audioPlayed) {
-				bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
-				audioPlayed = true;
+		else if (obj->_tag == GameObjectTag::GravDown && !gravTouched) {
+			if (gravCD <= 0.f) {
+				gravTouched = true;
+				if (!audioPlayed) {
+					bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
+					audioPlayed = true;
+				}
+				grav = Player::GravityDirection::Down;
+				UpdateRotation(0.f);
+				p_Scale.y = 50.f;
+				gravCD = 0.3f;
 			}
-			grav = Player::GravityDirection::Down;
-			UpdateRotation(0.f);
-			p_Scale.y = 50.f;
 		}
-		else if (obj->_tag == GameObjectTag::GravLeft) {
-			if (!audioPlayed) {
-				bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
-				audioPlayed = true;
+		else if (obj->_tag == GameObjectTag::GravLeft && !gravTouched) {
+			if (gravCD <= 0.f) {
+				gravTouched = true;
+				if (!audioPlayed) {
+					bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
+					audioPlayed = true;
+				}
+				grav = Player::GravityDirection::Left;
+				p_Scale.y = 50.f;
+				UpdateRotation(-(PI / 2.f));
+				gravCD = 0.3f;
 			}
-			grav = Player::GravityDirection::Left;
-			p_Scale.y = 50.f;
-			UpdateRotation(-(PI / 2.f));
 		}
-		else if (obj->_tag == GameObjectTag::Gravright) {
-			if (!audioPlayed) {
-				bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
-				audioPlayed = true;
+		else if (obj->_tag == GameObjectTag::Gravright && !gravTouched) {
+			if (gravCD <= 0.f) {
+				gravTouched = true;
+				if (!audioPlayed) {
+					bgm.PlayAudio("GRAVITY", AudioType::SFX, 1.f, 0);
+					audioPlayed = true;
+				}
+				grav = Player::GravityDirection::Right;
+				UpdateRotation(-(PI / 2.f));
+				p_Scale.y = -50.f;
+				gravCD = 0.3f;
 			}
-			grav = Player::GravityDirection::Right;
-			UpdateRotation(-(PI / 2.f));
-			p_Scale.y = -50.f;
 		}
 		else if (obj->_tag == GameObjectTag::Obstacle && !isHit) {
 			if (!hitAnim && p_playerHealth > 0 && hitCD <= 0.f) {

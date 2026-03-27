@@ -62,6 +62,7 @@ public:
 	bool canMove{ true };
 	bool canSwapGrav = true;
 	bool isHit{ false };
+	bool gravTouched{ false };
 	//public Variable for Player (Check if error)
 	bool p_isGrounded{ false };
 	f32 maxJumpBuffer{ 0.12f };
@@ -79,6 +80,7 @@ public:
 	f32 hitCD{ 0.2f };
 	int rot_count{ 0 };
 	bool hitAnim{ false };
+	f32 gravCD{ 0.3f };
 
 	//Gets the player data
 
