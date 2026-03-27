@@ -11,8 +11,6 @@
 
 
 //----------------------FORWARD DECLERATIONS---------------------------//
-void Level1_EditorUpdate();
-void Level1_EditorDraw();
 void Level1_Parallax();
 void Level1_UIDraw();
 void Tutorial();
@@ -63,6 +61,8 @@ namespace {
 
 	//TUTORIAL VARIABLES
 	int checkPoints;
+
+	std::string const& lvl1SavePath{ "../../Saves/Level1_GameObjects.json" };
 }
 
 void Level1_Load() {
@@ -137,7 +137,7 @@ void Level1_Load() {
 	memoryManager.AddFont(&digipenFont);
 	memoryManager.AddFont(&pauseTitleFont);
 
-	std::vector<GameObject> objData = ReadJsonToObjects("../../Saves/Level1_GameObjects.json");
+	std::vector<GameObject> objData = ReadJsonToObjects(lvl1SavePath.c_str());
 
 	// bro
 	grid.Load(go_texture.Get("TileSheet"), 900, 1200, 300, 300);
@@ -226,7 +226,6 @@ void Level1_Initialize()
 	isGameOver = 0;
 
 	for (GameObject* obj : grid.objs) {
-		//obj->Draw();
 		if (obj->_tag == GameObjectTag::GravUp ||
 			obj->_tag == GameObjectTag::GravDown ||
 			obj->_tag == GameObjectTag::GravLeft ||
@@ -301,16 +300,7 @@ void Level1_Update() {
 	if (!isGamePaused && !isGameOver) {
 		bgm.ResumeAudio();
 		levelTime += static_cast<f32>(AEFrameRateControllerGetFrameTime());
-	}
-
-	if (!IsEditorActive() || IsEditorActive())
-		if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_E))
-			ToggleEditorMode();
-
-	Level1_EditorUpdate();
-
-	Level1_Parallax();
-
+	}	
 	
 	for (GameObject* obj : grid.objs) {
 		if (obj->_tag == GameObjectTag::GravUp ||
@@ -321,6 +311,7 @@ void Level1_Update() {
 	}
 
 	if (isGamePaused || isGameOver) return;
+
 	/*PLAYER STUFF*/
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
 	if (mainPlayer.GetPlayerJump()) {
@@ -341,16 +332,16 @@ void Level1_Update() {
 
 	playerEffect.ResizePlayer(mainPlayer.isSprint);
 
-	//isGamePaused = true;
+	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_E)) 
+		ToggleEditorMode();
+
+	if (IsEditorActive()) {
+		EditorUpdate(&grid, Level1, lvl1SavePath);
+	}
 }
 
 void Level1_Draw() {
-	
-	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
-	for (GameObject& obj : backgroundObjs) {
-		obj.Draw();
-	}
-	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+	Level1_Parallax();
 	for (GameObject* obj : grid.objs) {
 		//obj->Draw();
 		if (obj->_tag == GameObjectTag::GravUp ||
@@ -359,6 +350,7 @@ void Level1_Draw() {
 			obj->_tag == GameObjectTag::Gravright)
 		gravityEffect.DrawParticle();
 	}
+	Level1_Parallax();
 	grid.Draw();
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
@@ -369,11 +361,11 @@ void Level1_Draw() {
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
 
-	if(!pauseMenu->IsActive() && !gameOverMenu->IsActive())Tutorial();
-
-	//timerBackground.Draw();
-
-	Level1_EditorDraw();
+	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
+	Tutorial();
+	if (IsEditorActive()) {
+		EditorDraw(digipenFont, grid, mainPlayer);
+	}
 }
 
 void Level1_Free() {
@@ -410,170 +402,18 @@ void Level1_Parallax() {
 	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
 	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
 	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
+	for (GameObject& obj : backgroundObjs) {
+		obj.Draw();
+	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void Level1_UIDraw() {
-	/*digipenFont.Input_Text("Time: ");
-	digipenFont.Draw_Text(675.f, 400.f);*/
-	/*digipenFont.Input_Float(levelTime);
-	digipenFont.Draw_Text_Corner(725.f, 387.f);*/
-
-	//digipenFont.Input_Text("Level 1");
-	//digipenFont.Draw_Text(AEVec2{ -700.f, -430.f }, .5f, 1.f);
 	digipenFont.Change_Text_Color(Colors::White);
 	digipenFont.Input_Text("x");
 	digipenFont.Draw_Text(AEVec2{ -720.f, -420.f }, .5f, 1.f);
 	digipenFont.Input_Float((float)mainPlayer.GetPlayerHealth());
 	digipenFont.Draw_Text(AEVec2{ -700.f, -420.f }, .5f, 1.f);
-
-}
-
-void Level1_EditorUpdate() {
-	if (IsEditorActive() && !isGamePaused && !isGameOver) {
-
-		//DragObject(levelObjList);
-		ChangeTileTag();
-		ChangeTileSlice();
-
-		if (input.isKeyTriggered(AEVK_R))
-			RestartLevel(UpdateGameManagerState, Level1);
-
-		if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_S))
-			SaveGameObjectToFilepath("../../Saves/Level1_GameObjects.json", grid.objs);
-
-		if (input.isKeyTriggered(AEVK_Q))
-			ToggleSaveFileMode();
-
-		s32 mwDelta{};
-		AEInputMouseWheelDelta(&mwDelta);
-
-		if (InputHandler::GetInstance().isKeyTriggered(AEVK_LBUTTON))
-		{
-			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
-				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.SpawnNewTile(EditorTileTag(), EditorTileSlice(), mousePos.x, mousePos.y, 0.f);
-		}
-		else if (InputHandler::GetInstance().isKeyTriggered(AEVK_RBUTTON))
-		{
-			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
-				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.DeleteTile(mousePos.x, mousePos.y);
-		}
-		else if (abs(mwDelta) > 0) {
-			AEVec2 mousePos{ 0.f,0.f };
-			InputHandler::GetInstance().GetMouseScreenPosition(mousePos.x, mousePos.y);
-			if (mousePos.x < 0.f || mousePos.x > 1600.f ||
-				mousePos.y < 0.f || mousePos.y > 900.f) return;
-			grid.RotateTile(mousePos.x, mousePos.y, mwDelta);
-		}
-	}
-}
-
-void Level1_EditorDraw() {
-	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
-	if (IsEditorActive()) {
-
-		digipenFont.Change_Text_Color(Colors::Black);
-
-		if (IsUsingSaveFile()) {
-			digipenFont.Input_Text("Using Save File");
-			digipenFont.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
-		}
-		DrawTileOutline();
-		mainPlayer.DebugDraw();
-		DrawDebugObjects(grid.objs);
-
-		digipenFont.Input_Text("Editor Active");
-		digipenFont.Draw_Text(AEVec2{ -650.f, 415.f }, .5f, 1.f);
-
-
-		digipenFont.Input_Text("Tile Tag: ");
-		digipenFont.Draw_Text(AEVec2{ -100.f, -365.f }, .5f, 1.f);
-		switch (EditorTileTag()) {
-		case 0:
-			digipenFont.Input_Text("Static");
-			break;
-		case 1:
-			digipenFont.Input_Text("Dynamic");
-			break;
-		case 2:
-			digipenFont.Input_Text("Platform");
-			break;
-		case 3:
-			digipenFont.Input_Text("Player");
-			break;
-		case 4:
-			digipenFont.Input_Text("Win");
-			break;
-		case 5:
-			digipenFont.Input_Text("GravUp");
-			break;
-		case 6:
-			digipenFont.Input_Text("GravDown");
-			break;
-		case 7:
-			digipenFont.Input_Text("GravLeft");
-			break;
-		case 8:
-			digipenFont.Input_Text("GravRight");
-			break;
-		case 9:
-			digipenFont.Input_Text("Obstacle");
-			break;
-		case 10:
-			digipenFont.Input_Text("Special");
-			break;
-		}
-		digipenFont.Draw_Text(AEVec2{ 75.f, -365.f }, .5f, 1.f);
-
-		digipenFont.Input_Text("Tile Slice: ");
-		digipenFont.Draw_Text(AEVec2{ -100.f, -415.f }, .5f, 1.f);
-		switch (EditorTileSlice()) {
-		case 0:
-			digipenFont.Input_Text("Top-left");
-			break;
-		case 1:
-			digipenFont.Input_Text("Top-Middle");
-			break;
-		case 2:
-			digipenFont.Input_Text("Top-Right");
-			break;
-		case 3:
-			digipenFont.Input_Text("Middle-Left");
-			break;
-		case 4:
-			digipenFont.Input_Text("Middle-Middle");
-			break;
-		case 5:
-			digipenFont.Input_Text("Middle-Right");
-			break;
-		case 6:
-			digipenFont.Input_Text("Bottom-Left");
-			break;
-		case 7:
-			digipenFont.Input_Text("Bottom-Middle");
-			break;
-		case 8:
-			digipenFont.Input_Text("Bottom-Right");
-			break;
-		case 9:
-			digipenFont.Input_Text("Connector 1");
-			break;
-		case 10:
-			digipenFont.Input_Text("Connector 2");
-			break;
-		case 11:
-			digipenFont.Input_Text("Connector 3");
-			break;
-		}
-		digipenFont.Draw_Text_Corner(15.f, -430.f);
-		digipenFont.Change_Text_Color(Colors::White);
-	}
 }
 
 void Tutorial() {
