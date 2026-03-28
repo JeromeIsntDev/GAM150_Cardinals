@@ -48,7 +48,6 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	newAnim.SetPlay(false);
 	newAnim.SetFrameTime(0.1f);
 	newAnim.SetLoop(true);
-	newAnim.SetAnimArr();
 	this->SetTexture(&newAnim.GetIdleTexture());
 }
 

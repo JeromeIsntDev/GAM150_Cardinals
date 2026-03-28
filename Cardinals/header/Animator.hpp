@@ -28,12 +28,7 @@ public:
 		currFrame{ 0 }, currenTexture{},
 		animArr{}
 	{}
-	~Animator() {
-		std::for_each(animArr.begin(), animArr.end(), [](Texture& T) {
-			T.Unload_Image();
-		});
-		//UnloadAnimFrames();
-	}
+	void UnloadFrames();
 	void SetFrameTime(f32);
 	void AnimationUpd(f32 const&);
 public:
@@ -51,7 +46,7 @@ public:
 	void SetAnimArr();
 	void SetLoop(bool);
 	void SetPlay(bool);
-	void UnloadAnimFrames();
+	//void UnloadAnimFrames();
 private:
 	bool isLoop;
 	bool isPlaying;

@@ -257,9 +257,9 @@ void LevelS_Update() {
 	if (mainPlayer.GetPlayerJump()) {
 		mainPlayer.SetTexture(playerTexture[1]);
 	}
-	else {
-		mainPlayer.SetTexture(playerTexture[0]);
-	}
+	//else {
+	//	mainPlayer.SetTexture(playerTexture[0]);
+	//}
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
 	mainPlayer.canMoveLeft = true;
@@ -319,6 +319,7 @@ void LevelS_Unload() {
 	PRINT("Unload: %s", "Level Special\n");
 	pauseMenu.reset();
 	gameOverMenu.reset();
+	mainPlayer.newAnim.UnloadFrames();
 	//pauseUI.Exit();
 	if (isGamePaused) isGamePaused = 0;
 	if (isGameOver) isGameOver = 0;

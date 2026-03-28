@@ -98,7 +98,7 @@ void Level1_Load() {
 	retryTexture.Load_Image(Images::RetryBtn);
 	candyTexture.Load_Image(Images::Candy);
 	greyCandyTexture.Load_Image(Images::CandyGrey);
-
+	mainPlayer.newAnim.SetAnimArr();
 
 	if (!memoryManager.textures.empty()) memoryManager.textures.clear();
 	//textures.push_back(&playerEffectTexture);
@@ -379,7 +379,7 @@ void Level1_Free() {
 
 void Level1_Unload() {
 	PRINT("[DEBUG | LEVEL] => Unload: %s", "Level 1\n");
-
+	mainPlayer.newAnim.UnloadFrames();
 	pauseMenu.reset();
 	gameOverMenu.reset();
 	if (isGamePaused) isGamePaused = 0;

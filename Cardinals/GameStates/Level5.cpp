@@ -69,6 +69,7 @@ void Level5_Load() {
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&digipenFont);
 	memoryManager.AddFont(&pauseTitleFont);
+	mainPlayer.newAnim.SetAnimArr();
 
 	std::vector<GameObject> objData = ReadJsonToObjects(savePath.c_str());
 	grid.Load(tex.Get("TileSheet"), 900, 1200, 300, 300);
@@ -329,6 +330,7 @@ void Level5_Unload() {
 	PRINT("Unload: %s", "Level 5\n");
 	pauseMenu.reset();
 	gameOverMenu.reset();
+	mainPlayer.newAnim.UnloadFrames();
 	//pauseUI.Exit();
 	if (isGamePaused) isGamePaused = 0;
 	if (isGameOver) isGameOver = 0;

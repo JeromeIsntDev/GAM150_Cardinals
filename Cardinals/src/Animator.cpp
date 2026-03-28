@@ -13,15 +13,10 @@ Functions definition for Animator objects
 
 #include "../header/Animator.hpp"
 
-namespace {
-	Texture playerTexture[3]{};
-}
-
 void Animator::SetAnimArr() {
-	playerTexture[0].Load_Image(Images::Player);
-	playerTexture[1].Load_Image(Images::PlayerJump);
-	playerTexture[2].Load_Image(Images::Player);
-	std::copy(std::begin(playerTexture), std::end(playerTexture), animArr.begin());
+	animArr[0].Load_Image(Images::Player);
+	animArr[1].Load_Image(Images::PlayerJump);
+	animArr[2].Load_Image(Images::Player);
 	currenTexture = animArr[0];
 }
 
@@ -48,10 +43,10 @@ void Animator::AnimationUpd(f32 const& dt) {
 	currenTexture = animArr[currFrame];
 }
 
-void Animator::UnloadAnimFrames() {
-	for (Texture T : playerTexture) {
+void Animator::UnloadFrames() {
+	std::for_each(animArr.begin(), animArr.end(), [](Texture& T) {
 		T.Unload_Image();
-	}
+	});
 }
 
 void Animator::SetFrameTime(f32 time) {
