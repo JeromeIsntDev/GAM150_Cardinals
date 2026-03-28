@@ -21,6 +21,7 @@ from GameObject class from GameObject
 #include "../header/Physics.hpp"
 #include "../header/GridManager.hpp"
 #include "../header/AudioManager.hpp"
+#include "Animator.hpp"
 
 class Player : public GameObject {
 
@@ -54,6 +55,7 @@ public:
 	GravityDirection prevDir = GravityDirection::Down;
 	AEVec2 p_velocityVector{ 0.f,0.f };
 	f32 playerScore{ 0 };
+	Animator newAnim;
 	bool p_isJumping{ true };
 	bool canMoveLeft{ true };
 	bool canMoveRight{ true };

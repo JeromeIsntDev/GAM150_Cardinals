@@ -260,9 +260,9 @@ void Level4_Update() {
 	if (mainPlayer.GetPlayerJump()) {
 		mainPlayer.SetTexture(playerTexture[1]);
 	}
-	else {
-		mainPlayer.SetTexture(playerTexture[0]);
-	}
+	//else {
+	//	mainPlayer.SetTexture(playerTexture[0]);
+	//}
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
 	mainPlayer.canMoveLeft = true;

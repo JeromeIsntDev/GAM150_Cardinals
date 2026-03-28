@@ -13,20 +13,57 @@ Functions definition for Animator objects
 
 #include "../header/Animator.hpp"
 
-void Animator::AnimationUpd(f32& dt) {
-	int i{};
+namespace {
+	Texture playerTexture[3]{};
+}
+
+void Animator::SetAnimArr() {
+	playerTexture[0].Load_Image(Images::Player);
+	playerTexture[1].Load_Image(Images::PlayerJump);
+	playerTexture[2].Load_Image(Images::Player);
+	std::copy(std::begin(playerTexture), std::end(playerTexture), animArr.begin());
+	currenTexture = animArr[0];
+}
+
+void Animator::AnimationUpd(f32 const& dt) {
 	if (!isPlaying)return;
 	//functionality here
 	animTime += dt;
 	if (animTime >= frameDur) {
-		animTime = 0.f;
-		//animArr[i++];
-		currFrame++;
+		animTime -= frameDur;
+
+		if (isLoop) {
+			currFrame = (currFrame + 1) % ANIM_FRAMES;
+		}
+		else {
+			if (currFrame < ANIM_FRAMES - 1) {
+				currFrame++;
+			}
+			else {
+				currFrame = ANIM_FRAMES - 1; // stay at last frame
+				isPlaying = false;          // optional: stop animation
+			}
+		}
+	}
+	currenTexture = animArr[currFrame];
+}
+
+void Animator::UnloadAnimFrames() {
+	for (Texture T : playerTexture) {
+		T.Unload_Image();
 	}
 }
 
 void Animator::SetFrameTime(f32 time) {
 	frameDur = time;
+}
+
+void Animator::SetLoop(bool value) {
+	isLoop = value;
+}
+
+void Animator::SetPlay(bool value) {
+	isPlaying = value;
 }
 
 bool Animator::GetLoop() const {
@@ -47,6 +84,14 @@ f32 Animator::GetAnimTime() const {
 	return animTime;
 }
 
-std::array<int, Animator::ANIM_FRAMES> Animator::GetArr() const {
+Texture& Animator::GetCurrTexture(){
+	return currenTexture;
+}
+
+Texture& Animator::GetIdleTexture() {
+	return animArr[0];
+}
+
+std::array<Texture, Animator::ANIM_FRAMES> Animator::GetArr() const {
 	return animArr;
 }

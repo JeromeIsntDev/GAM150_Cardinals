@@ -45,6 +45,11 @@ void Player::InitializePlayer(int health, f32 moveSpeed, bool isJump, f32 score,
 	grav = GravityDirection::Down;
 	gameOver = gOver;
 	p_isGrounded = true;
+	newAnim.SetPlay(false);
+	newAnim.SetFrameTime(0.1f);
+	newAnim.SetLoop(true);
+	newAnim.SetAnimArr();
+	this->SetTexture(&newAnim.GetIdleTexture());
 }
 
 //Math logic behind jump for parabola jump
@@ -80,6 +85,7 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	switch (dir) {
 		case GravityDirection::Left:
 		case GravityDirection::Right:
+			newAnim.AnimationUpd(dt);
 			if (canMoveRight) {
 				if (input.isKeyPressed(AEVK_S)) {
 					p_velocityVector.y = -1.f * p_moveSpeed * dt;
@@ -94,10 +100,19 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 					p_Scale.x = -50.f;
 				}
 			}
+			if (input.isKeyPressed(AEVK_W) || input.isKeyPressed(AEVK_S)) {
+				newAnim.SetPlay(true);
+				this->SetTexture(&newAnim.GetCurrTexture());
+			}
+			else {
+				newAnim.SetPlay(false);
+				this->SetTexture(&newAnim.GetIdleTexture());
+			}
 			isMoving = true;
 			break;
 		case GravityDirection::Up:
 		case GravityDirection::Down:
+			newAnim.AnimationUpd(dt);
 			if (canMoveRight) {
 				if (input.isKeyPressed(AEVK_D)) {
 					p_velocityVector.x = 1.f * p_moveSpeed * dt;
@@ -113,6 +128,14 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 					p_velocityVector.x = 0.f;
 					p_Scale.x = -50.f;
 				}
+			}
+			if (input.isKeyPressed(AEVK_A) || input.isKeyPressed(AEVK_D)) {
+				newAnim.SetPlay(true);
+				this->SetTexture(&newAnim.GetCurrTexture());
+			}
+			else {
+				newAnim.SetPlay(false);
+				this->SetTexture(&newAnim.GetIdleTexture());
 			}
 			isMoving = true;
 	}

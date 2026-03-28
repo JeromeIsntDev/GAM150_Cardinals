@@ -17,17 +17,25 @@ holds the class Animator that will take in the images for animation to loop
 #include "../header/SpritesheetHandler.hpp"
 #include "../header/TextureManager.hpp"
 #include <array>
+#include <algorithm> 
+#include <iostream>
 class Animator : SpriteSheet {
 public:
-	enum { ANIM_FRAMES = 6 };
+	enum { ANIM_FRAMES = 3 };
 	Animator():
-		isLoop{ true }, isPlaying{ false }, 
+		isLoop{ false }, isPlaying{ false }, 
 		animTime{0.f}, frameDur{0.f},
-		currFrame{0},
+		currFrame{ 0 }, currenTexture{},
 		animArr{}
 	{}
+	~Animator() {
+		std::for_each(animArr.begin(), animArr.end(), [](Texture& T) {
+			T.Unload_Image();
+		});
+		//UnloadAnimFrames();
+	}
 	void SetFrameTime(f32);
-	void AnimationUpd(f32&);
+	void AnimationUpd(f32 const&);
 public:
 	/*
 		CONSTANT FUNCTIONS
@@ -37,14 +45,21 @@ public:
 	f32 GetAnimTime()const;
 	bool GetLoop() const;
 	bool GetPlaying() const;
-	std::array<int, ANIM_FRAMES> GetArr() const;
+	Texture& GetCurrTexture();
+	Texture& GetIdleTexture();
+	std::array<Texture, ANIM_FRAMES> GetArr() const;
+	void SetAnimArr();
+	void SetLoop(bool);
+	void SetPlay(bool);
+	void UnloadAnimFrames();
 private:
 	bool isLoop;
 	bool isPlaying;
 	f32 animTime;
 	f32 frameDur; //how long to hold the frame
 	int currFrame;
-	std::array<int, ANIM_FRAMES> animArr;
+	Texture currenTexture;
+	std::array<Texture, ANIM_FRAMES> animArr;
 };
 
 #endif // !
