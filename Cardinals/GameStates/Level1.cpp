@@ -249,7 +249,7 @@ void Level1_Update() {
 
 	if (pauseMenu) //Checks if pauseMenu Exists
 	{
-		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
+		if (AEInputCheckTriggered(AEVK_ESCAPE) && !isGameOver)
 		{
 			isGamePaused = !isGamePaused;
 			pauseMenu->SetActive(isGamePaused);

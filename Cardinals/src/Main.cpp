@@ -148,7 +148,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		AESysFrameEnd();
-		if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
+		if (AEInputCheckTriggered(AEVK_DELETE) || 0 == AESysDoesWindowExist())
 		{
 			isGameRunning = 0;
 			//system("pause");
