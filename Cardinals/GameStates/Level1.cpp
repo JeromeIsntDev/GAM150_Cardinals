@@ -28,9 +28,7 @@ namespace {
 	Texture playerTexture[2]{};
 	ParticleEffect playerEffect;
 	ParticleEffect gravityEffect;
-
 	CameraEffects camEffect;
-	bool wasPlayerHitLastFrame{ false };
 
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
@@ -166,8 +164,7 @@ void Level1_Initialize()
 
 	playerEffect.Init();
 	gravityEffect.Init();
-	camEffect.Init();
-	wasPlayerHitLastFrame = false;
+	camEffect.Init(mainPlayer.grav);
 
 	timerBackground.SetMesh(squareMesh);
 	timerBackground.SetTexture(&cardBgTexture);
@@ -332,11 +329,7 @@ void Level1_Update() {
 	mainPlayer.CheckBinaryCollision(&grid,mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
 
-	if (mainPlayer.isHit && !wasPlayerHitLastFrame) {
-		camEffect.TriggerShake();
-	}
-	wasPlayerHitLastFrame = mainPlayer.isHit;
-	camEffect.Update(dt);
+	camEffect.Update(dt, mainPlayer.grav, mainPlayer.isHit);
 	camEffect.Apply();
 
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;

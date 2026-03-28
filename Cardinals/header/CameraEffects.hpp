@@ -14,7 +14,7 @@
 #ifndef _Camera_Effects_Header_
 #define _Camera_Effects_Header_
 
-#include <AEEngine.h>
+#include "PlayerController.hpp"
 
 class CameraEffects {
 private:
@@ -23,23 +23,25 @@ private:
 
 	f32 shakeTimeLeft{ 0.f };
 	f32 shakeMagnitude{ 0.f };
-
-	f32 defaultShakeMagnitude{ 1.3f };
+	f32 defaultShakeMagnitude{ 1.7f };
 	f32 defaultShakeDuration{ 0.2f };
 
-	//f32 springX{ 0.f };
-	//f32 springY{ 0.f };
-	//f32 springStrength{ 0.f };
-	//f32 springDamping{ 0.f };
+	f32 springX{ 0.f };
+	f32 springVelX{ 0.f };
+	f32 springY{ 0.f };
+	f32 springVelY{ 0.f };
+	f32 springStrength{ 40.f };
+	f32 springDamping{ 20.f };
+	f32 springImpulse{ 60.f };
+
+	bool wasObstacleHitLastFrame{ false };
+	Player::GravityDirection prevGravDir{ Player::GravityDirection::Down };
 
 public:
-	void Init();
-	void Update(f32 dt);
+	void Init(Player::GravityDirection startGrav);
+	void Update(f32 dt, Player::GravityDirection currentGrav, bool obstacleHit);
 	void Apply() const;
 	void Clear();
-
-	void TriggerShake();
-	void TriggerShake(f32 magnitude, f32 duration);
 
 	AEVec2 GetOffset() const;
 };

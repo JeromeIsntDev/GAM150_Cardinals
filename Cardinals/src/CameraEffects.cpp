@@ -12,26 +12,72 @@
 
 #include "../header/CameraEffects.hpp"
 
-void CameraEffects::Init()
+void CameraEffects::Init(Player::GravityDirection startGrav)
 {
 	offsetX = 0.f;
 	offsetY = 0.f;
 	shakeTimeLeft = 0.f;
 	shakeMagnitude = 0.f;
+	springX = 0.f;
+	springVelX = 0.f;
+	springY = 0.f;
+	springVelY = 0.f;
+	prevGravDir = startGrav;
+	wasObstacleHitLastFrame = false;
 	AEGfxSetCamPosition(0.f, 0.f);
 }
 
-void CameraEffects::Update(f32 dt)
+void CameraEffects::Update(f32 dt, Player::GravityDirection currentGrav, bool obstacleHit)
 {
+	// reset offset
 	offsetX = 0.f;
 	offsetY = 0.f;
+
+	// spring effect
+	if (currentGrav != prevGravDir)
+	{
+		switch (currentGrav)
+		{
+		case Player::GravityDirection::Up:
+			springVelY -= springImpulse;
+			break;
+		case Player::GravityDirection::Down:
+			springVelY += springImpulse;
+			break;
+		case Player::GravityDirection::Left:
+			springVelX -= springImpulse;
+			break;
+		case Player::GravityDirection::Right:
+			springVelX += springImpulse;
+		default:
+			break;
+		}
+		prevGravDir = currentGrav;
+	}
+
+	springVelX += (-springStrength * springX - springDamping * springVelX) * dt;
+	springVelY += (-springStrength * springY - springDamping * springVelY) * dt;
+
+	springX += springVelX * dt;
+	springY += springVelY * dt;
+
+	offsetX += springX;
+	offsetY += springY;
+
+	// shake effect
+	if (obstacleHit && !wasObstacleHitLastFrame)
+	{
+		shakeTimeLeft = defaultShakeDuration;
+		shakeMagnitude = defaultShakeMagnitude;
+	}
+	wasObstacleHitLastFrame = obstacleHit;
 
 	if (shakeTimeLeft > 0.f)
 	{
 		shakeTimeLeft -= dt;
 
-		offsetX = (((rand() % 100) / 50.f) - 1.f) * shakeMagnitude;
-		offsetY = (((rand() % 100) / 50.f) - 1.f) * shakeMagnitude;
+		offsetX += (((rand() % 100) / 50.f) - 1.f) * shakeMagnitude;
+		offsetY += (((rand() % 100) / 50.f) - 1.f) * shakeMagnitude;
 
 		if (shakeTimeLeft < 0.f)
 		{
@@ -45,23 +91,18 @@ void CameraEffects::Apply() const
 	AEGfxSetCamPosition(offsetX, offsetY);
 }
 
-void CameraEffects::TriggerShake(f32 magnitude, f32 duration)
-{
-	shakeMagnitude = magnitude;
-	shakeTimeLeft = duration;
-}
-
-void CameraEffects::TriggerShake()
-{
-	TriggerShake(defaultShakeMagnitude, defaultShakeDuration);
-}
-
 void CameraEffects::Clear()
 {
 	offsetX = 0.f;
 	offsetY = 0.f;
 	shakeTimeLeft = 0.f;
 	shakeMagnitude = 0.f;
+	springX = 0.f;
+	springVelX = 0.f;
+	springY = 0.f;
+	springVelY = 0.f;
+	wasObstacleHitLastFrame = false;
+	prevGravDir = Player::GravityDirection::Down;
 	AEGfxSetCamPosition(0.f, 0.f);
 }
 
