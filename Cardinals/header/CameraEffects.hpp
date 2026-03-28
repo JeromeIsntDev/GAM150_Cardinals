@@ -32,7 +32,7 @@ private:
 	f32 springVelY{ 0.f };
 	f32 springStrength{ 40.f };
 	f32 springDamping{ 20.f };
-	f32 springImpulse{ 60.f };
+	f32 springImpulse{ 70.f };
 
 	bool wasObstacleHitLastFrame{ false };
 	Player::GravityDirection prevGravDir{ Player::GravityDirection::Down };

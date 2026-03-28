@@ -18,6 +18,7 @@ namespace {
 	Texture *playerTexture[2]{};
 	ParticleEffect playerEffect;
 	ParticleEffect gravityEffect;
+	CameraEffects camEffect;
 
 	TextureManager& go_texture = TextureManager::GetInstance();
 	AudioManager& bgm = AudioManager::Instance();
@@ -93,6 +94,7 @@ void Level2_Initialize()
 
 	playerEffect.Init();
 	gravityEffect.Init();
+	camEffect.Init(mainPlayer.grav);
 
 	placeholderTexture = go_texture.Get("Placeholder");
 	cardBgTexture = go_texture.Get("CardBg");
@@ -271,6 +273,10 @@ void Level2_Update() {
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid, mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
+
+	camEffect.Update(dt, mainPlayer.grav, mainPlayer.isHit);
+	camEffect.Apply();
+
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
@@ -319,6 +325,7 @@ void Level2_Free() {
 	PRINT("Free: %s", "Level 2\n");
 	playerEffect.Clear();
 	gravityEffect.Clear();
+	camEffect.Clear();
 	bgm.StopAudio();
 }
 

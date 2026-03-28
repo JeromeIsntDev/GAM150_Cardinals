@@ -20,6 +20,7 @@
 #include "GStateManager.hpp"
 #include "ParticleEffect.hpp"
 #include "GameOverlayUI.hpp"
+#include "CameraEffects.hpp"
 
 void Level2_Load();
 void Level2_Initialize();
