@@ -29,6 +29,9 @@ namespace {
 	ParticleEffect playerEffect;
 	ParticleEffect gravityEffect;
 
+	CameraEffects camEffect;
+	bool wasPlayerHitLastFrame{ false };
+
 	//LEVEL VARIABLES
 	Texture placeholderTexture;
 	Texture verticalPlatformTex;
@@ -163,6 +166,8 @@ void Level1_Initialize()
 
 	playerEffect.Init();
 	gravityEffect.Init();
+	camEffect.Init();
+	wasPlayerHitLastFrame = false;
 
 	timerBackground.SetMesh(squareMesh);
 	timerBackground.SetTexture(&cardBgTexture);
@@ -317,15 +322,23 @@ void Level1_Update() {
 	if (mainPlayer.GetPlayerJump()) {
 		mainPlayer.SetTexture(&playerTexture[1]);
 	}
-	//else {
-	//	mainPlayer.SetTexture(&playerTexture[0]);
-	//}
+	else {
+		mainPlayer.SetTexture(&playerTexture[0]);
+	}
 	mainPlayer.p_isGrounded = false;
 	mainPlayer.hasCollided = false;
 	mainPlayer.canMoveLeft = true;
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid,mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
+
+	if (mainPlayer.isHit && !wasPlayerHitLastFrame) {
+		camEffect.TriggerShake();
+	}
+	wasPlayerHitLastFrame = mainPlayer.isHit;
+	camEffect.Update(dt);
+	camEffect.Apply();
+
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
@@ -374,6 +387,7 @@ void Level1_Free() {
 
 	playerEffect.Clear();
 	gravityEffect.Clear();
+	camEffect.Clear();
 	bgm.StopAudio();
 }
 

@@ -44,9 +44,6 @@ private:
 public:
 	//Player(f32 health, f32 moveSpeed, f32 jumpForce, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos);
 	AEVec2 p_Scale{ 50.f,50.f };
-	//// camera shake and bump variables for spring prototype
-	//AEVec2 pendingCamBump{ 0.f, 0.f };
-	//f32 pendingCamShake{ 0.f };
 
 	enum class GravityDirection {
 		Up, Down, Left, Right,
