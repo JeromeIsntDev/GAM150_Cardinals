@@ -30,6 +30,8 @@ void AudioManager::Init()
 {
 	musicGroup = AEAudioCreateGroup();
 	sfxGroup = AEAudioCreateGroup();
+	AEAudioSetGroupVolume(musicGroup, masterVol * musicVol);
+	AEAudioSetGroupVolume(sfxGroup, masterVol * sfxVol);
 	PRINT("Audio System Initialized\n");
 }
 
