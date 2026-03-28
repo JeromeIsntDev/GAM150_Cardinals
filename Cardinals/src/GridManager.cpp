@@ -60,7 +60,7 @@ void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH)
 	obstacleTexture.Load_Image(Images::CandyCorn);
 	gravTexture.Load_Image(Images::GravImg);
 	winTexture.Load_Image(Images::WinPortal);
-	specialTexture.Load_Image(Images::Placeholder);
+	specialTexture.Load_Image(Images::Collectible);
 }
 
 void Grid::Clear()

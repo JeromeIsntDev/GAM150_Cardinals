@@ -146,6 +146,7 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 	
 	if (canTouch && input.isKeyTriggered(AEVK_E)) {
 		std::cout << "item pressed" << std::endl;
+		bgm.PlayAudio("PICKUP", AudioType::MUSIC, 1.f, 0);
 		counter::specialCount++;
 		canTouch = false;
 	}
