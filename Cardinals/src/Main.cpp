@@ -211,6 +211,11 @@ void ControlPanelFunction() {
 		AddLog("Loading Level 5");
 		UpdateGameManagerState(GameStateEnum::Level5);
 	}
+	if (ImGui::Button("Load Special")) {
+		AddLog("Loading Level Special");
+		UpdateGameManagerState(GameStateEnum::Special);
+	}
+	ImGui::SameLine();
 	if (ImGui::Button("Clear Log")) {
 		g_logs.clear();
 	}

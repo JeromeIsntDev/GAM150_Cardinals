@@ -69,6 +69,7 @@ void LevelS_Load() {
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&digipenFont);
 	memoryManager.AddFont(&pauseTitleFont);
+	mainPlayer.newAnim.SetAnimArr();
 
 	std::vector<GameObject> objData = ReadJsonToObjects(savePath.c_str());
 	grid.Load(tex.Get("TileSheet"), 900, 1200, 300, 300);
@@ -187,7 +188,7 @@ void LevelS_Update() {
 
 	if (pauseMenu) //Checks if pauseMenu Exists
 	{
-		if (AEInputCheckTriggered(AEVK_P) && !isGameOver)
+		if (AEInputCheckTriggered(AEVK_ESCAPE) && !isGameOver)
 		{
 			isGamePaused = !isGamePaused;
 			pauseMenu->SetActive(isGamePaused);
