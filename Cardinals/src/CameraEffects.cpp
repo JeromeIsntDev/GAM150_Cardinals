@@ -61,6 +61,11 @@ void CameraEffects::Update(f32 dt, Player::GravityDirection currentGrav, bool ob
 	springX += springVelX * dt;
 	springY += springVelY * dt;
 
+	if (fabsf(springX) < 0.05f) springX = 0.f;
+	if (fabsf(springY) < 0.05f) springY = 0.f;
+	if (fabsf(springVelX) < 0.05f) springVelX = 0.f;
+	if (fabsf(springVelY) < 0.05f) springVelY = 0.f;
+
 	offsetX += springX;
 	offsetY += springY;
 
@@ -88,7 +93,9 @@ void CameraEffects::Update(f32 dt, Player::GravityDirection currentGrav, bool ob
 
 void CameraEffects::Apply() const
 {
-	AEGfxSetCamPosition(offsetX, offsetY);
+	f32 snappedX = roundf(offsetX);
+	f32 snappedY = roundf(offsetY);
+	AEGfxSetCamPosition(snappedX, snappedY);
 }
 
 void CameraEffects::Clear()

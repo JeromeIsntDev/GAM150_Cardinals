@@ -15,6 +15,7 @@
 #define _Camera_Effects_Header_
 
 #include "PlayerController.hpp"
+#include <cmath>
 
 class CameraEffects {
 private:
@@ -24,15 +25,15 @@ private:
 	f32 shakeTimeLeft{ 0.f };
 	f32 shakeMagnitude{ 0.f };
 	f32 defaultShakeMagnitude{ 1.7f };
-	f32 defaultShakeDuration{ 0.2f };
+	f32 defaultShakeDuration{ 0.15f };
 
 	f32 springX{ 0.f };
 	f32 springVelX{ 0.f };
 	f32 springY{ 0.f };
 	f32 springVelY{ 0.f };
-	f32 springStrength{ 40.f };
-	f32 springDamping{ 20.f };
-	f32 springImpulse{ 70.f };
+	f32 springStrength{ 35.f };
+	f32 springDamping{ 25.f };
+	f32 springImpulse{ 55.f };
 
 	bool wasObstacleHitLastFrame{ false };
 	Player::GravityDirection prevGravDir{ Player::GravityDirection::Down };
