@@ -329,7 +329,7 @@ void Level1_Update() {
 	mainPlayer.CheckBinaryCollision(&grid,mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
 
-	camEffect.Update(dt, mainPlayer.grav, mainPlayer.isHit);
+	camEffect.Update(dt, mainPlayer.isHit);
 	camEffect.Apply();
 
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;

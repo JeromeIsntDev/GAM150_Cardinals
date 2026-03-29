@@ -18,23 +18,23 @@ void CameraEffects::Init(Player::GravityDirection startGrav)
 	offsetY = 0.f;
 	shakeTimeLeft = 0.f;
 	shakeMagnitude = 0.f;
-	springX = 0.f;
-	springVelX = 0.f;
-	springY = 0.f;
-	springVelY = 0.f;
-	prevGravDir = startGrav;
+	//springX = 0.f;
+	//springVelX = 0.f;
+	//springY = 0.f;
+	//springVelY = 0.f;
+	//prevGravDir = startGrav;
 	wasObstacleHitLastFrame = false;
 	AEGfxSetCamPosition(0.f, 0.f);
 }
 
-void CameraEffects::Update(f32 dt, Player::GravityDirection currentGrav, bool obstacleHit)
+void CameraEffects::Update(f32 dt, bool obstacleHit)
 {
 	// reset offset
 	offsetX = 0.f;
 	offsetY = 0.f;
 
 	// spring effect
-	if (currentGrav != prevGravDir)
+	/*if (currentGrav != prevGravDir)
 	{
 		switch (currentGrav)
 		{
@@ -67,7 +67,7 @@ void CameraEffects::Update(f32 dt, Player::GravityDirection currentGrav, bool ob
 	if (fabsf(springVelY) < 0.05f) springVelY = 0.f;
 
 	offsetX += springX;
-	offsetY += springY;
+	offsetY += springY;*/
 
 	// shake effect
 	if (obstacleHit && !wasObstacleHitLastFrame)
@@ -104,12 +104,12 @@ void CameraEffects::Clear()
 	offsetY = 0.f;
 	shakeTimeLeft = 0.f;
 	shakeMagnitude = 0.f;
-	springX = 0.f;
-	springVelX = 0.f;
-	springY = 0.f;
-	springVelY = 0.f;
+	//springX = 0.f;
+	//springVelX = 0.f;
+	//springY = 0.f;
+	//springVelY = 0.f;
 	wasObstacleHitLastFrame = false;
-	prevGravDir = Player::GravityDirection::Down;
+	//prevGravDir = Player::GravityDirection::Down;
 	AEGfxSetCamPosition(0.f, 0.f);
 }
 

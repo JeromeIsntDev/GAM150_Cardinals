@@ -27,20 +27,20 @@ private:
 	f32 defaultShakeMagnitude{ 1.7f };
 	f32 defaultShakeDuration{ 0.15f };
 
-	f32 springX{ 0.f };
-	f32 springVelX{ 0.f };
-	f32 springY{ 0.f };
-	f32 springVelY{ 0.f };
-	f32 springStrength{ 35.f };
-	f32 springDamping{ 25.f };
-	f32 springImpulse{ 55.f };
+	//f32 springX{ 0.f };
+	//f32 springVelX{ 0.f };
+	//f32 springY{ 0.f };
+	//f32 springVelY{ 0.f };
+	//f32 springStrength{ 35.f };
+	//f32 springDamping{ 25.f };
+	//f32 springImpulse{ 55.f };
 
 	bool wasObstacleHitLastFrame{ false };
-	Player::GravityDirection prevGravDir{ Player::GravityDirection::Down };
+	//Player::GravityDirection prevGravDir{ Player::GravityDirection::Down };
 
 public:
 	void Init(Player::GravityDirection startGrav);
-	void Update(f32 dt, Player::GravityDirection currentGrav, bool obstacleHit);
+	void Update(f32 dt, bool obstacleHit);
 	void Apply() const;
 	void Clear();
 
