@@ -164,7 +164,7 @@ void Level1_Initialize()
 
 	playerEffect.Init();
 	gravityEffect.Init();
-	camEffect.Init(mainPlayer.grav);
+	camEffect.Init();
 
 	timerBackground.SetMesh(squareMesh);
 	timerBackground.SetTexture(&cardBgTexture);

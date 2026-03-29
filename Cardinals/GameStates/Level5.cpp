@@ -18,6 +18,7 @@ namespace {
 	Texture* playerTexture[2]{};
 	ParticleEffect playerEffect;
 	ParticleEffect gravityEffect;
+	CameraEffects camEffect;
 
 	TextureManager& tex = TextureManager::GetInstance();
 	AudioManager& bgm = AudioManager::Instance();
@@ -92,6 +93,7 @@ void Level5_Initialize() {
 
 	playerEffect.Init();
 	gravityEffect.Init();
+	camEffect.Init();
 
 	placeholderTexture = tex.Get("Placeholder");
 	cardBgTexture = tex.Get("CardBg");
@@ -277,6 +279,10 @@ void Level5_Update() {
 	mainPlayer.canMoveRight = true;
 	mainPlayer.CheckBinaryCollision(&grid, mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
+
+	camEffect.Update(dt, mainPlayer.isHit);
+	camEffect.Apply();
+
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;
 
 	playerEffect.Update(dt, mainPlayer.GetPosition());
@@ -323,6 +329,7 @@ void Level5_Free() {
 	PRINT("Free: %s", "Level 5\n");
 	playerEffect.Clear();
 	gravityEffect.Clear();
+	camEffect.Clear();
 	bgm.StopAudio();
 }
 

@@ -39,7 +39,7 @@ private:
 	//Player::GravityDirection prevGravDir{ Player::GravityDirection::Down };
 
 public:
-	void Init(Player::GravityDirection startGrav);
+	void Init();
 	void Update(f32 dt, bool obstacleHit);
 	void Apply() const;
 	void Clear();

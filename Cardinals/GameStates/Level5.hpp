@@ -8,6 +8,7 @@
 
 #include "TextureManager.hpp"
 #include "MemoryManager.hpp"
+#include "CameraEffects.hpp"
 
 void Level5_Load();
 void Level5_Initialize();

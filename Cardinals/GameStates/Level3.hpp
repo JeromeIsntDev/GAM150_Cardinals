@@ -8,6 +8,7 @@
 
 #include "TextureManager.hpp"
 #include "MemoryManager.hpp"
+#include "CameraEffects.hpp"
 
 void Level3_Load();
 void Level3_Initialize();

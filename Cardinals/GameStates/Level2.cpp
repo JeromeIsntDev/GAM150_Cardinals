@@ -94,7 +94,7 @@ void Level2_Initialize()
 
 	playerEffect.Init();
 	gravityEffect.Init();
-	camEffect.Init(mainPlayer.grav);
+	camEffect.Init();
 
 	placeholderTexture = go_texture.Get("Placeholder");
 	cardBgTexture = go_texture.Get("CardBg");

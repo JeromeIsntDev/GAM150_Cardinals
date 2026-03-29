@@ -12,7 +12,7 @@
 
 #include "../header/CameraEffects.hpp"
 
-void CameraEffects::Init(Player::GravityDirection startGrav)
+void CameraEffects::Init()
 {
 	offsetX = 0.f;
 	offsetY = 0.f;
