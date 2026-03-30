@@ -65,12 +65,14 @@ void Grid::Load(Texture* sheet, int sheetW, int sheetH, int tileW, int tileH)
 
 void Grid::Clear()
 {
-	if(tileMesh) AEGfxMeshFree(tileMesh);
-	if (standardMesh) AEGfxMeshFree(standardMesh);
 	obstacleTexture.Unload_Image();
 	gravTexture.Unload_Image();
 	winTexture.Unload_Image();
 	specialTexture.Unload_Image();
+
+	if(tileMesh) AEGfxMeshFree(tileMesh);
+	if (standardMesh) AEGfxMeshFree(standardMesh);
+
 	//tileTexture.Unload_Image();
 	objs.clear();
 	for (u32 i = 0; i < rows; ++i) {

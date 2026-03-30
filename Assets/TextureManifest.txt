@@ -20,7 +20,7 @@ RestartBtn, ../../Assets/Textures/Restart_Button.png, 412, 120
 NextBtn, ../../Assets/Textures/Next_Button.png, 412, 120
 RetryBtn, ../../Assets/Textures/Retry_Button.png, 412, 120
 # bg and stuff
-WinPortal, ../../Assets/Textures/WinPortal.png, 317, 325
+WinPortal, ../../Assets/Textures/WinPortal.png, 500, 500
 GravityBlock, ../../Assets/Textures/GravityBlock.png, 321, 325
 Background, ../../Assets/Textures/MenuBG.png, 1600, 900
 Placeholder, ../../Assets/Textures/MissingTexture.png, 1600, 900
