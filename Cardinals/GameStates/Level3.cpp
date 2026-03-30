@@ -98,7 +98,6 @@ void Level3_Initialize()
 
 	playerEffect.Init();
 	gravityEffect.Init();
-	camEffect.Init();
 
 	placeholderTexture = tex.Get("Placeholder");
 	cardBgTexture = tex.Get("CardBg");
@@ -130,6 +129,8 @@ void Level3_Initialize()
 	mainPlayer.UpdatePosition(mainPlayer.GetPosition());
 	mainPlayer._tag = GameObjectTag::Player;
 	mainPlayer.SetHealth(3);
+
+	camEffect.Init(mainPlayer.grav);
 
 	levelTime = 0.f;
 
@@ -276,7 +277,7 @@ void Level3_Update() {
 	mainPlayer.CheckBinaryCollision(&grid, mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
 
-	camEffect.Update(dt, mainPlayer.isHit);
+	camEffect.Update(dt, mainPlayer.grav,mainPlayer.isHit);
 	camEffect.Apply();
 
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;
@@ -345,6 +346,23 @@ void Level3_Unload() {
 	grid.Clear();
 }
 
+//void Level3_Parallax() {
+//	//Reduce Colour -> To Bright
+//	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
+//	f32 offset = mainPlayer.GetPosition().x;
+//	f32 offsetFirst = offset / 200.f;
+//	f32 offsetSecond = offset / 75.f;
+//	f32 offsetThird = offset / 25.f;
+//
+//	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
+//	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
+//	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
+//	for (GameObject& obj : backgroundObjs) {
+//		obj.Draw();
+//	}
+//	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+//}
+
 void Level3_Parallax() {
 	//Reduce Colour -> To Bright
 	AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
@@ -353,9 +371,9 @@ void Level3_Parallax() {
 	f32 offsetSecond = offset / 75.f;
 	f32 offsetThird = offset / 25.f;
 
-	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
-	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
-	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst + camEffect.GetBgOffset().x * 0.20f, camEffect.GetBgOffset().y * 0.35f });
+	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond + camEffect.GetBgOffset().x * 0.35f, camEffect.GetBgOffset().y * 0.55f });
+	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird + camEffect.GetBgOffset().x * 0.50f, camEffect.GetBgOffset().y * 0.80f });
 	for (GameObject& obj : backgroundObjs) {
 		obj.Draw();
 	}

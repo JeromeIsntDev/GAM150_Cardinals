@@ -164,7 +164,6 @@ void Level1_Initialize()
 
 	playerEffect.Init();
 	gravityEffect.Init();
-	camEffect.Init();
 
 	timerBackground.SetMesh(squareMesh);
 	timerBackground.SetTexture(&cardBgTexture);
@@ -181,6 +180,7 @@ void Level1_Initialize()
 	mainPlayer.UpdateRotation(0.f);
 	mainPlayer._tag = GameObjectTag::Player;
 	mainPlayer.SetHealth(3);
+
 
 	for (int i{}; i < 4; ++i) {
 		GameObject* obj = &backgroundObjs[i];
@@ -329,7 +329,7 @@ void Level1_Update() {
 	mainPlayer.CheckBinaryCollision(&grid,mainPlayer.grav);
 	mainPlayer.PlayerCollision(grid.objs);
 
-	camEffect.Update(dt, mainPlayer.isHit);
+	camEffect.Update(dt, mainPlayer.grav, mainPlayer.isHit);
 	camEffect.Apply();
 
 	mainPlayer.audioPlayed = mainPlayer.hasCollided;
@@ -356,7 +356,7 @@ void Level1_Draw() {
 			obj->_tag == GameObjectTag::Gravright)
 		gravityEffect.DrawParticle();
 	}
-	Level1_Parallax();
+	//Level1_Parallax();
 	grid.Draw();
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
@@ -407,9 +407,9 @@ void Level1_Parallax() {
 	f32 offsetSecond = offset / 75.f;
 	f32 offsetThird = offset / 25.f;
 
-	backgroundObjs[1].UpdatePosition(AEVec2{ -offsetFirst, backgroundObjs[1].GetPosition().y });
-	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond, backgroundObjs[1].GetPosition().y });
-	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird, backgroundObjs[1].GetPosition().y });
+	backgroundObjs[1].UpdatePosition(AEVec2{-offsetFirst + camEffect.GetBgOffset().x * 0.20f, camEffect.GetBgOffset().y * 0.35f});
+	backgroundObjs[2].UpdatePosition(AEVec2{ -offsetSecond + camEffect.GetBgOffset().x * 0.35f, camEffect.GetBgOffset().y * 0.55f });
+	backgroundObjs[3].UpdatePosition(AEVec2{ -offsetThird + camEffect.GetBgOffset().x * 0.50f, camEffect.GetBgOffset().y * 0.80f });
 	for (GameObject& obj : backgroundObjs) {
 		obj.Draw();
 	}

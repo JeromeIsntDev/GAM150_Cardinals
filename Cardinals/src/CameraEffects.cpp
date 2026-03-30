@@ -12,62 +12,64 @@
 
 #include "../header/CameraEffects.hpp"
 
-void CameraEffects::Init()
+void CameraEffects::Init(Player::GravityDirection startGrav)
 {
 	offsetX = 0.f;
 	offsetY = 0.f;
 	shakeTimeLeft = 0.f;
 	shakeMagnitude = 0.f;
-	//springX = 0.f;
-	//springVelX = 0.f;
-	//springY = 0.f;
-	//springVelY = 0.f;
-	//prevGravDir = startGrav;
+	
+	gravBgOffsetX = 0.f;
+	gravBgOffsetY = 0.f;
+	gravBgVelX = 0.f;
+	gravBgVelY = 0.f;
+
+	prevParallaxGrav = startGrav;
+
+
 	wasObstacleHitLastFrame = false;
 	AEGfxSetCamPosition(0.f, 0.f);
 }
 
-void CameraEffects::Update(f32 dt, bool obstacleHit)
+void CameraEffects::Update(f32 dt, Player::GravityDirection currentGrav, bool obstacleHit)
 {
 	// reset offset
 	offsetX = 0.f;
 	offsetY = 0.f;
 
-	// spring effect
-	/*if (currentGrav != prevGravDir)
+	// parallax effect
+	if (currentGrav != prevParallaxGrav)
 	{
 		switch (currentGrav)
 		{
-		case Player::GravityDirection::Up:
-			springVelY -= springImpulse;
-			break;
-		case Player::GravityDirection::Down:
-			springVelY += springImpulse;
-			break;
-		case Player::GravityDirection::Left:
-			springVelX -= springImpulse;
-			break;
-		case Player::GravityDirection::Right:
-			springVelX += springImpulse;
-		default:
-			break;
+			case Player::GravityDirection::Up:
+				gravBgVelY = -110.f;
+				break;
+			case Player::GravityDirection::Down:
+				gravBgVelY = 110.f;
+				break;
+			case Player::GravityDirection::Left:		
+				gravBgVelX = -60.f;
+				break;
+			case Player::GravityDirection::Right:
+				gravBgVelX = 60.f;
+				break;
+			default:
+				break;
 		}
-		prevGravDir = currentGrav;
+		prevParallaxGrav = currentGrav;
 	}
 
-	springVelX += (-springStrength * springX - springDamping * springVelX) * dt;
-	springVelY += (-springStrength * springY - springDamping * springVelY) * dt;
+	gravBgVelX += (-25.f * gravBgOffsetX - 13.f * gravBgVelX) * dt;
+	gravBgVelY += (-25.f * gravBgOffsetY - 13.f * gravBgVelY) * dt;
 
-	springX += springVelX * dt;
-	springY += springVelY * dt;
+	gravBgOffsetX += gravBgVelX * dt;
+	gravBgOffsetY += gravBgVelY * dt;
 
-	if (fabsf(springX) < 0.05f) springX = 0.f;
-	if (fabsf(springY) < 0.05f) springY = 0.f;
-	if (fabsf(springVelX) < 0.05f) springVelX = 0.f;
-	if (fabsf(springVelY) < 0.05f) springVelY = 0.f;
-
-	offsetX += springX;
-	offsetY += springY;*/
+	if (fabsf(gravBgOffsetX) < 0.05f) gravBgOffsetX = 0.f;
+	if (fabsf(gravBgOffsetY) < 0.05f) gravBgOffsetY = 0.f;
+	if (fabsf(gravBgVelX) < 0.05f) gravBgVelX = 0.f;
+	if (fabsf(gravBgVelY) < 0.05f) gravBgVelY = 0.f;
 
 	// shake effect
 	if (obstacleHit && !wasObstacleHitLastFrame)
@@ -104,16 +106,24 @@ void CameraEffects::Clear()
 	offsetY = 0.f;
 	shakeTimeLeft = 0.f;
 	shakeMagnitude = 0.f;
-	//springX = 0.f;
-	//springVelX = 0.f;
-	//springY = 0.f;
-	//springVelY = 0.f;
+	
+	gravBgOffsetX = 0.f;
+	gravBgOffsetY = 0.f;
+	gravBgVelX = 0.f;
+	gravBgVelY = 0.f;
+
+	prevParallaxGrav = Player::GravityDirection::Down;
+
 	wasObstacleHitLastFrame = false;
-	//prevGravDir = Player::GravityDirection::Down;
 	AEGfxSetCamPosition(0.f, 0.f);
 }
 
 AEVec2 CameraEffects::GetOffset() const
 {
 	return { offsetX, offsetY };
+}
+
+AEVec2 CameraEffects::GetBgOffset() const
+{
+	return { gravBgOffsetX, gravBgOffsetY };
 }
