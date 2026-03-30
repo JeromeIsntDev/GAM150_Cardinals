@@ -53,6 +53,8 @@ namespace {
 	Player mainPlayer;
 
 	std::string const& savePath{ "../../Saves/LevelSpecial_GameObjects.json" };
+
+	static int checkPoint{ 0 };
 }
 
 void LevelS_Load() {
@@ -196,6 +198,7 @@ void LevelS_Initialize() {
 			obj->_tag == GameObjectTag::Gravright)
 			gravityEffect.ResizeGrav();
 	}
+	checkPoint = 0;
 }
 
 void LevelS_Update() {
@@ -331,8 +334,20 @@ void LevelS_Draw() {
 
 	gamelives.Draw();
 
+	if (checkPoint > 0) {
+		digipenFont.Input_Text("Thank You For Playing!!!");
+		digipenFont.Draw_Text({ 150.f, 0.f }, 1.f, 1.f);
+	}
+	else {
+		if (mainPlayer.GetPosition().x > -300.f) {
+			++checkPoint;
+		}
+	}
+	
+
 	if (pauseMenu) pauseMenu->Draw();
 	if (gameOverMenu) gameOverMenu->Draw();
+	
 
 	if (pauseMenu->IsActive() || gameOverMenu->IsActive()) return;
 	if (IsEditorActive())
