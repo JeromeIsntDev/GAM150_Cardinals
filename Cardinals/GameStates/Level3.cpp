@@ -81,7 +81,7 @@ void Level3_Load() {
 	for (int i{}; i < objData.size(); ++i) {
 		objData[i].SetMesh(grid.tileMesh);
 		objData[i].SetTexture(&grid.tileTexture);
-		if (objData[i]._tag == GameObjectTag::Special && counter::specialCount == 3) continue;
+		if (objData[i]._tag == GameObjectTag::Special && counter::specialCount >= 3) continue;
 		AEVec2& pos = objData[i].GetPosition();
 		objData[i].UpdatePosition(pos);
 		u32 tag = static_cast<u32>(objData[i]._tag);
