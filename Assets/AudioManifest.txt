@@ -2,9 +2,7 @@
 # can you believe this works haha hahhahahaahaha ahahahahahhahahaha
 # i'll do this for the images another time lol
 BGM, ../../Assets/Music/bouken.mp3
-SFX, ../../Assets/Music/ore.mp3
 CLICK, ../../Assets/Music/btn_click.wav
-WALK, ../../Assets/Music/walk.wav
 JUMP, ../../Assets/Music/jump.wav
 HIT, ../../Assets/Music/obstacle_hit.wav
 PICKUP, ../../Assets/Music/pick_up.wav
