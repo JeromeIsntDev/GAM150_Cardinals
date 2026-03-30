@@ -194,7 +194,6 @@ void MainMenu_Initialize()
 	);
 	settingsBtn->SetTexture(settingsTex); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
 	settingsBtn->SetTooltipText("Settings!");
-	noBtn->SetTooltipText("Adjust Sliders!");
 	settingsBtn->SetOnClick(
 		[]() { settingsMenu->SetActive(true); }
 	);
