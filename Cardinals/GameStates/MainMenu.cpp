@@ -147,7 +147,7 @@ void MainMenu_Initialize()
 		AEVec2{ startTex->Get_Image_Width(), startTex->Get_Image_Height() }
 	);
 	startBtn->SetTexture(startTex); startBtn->SetActive(true); startBtn->SetInteractable(true);
-	startBtn->SetTooltipText("Into Level Select!");
+	startBtn->SetTooltipText("Intro Level Select!");
 
 	creditsBtn = std::make_unique<Button>(
 		squareMesh, 
@@ -193,6 +193,7 @@ void MainMenu_Initialize()
 		AEVec2{ settingsTex->Get_Image_Width(), settingsTex->Get_Image_Height()}
 	);
 	settingsBtn->SetTexture(settingsTex); settingsBtn->SetActive(true); settingsBtn->SetInteractable(true);
+	settingsBtn->SetTooltipText("Settings!");
 	noBtn->SetTooltipText("Adjust Sliders!");
 	settingsBtn->SetOnClick(
 		[]() { settingsMenu->SetActive(true); }
