@@ -16,7 +16,7 @@
 #include <sstream>
 
 AudioManager::AudioManager()
-	: musicGroup{nullptr}, sfxGroup{nullptr}, masterVol{ 1.0f }, musicVol{ 1.0f }, sfxVol{ 1.0f }
+	: musicGroup{nullptr}, sfxGroup{nullptr}, masterVol{ 0.3f }, musicVol{ 0.3f }, sfxVol{ 0.6f }
 {
 	PRINT("Audio Created\n");
 }

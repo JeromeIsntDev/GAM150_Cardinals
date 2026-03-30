@@ -168,7 +168,7 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir, Grid& grid)
 	
 	if (canTouch && input.isKeyTriggered(AEVK_E)) {
 		std::cout << "item pressed" << std::endl;
-		bgm.PlayAudio("PICKUP", AudioType::MUSIC, 1.f, 0);
+		bgm.PlayAudio("PICKUP", AudioType::SFX, 1.f, 0);
 		counter::specialCount++;
 		canTouch = false;
 		delete grid.cherryCell->obj;
@@ -631,7 +631,7 @@ void Player::PlayerCollision(std::vector<GameObject*> objs)
 				std::cout << "obstacle hit" << std::endl;
 				hitAnim = true;
 				canMove = false;
-				bgm.PlayAudio("HIT", AudioType::SFX, 1.f, 0);
+				bgm.PlayAudio("BRUH", AudioType::SFX, 1.f, 0);
 				rot_Timer = 0.f;
 				rot_count = 0;
 				hitCD = 0.2f;
