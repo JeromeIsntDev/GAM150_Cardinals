@@ -171,9 +171,17 @@ void LevelS_Initialize() {
 		GameObject* obj = &dev[i];
 		obj->SetMesh(squareMesh);
 		obj->SetTexture(devImages[i]);
-		obj->UpdateScale(AEVec2{ 100.f,100.f });
+		f32 YoffSet{};
+		if (i == 1) {
+			obj->UpdateScale(AEVec2{ 60.f,60.f });
+			YoffSet = -170.f;
+		}
+		else {
+			obj->UpdateScale(AEVec2{ 100.f,100.f });
+			YoffSet = -150.f;
+		}
 		obj->UpdateRotation(0.f);
-		obj->UpdatePosition(AEVec2{ 0.f + (i * 100.f),-150.f });
+		obj->UpdatePosition(AEVec2{ 0.f + (i * 100.f),YoffSet });
 	}
 
 	for (int i{}; i < 4; ++i) {
