@@ -232,6 +232,18 @@ void Overlay::Draw() const
 		_titleFont->Draw_Text(AEVec2{ 0.f, 220.f },.75f, 1.f);
 	}
 
+	if ((_mode == PAUSE || _mode == SETTINGS) && _titleFont) {
+		_titleFont->Change_Text_Color(Colors::White);
+		_titleFont->Input_Text("MASTER");
+		_titleFont->Draw_Text(AEVec2{ -250.f, 100.f }, .42f, 1.f);
+
+		_titleFont->Input_Text("MUSIC");
+		_titleFont->Draw_Text(AEVec2{ -250.f, 0.f }, .42f, 1.f);
+
+		_titleFont->Input_Text("EFFECT");
+		_titleFont->Draw_Text(AEVec2{ -250.f, -100.f }, .42f, 1.f);
+	}
+
 	if (_mode == LEVEL && _bodyFont) {
 		_bodyFont->Input_Text(buffer);
 		_bodyFont->Change_Text_Color(Colors::White);
@@ -283,15 +295,15 @@ void Overlay::SetTextures(const GameOverTextures& gameOverTex)
 void Overlay::SetupPauseMenu()
 {
 	// sliiiders
-	auto* masterSlider = new VolSlider(commonMesh, AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
+	auto* masterSlider = new VolSlider(commonMesh, AudioType::MASTER, AEVec2{ 100.f, 100.f }, 420.f);
 	_masterSlider = masterSlider;
 	AddChild(masterSlider);
 
-	auto* musicSlider = new VolSlider(commonMesh, AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 500.f);
+	auto* musicSlider = new VolSlider(commonMesh, AudioType::MUSIC, AEVec2{ 100.f, 0.f }, 420.f);
 	_musicSlider = musicSlider;
 	AddChild(musicSlider);
 
-	auto* sfxSlider = new VolSlider(commonMesh, AudioType::SFX, AEVec2{ 0.f, -100.f }, 500.f);
+	auto* sfxSlider = new VolSlider(commonMesh, AudioType::SFX, AEVec2{ 100.f, -100.f }, 420.f);
 	_sfxSlider = sfxSlider;
 	AddChild(sfxSlider);
 
@@ -339,15 +351,15 @@ void Overlay::SetupPauseMenu()
 void Overlay::SetupSettingsMenu()
 {
 	// sliiiders
-	auto* masterSlider = new VolSlider(commonMesh, AudioType::MASTER, AEVec2{ 0.f, 100.f }, 500.f);
+	auto* masterSlider = new VolSlider(commonMesh, AudioType::MASTER, AEVec2{ 100.f, 100.f }, 420.f);
 	_masterSlider = masterSlider;
 	AddChild(masterSlider);
 
-	auto* musicSlider = new VolSlider(commonMesh, AudioType::MUSIC, AEVec2{ 0.f, 0.f }, 500.f);
+	auto* musicSlider = new VolSlider(commonMesh, AudioType::MUSIC, AEVec2{ 100.f, 0.f }, 420.f);
 	_musicSlider = musicSlider;
 	AddChild(musicSlider);
 
-	auto* sfxSlider = new VolSlider(commonMesh, AudioType::SFX, AEVec2{ 0.f, -100.f }, 500.f);
+	auto* sfxSlider = new VolSlider(commonMesh, AudioType::SFX, AEVec2{ 100.f, -100.f }, 420.f);
 	_sfxSlider = sfxSlider;
 	AddChild(sfxSlider);
 
