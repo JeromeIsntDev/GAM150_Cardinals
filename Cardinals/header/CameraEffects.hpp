@@ -32,17 +32,7 @@ private:
 	f32 gravBgVelX{ 0.f };
 	f32 gravBgVelY{ 0.f };
 	Player::GravityDirection prevParallaxGrav{ Player::GravityDirection::Down };
-
-	//f32 springX{ 0.f };
-	//f32 springVelX{ 0.f };
-	//f32 springY{ 0.f };
-	//f32 springVelY{ 0.f };
-	//f32 springStrength{ 35.f };
-	//f32 springDamping{ 25.f };
-	//f32 springImpulse{ 55.f };
-
 	bool wasObstacleHitLastFrame{ false };
-	//Player::GravityDirection prevGravDir{ Player::GravityDirection::Down };
 
 public:
 	void Init(Player::GravityDirection startGrav);
