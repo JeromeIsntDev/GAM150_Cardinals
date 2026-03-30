@@ -76,7 +76,7 @@ Player::Player()
 {
 }
 
-void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
+void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir, Grid& grid) {
 	f32 moveSpeed{ 300.f };
 	isMoving = false;
 	isSprint = false;
@@ -171,6 +171,8 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 		bgm.PlayAudio("PICKUP", AudioType::MUSIC, 1.f, 0);
 		counter::specialCount++;
 		canTouch = false;
+		delete grid.cherryCell->obj;
+		grid.cherryCell->obj = nullptr;
 	}
 
 	if (input.isKeyTriggered(AEVK_SPACE) && !p_isJumping) {
@@ -207,7 +209,7 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir) {
 }
 
 //Player Movement Logic
-void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
+void Player::PlayerMovement(f32 const& dt, GravityDirection& dir, Grid& grid) {
 	//std::cout << "dt: " << dt << std::endl;
 
 	jumpBuffer = max(0, jumpBuffer - dt);
@@ -314,7 +316,7 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir) {
 		}
 	}
 
-	PlayerInputHandle(dt, dir);
+	PlayerInputHandle(dt, dir, grid);
 
 
 	//if top of player goes past bottom of screen (temporary stuff, probably wont need)

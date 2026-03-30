@@ -110,8 +110,9 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
 		return;
 	}
 
-	cell->obj
-	/*GameObject* obj*/ = new GameObject{};
+	if (tag == static_cast<int>(GameObjectTag::Special)) cherryCell = cell;
+
+	cell->obj = new GameObject{};
 	cell->obj->UpdateScale({ tileScale,tileScale });
 	f32 ax{ cell->position.x }, ay{ cell->position.y };
 	GridToWorld(&ax,&ay);

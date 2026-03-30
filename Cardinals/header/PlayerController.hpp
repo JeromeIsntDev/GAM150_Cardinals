@@ -102,8 +102,8 @@ public:
 	void SetGameOver(bool);
 	void SetHealth(int);
 	//void SetPlayerHealth(f32);
-	void PlayerInputHandle(f32 const&, GravityDirection&);
-	void PlayerMovement(f32 const&, GravityDirection& dir);
+	void PlayerInputHandle(f32 const&, GravityDirection&, Grid&);
+	void PlayerMovement(f32 const&, GravityDirection& dir, Grid& grid);
 	void PlayerCollision(std::vector<GameObject*> objs);
 	void CheckBinaryCollision(Grid* grid, GravityDirection&);
 	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid* grid);

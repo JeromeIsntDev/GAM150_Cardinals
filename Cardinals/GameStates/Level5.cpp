@@ -267,7 +267,7 @@ void Level5_Update() {
 	}
 
 	//PLAYER ITEMS//
-	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
+	mainPlayer.PlayerMovement(dt, mainPlayer.grav, grid);
 	if (mainPlayer.GetPlayerJump()) {
 		mainPlayer.SetTexture(playerTexture[1]);
 	}

@@ -315,7 +315,7 @@ void Level1_Update() {
 	if (isGamePaused || isGameOver) return;
 
 	/*PLAYER STUFF*/
-	mainPlayer.PlayerMovement(dt, mainPlayer.grav);
+	mainPlayer.PlayerMovement(dt, mainPlayer.grav, grid);
 	if (mainPlayer.GetPlayerJump()) {
 		mainPlayer.SetTexture(&playerTexture[1]);
 	}
