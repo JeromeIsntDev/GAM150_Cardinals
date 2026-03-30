@@ -88,7 +88,7 @@ namespace Images
     constexpr ImageFile BG_CLOUDS{ "../../Assets/Textures/BG_CLOUDS.png", 1600.f, 900.f };
     constexpr ImageFile BG_FRONTMOUNTAIN{ "../../Assets/Textures/BG_FRONTMOUNTAIN.png", 1600.f, 900.f };
     constexpr ImageFile Collectible{ "../../Assets/Textures/Collectible.png", 160.f, 160.f };
-}
+}   
 
 namespace Fonts
 {

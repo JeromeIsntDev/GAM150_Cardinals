@@ -38,3 +38,9 @@ BG_BACKMOST, ../../Assets/Textures/BG_BACKMOST.png, 1600, 900
 BG_MOUNTAIN, ../../Assets/Textures/BG_BACKMOUNTAIN.png, 1600, 900
 BG_CLOUDS, ../../Assets/Textures/BG_CLOUDS.png, 1600, 900
 BG_FRONTMOUNTAIN, ../../Assets/Textures/BG_FRONTMOUNTAIN.png, 1600, 900
+# devimages
+SadricCat, ../../Assets/Textures/SadricCat.png, 160, 160
+BreanneRat, ../../Assets/Textures/BreanneRat.png, 160, 160
+JeromeBear, ../../Assets/Textures/JeromeBear.png, 160, 160
+ShirleyCat, ../../Assets/Textures/ShirleyCat.png, 160, 160
+ZoeyCat, ../../Assets/Textures/ZoeyCat.png, 160, 160

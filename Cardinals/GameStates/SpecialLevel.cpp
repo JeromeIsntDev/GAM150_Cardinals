@@ -43,6 +43,9 @@ namespace {
 
 	GameObject gamelives;
 
+	Texture* devImages[5]{};
+	GameObject dev[5]{};
+
 	Texture* backgrounds[4]{};
 	GameObject backgroundObjs[4]{};
 
@@ -69,6 +72,8 @@ void LevelS_Load() {
 	if (!memoryManager.fonts.empty()) memoryManager.fonts.clear();
 	memoryManager.AddFont(&digipenFont);
 	memoryManager.AddFont(&pauseTitleFont);
+
+
 	mainPlayer.newAnim.SetAnimArr();
 
 	std::vector<GameObject> objData = ReadJsonToObjects(savePath.c_str());
@@ -114,6 +119,12 @@ void LevelS_Initialize() {
 	backgrounds[2] = tex.Get("BG_MOUNTAIN");
 	backgrounds[3] = tex.Get("BG_FRONTMOUNTAIN");
 
+	devImages[0] = tex.Get("SadricCat");
+	devImages[1] = tex.Get("BreanneRat");
+	devImages[2] = tex.Get("JeromeBear");
+	devImages[3] = tex.Get("ShirleyCat");
+	devImages[4] = tex.Get("ZoeyCat");
+
 	mainPlayer.InitializePlayer(playerHealth, playerMovespeed, false,
 		0.f, 0.f, squareMesh, AEGfxGetWinMinX() + 75.f, AEGfxGetWinMinY() + 100.f, false);
 	mainPlayer.SetMesh(squareMesh);
@@ -153,6 +164,15 @@ void LevelS_Initialize() {
 			nextTexture, &pauseTitleFont, &digipenFont
 		});
 	isGameOver = 0;
+
+	for (size_t i{}; i < 5; ++i) {
+		GameObject* obj = &dev[i];
+		obj->SetMesh(squareMesh);
+		obj->SetTexture(devImages[i]);
+		obj->UpdateScale(AEVec2{ 100.f,100.f });
+		obj->UpdateRotation(0.f);
+		obj->UpdatePosition(AEVec2{ 0.f + (i * 100.f),-150.f });
+	}
 
 	for (int i{}; i < 4; ++i) {
 		GameObject* obj = &backgroundObjs[i];
@@ -253,6 +273,10 @@ void LevelS_Update() {
 			gravityEffect.Update(dt, obj->GetPosition(), obj->_tag);
 	}
 
+	//for (GameObject& obj : dev) {
+	//	obj.UpdatePosition(AEVec2{ obj.GetPosition().x,(obj.GetPosition().y + 100.f) * dt });
+	//}
+
 	//PLAYER ITEMS//
 	mainPlayer.PlayerMovement(dt, mainPlayer.grav, grid);
 	if (mainPlayer.GetPlayerJump()) {
@@ -289,6 +313,12 @@ void LevelS_Draw() {
 			obj->_tag == GameObjectTag::Gravright)
 			gravityEffect.DrawParticle();
 	}
+	//AEGfxSetColorToMultiply(.75f, .75f, .75f, 1.0f);
+	for (GameObject& obj : dev) {
+		//std::cout << obj.GetPosition().x << std::endl;
+		obj.Draw();
+	}
+	//AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	grid.Draw();
 	mainPlayer.Draw();
 	playerEffect.DrawParticle();
