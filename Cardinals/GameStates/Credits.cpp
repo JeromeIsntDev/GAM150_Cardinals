@@ -15,6 +15,7 @@ namespace {
 
 	TextureManager& go_texture = TextureManager::GetInstance();
 	InputHandler& input = InputHandler::GetInstance();
+	AudioManager& bgm = AudioManager::Instance();
 
 	GameObject logo;
 
@@ -47,6 +48,7 @@ void Credits_Load() {
 
 void Credits_Initialize()
 {
+	bgm.PlayAudio("LEVEL", AudioType::MUSIC, 1.f, -1);
 	startY = -430.f;
 	logo.SetMesh(squareMesh);
 	logo.SetTexture(go_texture.Get("DigipenLogo"));
@@ -108,6 +110,7 @@ void Credits_Draw() {
 void Credits_Free() {
 	PRINT("Free: %s", "Credits\n");
 	if(quitCredits) quitCredits = false;
+	bgm.StopAudio();
 }
 
 void Credits_Unload() {
