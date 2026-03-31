@@ -190,6 +190,10 @@ void Level4_Update() {
 	if (isGameOver) {
 		if (input.isKeyTriggered(AEVK_R))
 			RestartLevel(UpdateGameManagerState, Level4);
+		if (input.isKeyTriggered(AEVK_SPACE) && mainPlayer.GetPlayerHealth() > 0) {
+			isGameOver = 0;
+			UpdateGameManagerState(GameStateEnum::Level5);
+		}
 	}
 
 	if (pauseMenu) //Checks if pauseMenu Exists
@@ -282,7 +286,7 @@ void Level4_Update() {
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 	playerEffect.ResizePlayer(mainPlayer.isSprint);
 
-	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_E))
+	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_EQUAL))
 		ToggleEditorMode();
 
 	if (IsEditorActive())

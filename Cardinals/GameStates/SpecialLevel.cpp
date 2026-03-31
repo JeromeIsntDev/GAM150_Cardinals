@@ -307,7 +307,7 @@ void LevelS_Update() {
 	playerEffect.Update(dt, mainPlayer.GetPosition());
 	playerEffect.ResizePlayer(mainPlayer.isSprint);
 
-	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_E))
+	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_EQUAL))
 		ToggleEditorMode();
 
 	if (IsEditorActive())

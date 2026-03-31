@@ -242,6 +242,10 @@ void Level1_Update() {
 	if (isGameOver) {
 		if (input.isKeyTriggered(AEVK_R))
 			RestartLevel(UpdateGameManagerState, Level1);
+		if (input.isKeyTriggered(AEVK_SPACE) && mainPlayer.GetPlayerHealth() > 0) {
+			isGameOver = 0;
+			UpdateGameManagerState(GameStateEnum::Level2);
+		}
 	}
 
 	if (pauseMenu) //Checks if pauseMenu Exists
@@ -338,7 +342,7 @@ void Level1_Update() {
 
 	playerEffect.ResizePlayer(mainPlayer.isSprint);
 
-	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_E)) 
+	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_EQUAL))
 		ToggleEditorMode();
 
 	if (IsEditorActive()) {
