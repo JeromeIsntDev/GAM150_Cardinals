@@ -106,6 +106,7 @@ public:
 	void PlayerInputGravUpDown(const f32& dt);
 	void PlayerInputGravLeftRight(const f32& dt);
 	void PlayerInputSprint();
+	void PlayerRotAnim(const f32& dt);
 	void PlayerInputJump(const f32& dt, GravityDirection&);
 	void PlayerInputCollectible(Grid&);
 	void PlayerMovement(f32 const&, GravityDirection& dir, Grid& grid);

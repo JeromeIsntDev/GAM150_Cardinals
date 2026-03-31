@@ -139,40 +139,8 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir, Grid& grid) {
 		gravTouched = false;
 	}
 
-	if (hitAnim) {
-		rot_Timer += dt;
-		while (rot_Timer >= .045f && rot_count < 12) {
-			UpdateRotation(this->GetRotation() + (PI / 4.f));
-			//std::cout << "this is running" << std::endl;
-			rot_Timer -= .045f;
-			++rot_count;
-		}
+	PlayerRotAnim(dt);
 
-		if (rot_count >= 12) {
-			UpdateRotation(0.f);
-			isHit = false;
-			//std::cout << "this ran" << std::endl;
-			--p_playerHealth;
-
-			rot_Timer = 0.0f;
-			rot_count = 0;
-			hitAnim = false;
-
-			p_currPos = p_previousPos;
-			canMove = true;
-			grav = GravityDirection::Down;
-			p_velocityVector = { 0.f, 0.f };
-			p_Scale = { 50.f, 50.f };
-		}
-		if (p_playerHealth <= 0) {
-			bgm.StopAudio();
-			bgm.PlayAudio("FAILOVERLAY", AudioType::MUSIC, 1.f, -1);
-			p_velocityVector = { 0.f, 0.f };
-			p_Scale = { 50.f,50.f };
-			grav = GravityDirection::Down;
-			gameOver = true;
-		}
-	}
 	clampedDT = AEMin(0.01667f, dt);
 	if (!p_isGrounded) {
 		switch (dir)
@@ -714,5 +682,42 @@ void Player::PlayerInputCollectible(Grid& grid) {
 		canTouch = false;
 		delete grid.cherryCell->obj;
 		grid.cherryCell->obj = nullptr;
+	}
+}
+
+void Player::PlayerRotAnim(const f32& dt) {
+	if (hitAnim) {
+		rot_Timer += dt;
+		while (rot_Timer >= .045f && rot_count < 12) {
+			UpdateRotation(this->GetRotation() + (PI / 4.f));
+			//std::cout << "this is running" << std::endl;
+			rot_Timer -= .045f;
+			++rot_count;
+		}
+
+		if (rot_count >= 12) {
+			UpdateRotation(0.f);
+			isHit = false;
+			//std::cout << "this ran" << std::endl;
+			--p_playerHealth;
+
+			rot_Timer = 0.0f;
+			rot_count = 0;
+			hitAnim = false;
+
+			p_currPos = p_previousPos;
+			canMove = true;
+			grav = GravityDirection::Down;
+			p_velocityVector = { 0.f, 0.f };
+			p_Scale = { 50.f, 50.f };
+		}
+		if (p_playerHealth <= 0) {
+			bgm.StopAudio();
+			bgm.PlayAudio("FAILOVERLAY", AudioType::MUSIC, 1.f, -1);
+			p_velocityVector = { 0.f, 0.f };
+			p_Scale = { 50.f,50.f };
+			grav = GravityDirection::Down;
+			gameOver = true;
+		}
 	}
 }
