@@ -63,7 +63,7 @@ namespace {
 	//TUTORIAL VARIABLES
 	int checkPoints;
 
-	std::string const& lvl1SavePath{ "../../Saves/Level1_GameObjects.json" };
+	std::string const& lvl1SavePath{ "../Saves/Level1_GameObjects.json" };
 }
 
 void Level1_Load() {

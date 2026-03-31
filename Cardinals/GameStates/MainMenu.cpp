@@ -42,14 +42,17 @@ namespace {
 	AudioManager& bgm = AudioManager::Instance();
 	TextureManager& go_texture = TextureManager::GetInstance();
 	InputHandler& input = InputHandler::GetInstance();
+
+	const std::string textureManifest{ "../Assets/TextureManifest.txt" };
+	const std::string audioManifest{ "../Assets/AudioManifest.txt" };
 }
 
 
 void MainMenu_Load() {
 	PRINT("[DEBUG | LEVEL] => Load: %s", "Main Menu\n");
 
-	bgm.LoadManifest("../../Assets/AudioManifest.txt");
-	go_texture.LoadManifest("../../Assets/TextureManifest.txt");
+	bgm.LoadManifest(audioManifest);
+	go_texture.LoadManifest(textureManifest);
 
 	// for persistent objs beyond manifest
 	go_texture.SetPersistent("TileSheet");
