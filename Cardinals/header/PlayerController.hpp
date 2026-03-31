@@ -103,6 +103,11 @@ public:
 	void SetHealth(int);
 	//void SetPlayerHealth(f32);
 	void PlayerInputHandle(f32 const&, GravityDirection&, Grid&);
+	void PlayerInputGravUpDown(const f32& dt);
+	void PlayerInputGravLeftRight(const f32& dt);
+	void PlayerInputSprint();
+	void PlayerInputJump(const f32& dt, GravityDirection&);
+	void PlayerInputCollectible(Grid&);
 	void PlayerMovement(f32 const&, GravityDirection& dir, Grid& grid);
 	void PlayerCollision(std::vector<GameObject*> objs);
 	void CheckBinaryCollision(Grid* grid, GravityDirection&);
