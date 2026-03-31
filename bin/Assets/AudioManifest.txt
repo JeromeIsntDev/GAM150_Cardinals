@@ -1,0 +1,14 @@
+# Name, Path
+# can you believe this works haha hahhahahaahaha ahahahahahhahahaha
+# i'll do this for the images another time lol
+BGM, ../Assets/Music/bouken.mp3
+CLICK, ../Assets/Music/btn_click.mp3
+JUMP, ../Assets/Music/jump.mp3
+PICKUP, ../Assets/Music/pick_up.mp3
+NEXT, ../Assets/Music/next.mp3
+GRAVITY, ../Assets/Music/gravity.mp3
+LEVEL, ../Assets/Music/level_bg.mp3
+FAILOVERLAY, ../Assets/Music/fail_overlay.mp3
+WINOVERLAY, ../Assets/Music/win_overlay.mp3
+GAMEPLAY, ../Assets/Music/gameplay.mp3
+BRUH, ../Assets/Music/bruh.mp3

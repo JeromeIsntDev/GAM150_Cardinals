@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
-bin/
+bin/Release-x64
+bin/Debug-x64
 .tmp
 .vs
 

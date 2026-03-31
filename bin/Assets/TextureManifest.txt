@@ -1,0 +1,46 @@
+# Name, Path, Width, Height
+# AHHHHHHHHHHHHHHHHHHHH
+DigipenLogo, ../Assets/Textures/DigiPen_WHITE.png, 1525, 445
+Player, ../Assets/Textures/playerIdle.png, 500, 500
+PlayerJump, ../Assets/Textures/playerJump.png, 500, 500
+# btn and knobs
+StartBtn, ../Assets/Textures/Start_Button.png, 412, 120
+PrevBtn, ../Assets/Textures/Previous_Button.png, 120, 120
+ExitBtn, ../Assets/Textures/Exit_Button.png, 412, 120
+CreditsBtn, ../Assets/Textures/Credits_Button.png, 412, 120
+SettingsBtn, ../Assets/Textures/Settings_Button.png, 120, 120
+Bar, ../Assets/Textures/Generic_Bar.png, 500, 40
+KnobMaster, ../Assets/Textures/Master_Vol.png, 80, 80
+KnobMusic, ../Assets/Textures/Music_Vol.png, 80, 80
+KnobEFX, ../Assets/Textures/EFX_Vol.png, 80, 80
+CardBg, ../Assets/Textures/RoundedSq.png, 800, 600
+ResumeBtn, ../Assets/Textures/Resume_Button.png, 412, 120
+HomeBtn, ../Assets/Textures/Home_Button.png, 412, 120
+RestartBtn, ../Assets/Textures/Restart_Button.png, 412, 120
+NextBtn, ../Assets/Textures/Next_Button.png, 412, 120
+RetryBtn, ../Assets/Textures/Retry_Button.png, 412, 120
+# bg and stuff
+WinPortal, ../Assets/Textures/WinPortal.png, 500, 500
+GravityBlock, ../Assets/Textures/GravityBlock.png, 321, 325
+Background, ../Assets/Textures/MenuBG.png, 1600, 900
+Placeholder, ../Assets/Textures/MissingTexture.png, 1600, 900
+Button, ../Assets/Textures/Button.png, 200, 200
+Lollipop, ../Assets/Textures/Lollipop.png, 100, 100
+Candy, ../Assets/Textures/Candy.png, 50, 50 
+CandyGrey, ../Assets/Textures/Candy_Grey.png, 50, 50
+Candy_Corn1, ../Assets/Textures/Candy_Corn1.png, 50, 50
+Cotton_Candy, ../Assets/Textures/Cotton_Candy.png, 50, 50
+Macaron, ../Assets/Textures/Macaron.png, 50, 50
+Sweet, ../Assets/Textures/Sweet.png, 50, 50
+# game bg
+TileSheet, ../Assets/Textures/TileSheet.png, 900, 1200
+BG_BACKMOST, ../Assets/Textures/BG_BACKMOST.png, 1600, 900
+BG_MOUNTAIN, ../Assets/Textures/BG_BACKMOUNTAIN.png, 1600, 900
+BG_CLOUDS, ../Assets/Textures/BG_CLOUDS.png, 1600, 900
+BG_FRONTMOUNTAIN, ../Assets/Textures/BG_FRONTMOUNTAIN.png, 1600, 900
+# devimages
+SadricCat, ../Assets/Textures/SadricCat.png, 160, 160
+BreanneRat, ../Assets/Textures/BreanneRat.png, 160, 160
+JeromeBear, ../Assets/Textures/JeromeBear.png, 160, 160
+ShirleyCat, ../Assets/Textures/ShirleyCat.png, 160, 160
+ZoeyCat, ../Assets/Textures/ZoeyCat.png, 160, 160
