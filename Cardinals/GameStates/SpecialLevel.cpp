@@ -52,7 +52,7 @@ namespace {
 	Grid grid;
 	Player mainPlayer;
 
-	std::string const& savePath{ "../../Saves/LevelSpecial_GameObjects.json" };
+	std::string const& savePath{ "../Saves/LevelSpecial_GameObjects.json" };
 
 	static int checkPoint{ 0 };
 }
