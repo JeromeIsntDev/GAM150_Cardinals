@@ -103,27 +103,27 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	{
 		AESysFrameStart();
 
-		if (AEInputCheckReleased(AEVK_0)) {
-			UpdateGameManagerState(GameStateEnum::MainMenu);
-		}
-		if (AEInputCheckReleased(AEVK_1)) {
-			UpdateGameManagerState(GameStateEnum::Level1);
-		}
-		if (AEInputCheckReleased(AEVK_2)) {
-			UpdateGameManagerState(GameStateEnum::Level2);
-		}
-		if (AEInputCheckReleased(AEVK_3)) {
-			UpdateGameManagerState(GameStateEnum::Level3);
-		}
-		if (AEInputCheckReleased(AEVK_4)) {
-			UpdateGameManagerState(GameStateEnum::Level4);
-		}
-		if (AEInputCheckReleased(AEVK_8)) {
-			UpdateGameManagerState(GameStateEnum::LevelMenu);
-		}
-		if (AEInputCheckReleased(AEVK_9)) {
-			UpdateGameManagerState(GameStateEnum::Credits);
-		}
+		//if (AEInputCheckReleased(AEVK_0)) {
+		//	UpdateGameManagerState(GameStateEnum::MainMenu);
+		//}
+		//if (AEInputCheckReleased(AEVK_1)) {
+		//	UpdateGameManagerState(GameStateEnum::Level1);
+		//}
+		//if (AEInputCheckReleased(AEVK_2)) {
+		//	UpdateGameManagerState(GameStateEnum::Level2);
+		//}
+		//if (AEInputCheckReleased(AEVK_3)) {
+		//	UpdateGameManagerState(GameStateEnum::Level3);
+		//}
+		//if (AEInputCheckReleased(AEVK_4)) {
+		//	UpdateGameManagerState(GameStateEnum::Level4);
+		//}
+		//if (AEInputCheckReleased(AEVK_8)) {
+		//	UpdateGameManagerState(GameStateEnum::LevelMenu);
+		//}
+		//if (AEInputCheckReleased(AEVK_9)) {
+		//	UpdateGameManagerState(GameStateEnum::Credits);
+		//}
 
 		if (AEInputCheckTriggered(AEVK_F1)) {
 			panelOpen = !panelOpen;

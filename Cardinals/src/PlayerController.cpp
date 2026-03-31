@@ -77,7 +77,6 @@ Player::Player()
 }
 
 void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir, Grid& grid) {
-	f32 moveSpeed{ 300.f };
 	isMoving = false;
 	isSprint = false;
 
@@ -85,65 +84,19 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir, Grid& grid)
 		case GravityDirection::Left:
 		case GravityDirection::Right:
 			newAnim.AnimationUpd(dt);
-			if (canMoveRight) {
-				if (input.isKeyPressed(AEVK_S)) {
-					p_velocityVector.y = -1.f * p_moveSpeed * dt;
-					p_currPos.y += p_velocityVector.y;
-					p_Scale.x = 50.f;
-				}
-			}
-			if (canMoveLeft) {
-				if (input.isKeyPressed(AEVK_W)) {
-					p_velocityVector.y = 1.f * p_moveSpeed * dt;
-					p_currPos.y += p_velocityVector.y;
-					p_Scale.x = -50.f;
-				}
-			}
-			if (input.isKeyPressed(AEVK_W) || input.isKeyPressed(AEVK_S)) {
-				newAnim.SetPlay(true);
-				this->SetTexture(&newAnim.GetCurrTexture());
-			}
-			else {
-				newAnim.SetPlay(false);
-				this->SetTexture(&newAnim.GetIdleTexture());
-			}
+			PlayerInputGravLeftRight(dt);
 			isMoving = true;
 			break;
 		case GravityDirection::Up:
 		case GravityDirection::Down:
 			newAnim.AnimationUpd(dt);
-			if (canMoveRight) {
-				if (input.isKeyPressed(AEVK_D)) {
-					p_velocityVector.x = 1.f * p_moveSpeed * dt;
-					p_currPos.x += p_velocityVector.x;
-					p_velocityVector.x = 0.f;
-					p_Scale.x = 50.f;
-				}
-			}
-			if (canMoveLeft) {
-				if (input.isKeyPressed(AEVK_A)) {
-					p_velocityVector.x = -1.f * p_moveSpeed * dt;
-					p_currPos.x += p_velocityVector.x;
-					p_velocityVector.x = 0.f;
-					p_Scale.x = -50.f;
-				}
-			}
-			if (input.isKeyPressed(AEVK_A) || input.isKeyPressed(AEVK_D)) {
-				newAnim.SetPlay(true);
-				this->SetTexture(&newAnim.GetCurrTexture());
-			}
-			else {
-				newAnim.SetPlay(false);
-				this->SetTexture(&newAnim.GetIdleTexture());
-			}
+			PlayerInputGravUpDown(dt);
 			isMoving = true;
+			break;
 	}
-	if (input.isKeyPressed(AEVK_LSHIFT) && isMoving) {
-		isSprint = true;
-	}
-	if (input.isKeyReleased(AEVK_LSHIFT)) {
-		isSprint = false;
-	}
+
+	PlayerInputSprint();
+
 	GravityDirection currDir = dir;
 	changeCD += dt;
 	if (currDir != prevDir)
@@ -157,54 +110,11 @@ void Player::PlayerInputHandle(f32 const& dt, GravityDirection& dir, Grid& grid)
 			prevDir = currDir;
 		}
 	}
-	//Sprint speed logic
-	if (isSprint) {
-		f32 maxSpeed = moveSpeed * 1.2f;
-		p_moveSpeed = maxSpeed;
-	}
-	else {
-		p_moveSpeed = moveSpeed;
-	}
 	
-	if (canTouch && input.isKeyTriggered(AEVK_E)) {
-		std::cout << "item pressed" << std::endl;
-		bgm.PlayAudio("PICKUP", AudioType::SFX, 1.f, 0);
-		counter::specialCount++;
-		canTouch = false;
-		delete grid.cherryCell->obj;
-		grid.cherryCell->obj = nullptr;
-	}
+	PlayerInputCollectible(grid);
 
-	if (input.isKeyTriggered(AEVK_SPACE) && !p_isJumping) {
-		bgm.PlayAudio("JUMP", AudioType::SFX, 1.f, 0);
-		//adjust jump logic here
-		switch(dir){
-		case Player::GravityDirection::Up:
-			p_velocityVector.y = -jumpForce;
-			p_velocityVector.x = 0.f;
-			break;
-		case Player::GravityDirection::Down:
-			p_velocityVector.y = jumpForce;
-			p_velocityVector.x = 0.f;
-			break;
-		case Player::GravityDirection::Left:
-			p_velocityVector.x = jumpForce;
-			p_velocityVector.y = 0.f;
-			break;
-		case Player::GravityDirection::Right:
-			p_velocityVector.x = -jumpForce;
-			p_velocityVector.y = 0.f;
-			break;
-		default:
-			break;
-		}
-		jumpBuffer = maxJumpBuffer;
-		coyoteBuffer = maxCoyoteBuffer;
-		p_isJumping = true;
-		if (jumpBuffer > 0.f && (p_isGrounded || coyoteBuffer > 0.f)) {
-			PlayerJump(dt,dir);
-		}
-	}
+	PlayerInputJump(dt, dir);
+
 	UpdateScale(p_Scale);
 }
 
@@ -688,4 +598,121 @@ f32 Player::GetPlayerJumpForce() const{
 }
 bool Player::GetPlayerJump() const {
 	return p_isJumping;
+}
+
+//===================================================
+//					ABSTRACTION
+//===================================================
+void Player::PlayerInputGravUpDown(const f32& dt) {
+	if (canMoveRight) {
+		if (input.isKeyPressed(AEVK_D)) {
+			p_velocityVector.x = 1.f * p_moveSpeed * dt;
+			p_currPos.x += p_velocityVector.x;
+			p_velocityVector.x = 0.f;
+			p_Scale.x = 50.f;
+		}
+	}
+	if (canMoveLeft) {
+		if (input.isKeyPressed(AEVK_A)) {
+			p_velocityVector.x = -1.f * p_moveSpeed * dt;
+			p_currPos.x += p_velocityVector.x;
+			p_velocityVector.x = 0.f;
+			p_Scale.x = -50.f;
+		}
+	}
+	if (input.isKeyPressed(AEVK_A) || input.isKeyPressed(AEVK_D)) {
+		newAnim.SetPlay(true);
+		this->SetTexture(&newAnim.GetCurrTexture());
+	}
+	else {
+		newAnim.SetPlay(false);
+		this->SetTexture(&newAnim.GetIdleTexture());
+	}
+}
+
+void Player::PlayerInputGravLeftRight(const f32& dt) {
+	if (canMoveRight) {
+		if (input.isKeyPressed(AEVK_S)) {
+			p_velocityVector.y = -1.f * p_moveSpeed * dt;
+			p_currPos.y += p_velocityVector.y;
+			p_Scale.x = 50.f;
+		}
+	}
+	if (canMoveLeft) {
+		if (input.isKeyPressed(AEVK_W)) {
+			p_velocityVector.y = 1.f * p_moveSpeed * dt;
+			p_currPos.y += p_velocityVector.y;
+			p_Scale.x = -50.f;
+		}
+	}
+	if (input.isKeyPressed(AEVK_W) || input.isKeyPressed(AEVK_S)) {
+		newAnim.SetPlay(true);
+		this->SetTexture(&newAnim.GetCurrTexture());
+	}
+	else {
+		newAnim.SetPlay(false);
+		this->SetTexture(&newAnim.GetIdleTexture());
+	}
+}
+
+void Player::PlayerInputSprint() {
+	f32 moveSpeed{ 300.f };
+	if (input.isKeyPressed(AEVK_LSHIFT) && isMoving) {
+		isSprint = true;
+	}
+	if (input.isKeyReleased(AEVK_LSHIFT)) {
+		isSprint = false;
+	}
+	//Sprint speed logic
+	if (isSprint) {
+		f32 maxSpeed = moveSpeed * 1.2f;
+		p_moveSpeed = maxSpeed;
+	}
+	else {
+		p_moveSpeed = moveSpeed;
+	}
+}
+
+void Player::PlayerInputJump(const f32& dt, GravityDirection& dir) {
+	if (input.isKeyTriggered(AEVK_SPACE) && !p_isJumping) {
+		bgm.PlayAudio("JUMP", AudioType::SFX, 1.f, 0);
+		//adjust jump logic here
+		switch (dir) {
+		case Player::GravityDirection::Up:
+			p_velocityVector.y = -jumpForce;
+			p_velocityVector.x = 0.f;
+			break;
+		case Player::GravityDirection::Down:
+			p_velocityVector.y = jumpForce;
+			p_velocityVector.x = 0.f;
+			break;
+		case Player::GravityDirection::Left:
+			p_velocityVector.x = jumpForce;
+			p_velocityVector.y = 0.f;
+			break;
+		case Player::GravityDirection::Right:
+			p_velocityVector.x = -jumpForce;
+			p_velocityVector.y = 0.f;
+			break;
+		default:
+			break;
+		}
+		jumpBuffer = maxJumpBuffer;
+		coyoteBuffer = maxCoyoteBuffer;
+		p_isJumping = true;
+		if (jumpBuffer > 0.f && (p_isGrounded || coyoteBuffer > 0.f)) {
+			PlayerJump(dt, dir);
+		}
+	}
+}
+
+void Player::PlayerInputCollectible(Grid& grid) {
+	if (canTouch && input.isKeyTriggered(AEVK_E)) {
+		std::cout << "item pressed" << std::endl;
+		bgm.PlayAudio("PICKUP", AudioType::SFX, 1.f, 0);
+		counter::specialCount++;
+		canTouch = false;
+		delete grid.cherryCell->obj;
+		grid.cherryCell->obj = nullptr;
+	}
 }
