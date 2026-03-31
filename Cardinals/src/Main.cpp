@@ -75,11 +75,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysInit(hInstance, nCmdShow, 1600, 900, 0, 60, true, NULL);
 
 	// Changing the window title
-	AESysSetWindowTitle("CARDINAL");
+	AESysSetWindowTitle("CARDINALS");
 	AESysSetWindowIcon("../Assets/Textures/Lollipop.ico", 100, 100);
 	UpdateGameManagerState(GameStateEnum::MainMenu);
 
 	HWND hwnd = AESysGetWindowHandle();
+
+	HICON hIcon = (HICON)LoadImageA(NULL, "../Assets/Textures/Lollipop.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE);
+	if (hIcon) {
+		SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
+		SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+	}
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui_ImplWin32_Init(hwnd);
