@@ -53,7 +53,7 @@ namespace {
 
 	int checkPoints = 0;
 
-	std::string const& savePath{ "../../Saves/Level3_GameObjects.json" };
+	std::string const& savePath{ "../Saves/Level3_GameObjects.json" };
 }
 
 void Level3_Load() {

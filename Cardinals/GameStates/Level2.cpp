@@ -50,7 +50,7 @@ namespace {
 	Grid grid;
 	Player mainPlayer;
 
-	std::string const& savePath{ "../../Saves/Level2_GameObjects.json" };
+	std::string const& savePath{ "../Saves/Level2_GameObjects.json" };
 }
 
 void Level2_Load() {
