@@ -2,7 +2,7 @@
  * @file		AudioManager.hpp
  * @brief		Header for managing audios, sound effects, and volume.
  * @details		Handles reading from an AudioManifest and the general controlling of audios.
- * @author		Shirley Liau, Chua Jia Xuan Breanne
+ * @author		Shirley Liau, Chua Jia Xuan Breanne, Zoey Tan
  * @date		20.01.2026
  */
 

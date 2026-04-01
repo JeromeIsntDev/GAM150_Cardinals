@@ -1,14 +1,12 @@
-/*!***********************************************************************
-\file	CameraEffects.hpp
-\author	Zoey Tan
-\date	25/03/2026
-\par	Last Updated by: Zoey Tan
-\par	Project: Cardinals
-
-\brief	CameraEffects is responsible for managing camera effects in the game.
-
-\par	Changes: None
-**************************************************************************/
+/**
+ * @file CameraEffects.hpp
+ * @brief Header file for the CameraEffects class
+ * @details This class manages camera effects such as shaking and parallax background movement 
+ *			based on the player's gravity direction 
+ * 			and obstacle interactions.
+ * @author Zoey Tan 
+ * @date 25.03.2026
+ */
 
 #pragma once
 #ifndef _Camera_Effects_Header_
@@ -17,6 +15,11 @@
 #include "PlayerController.hpp"
 #include <cmath>
 
+/**
+ * @class CameraEffects
+ * @brief Manages camera effects such as shaking and parallax background movement based on player interactions.
+ * 
+ */
 class CameraEffects {
 private:
 	f32 offsetX{ 0.f };
@@ -35,12 +38,46 @@ private:
 	bool wasObstacleHitLastFrame{ false };
 
 public:
+	/**
+	 * @brief Initializes the camera effects
+	 * 
+	 * @param startGrav 
+	 */
 	void Init(Player::GravityDirection startGrav);
+
+	/**
+	 * @brief Updates the camera effects
+	 * 
+	 * @param dt 
+	 * @param currentGrav 
+	 * @param obstacleHit 
+	 */
 	void Update(f32 dt, Player::GravityDirection currentGrav, bool obstacleHit);
+
+	/**
+	 * @brief Applies the camera effects
+	 * 
+	 */
 	void Apply() const;
+
+	/**
+	 * @brief Clears the camera effects
+	 * 
+	 */
 	void Clear();
 
+	/**
+	 * @brief Get the Offset object
+	 * 
+	 * @return AEVec2 
+	 */
 	AEVec2 GetOffset() const;
+
+	/**
+	 * @brief Get the Bg Offset object
+	 * 
+	 * @return AEVec2 
+	 */
 	AEVec2 GetBgOffset() const;
 };
 
