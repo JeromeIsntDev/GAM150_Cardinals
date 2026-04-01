@@ -141,46 +141,8 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir, Grid& grid) {
 
 	PlayerRotAnim(dt);
 
-	clampedDT = AEMin(0.01667f, dt);
-	if (!p_isGrounded) {
-		switch (dir)
-		{
-		case Player::GravityDirection::Up:
-			if (!isHit) {
-				p_velocityVector.y += (gravity * p_downForce) * clampedDT;
-			}
-			break;
-		case Player::GravityDirection::Down:
-			if (!isHit) {
-				p_velocityVector.y += (-gravity * p_downForce) * clampedDT;
-			}
-			break;
-		case Player::GravityDirection::Left:
-			if (!isHit) {
-				p_velocityVector.x += (-gravity * p_downForce) * clampedDT;
-			}
-			break;
-		case Player::GravityDirection::Right:
-			if (!isHit) {
-				p_velocityVector.x += (gravity * p_downForce) * clampedDT;
-			}
-			break;
-		default:
-			break;
-		}
-		//CLAMP HERE
-		p_velocityVector.y = AEClamp(p_velocityVector.y, -550.f, 550.f);
-		p_velocityVector.x = AEClamp(p_velocityVector.x, -500.f, 500.f);
-		if (!isHit) {
-			p_currPos.x += (p_velocityVector.x) * clampedDT;
-			p_currPos.y += (p_velocityVector.y) * clampedDT;
-		}
-		/*p_velocityVector.y += gravity * dt;
-		p_currPos.y += (p_velocityVector.y * p_downForce) * dt;*/
-	}
-	//std::cout << "X: " << p_currPos.x << "Y: " << p_currPos.y << std::endl;
-	//give a cool down to prevent being able to jump instantly
-	//std::cout << "timer: " << currCD << std::endl;
+	GravityApplication(dt, dir);
+
 	currCD += dt;
 	if (currDir != prevDir)
 	{
@@ -197,40 +159,8 @@ void Player::PlayerMovement(f32 const& dt, GravityDirection& dir, Grid& grid) {
 	PlayerInputHandle(dt, dir, grid);
 
 
-	//if top of player goes past bottom of screen (temporary stuff, probably wont need)
-	//std::cout << p_currPos.y << std::endl;
-	if (p_currPos.y <= -500.f) {
-		p_currPos = p_previousPos;
-		p_velocityVector = { 0.f, 0.f };
-		p_Scale = { 50.f,50.f };
-		p_playerHealth--;
-		UpdateRotation(0.f);
-		grav = Player::GravityDirection::Down;
-	}
-	if (p_currPos.y >= 400.f) {
-		p_currPos = p_previousPos;
-		p_velocityVector = { 0.f, 0.f };
-		p_Scale = { 50.f,50.f };
-		p_playerHealth--;
-		UpdateRotation(0.f);
-		grav = Player::GravityDirection::Down;
-	}
-	if (p_currPos.x >= 750.f) {
-		p_currPos = p_previousPos;
-		p_velocityVector = { 0.f, 0.f };
-		p_Scale = { 50.f,50.f };
-		p_playerHealth--;
-		UpdateRotation(0.f);
-		grav = Player::GravityDirection::Down;
-	}
-	if (p_currPos.x <= -750.f) {
-		p_currPos = p_previousPos;
-		p_velocityVector = { 0.f, 0.f };
-		p_Scale = { 50.f,50.f };
-		p_playerHealth--;
-		UpdateRotation(0.f);
-		grav = Player::GravityDirection::Down;
-	}
+	//if top of player goes past boundaries of screen 
+	WindowBoundsCheck();
 
 	if (p_playerHealth <= 0) {
 		p_velocityVector = { 0.f, 0.f };
@@ -719,5 +649,78 @@ void Player::PlayerRotAnim(const f32& dt) {
 			grav = GravityDirection::Down;
 			gameOver = true;
 		}
+	}
+}
+
+void Player::GravityApplication(const f32& dt, GravityDirection& dir) {
+	clampedDT = AEMin(0.01667f, dt);
+	if (!p_isGrounded) {
+		switch (dir)
+		{
+		case Player::GravityDirection::Up:
+			if (!isHit) {
+				p_velocityVector.y += (gravity * p_downForce) * clampedDT;
+			}
+			break;
+		case Player::GravityDirection::Down:
+			if (!isHit) {
+				p_velocityVector.y += (-gravity * p_downForce) * clampedDT;
+			}
+			break;
+		case Player::GravityDirection::Left:
+			if (!isHit) {
+				p_velocityVector.x += (-gravity * p_downForce) * clampedDT;
+			}
+			break;
+		case Player::GravityDirection::Right:
+			if (!isHit) {
+				p_velocityVector.x += (gravity * p_downForce) * clampedDT;
+			}
+			break;
+		default:
+			break;
+		}
+		//CLAMP HERE
+		p_velocityVector.y = AEClamp(p_velocityVector.y, -550.f, 550.f);
+		p_velocityVector.x = AEClamp(p_velocityVector.x, -500.f, 500.f);
+		if (!isHit) {
+			p_currPos.x += (p_velocityVector.x) * clampedDT;
+			p_currPos.y += (p_velocityVector.y) * clampedDT;
+		}
+	}
+}
+
+void Player::WindowBoundsCheck() {
+	if (p_currPos.y <= -500.f) {
+		p_currPos = p_previousPos;
+		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
+		UpdateRotation(0.f);
+		grav = Player::GravityDirection::Down;
+	}
+	if (p_currPos.y >= 400.f) {
+		p_currPos = p_previousPos;
+		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
+		UpdateRotation(0.f);
+		grav = Player::GravityDirection::Down;
+	}
+	if (p_currPos.x >= 750.f) {
+		p_currPos = p_previousPos;
+		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
+		UpdateRotation(0.f);
+		grav = Player::GravityDirection::Down;
+	}
+	if (p_currPos.x <= -750.f) {
+		p_currPos = p_previousPos;
+		p_velocityVector = { 0.f, 0.f };
+		p_Scale = { 50.f,50.f };
+		p_playerHealth--;
+		UpdateRotation(0.f);
+		grav = Player::GravityDirection::Down;
 	}
 }

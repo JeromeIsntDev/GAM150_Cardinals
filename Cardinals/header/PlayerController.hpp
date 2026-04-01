@@ -111,6 +111,8 @@ public:
 	void PlayerInputCollectible(Grid&);
 	void PlayerMovement(f32 const&, GravityDirection& dir, Grid& grid);
 	void PlayerCollision(std::vector<GameObject*> objs);
+	void GravityApplication(const f32&, GravityDirection&);
+	void WindowBoundsCheck();
 	void CheckBinaryCollision(Grid* grid, GravityDirection&);
 	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid* grid);
 	//Function for Player Jump Logic
