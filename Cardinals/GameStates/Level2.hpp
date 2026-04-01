@@ -4,8 +4,6 @@
 
 #define NOMINMAX
 
-#include <iostream>
-
 #include <AEEngine.h>
 #include <iostream>
 
@@ -13,7 +11,6 @@
 #include "TextureManager.hpp"
 #include "AudioManager.hpp"
 #include "PlayerController.hpp"
-#include "ControlPanel.hpp"
 #include "InputHandler.hpp"
 #include "GameSaver.hpp"
 #include "MemoryManager.hpp"
