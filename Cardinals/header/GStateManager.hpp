@@ -1,3 +1,11 @@
+/**
+ * @file		GStateManager.hpp
+ * @brief		Contains all relevant data to handling Game States
+ * @details		Used function pointers that are assigned depending on the current game state and call through main.cpp
+ * @author		Jerome Lim
+ * @date		13.01.2026
+ */
+
 #pragma once
 #ifndef _Game_State_Manager_
 #define _Game_State_Manager_
@@ -37,6 +45,11 @@ enum GameStateEnum {
 
 extern GameStateEnum pt_CurrentGameState;
 
+/**
+ * @brief Updates the current game state to the given state
+ *
+ * @param state the current state the game is supposed to be in 
+ */
 void UpdateGameManagerState(GameStateEnum state);
 GameStateEnum GetCurrentGameState();
 

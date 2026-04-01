@@ -8,13 +8,10 @@ void EditorUpdate(Grid* grid, GameStateEnum state, std::string const& savePath)
 	ChangeTileSlice();
 
 	if (input.isKeyTriggered(AEVK_R))
-		RestartLevel(UpdateGameManagerState, state);
+		UpdateGameManagerState(state);
 
 	if (input.isKeyPressed(AEVK_LCTRL) && input.isKeyTriggered(AEVK_S))
 		SaveGameObjectToFilepath(savePath, grid->objs);
-
-	if (input.isKeyTriggered(AEVK_Q))
-		ToggleSaveFileMode();
 
 	s32 mwDelta{};
 	AEInputMouseWheelDelta(&mwDelta);
@@ -23,28 +20,24 @@ void EditorUpdate(Grid* grid, GameStateEnum state, std::string const& savePath)
 	{
 		AEVec2 mousePos{ 0.f,0.f };
 		EditorGetMouse(mousePos.x, mousePos.y);
-		grid->SpawnNewTile(EditorTileTag(), EditorTileSlice(), mousePos.x, mousePos.y, 0.f);
+		grid->SpawnNewCell(EditorTileTag(), EditorTileSlice(), mousePos.x, mousePos.y, 0.f);
 	}
 	else if (InputHandler::GetInstance().isKeyTriggered(AEVK_RBUTTON))
 	{
 		AEVec2 mousePos{ 0.f,0.f };
 		EditorGetMouse(mousePos.x, mousePos.y);
-		grid->DeleteTile(mousePos.x, mousePos.y);
+		grid->DeleteCellObject(mousePos.x, mousePos.y);
 	}
 	else if (abs(mwDelta) > 0) {
 		AEVec2 mousePos{ 0.f,0.f };
 		EditorGetMouse(mousePos.x, mousePos.y);
-		grid->RotateTile(mousePos.x, mousePos.y, mwDelta);
+		grid->RotateCellObject(mousePos.x, mousePos.y, mwDelta);
 	}
 }
 
 void EditorDraw(Text& font, Grid& grid, Player& player){
 	font.Change_Text_Color(Colors::Black);
 
-	if (IsUsingSaveFile()) {
-		font.Input_Text("Using Save File");
-		font.Draw_Text(AEVec2{ -640.f, 380.f }, .5f, 1.f);
-	}
 	DrawTileOutline();
 	player.DebugDraw();
 	DrawDebugObjects(grid.objs);
@@ -225,15 +218,6 @@ void SaveGameObjectToFilepath(std::string filepathSave, std::vector<GameObject*>
 void ToggleEditorMode()
 {
 	canEdit = !canEdit;
-}
-
-void ToggleSaveFileMode() {
-	useSaveFile = !useSaveFile;
-}
-
-void RestartLevel(void(*restart)(GameStateEnum), GameStateEnum state)
-{
-	restart(state);
 }
 
 bool IsEditorActive()

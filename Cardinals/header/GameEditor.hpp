@@ -1,14 +1,9 @@
-/*!***********************************************************************
-\file	GameEditor.hpp
-\author	Jerome Lim
-\date	4/02/2026
-\par	Last Updated by: Jerome Lim
-\par	Project: Cardinals
-
-\brief	Game Editor that assists in Level Editing and other debug features.
-
-\par	Changes: None
-**************************************************************************/
+/**
+ * @file		GameEditor.hpp
+ * @brief		The GameEditor to edit levels
+ * @author		Jerome Lim
+ * @date		03.02.2026
+ */
 #pragma once
 #ifndef _GAME_EDITOR_HEADER_
 #define _GAME_EDITOR_HEADER_
@@ -37,29 +32,81 @@ namespace {
 	const AEVec2 verticalScale{ 1.f , 900.f };
 }
 
+/**
+ * @brief	Handles all Editor Functions; To be called in Game Level Update
+ */
 void EditorUpdate(Grid*, GameStateEnum, std::string const&);
+
+/**
+ * @brief	Draws the Editor Mode; Shows the Current Mode & the Grid Outline
+ */
 void EditorDraw(Text&, Grid&, Player&);
 
+/**
+ * @brief	Gets The Mouse Position for the Editor To Convert for Grid Coordinates
+ */
 void EditorGetMouse(f32&, f32&);
 
+/**
+ * @brief	Initializes Editor Variables and Textures
+ */
 void InitializeEditor();
+
+/**
+ * @brief	Clear and Free any memory allocated that was Initialized
+ */
 void ClearEditorMemory();
 
+/**
+ * @brief	Drag the object that is under the mouse during mouse one down; This Function is No Longer Used
+ */
 void DragObject(std::vector<GameObject*> objs);
+
+/**
+ * @brief	Draw all GameObjects Debug
+ */
 void DrawDebugObjects(std::vector<GameObject*> objs);
+
+/**
+ * @brief	Draws the Editor Mode; Uses GameObject DebugDraw
+ */
 void DrawTileOutline();
 
+/**
+ * @brief	Toggles the Editor Mode to be Drawn or not Drawn
+ */
 void ToggleEditorMode();
-void ToggleSaveFileMode();
-void RestartLevel(void (*restart)(GameStateEnum), GameStateEnum state);
+
+/**
+ * @brief	Save the given Vector of GameObjects to the given FilePath
+ */
 void SaveGameObjectToFilepath(std::string filepathSave, std::vector<GameObject*> objs);
 
+/**
+ * @brief	Checks if the Editor is currently active
+ */
 bool IsEditorActive();
-bool IsUsingSaveFile();
 
+/**
+ * @brief	Returns a reference to current Tile Tag; The Object Type that is be spawned
+ */
 int& EditorTileTag();
+
+/**
+ * @brief	Reference to the Slice of the Current Tile; Does not work with GameObject Types that have no Slices
+ */
 int& EditorTileSlice();
+
+
+/**
+ * @brief	Change the Current Tile Tag; The Object Type that is be spawned
+ */
 void ChangeTileTag();
+
+
+/**
+ * @brief	Function to handle changing the tile slice
+ */
 void ChangeTileSlice();
 
 #endif // !_GAME_EDITOR_HEADER_

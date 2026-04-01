@@ -1,3 +1,10 @@
+/**
+ * @file		GameManager.hpp
+ * @brief		A header to store values that will be used globally
+ * @author		Jerome Lim
+ * @date		27.01.2026
+ */
+
 #pragma once
 #ifndef _Game_Manager_HEADER_
 #define _Game_Manager_HEADER_

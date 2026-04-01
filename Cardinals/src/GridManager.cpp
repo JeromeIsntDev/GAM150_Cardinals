@@ -94,7 +94,7 @@ void Grid::Draw() const {
 	}
 }
 
-void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
+void Grid::SpawnNewCell(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
 {
 	GridCell* cell = GetCell(y, x);
 	if (cell == nullptr) {
@@ -108,7 +108,7 @@ void Grid::SpawnNewTile(int const& tag, int const& slice, f32 x, f32 y, f32 rot)
 		GridToWorld(&ax, &ay);
 		PRINT("[DEBUG] => Cell World Position: %f, %f\n\n", ax, ay);
 
-		ChangeTile(cell);
+		ChangeCellObject(cell);
 		return;
 	}
 
@@ -201,7 +201,7 @@ void Grid::WorldToGrid(f32* x, f32* y)
 	*y = 450.f - prevY;
 }
 
-void Grid::DeleteTile(f32 x, f32 y)
+void Grid::DeleteCellObject(f32 x, f32 y)
 {
 	GridCell* cell = GetCell(y, x);
 	cell->tag = GameObjectTag::GameObjectTagNumber;
@@ -224,7 +224,7 @@ void Grid::DeleteTile(f32 x, f32 y)
 	cell->obj = nullptr;
 }
 
-void Grid::ChangeTile(GridCell* cell) const
+void Grid::ChangeCellObject(GridCell* cell) const
 {
 	TileUV uv{};
 	int slice{ 0 };
@@ -258,7 +258,7 @@ void Grid::ChangeTile(GridCell* cell) const
 	}
 }
 
-void Grid::RotateTile(f32 x, f32 y, s32 mouseDelta)
+void Grid::RotateCellObject(f32 x, f32 y, s32 mouseDelta)
 {
 	GridCell* cell = GetCell(y, x);
 	if (!cell->obj) return;
