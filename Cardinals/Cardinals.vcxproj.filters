@@ -14,7 +14,6 @@
     <ClCompile Include="imGUI\imgui_widgets.cpp" />
     <ClCompile Include="imGUI\imgui_impl_glfw.cpp" />
     <ClCompile Include="imGUI\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="src\ControlPanel.cpp" />
     <ClCompile Include="src\GStateManager.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\AudioManager.cpp" />
@@ -51,7 +50,6 @@
     <ClInclude Include="imGUI\imstb_rectpack.h" />
     <ClInclude Include="imGUI\imstb_textedit.h" />
     <ClInclude Include="imGUI\imstb_truetype.h" />
-    <ClInclude Include="header\ControlPanel.hpp" />
     <ClInclude Include="header\GStateManager.hpp" />
     <ClInclude Include="imGUI\glfw\include\GLFW\glfw3.h" />
     <ClInclude Include="imGUI\glfw\include\GLFW\glfw3native.h" />
