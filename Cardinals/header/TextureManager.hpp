@@ -1,14 +1,10 @@
-/*!***********************************************************************
-\file	TextureManager.hpp
-\author	Shirley Liau
-\date	14/01/2026
-\par	Last Updated by: Shirley Liau
-\par	Project: Cardinals
-
-\brief	TextureManager is responsible for colors and images.
-
-\par	Changes: None
-**************************************************************************/
+/**
+ * @file		TextureManager.hpp
+ * @brief		Header for managing textures, colors, and fonts.
+ * @details		Handles all the texture reading, loading, colors, fonts and etc.
+ * @author		Shirley Liau, Chua Jia Xuan Breanne
+ * @date		20.01.2026
+ */
 
 #pragma once
 #ifndef _Texture_Man_Header_
@@ -24,18 +20,27 @@
 #include <unordered_map>
 #include <unordered_set>
 
-struct Color {
-    f32 r, g, b, a;
-};
+ /**
+  * @brief Color struct for RGBA normalized values
+  */
+struct Color { f32 r, g, b, a; };
 
-struct FontFile {
-    const char* filename;
-};
+/**
+ * @brief FontFile struct to store font pathing
+ */
+struct FontFile { const char* filename; };
 
+/**
+ * @brief ImageFile struct to store file path and expected dimensions
+ */
 struct ImageFile {
     const char* filename;
     f32 width, height;
 };
+
+///
+// NAMESPACES (Colors, Images, Fonts) ...
+///
 
 namespace Colors
 {
@@ -51,9 +56,6 @@ namespace Colors
 
 namespace Images
 {
-    constexpr ImageFile Test{ "../Assets/Textures/test.png", 500.f,500.f };
-
-    //constexpr ImageFile Background{ "../../Assets/Background.png", 1600.f, 900.f };
     constexpr ImageFile DigipenLogo{ "../Assets/Textures/DigiPen_WHITE.png", 1525.f, 445.f };
     constexpr ImageFile Player{ "../Assets/Textures/playerIdle.png", 500.f,500.f };
     constexpr ImageFile PlayerJump{ "../Assets/Textures/playerJump.png", 500.f,500.f };
@@ -101,6 +103,9 @@ namespace Fonts
 /// TEXTURE
 ///
 
+/**
+ * @brief Texture class wrapper for AEGfxTexture
+ */
 class Texture
 {
 private:
@@ -109,14 +114,57 @@ private:
     f32 _width;
     f32 _height;
 public:
-	void Fill_Color(const Color color);
-	void Load_Image(const ImageFile& imageFilePath);
-    void Load_Image(const std::string& path, float w, float h); // for manifest
 
+    /**
+     * @brief Sets the global drawing color
+     * @param color The Color struct to apply
+     */
+	void Fill_Color(const Color color);
+
+    /**
+     * @brief Loads an image from an ImageFile struct
+     * @param imageFilePath Struct containing path and size
+     */
+	void Load_Image(const ImageFile& imageFilePath);
+
+    /**
+     * @brief Overloaded loader for manual path and dimension input from the manifest
+     * @param path String path to file
+     * @param w Width of image
+     * @param h Height of image
+     */
+    void Load_Image(const std::string& path, float w, float h);
+
+    /**
+     * @brief Sets the texture to the active rendering slot
+     * @param x The width
+     * @param y The height
+     * @return void
+     */
     void Set_Image(f32 x, f32 y);
+
+    /**
+     * @brief Frees the texture resource
+     * @return void
+     */
     void Unload_Image();
+
+    /**
+     * @brief Retrieves the width of the loaded texture
+     * @return f32 The width in pixels
+     */
     f32 Get_Image_Width() const;
+    
+    /**
+     * @brief Retrieves the height of the loaded texture
+     * @return f32 The height in pixels
+     */
     f32 Get_Image_Height() const;
+
+    /**
+     * @brief Returns the underlying Alpha Engine texture pointer
+     * @return AEGfxTexture* Pointer to the texture object
+     */
     AEGfxTexture* Get_Image() const;
 };
 
@@ -124,34 +172,68 @@ public:
 /// TEXTUREMANAGER
 ///
 
+/**
+ * @brief Singleton manager for handling texture lifecycles
+ */
 class TextureManager
 {
 private:
     std::map<std::string, Texture> textureMap;
     std::unordered_set<std::string> persistentLoad;
-
     TextureManager() = default;
 
 public:
 
+    /**
+     * @brief Access the Singleton instance
+     * @return TextureManager&
+     */
     static TextureManager& GetInstance() 
     {
         static TextureManager instance;
         return instance;
     }
 
+    /**
+     * @brief Parses a .txt manifest to bulk load textures
+     * @param path Path to the manifest file
+     */
     virtual void LoadManifest(const std::string& path);
+
+    /**
+     * @brief Retrieves a pointer to a loaded texture by name
+     * @param name The key used in the manifest
+     * @return Texture* Pointer to texture, or nullptr if not found
+     */
     Texture* Get(const std::string& name);
+
+    /**
+     * @brief Unloads all non-persistent textures from the manager
+     * @return void
+     */
     void UnloadAll();
 
-    virtual void SetPersistent(const std::string& name); // share with audio
+    /**
+     * @brief Unloads all textures marked as persistent and clears the sets
+     * @return void
+     */
     void UnloadPersistent();
+
+    /**
+     * @brief Marks a specific texture ID as persistent so it survives UnloadAll()
+     * @param name The unique string identifier of the texture
+     * @return void
+     */
+    virtual void SetPersistent(const std::string& name);
 };
 
 ///
 /// TEXTMANAGER
 ///
 
+/**
+ * @brief Class for handling font loading and text rendering
+ */
 class Text {
 private:
     s8 _font;
@@ -163,14 +245,70 @@ private:
 public:
     Text();
 
+    /**
+     * @brief Loads a font file and initializes its base height
+     * @param fontFilePath Struct containing the .ttf path
+     * @param initHeight The base resolution/size of the font
+     * @return void
+    */
     void Load_Font(const FontFile& fontFilePath, const f32 initHeight);
+
+    /**
+     * @brief Parses a string into the internal text array, handling newlines
+     * @param text The string to be stored for rendering
+     * @return void
+     */
     void Input_Text(const char* text);
+
+    /**
+     * @brief Converts a float to an integer string and stores it for rendering
+     * @param t The floating point value to display
+     * @return void
+     */
     void Input_Float(float t);
+
+    /**
+     * @brief Renders the stored text array centered at the screen origin (0,0)
+     * @return void
+     */
     void Draw_Text() const;
+
+    /**
+     * @brief Renders the stored text array centered at a specific pixel offset
+     * @param x Horizontal pixel offset
+     * @param y Vertical pixel offset
+     * @return void
+     */
     void Draw_Text(f32 x, f32 y);
+
+    /**
+     * @brief Renders the text using x and y as the top-left corner coordinates
+     * @param x Horizontal screen position
+     * @param y Vertical screen position
+     * @return void
+     */
     void Draw_Text_Corner(f32 x, f32 y);
+
+    /**
+     * @brief Renders text at a position with custom scaling and transparency
+     * @param pos Vector2 containing the screen position
+     * @param scale The size multiplier for the font
+     * @param fading The alpha transparency value (0.0 to 1.0)
+     * @return void
+     */
     void Draw_Text(AEVec2 pos, f32 scale, f32 fading);
+
+    /**
+     * @brief Updates the RGBA color used for subsequent text rendering
+     * @param color The Color struct containing normalized RGBA values
+     * @return void
+     */
     void Change_Text_Color(const Color color);
+
+    /**
+     * @brief Destroys the font resource and frees
+     * @return void
+     */
     void Free_Font() const;
 };
 

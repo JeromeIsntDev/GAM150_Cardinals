@@ -1,17 +1,4 @@
-/*!***********************************************************************
-\file	Animator.cpp
-\author	Sadric Koh
-\date	10/01/26
-\par	Last Updated by: Sadric
-\par	Project: Cardinals
-
-\brief
-Functions definition for Animator objects
-
-\par	Changes:
-**************************************************************************/
-
-#include "../header/Animator.hpp"
+#include "Animator.hpp"
 
 void Animator::SetAnimArr() {
 	animArr[0].Load_Image(Images::Player);
@@ -22,7 +9,6 @@ void Animator::SetAnimArr() {
 
 void Animator::AnimationUpd(f32 const& dt) {
 	if (!isPlaying)return;
-	//functionality here
 	animTime += dt;
 	if (animTime >= frameDur) {
 		animTime -= frameDur;

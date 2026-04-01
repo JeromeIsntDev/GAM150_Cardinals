@@ -1,15 +1,6 @@
-/*!***********************************************************************
-\file	SpritesheetHandler.cpp
-\author	Chua Jia Xuan Breanne
-\date	25/02/2026
-\par	Last Updated by: Breanne
-\par	Project: Cardinals
-
-\brief
-Handles all the spritesheet reading and tilemap textures.
-**************************************************************************/
-
 #include "SpritesheetHandler.hpp"
+#include <unordered_map>
+#include <vector>
 
 void SpriteSheet::Load(const std::string& path, float w, float h)
 {
@@ -20,12 +11,11 @@ void SpriteSheet::Load(const std::string& path, float w, float h)
 
 }
 
-void SpriteSheet::Slice(Texture t)
+void SpriteSheet::Slice(const Texture& t)
 {
     go_texture = t;
-    slices.clear(); // reset
+    slices.clear();
 
-    // rows and column slicing bro
     for (int r = 0; r < rows; r++)
     {
         for (int c = 0; c < cols; c++)
@@ -40,25 +30,14 @@ void SpriteSheet::Slice(Texture t)
 
 void SpriteSheet::RegisterAllTiles()
 {
-    // maps every slice index to itself (0 = 0, 1=1 whatever
     for (int i = 0; i < (int)slices.size(); i++)
     {
         idToSlice[i] = i;
     }
 }
 
-//void SpriteSheet::RegisterTile(int tileID, int tileIndex)
-//{
-//    // js registers. diff stuff to diff tile or whatever u want
-//    if (tileIndex < (int)slices.size())
-//    {
-//        idToSlice[tileID] = tileIndex;
-//    }
-//}
-
 bool SpriteSheet::GetUV(int tileID, TileUV& outUV) const
 {
-    // searches map for ID key. if tileID = whatever, it looks for whatever
     auto it = idToSlice.find(tileID);
     if (it == idToSlice.end())
     {
@@ -66,8 +45,6 @@ bool SpriteSheet::GetUV(int tileID, TileUV& outUV) const
         return false;
     }
 
-    // grabs the tileUV struct and writes into outUV i love keyvalues vro
-    // second literally is just the second val its the value stored at that key which is slices[] index
     outUV = slices[it->second];
     return true;
 }

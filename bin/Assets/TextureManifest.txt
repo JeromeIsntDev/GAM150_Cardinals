@@ -1,5 +1,4 @@
 # Name, Path, Width, Height
-# AHHHHHHHHHHHHHHHHHHHH
 DigipenLogo, ../Assets/Textures/DigiPen_WHITE.png, 1525, 445
 Player, ../Assets/Textures/playerIdle.png, 500, 500
 PlayerJump, ../Assets/Textures/playerJump.png, 500, 500

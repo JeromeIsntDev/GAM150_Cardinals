@@ -1,19 +1,4 @@
-/*!***********************************************************************
-\file	AudioManager.cpp
-\author	Shirley Liau
-\date	16/01/2026
-\par	Last Updated by: Zoey Tan
-\par	Project: Cardinals
-
-\brief	AudioManager is responsible for music and sound effect.
-
-\par	Changes: None
-**************************************************************************/
-
-#include "../header/AudioManager.hpp"
-#include <iostream>
-#include <fstream>
-#include <sstream>
+#include "AudioManager.hpp"
 
 AudioManager::AudioManager()
 	: musicGroup{nullptr}, sfxGroup{nullptr}, masterVol{ 0.3f }, musicVol{ 0.3f }, sfxVol{ 0.6f }
@@ -35,11 +20,6 @@ void AudioManager::Init()
 	PRINT("Audio System Initialized\n");
 }
 
-void AudioManager::Update()
-{
-	
-}
-
 void AudioManager::LoadManifest(const std::string& path)
 {
 	std::ifstream file(path);
@@ -53,13 +33,11 @@ void AudioManager::LoadManifest(const std::string& path)
 
 	while (std::getline(file, line))
 	{
-		// skip empty or lines starting with #
 		if (line.empty() || line[0] == '#') continue;
 
 		std::stringstream ss(line);
 		std::string name, filePath;
 
-		// parses name and path ts just like Prasanna Ghali
 		if (std::getline(ss, name, ',') && std::getline(ss, filePath))
 		{
 			filePath.erase(0, filePath.find_first_not_of(" \t"));
@@ -68,7 +46,6 @@ void AudioManager::LoadManifest(const std::string& path)
 	}
 }
 
-// yes. good keep this here
 void AudioManager::LoadAudio(const std::string& name, const std::string& path)
 {
 	if (audioMap.find(name) != audioMap.end()) return;
@@ -94,18 +71,15 @@ void AudioManager::PlayAudio(const std::string& name, AudioType type, f32 pitch,
 		return;
 	}
 
-	// Choose group based on type (Enum)
 	AEAudioGroup targetGroup = (type == AudioType::MUSIC) ?  musicGroup : sfxGroup;
 	AEAudioPlay(it->second, targetGroup, 1.0f, pitch, loop);
 }
 
 void AudioManager::SetVolume(AudioType type, f32 vol)
 {
-	// Keep volume between 0% and 100%
 	if (vol < 0.0f) vol = 0.0f;
 	if (vol > 1.0f) vol = 1.0f;
 
-	// Set volume based on type
 	switch (type)
 	{
 		case AudioType::MASTER: masterVol = vol; break;
@@ -113,7 +87,6 @@ void AudioManager::SetVolume(AudioType type, f32 vol)
 		case AudioType::SFX: sfxVol = vol; break;
 	}
 
-	// Update group volumes
 	AEAudioSetGroupVolume(musicGroup, masterVol * musicVol);
 	AEAudioSetGroupVolume(sfxGroup, masterVol * sfxVol);
 }
@@ -132,19 +105,16 @@ f32 AudioManager::GetVolume(AudioType type) const
 void AudioManager::PauseAudio() const
 {
 	AEAudioPauseGroup(musicGroup);
-	//AEAudioPauseGroup(sfxGroup);
 }
 
 void AudioManager::ResumeAudio() const
 {
 	AEAudioResumeGroup(musicGroup);
-	//AEAudioResumeGroup(sfxGroup);
 }
 
 void AudioManager::StopAudio() const
 {
 	AEAudioStopGroup(musicGroup);
-	//AEAudioStopGroup(sfxGroup);
 }
 
 void AudioManager::Free()

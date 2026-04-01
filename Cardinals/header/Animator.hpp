@@ -1,21 +1,17 @@
-/*!***********************************************************************
-\file	Animator.hpp
-\author	Sadric Koh
-\date	10/01/26
-\par	Last Updated by: Sadric
-\par	Project: Cardinals
-
-\brief
-holds the class Animator that will take in the images for animation to loop
-
-\par	Changes:
-**************************************************************************/
+/**
+ * @file		Animator.hpp
+ * @brief		Header for the class Animator that will take in the images for animation to loop
+ * @author		Sadric Koh
+ * @date		10.01.2026
+ */
 
 #ifndef ANIMATOR_HPP
 #define ANIMATOR_HPP
 #pragma once
-#include "../header/SpritesheetHandler.hpp"
-#include "../header/TextureManager.hpp"
+
+#include "SpritesheetHandler.hpp"
+#include "TextureManager.hpp"
+
 #include <array>
 #include <algorithm> 
 #include <iostream>

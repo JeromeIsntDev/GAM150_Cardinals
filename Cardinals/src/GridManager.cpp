@@ -1,11 +1,3 @@
-/*!***********************************************************************
-\file	GridManager.cpp
-\author	Jerome Lim
-\date	29/02/2026
-\par	Project: Cardinals
-
-\brief	
-**************************************************************************/
 #include "GridManager.hpp"
 #include "GameEditor.hpp"
 #include <cmath>
@@ -181,9 +173,7 @@ void Grid::SnapToCell(f32* val)
 	int newVal = static_cast<int>((*val)/50.f);
 	*val = static_cast<f32>(newVal) * 50.f + 25.f * static_cast<f32>(sign);
 }
-/*!
-	\brief Converts grid coordinates to world coordinates
-*/
+
 void Grid::GridToWorld(f32* x, f32* y)
 {
 	f32 prevX{ *x }, prevY{ *y };
@@ -191,9 +181,6 @@ void Grid::GridToWorld(f32* x, f32* y)
 	*y = -(prevY - 450.f);
 }
 
-/*!
-	\brief Converts world coordinates to grid coordinates
-*/
 void Grid::WorldToGrid(f32* x, f32* y)
 {
 	f32 prevX{ *x }, prevY{ *y };

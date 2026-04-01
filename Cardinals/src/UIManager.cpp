@@ -1,17 +1,4 @@
-/*!***********************************************************************
-\file    UIManager.cpp
-\author Breanne Chua
-\date    16/01/2026
-\par    Last Updated by: Breanne Chua
-\par    Project: Cardinals
-
-\brief    UIManager is responsible for the UI interfaces.
-
-\par    Changes: None
-**************************************************************************/
-
-#include "../header/UIManager.hpp"
-#include "../header/InputHandler.hpp"
+#include "UIManager.hpp"
 
 ///
 /// UI ELEMENTS
@@ -32,12 +19,11 @@ void UIElement::SetTooltip(std::string text, AEVec2 pos)
 
 void UIElement::AddChild(UIElement* child)
 {
-    // attach to parent, parent overrides kids
     children.push_back(child);
     child->SetActive(false);
 }
 
-void UIElement::ResetTooltip() { isToolTipShown = false; } // reset every frame so tooltips dont smooch
+void UIElement::ResetTooltip() { isToolTipShown = false; }
 
 bool UIElement::IsPointInside(float x, float y) const 
 {
@@ -51,7 +37,6 @@ bool UIElement::ToggleActive(u8 key)
         bool newState = !this->IsActive();
         this->SetActive(newState);
 
-        // sets the kids too
         for (auto child : children) 
         {
             child->SetActive(newState);
@@ -68,7 +53,6 @@ bool UIElement::ToggleActive(u8 key)
 /// UI BUTTONS
 /// 
 
-// use like startBtn->SetTooltipText("ur mom"); okayyy :3
 void Button::SetTooltipText(const std::string& text) { toolTipText = text; }
 void Button::SetOnClick(std::function<void()> func) { onClick = func; }
 
@@ -84,14 +68,11 @@ void Button::Update(float dt)
     float scaleMultiplier = 1.1f;
     AEVec2 mousePos = UIManager::GetNewMousePos();
 
-    // hover code, combined tints + scales texture when mouse is within button pos
     if (IsPointInside(mousePos.x, mousePos.y))
     {
-        //std::cout << "bruh " << mousePos.x << " " << mousePos.y << std::endl;
         tint = { Colors::PastelPurple };
         GameObject::UpdateScale({ initialScale.x * scaleMultiplier, initialScale.y * scaleMultiplier });
 
-        // small delay because having it shoved in ur face is ass
         hoverTimer += dt;
         if (hoverTimer > 0.5f)
         {
@@ -105,32 +86,17 @@ void Button::Update(float dt)
 
         GameObject::UpdateScale({ initialScale.x * scaleMultiplier, initialScale.y * scaleMultiplier });
 
-        hoverTimer = 0.0f; // double check
+        hoverTimer = 0.0f;
         ResetTooltip();
     }
 }
 
 void Button::OnClick()
 {
-    // literally just error checks and then handles onclick lmao
     if (!isActive || !isInteractable)
         return;
 
     if (onClick) onClick();
-}
-
-///
-/// UI POPUPS
-/// 
-
-void PopUp::SetActive(bool active)
-{
-    isActive = active;
-    for (auto* child : children)
-    {
-        child->SetActive(active);
-        child->SetInteractable(active);
-    }
 }
 
 ///
@@ -139,8 +105,6 @@ void PopUp::SetActive(bool active)
 
 AEVec2 UIManager::GetNewMousePos()
 {
-    // just converts the shityy gglobal mousepos into actual. mousepos
-
     auto& input = InputHandler::GetInstance();
     float rawX, rawY;
     input.GetMouseScreenPosition(rawX, rawY);
@@ -167,8 +131,8 @@ void UIManager::Update(float dt)
     {
         if (e->IsActive()) 
         {
-            e->ResetTooltip(); // turn off by default
-            e->Update(dt); // update for the hover
+            e->ResetTooltip();
+            e->Update(dt);
         }
     }
 
@@ -177,21 +141,19 @@ void UIManager::Update(float dt)
 
 void UIManager::Draw() const
 {
-    // tint
     for (UIElement* e : uiElements) 
     {
         if (e->IsActive())
         {
-            AEGfxSetColorToMultiply(e->GetTint().r, e->GetTint().g, e->GetTint().b, e->GetTint().a); // APPLY THE TINT RIGHT BEFORE DRAWING RAHHHH
+            AEGfxSetColorToMultiply(e->GetTint().r, e->GetTint().g, e->GetTint().b, e->GetTint().a);
             e->Draw();
         }
     }
 
-    AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f); // reset
+    AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
 
-    if (!isFontLoaded) return; // fuck yo warnings
+    if (!isFontLoaded) return;
 
-    // tool tip
     for (UIElement* e : uiElements) 
     {
         if (e->IsActive() && e->IsShowingTooltip()) 
@@ -207,27 +169,20 @@ void UIManager::Draw() const
 
 void UIManager::HandleClick()
 {
-    // just tells the compiler to find the instance using referencing olololol
-    // thank you prasanna
     auto& input = InputHandler::GetInstance();
 
-    // mouse pointing calculation because screen view is NNNOOTT the same as game view iykwim
-    // yk idk if this was a problem i just coded it cuz i felt like it wld have an issue lol
     if (input.isKeyTriggered(AEVK_LBUTTON))
     {
         AEVec2 mousePos = GetNewMousePos();
-
-        // can also use auto but imma use uielement for btr clarity
         for (UIElement* e : uiElements)
         {
-            // use the trnalsated mouse coordinates
             if (e->IsActive() && e->IsInteractable())
             {
                 if (e->IsPointInside(mousePos.x, mousePos.y))
                 {
                     bgm.PlayAudio("CLICK", AudioType::SFX, 1.f, 0);
                     e->OnClick();
-                    std::cout << "Element clicked at: " << mousePos.x << ", " << mousePos.y << std::endl;
+                    //std::cout << "DEBUG: Element clicked at: " << mousePos.x << ", " << mousePos.y << std::endl;
                     break;
                 }
             }
@@ -237,7 +192,7 @@ void UIManager::HandleClick()
 
 void UIManager::Exit() 
 {
-    uiElements.clear(); // get rid of them dangling pointers 
+    uiElements.clear();
     isFontLoaded = false;
 }
 

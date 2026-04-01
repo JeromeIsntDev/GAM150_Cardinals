@@ -1,15 +1,3 @@
-/*!***********************************************************************
-\file	TextureManager.cpp
-\author	Shirley Liau
-\date	14/01/2026
-\par	Last Updated by: Shirley Liau
-\par	Project: Cardinals
-
-\brief	TextureManager is responsible for colors and images.
-
-\par	Changes: None
-**************************************************************************/
-
 #include "../header/TextureManager.hpp"
 
 ///
@@ -46,7 +34,7 @@ f32 Texture::Get_Image_Height() const
 
 void Texture::Unload_Image()
 {
-	if (!_image) return; // already unloaded or never loaded DIE DIE DIE DIE
+	if (!_image) return;
 	PRINT("[DEBUG | Texture] => unloading Image\n");
 	AEGfxTextureUnload(_image);
 	_image = nullptr;
@@ -54,14 +42,14 @@ void Texture::Unload_Image()
 
 AEGfxTexture* Texture::Get_Image() const
 {
-	// if it crashes it likely means your manifest filepath is wrronggg or you fucked up the
-	// definition of the texture which shouldn't be the case since all you should be touching
-	// is the manifest
+	if (_image == nullptr)
+	{
+		PRINT("[ERROR | Texture] => Your manifest filepath is WRONG! Double check!\n");
+	}
 
 	return _image;
 }
 
-// overloaded
 void Texture::Load_Image(const std::string& path, float w, float h)
 {
 	if (_image)
@@ -74,7 +62,7 @@ void Texture::Load_Image(const std::string& path, float w, float h)
 	_width = w;
 	_height = h;
 
-	PRINT("[ERROR | Texture] => at %s, result: %s | dimensions: %.0fx%.0f\n", path.c_str(), _image ? "loaded bro" : "failed bro", _width, _height);
+	PRINT("[SUCCESS | Texture] => at %s, result: %s | dimensions: %.0fx%.0f\n", path.c_str(), _image ? "loaded bro" : "failed bro", _width, _height);
 }
 
 ///
@@ -94,7 +82,6 @@ void TextureManager::LoadManifest(const std::string& path)
 
 	while (std::getline(file, line))
 	{
-		// skip empty or lines starting with #
 		if (line.empty() || line[0] == '#') continue;
 
 		std::stringstream ss(line);
@@ -149,7 +136,6 @@ void TextureManager::UnloadAll()
 
 void TextureManager::SetPersistent(const std::string& name)
 {
-	// omg waow so thats how it works
 	persistentLoad.insert(name);
 }
 
@@ -157,14 +143,14 @@ void TextureManager::UnloadPersistent()
 {
 	for (auto& key : persistentLoad) 
 	{
-		PRINT("unloading persistent: %s\n", key.c_str());
+		PRINT("[DEBUG | Texture] Unloading Persistent: %s\n", key.c_str());
 		if (textureMap.count(key))
 		{
 			textureMap[key].Unload_Image();
 		}
 		else
 		{
-			PRINT("key not in mmmap: %s\n", key.c_str());
+			PRINT("[ERROR | Texture] Your key isn't in the map! %s\n", key.c_str());
 		}
 	}
 
