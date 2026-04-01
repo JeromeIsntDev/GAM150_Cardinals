@@ -1,9 +1,7 @@
 /**
  * @file GameOverlayUI.hpp
- * @brief Implementation of the game overlay UI, including pause menu, settings menu, and level completion menu.
- * @details This file defines the VolSlider class for audio volume control 
- *			and the Overlay class for managing different game overlay states (pause, settings, level completion). 
-*			The Overlay class handles the display of UI elements, user interactions, and updates based on game events.
+ * @brief Header file for the GameOverlayUI class
+ * @details Manages the game's overlay user interface, including pause menu, settings menu, and level completion screen.
  * @author Zoey Tan
  * @date 31.01.2026
  */
