@@ -151,7 +151,7 @@ void Level1_Load() {
 		objData[i].UpdatePosition(pos);
 		u32 tag = static_cast<u32>(objData[i]._tag);
 		grid.WorldToGrid(&pos.x, &pos.y);
-		grid.SpawnNewTile(tag, objData[i].GetSlice(), pos.x, pos.y, objData[i].GetRotation());
+		grid.SpawnNewCell(tag, objData[i].GetSlice(), pos.x, pos.y, objData[i].GetRotation());
 	}
 }
 
@@ -241,7 +241,7 @@ void Level1_Update() {
 
 	if (isGameOver) {
 		if (input.isKeyTriggered(AEVK_R))
-			RestartLevel(UpdateGameManagerState, Level1);
+			UpdateGameManagerState(GameStateEnum::Level1);
 		if (input.isKeyTriggered(AEVK_SPACE) && mainPlayer.GetPlayerHealth() > 0) {
 			isGameOver = 0;
 			UpdateGameManagerState(GameStateEnum::Level2);
