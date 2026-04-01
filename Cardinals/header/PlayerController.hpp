@@ -1,17 +1,10 @@
-/*!***********************************************************************
-\file	PlayerManager.hpp
-\author	Sadric Koh
-\date	12/01/2026
-\par	Last Updated by: Sadric
-\par	Project: Cardinals
-
-\brief	
-holds the class Player which contains player only variables and inherits
-from GameObject class from GameObject
-
-
-\par	Changes: Added Player initializer
-**************************************************************************/
+/**
+ * @file PlayerController.hpp
+ * @brief The Header holding the class of player and all its function
+ * @details -
+ * @author Sadric Koh s,koh
+ * @date 01.04.2026
+ */
 
 #pragma once
 #ifndef PLAYER_MANAGER
@@ -23,6 +16,12 @@ from GameObject class from GameObject
 #include "../header/AudioManager.hpp"
 #include "Animator.hpp"
 
+
+ /**
+  * @class Player
+  * @brief Inherited from Gameobject and contains functions
+  *	pertaining to player.
+  */
 class Player : public GameObject {
 
 	//Player() = delete;
@@ -86,41 +85,183 @@ public:
 	//Gets the player data
 
 	int	gridCollisionFlag{};
-
+	/**
+	 * @brief Initializes the player with values for the level
+	 *
+	 * @param health sets the health
+	 * @param moveSpeed sets the speed of player
+	 * @param isJump to set boolean on startup
+	 * @param score set the score
+	 * @param zeroVal parse in a 0
+	 * @param mesh sets the mesh of the player
+	 * @param xPos sets the starting position X
+	 * @param yPos sets the starting position Y
+	 * @param gOver sets gameover boolean
+	 */
 	void InitializePlayer(int health, f32 moveSpeed, bool isJump ,f32 score, f32 zeroVal, AEGfxVertexList* mesh, f32 xPos, f32 yPos, bool gOver);
-
+	/**
+	 * @brief Getter for health
+	 *
+	 * @return returns player health
+	 */
 	int GetPlayerHealth() const;
+	/**
+	 * @brief Getter for Speed
+	 *
+	 * @return returns player speed
+	 */
 	f32 GetPlayerSpeed() const;
+	/**
+	 * @brief Getter for player Jumpforce
+	 *
+	 * @return returns player Jumpforce
+	 */
 	f32 GetPlayerJumpForce() const;
+	/**
+	 * @brief Getter for boolean of playerJump
+	 *
+	 * @return returns boolean
+	 */
 	bool GetPlayerJump() const;
+	/**
+	 * @brief Getter for boolean of player collision
+	 *
+	 * @return return boolean
+	 */
 	bool GetPlayerCollide() const;
+	/**
+	 * @brief Getter for previous position of player
+	 *
+	 * @return return Vector2 of player prev position
+	 */
 	AEVec2 GetPrevPos() const;
+	/**
+	 * @brief Getter for player velocity
+	 *
+	 * @return return Vector2 of player velocity
+	 */
 	AEVec2 GetVelocity() const;
+	/**
+	 * @brief Getter for Gameover boolean
+	 *
+	 * @return return boolean
+	 */
 	bool getGameOver() const;
-	//set the player health
+	/**
+	 * @brief Setter for player collision
+	 * 
+	 * @param bool to be parsed in to set playerCollide
+	 */
 	void SetPlayerCollide(bool);
+	/**
+	 * @brief Setter for gameOver
+	 *
+	 * @param bool to be parsed in to set gameOver
+	 */
 	void SetGameOver(bool);
+	/**
+	 * @brief Setter for player health
+	 *
+	 * @param int to be parsed in to set playerHealth
+	 */
 	void SetHealth(int);
-	//void SetPlayerHealth(f32);
+	/**
+	 * @brief Handles the input given by the player
+	 *
+	 * @param const f32& to parse in the deltaTime
+	 * @param GravityDirection& to parse in the direction of player
+	 * @param Grid& to parse in the grid of the map
+	 */
 	void PlayerInputHandle(f32 const&, GravityDirection&, Grid&);
+	/**
+	 * @brief Subset of InputHandle to handle input when grav is up or down
+	 *
+	 * @param dt to take the dt to calculate movement
+	 */
 	void PlayerInputGravUpDown(const f32& dt);
+	/**
+	 * @brief Subset of InputHandle to handle input when grav is left or right
+	 *
+	 * @param dt to take the dt to calculate movement
+	 */
 	void PlayerInputGravLeftRight(const f32& dt);
+	/**
+	 * @brief Subset of InputHandle to handle player sprint
+	 */
 	void PlayerInputSprint();
+	/**
+	 * @brief Rotation anim of player when player dies
+	 *
+	 * @param dt to take the dt to calculate timing
+	 */
 	void PlayerRotAnim(const f32& dt);
+	/**
+	 * @brief Subset of InputHandle to handle jump inputs
+	 *
+	 * @param dt to take the dt to calculate movement
+	 * @param GravityDirection& to check the direction of player
+	 */
 	void PlayerInputJump(const f32& dt, GravityDirection&);
+	/**
+	 * @brief Subset of InputHandle to handle input of collecting item
+	 *
+	 * @param Grid& to take in the grid to check with the map
+	 */
 	void PlayerInputCollectible(Grid&);
+	/**
+	 * @brief The Math function to provide movement to player
+	 *
+	 * @param dt to take the dt to calculate movement
+	 * @param GravityDirection& to check the player direction
+	 * @param grid to take in the map and check with the map
+	 */
 	void PlayerMovement(f32 const&, GravityDirection& dir, Grid& grid);
+	/**
+	 * @brief Checks with all collidable object
+	 *
+	 * @param objs object vector to be checked with
+	 */
 	void PlayerCollision(std::vector<GameObject*> objs);
+	/**
+	 * @brief Gravity application on the player
+	 *
+	 * @param dt to take the dt to calculate movement
+	 * @param GravityDirection& to check the player direction
+	 */
 	void GravityApplication(const f32&, GravityDirection&);
+	/**
+	 * @brief Checks if player goes out of bounds of the window
+	 */
 	void WindowBoundsCheck();
+	/**
+	 * @brief Binary Collision with the map data
+	 *
+	 * @param grid to check collision with the map
+	 * @param GravityDirection& to check with the player direction
+	 */
 	void CheckBinaryCollision(Grid* grid, GravityDirection&);
+	/**
+	 * @brief Checks the player position and whether its colliding
+	 *
+	 * @param PosX the xPos of the player
+	 * @param PosY the yPos of the player
+	 * @param scaleX the xScale of the player
+	 * @param scaleY the yScale of the player
+	 * @param grid the map data
+	 * 
+	 * @return the Collision value if colliding
+	 */
 	int CheckInstanceBinaryMapCollision(f32 PosX, f32 PosY, f32 scaleX, f32 scaleY, Grid* grid);
-	//Function for Player Jump Logic
-	//Basically the initialize values for PreJumps
-	//void StartJump(AEVec2);
-	//The math and update for during the jump
+	/**
+	 * @brief Additional Jump Logic
+	 *
+	 * @param dt to take the dt to calculate movement
+	 * @param GravityDirection& the direction of the player
+	 */
 	void PlayerJump(f32 const&, GravityDirection&);
-
+	/**
+	 * @brief to fix certain issues
+	 */
 	Player();
 };
 
