@@ -2,13 +2,13 @@
  * @file PlayerController.hpp
  * @brief The Header holding the class of player and all its function
  * @details -
- * @author Sadric Koh s,koh
+ * @author Sadric Koh s.koh
  * @date 01.04.2026
  */
 
 #pragma once
-#ifndef PLAYER_MANAGER
-#define PLAYER_MANAGER
+#ifndef _Player_Controller_
+#define  _Player_Controller_
 
 #include "../header/GameObject.hpp"
 #include "../header/Physics.hpp"

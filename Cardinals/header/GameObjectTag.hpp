@@ -1,3 +1,9 @@
+/**
+ * @file GameObjectTag.hpp
+ * @brief Holds the enum class for GameObjectTags
+ * @author Sadric Koh s.koh
+ * @date 01.04.2026
+ */
 #pragma once
 #ifndef TAG_HEADER_HPP
 #define TAG_HEADER_HPP
