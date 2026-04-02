@@ -1,15 +1,10 @@
-/*!***********************************************************************
-\file	ParticleEffect.hpp
-\author	Shirley Liau
-\date	23/02/2026
-\par	Last Updated by: Shirley Liau
-\par	Project: Cardinals
-
-\brief	ParticleEffect is responsible for player particle spawn.
-
-\par	Changes: None
-**************************************************************************/
-
+/**
+ * @file ParticleEffect.hpp
+ * @brief ParticleEffect is responsible for player and gravity particle spawn.
+ * @details -
+ * @author Shirley Liau
+ * @date 20.01.2026
+ */
 #pragma once
 #ifndef _Particle_Effect_Header_
 #define _Particle_Effect_Header_
@@ -18,8 +13,16 @@
 #include <TextureManager.hpp>
 #include <GameObject.hpp>
 #include <MeshGenerator.hpp>
+ /**
+  * @int MAX_PARTICLES
+  * @brief restrict the total Particle in game state
+  */
 static const int MAX_PARTICLES = 300;
 
+/**
+ * @struct palette
+ * @brief Color use for particles
+ */
 static const Color palette[] = {
     Colors::PastelPink,
     Colors::PastelOrange,
@@ -29,6 +32,10 @@ static const Color palette[] = {
     Colors::PastelYellow
 };
 
+/**
+ * @struct ImageTexture
+ * @brief Image use as particles
+ */
 struct ImageTexture {
     Texture coffee;
     Texture candycorn;
@@ -37,12 +44,19 @@ struct ImageTexture {
     Texture sweet;
 };
 
-
+/**
+ * @enum Type
+ * @brief type of particles different type has different direction
+ */
 enum TYPE {
     GRAVITY,
     PLAYER
 };
 
+/**
+ * @struct ParticleObjInst
+ * @brief Hold the needed instance for a particle 
+ */
 struct ParticleObjInst
 {
     AEGfxVertexList*    pMesh;
@@ -62,6 +76,10 @@ struct ParticleObjInst
 
 };
 
+/**
+ * @class Overlay
+ * @brief Manages particles creation, spawning position, clearing.
+ */
 class ParticleEffect
 {
 private:
@@ -75,17 +93,59 @@ private:
     int playerParticle;
 
 public:
+    /**
+    * @brief Construct a Particle object and initializes its default properties.
+    */
     ParticleEffect();
 
+    /**
+    * @brief Returns the number of active particles of a given type.
+    * @param Type type of particle gravity or player
+    * @return Count of particles
+    */
     int ActiveParticle(TYPE type);
 
+    /**
+    * @brief Initializes the particle system by setting up meshes, loading textures
+    */
     void Init();
+
+    /**
+    * @brief Emits particles at a specified position with random direction close the the position given.
+    * @param AEVec2 position of player or gravity tile
+    */
     void Emit(AEVec2 position);
+    
+    /**
+    * @brief Emits particles at a specified position close the the position given with fix direction depending of grav tag.
+    * @param AEVec2 position of player or gravity tile
+    * @param GameObjectTag type of gravity tile up, down, left, right
+    */
     void Emit(AEVec2 position, GameObjectTag grav);
+    
+    /**
+    * @brief Updates all particles based on delta time, position.
+    */
     void Update(float dt, AEVec2 position, GameObjectTag grav = GameObjectTag::Static);
+    
+    /**
+    * @brief Renders all active particles to the screen.
+    */
     void DrawParticle();
+    
+    /**
+    * @brief Clears and resets all particles in the system.
+    */
     void Clear();
+    
+    /**
+    * @brief Increase particle spawn if its gravity effects.
+    */
     void ResizeGrav();
+
+    /**
+    * @brief Adjusts particle properties based on player movement.
+    */
     void ResizePlayer(bool isSprint);
 };
 

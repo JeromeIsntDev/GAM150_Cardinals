@@ -1,3 +1,12 @@
+/**
+ * @file Credits.hpp
+ * @brief The Header holding the function for loading and unloading
+		  game state: Credits page
+ * @details -
+ * @author Shirley Liau
+ * @date 20.01.2026
+ */
+
 #pragma once
 #ifndef _Credits_Header_
 #define _Credits_Header_
