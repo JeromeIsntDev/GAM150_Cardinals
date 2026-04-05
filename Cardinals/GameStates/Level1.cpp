@@ -268,17 +268,6 @@ void Level1_Update() {
 
 	if (gameOverMenu)
 	{
-		if (AEInputCheckTriggered(AEVK_O) && !isGameOver)
-		{
-			bgm.PauseAudio();
-			isGameOver = true;
-			isGamePaused = false;
-			gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
-
-			pauseMenu->SetActive(false);
-			gameOverMenu->SetActive(true);
-		}
-
 		gameOverMenu->Update(dt);
 
 		if (gameOverMenu->IsActive() && input.isKeyTriggered(AEVK_LBUTTON))
@@ -463,7 +452,7 @@ void Tutorial() {
 			if (mainPlayer.GetPosition().x > 450.f) ++checkPoints;
 			break;
 		case 4:
-			digipenFont.Input_Text("Touch the COTTON PORTAL and go to");
+			digipenFont.Input_Text("Touch the RAINBOW FISH and go to");
 			digipenFont.Draw_Text({ 350.f, 45.f }, .5f, 1.f);
 			digipenFont.Input_Text("the next level!");
 			digipenFont.Draw_Text({ 350.f, 15.f }, .5f, 1.f);

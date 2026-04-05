@@ -226,17 +226,6 @@ void Level5_Update() {
 
 	if (gameOverMenu)
 	{
-		if (AEInputCheckTriggered(AEVK_O) && !isGameOver)
-		{
-			bgm.PauseAudio();
-			isGameOver = true;
-			isGamePaused = false;
-			gameOverMenu->UpdateGameOverMenu(levelTime, mainPlayer.GetPlayerHealth());
-
-			pauseMenu->SetActive(false);
-			gameOverMenu->SetActive(true);
-		}
-
 		gameOverMenu->Update(dt);
 
 		if (gameOverMenu->IsActive() && input.isKeyTriggered(AEVK_LBUTTON))
